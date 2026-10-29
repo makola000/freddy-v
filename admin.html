@@ -1,35 +1,62 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ADMIN FREDDY-V - Paiement Airtel</title>
-<style>body{background:#000;color:#fff;font-family:Arial;padding:12px}
-.card{background:#1a1a1a;padding:12px;border-radius:10px;margin:10px 0;border-left:4px solid red}
-input{padding:10px;background:#222;border:1px solid #333;color:#fff;border-radius:6px}
-.btn{background:red;color:#fff;border:none;padding:10px 16px;border-radius:20px;font-weight:bold}
-</style></head><body>
-<h2 style="color:red">🔐 ADMIN FREDDY-V - Paiement Airtel Money</h2>
-<p style="font-size:12px">Admin: kibwemakola@gmail.com | Airtel: +243983356734</p>
-<input id="rate" value="1" style="width:60px"> FC par vue (ex: 1 vue = 1 FC)
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADMIN FREDDY-V INTERNATIONAL</title>
+<style>
+body{background:#000;color:#fff;font-family:Arial;padding:10px}
+.card{background:#1a1a1a;padding:12px;margin:10px 0;border-radius:8px;border-left:4px solid red}
+.btn{background:red;color:#fff;border:none;padding:8px 12px;border-radius:5px;margin:3px}
+.pay{background:#00aa00}
+h2{color:red;text-align:center}
+</style>
+</head>
+<body>
+<h2>👑 ADMIN FREDDY-V - INTERNATIONAL</h2>
+<p style="font-size:12px;text-align:center">Airtel: 0983356734 | WU + MoneyGram + Banque</p>
+<input id="rate" value="1" style="width:60px"> <span style="font-size:12px">Taux: 1000 vues = 1$</span>
 <button class="btn" onclick="load()">Actualiser</button>
 <div id="list">Chargement...</div>
+
 <script type="module">
-import {initializeApp} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import {getFirestore,collection,getDocs} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-const firebaseConfig={apiKey:"AIzaSyB83-zVJMqqDR6E0nEzDefjH5Vv_nQAws4",authDomain:"freddy-v-kolwezi.firebaseapp.com",projectId:"freddy-v-kolwezi",storageBucket:"freddy-v-kolwezi.firebasestorage.app",messagingSenderId:"89153368888",appId:"1:89153368888:web:1e23139f916d6d303507cd"};
-const app=initializeApp(firebaseConfig);const db=getFirestore(app);
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+import {getFirestore,collection,getDocs,doc,updateDoc,deleteDoc} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+const firebaseConfig={apiKey:"AIzaSyB83-...",authDomain:"freddy-v.firebaseapp.com",projectId:"freddy-v"};
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
+
 async function load(){
-  const usersSnap=await getDocs(collection(db,'users'));
-  const videosSnap=await getDocs(collection(db,'videos'));
-  const rate=parseFloat(document.getElementById('rate').value)||1;
-  let videosByUser={};
-  videosSnap.forEach(d=>{let v=d.data(); if(!videosByUser[v.uid])videosByUser[v.uid]={count:0,views:0}; videosByUser[v.uid].count++; videosByUser[v.uid].views+=(v.views||0);});
-  let html='';
-  usersSnap.forEach(u=>{
-    let user=u.data();
-    let stats=videosByUser[user.uid]||{count:0,views:0};
-    let toPay=stats.views*rate;
-    html+=`<div class="card"><b>${user.name}</b> (${user.email})<br>Airtel Money: <b style="color:#ff6b00">${user.mpesa}</b><br>Vidéos: ${stats.count} | Vues: <b>${stats.views}</b><br>À PAYER: <b style="color:lime;font-size:18px">${toPay} FC via Airtel</b><br><br><a href="https://wa.me/${user.mpesa.replace('+','')}" style="color:#fff;background:#ff0000;padding:8px 12px;border-radius:10px;text-decoration:none;font-size:12px">Payer Airtel Money via WhatsApp</a></div>`;
-  });
-  if(!html)html='<p>Aucun créateur avec compte. Crée ton compte Admin avec kibwemakola@gmail.com d\'abord!</p>';
-  document.getElementById('list').innerHTML=html;
+const snap=await getDocs(collection(db,"users"));
+let html="";
+snap.forEach(d=>{
+let u=d.data();
+let id=d.id;
+let vues=u.vues||0;
+let rate=parseFloat(document.getElementById("rate").value)||1;
+let apayer=(vues/1000*rate).toFixed(2);
+html+=`<div class="card">
+<b>${u.nom||"Sans nom"}</b> - ${u.pays||"RDC"} - ${u.whatsapp||""}<br>
+💳 <b>${u.paiement||u.modePaiement||"Airtel Money"}</b> : ${u.details||u.numero||u.airtel||""}<br>
+👁️ ${vues} vues = <b style="color:#0f0">${apayer}$ à payer</b><br>
+<button class="btn pay" onclick="payer('${id}',${vues})">✅ J'AI PAYÉ ${apayer}$ via ${u.paiement||""}</button>
+<button class="btn" onclick="supprimer('${id}')">Supprimer</button>
+</div>`;
+});
+document.getElementById("list").innerHTML=html||"Aucun créateur";
 }
-window.load=load; load();
-</script></body></html>
+window.load=load;
+window.payer=async(id,vues)=>{
+if(confirm("Confirmer paiement?")){
+await updateDoc(doc(db,"users",id),{vues:0});
+load();
+}};
+window.supprimer=async(id)=>{
+if(confirm("Supprimer?")){
+await deleteDoc(doc(db,"users",id));
+load();
+}};
+load();
+</script>
+</body>
+</html>
