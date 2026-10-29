@@ -1,0 +1,35 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ADMIN FREDDY-V</title>
+<style>body{background:#000;color:#fff;font-family:Arial;padding:12px}
+.card{background:#1a1a1a;padding:12px;border-radius:10px;margin:10px 0;border-left:4px solid red}
+input{padding:10px;background:#222;border:1px solid #333;color:#fff;border-radius:6px}
+.btn{background:red;color:#fff;border:none;padding:10px 16px;border-radius:20px;font-weight:bold}
+</style></head><body>
+<h2 style="color:red">🔐 ADMIN FREDDY-V - Paiement M-Pesa</h2>
+<p style="font-size:12px">Seul toi avec ton email admin peut voir</p>
+<input id="rate" value="1" style="width:60px"> FC par vue (ex: 1 vue = 1 FC)
+<button class="btn" onclick="load()">Actualiser</button>
+<div id="list">Chargement...</div>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {getFirestore,collection,getDocs} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+const firebaseConfig={apiKey:"AIzaSyB83-zVJMqqDR6E0nEzDefjH5Vv_nQAws4",authDomain:"freddy-v-kolwezi.firebaseapp.com",projectId:"freddy-v-kolwezi",storageBucket:"freddy-v-kolwezi.firebasestorage.app",messagingSenderId:"89153368888",appId:"1:89153368888:web:1e23139f916d6d303507cd"};
+const app=initializeApp(firebaseConfig);const db=getFirestore(app);
+async function load(){
+  const usersSnap=await getDocs(collection(db,'users'));
+  const videosSnap=await getDocs(collection(db,'videos'));
+  const rate=parseFloat(document.getElementById('rate').value)||1;
+  let videosByUser={};
+  videosSnap.forEach(d=>{let v=d.data(); if(!videosByUser[v.uid])videosByUser[v.uid]={count:0,views:0}; videosByUser[v.uid].count++; videosByUser[v.uid].views+=(v.views||0);});
+  let html='';
+  usersSnap.forEach(u=>{
+    let user=u.data();
+    let stats=videosByUser[user.uid]||{count:0,views:0};
+    let toPay=stats.views*rate;
+    html+=`<div class="card"><b>${user.name}</b> (${user.email})<br>M-Pesa: <b style="color:#ff6b00">${user.mpesa}</b><br>Vidéos: ${stats.count} | Vues totales: <b>${stats.views}</b><br>À PAYER: <b style="color:lime;font-size:18px">${toPay} FC</b><br><a href="https://wa.me/${user.mpesa.replace('+','')}" style="color:#fff;background:green;padding:6px 10px;border-radius:10px;text-decoration:none;font-size:12px">Payer via WhatsApp</a></div>`;
+  });
+  if(!html)html='<p>Aucun créateur avec compte pour l\'instant. Les anciennes vidéos sont Anonyme.</p>';
+  document.getElementById('list').innerHTML=html;
+}
+window.load=load; load();
+</script></body></html>
