@@ -1,167 +1,53 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>FREDDY-V - Kolwezi Video</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FREDDY-V INTERNATIONAL</title>
 <style>
-body{background:#0f0f0f;color:#fff;font-family:Arial;margin:0;padding:10px}
-.header{display:flex;justify-content:space-between;align-items:center;padding:10px;background:#000;position:sticky;top:0;z-index:10}
-.logo{color:red;font-weight:900;font-size:18px}
-.btn{background:#212121;color:#fff;border:none;padding:8px 14px;border-radius:20px;cursor:pointer}
-.btn-red{background:red}
-input,select{width:100%;padding:13px;margin:6px 0;background:#212121;border:1px solid #333;color:#fff;border-radius:8px;box-sizing:border-box}
-.publish{background:red;width:100%;padding:14px;border:none;border-radius:20px;font-weight:bold;color:#fff;cursor:pointer}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.card{background:#1a1a1a;border-radius:10px;overflow:hidden}
-.thumb{aspect-ratio:16/9;position:relative;background:#222;cursor:pointer}
-.thumb img{width:100%;height:100%;object-fit:cover}
-.badge{position:absolute;bottom:4px;right:4px;background:rgba(0,0,0,0.8);padding:2px 6px;font-size:10px;border-radius:4px}
-.info{padding:8px;font-size:12px}
-#authBox{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.95);z-index:99;padding:20px;overflow-y:auto}
+body{background:#111;color:#fff;font-family:Arial;padding:15px}
+.box{background:#222;padding:20px;border-radius:12px;max-width:400px;margin:auto}
+input,select{width:100%;padding:13px;margin:8px 0;border-radius:8px;border:none;font-size:15px}
+button{width:100%;padding:15px;background:#ff0040;color:#fff;border:none;border-radius:8px;font-weight:bold;font-size:17px;margin-top:10px}
+h2{text-align:center;color:#ff0040;margin:0}
+.p{color:#aaa;font-size:13px;text-align:center}
 </style>
 </head>
 <body>
-
-<div class="header">
-<div class="logo">▶ FREDDY-V</div>
-<div><span id="userName" style="font-size:11px;color:#ff6b00"></span>
-<button id="loginBtn" class="btn" onclick="openAuth()">Se connecter</button>
-<button id="logoutBtn" class="btn" style="display:none" onclick="logout()">Sortir</button></div>
-</div>
-
-<div style="background:#1a1a1a;padding:12px;border-radius:12px;margin:10px 0">
-<div style="color:#ff6b00;font-weight:bold;margin-bottom:6px">📤 Publier Vidéo (compte requis)</div>
-<input id="title" placeholder="Titre de la vidéo (ex: Musique Kolwezi 2024)">
-<input id="yturl" placeholder="Lien YouTube: https://youtu.be/... ou https://www.youtube.com/watch?v=...">
-<select id="cat"><option>Pour toi</option><option>Musique</option><option>Masisi</option><option>Kolwezi</option><option>Comédie</option><option>Gospel</option></select>
-<button class="publish" onclick="publier()">🚀 PUBLIER AVEC MON COMPTE</button>
-<div style="font-size:11px;color:#888;margin-top:6px;text-align:center">💰 Paiement créateur via Airtel Money Admin: +243983356734 • Chaque vue = argent</div>
-</div>
-
-<div id="videos" class="grid"><p style="color:#888">Chargement des vidéos...</p></div>
-
-<div id="authBox">
-<div style="background:#212121;padding:20px;border-radius:12px;max-width:420px;margin:20px auto">
-<h3 style="color:red;margin:0">Créer compte FREDDY-V</h3>
-<p style="font-size:12px;color:#aaa">Crée ton compte pour publier et être payé via Airtel Money</p>
-<input id="a_name" placeholder="Ton nom (ex: Freddy Kolwezi)">
-<input id="a_mpesa" placeholder="Numéro Airtel Money +243... pour être payé">
-<input id="a_email" placeholder="Email (ex: kibwemakola@gmail.com)">
-<input id="a_pass" type="password" placeholder="Mot de passe (6 caractères min)">
-<button class="publish" onclick="register()">CRÉER MON COMPTE</button>
-<button class="btn" style="width:100%;margin-top:8px" onclick="login()">J'ai déjà un compte - SE CONNECTER</button>
-<button class="btn" style="width:100%;margin-top:8px;background:#333" onclick="closeAuth()">Fermer</button>
-<div id="authMsg" style="font-size:13px;color:#ff6b00;margin-top:10px;text-align:center"></div>
-</div>
-</div>
-
-<div id="player" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.97);z-index:98;padding:10px;overflow-y:auto">
-<div style="text-align:right"><button onclick="document.getElementById('player').style.display='none'" style="background:red;border:none;color:#fff;padding:10px 14px;border-radius:8px">X Fermer</button></div>
-<div id="playerBox"></div>
+<div class="box">
+<h2>🎬 FREDDY-V</h2>
+<p class="p">1000 vues = 1$<br>Airtel Money + Western Union + MoneyGram</p>
+<input id="nom" placeholder="Nom complet (OBLIGATOIRE pour Western Union)">
+<input id="whatsapp" placeholder="WhatsApp ex: 0983356734">
+<select id="pays">
+<option value="">Choisis ton pays</option>
+<option value="RDC">🇨🇩 RDC</option>
+<option value="France">🇫🇷 France</option>
+<option value="Belgique">🇧🇪 Belgique</option>
+<option value="USA">🇺🇸 USA</option>
+<option value="Cameroun">🇨🇲 Cameroun</option>
+<option value="Autre">🌍 Autre</option>
+</select>
+<select id="paiement">
+<option value="">Comment tu veux être payé?</option>
+<option value="Airtel Money">📱 Airtel Money RDC - 0983356734</option>
+<option value="Orange Money">🟠 Orange Money RDC</option>
+<option value="M-Pesa">🔵 M-Pesa / Vodacom</option>
+<option value="Western Union">🌍 Western Union - Monde</option>
+<option value="MoneyGram">💸 MoneyGram - Monde</option>
+<option value="Banque IBAN">🏦 Banque / IBAN Europe</option>
+</select>
+<input id="details" placeholder="Numéro Airtel OU Nom complet pour WU">
+<button onclick="inscrire()">S'INSCRIRE - C'EST GRATUIT</button>
+<p class="p">Payeur: Airtel 0983356734 - Paiement Lundi<br>FREDDY-V Kolwezi</p>
 </div>
 
 <script type="module">
-import {initializeApp} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import {getFirestore,collection,addDoc,getDocs,query,orderBy,doc,updateDoc,increment} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import {getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,onAuthStateChanged,signOut,updateProfile} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyB83-zVJMqqDR6E0nEzDefjH5Vv_nQAws4",
-  authDomain: "freddy-v-kolwezi.firebaseapp.com",
-  projectId: "freddy-v-kolwezi",
-  storageBucket: "freddy-v-kolwezi.firebasestorage.app",
-  messagingSenderId: "89153368888",
-  appId: "1:89153368888:web:1e23139f916d6d303507cd"
-};
-
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+import {getFirestore,collection,addDoc} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+const firebaseConfig={apiKey:"AIzaSyB83-XXXX",authDomain:"freddy-v.firebaseapp.com",projectId:"freddy-v",storageBucket:"freddy-v.appspot.com",messagingSenderId:"XXX",appId:"XXX"};
 const app=initializeApp(firebaseConfig);
 const db=getFirestore(app);
-const auth=getAuth(app);
 
-let currentUser=null;
-onAuthStateChanged(auth,(u)=>{
-  currentUser=u;
-  const nameEl=document.getElementById('userName');
-  if(u){
-    nameEl.innerText=(u.displayName||u.email).substring(0,15);
-    document.getElementById('loginBtn').style.display='none';
-    document.getElementById('logoutBtn').style.display='inline';
-  } else {
-    nameEl.innerText='';
-    document.getElementById('loginBtn').style.display='inline';
-    document.getElementById('logoutBtn').style.display='none';
-  }
-});
-
-window.openAuth=()=>document.getElementById('authBox').style.display='block';
-window.closeAuth=()=>document.getElementById('authBox').style.display='none';
-window.logout=async()=>{await signOut(auth); location.reload();};
-
-window.register=async()=>{
-  const name=document.getElementById('a_name').value.trim();
-  const mpesa=document.getElementById('a_mpesa').value.trim();
-  const email=document.getElementById('a_email').value.trim();
-  const pass=document.getElementById('a_pass').value;
-  const msg=document.getElementById('authMsg');
-  if(!name||!mpesa||!email||!pass){msg.innerText='Remplis TOUT: nom, Airtel Money, email, mot de passe!';return;}
-  msg.innerText='Création en cours...';
-  try{
-    const cred=await createUserWithEmailAndPassword(auth,email,pass);
-    await updateProfile(cred.user,{displayName:name});
-    await addDoc(collection(db,'users'),{uid:cred.user.uid,name:name,mpesa:mpesa,email:email,totalViews:0,totalVideos:0,created:Date.now()});
-    msg.innerText='Compte créé! ✅ Bienvenue sur FREDDY V! Paiement via Airtel Money';
-    setTimeout(()=>{closeAuth(); location.reload();},1200);
-  }catch(e){msg.innerText='Erreur: '+e.message}
-}
-
-window.login=async()=>{
-  const email=document.getElementById('a_email').value.trim();
-  const pass=document.getElementById('a_pass').value;
-  const msg=document.getElementById('authMsg');
-  if(!email||!pass){msg.innerText='Mets email et mot de passe';return;}
-  msg.innerText='Connexion...';
-  try{await signInWithEmailAndPassword(auth,email,pass);msg.innerText='Connecté! ✅'; setTimeout(()=>{closeAuth(); location.reload();},800);}catch(e){msg.innerText='Erreur: '+e.message}
-}
-
-function getId(url){let m=url.match(/(?:v=|youtu\.be\/|shorts\/|embed\/)([A-Za-z0-9_-]{6,})/);return m?m[1]:null;}
-
-window.publier=async()=>{
-  if(!currentUser){openAuth();alert('Crée ton compte d\'abord pour publier et être payé via Airtel Money!');return;}
-  const t=document.getElementById('title').value.trim();
-  const u=document.getElementById('yturl').value.trim();
-  const c=document.getElementById('cat').value;
-  const id=getId(u);
-  if(!t||!id){alert('Mets un Titre + lien YouTube valide! Ex: https://youtu.be/dQw4w9WgXcQ');return;}
-  try{
-    await addDoc(collection(db,'videos'),{title:t,url:u,youtubeId:id,category:c,uid:currentUser.uid,author:currentUser.displayName||currentUser.email,authorEmail:currentUser.email,views:0,date:Date.now()});
-    alert('Vidéo publiée avec TON COMPTE! ✅ Elle apparaîtra avec ton nom!');
-    document.getElementById('title').value=''; document.getElementById('yturl').value='';
-    load();
-  }catch(e){alert('Erreur Firestore: Va dans Firebase > Firestore > Rules et mets allow read, write: if true;')}
-}
-
-async function load(){
-  try{
-    const q=query(collection(db,'videos'),orderBy('date','desc'));
-    const snap=await getDocs(q);
-    const cont=document.getElementById('videos'); cont.innerHTML='';
-    if(snap.empty){cont.innerHTML='<p style="color:#888">Aucune vidéo. Sois le premier à publier!</p>';return;}
-    snap.forEach(d=>{
-      const v=d.data(); const docId=d.id;
-      const safeTitle=v.title.replace(/'/g,"\\'").replace(/"/g,'&quot;');
-      const el=document.createElement('div'); el.className='card';
-      el.innerHTML=`<div class="thumb" onclick="playVideo('${v.youtubeId}','${safeTitle}','${docId}')"><img src="https://img.youtube.com/vi/${v.youtubeId}/hqdefault.jpg"><div class="badge">👁️ ${v.views||0} vues</div></div><div class="info"><b style="display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${v.title}</b><div style="color:#ff6b00;font-size:11px">par ${v.author||'Anonyme'} • ${v.category}</div></div>`;
-      cont.appendChild(el);
-    });
-  }catch(e){document.getElementById('videos').innerHTML='<p style="color:red">Erreur Firestore</p>'}
-}
-
-window.playVideo=async(id,title,docId)=>{
-  document.getElementById('player').style.display='block';
-  document.getElementById('playerBox').innerHTML=`<h3>${title}</h3><div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden"><iframe style="position:absolute;top:0;left:0;width:100%;height:100%" src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1" frameborder="0" allowfullscreen></iframe></div><p style="font-size:13px;color:#aaa;margin-top:12px;background:#1a1a1a;padding:10px;border-radius:8px">👁️ Vue comptée! Le créateur gagne de l'argent pour cette vue. Paiement via Airtel Money par l'Admin +243983356734</p>`;
-  try{await updateDoc(doc(db,'videos',docId),{views:increment(1)});}catch(e){console.log(e)}
-}
-load();
-</script>
-</body>
-</html>
+window.inscrire=async()=>{
+let n=document.getElementById("nom").value.trim
