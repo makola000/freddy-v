@@ -3,114 +3,123 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FREDDY V - KOLWEZI | Plateforme Vidéo</title>
-<!-- GOOGLE ADSENSE - Remplace ca-pub-XXXXXXXX par ton vrai ID après approbation -->
+<title>FREDDY V - KOLWEZI | Gagne en publiant</title>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0983356734" crossorigin="anonymous"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
 body{background:#0f0f0f;color:#fff}
-header{background:linear-gradient(135deg,#ff6a00,#ee0979);padding:12px 16px;position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+header{background:linear-gradient(135deg,#ff6a00,#ee0979);padding:12px 16px;position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
 .logo{display:flex;align-items:center;gap:10px;cursor:pointer}
-.logo b{font-size:32px} .logo h1{font-size:18px} .logo span{font-size:11px;opacity:.9;display:block}
-.search{flex:1;max-width:400px;display:flex}
+.logo b{font-size:32px} .logo h1{font-size:17px} .logo span{font-size:11px;opacity:.9;display:block}
+.search{flex:1;max-width:350px;display:flex}
 .search input{flex:1;padding:10px;border:none;border-radius:20px 0 0 20px;color:#000;outline:none}
-.search button{padding:10px 16px;border:none;background:#000;color:#fff;border-radius:0 20px 20px 0;cursor:pointer}
-.actions{display:flex;gap:8px}
-.btn{padding:8px 16px;border:none;border-radius:20px;cursor:pointer;font-weight:bold}
-.btn-orange{background:#fff;color:#ff4500} .btn-green{background:#25D366;color:#fff} .btn-dark{background:#272727;color:#fff}
-#home{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;padding:16px}
+.search button{padding:10px 14px;border:none;background:#000;color:#fff;border-radius:0 20px 20px 0}
+.actions{display:flex;gap:6px;flex-wrap:wrap}
+.btn{padding:8px 14px;border:none;border-radius:20px;cursor:pointer;font-weight:bold;font-size:13px}
+.btn-orange{background:#fff;color:#ff4500} .btn-green{background:#25D366;color:#fff} .btn-dark{background:#272727;color:#fff} .btn-gold{background:gold;color:#000}
+#home{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px;padding:14px}
 .card{background:#1f1f1f;border-radius:12px;overflow:hidden;cursor:pointer}
-.thumb{height:170px;background:#000;position:relative} .thumb iframe{width:100%;height:100%;border:none}
-.card-body{padding:10px} .card-body h3{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.meta{font-size:12px;color:#aaa}
-#watch,#channelView{display:none;padding:16px;max-width:1200px;margin:auto}
-.video-player{aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden;margin-bottom:12px} .video-player iframe{width:100%;height:100%;border:none}
-.channel{display:flex;align-items:center;justify-content:space-between;background:#1f1f1f;padding:12px;border-radius:10px;margin:12px 0}
-.subscribe{background:red;color:#fff;border:none;padding:8px 16px;border-radius:20px;cursor:pointer;font-weight:bold}
-.comments input{width:100%;padding:12px;border-radius:20px;border:none;background:#272727;color:#fff;margin-bottom:10px;outline:none}
-.comment{background:#1f1f1f;padding:8px;border-radius:8px;margin-bottom:8px;font-size:13px}
-.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);align-items:center;justify-content:center;z-index:200;padding:16px}
-.modal-content{background:#212121;padding:20px;border-radius:12px;width:100%;max-width:450px}
-.modal-content input,.modal-content textarea{width:100%;padding:10px;margin:8px 0;border-radius:8px;border:none;background:#000;color:#fff}
-.monetize{background:#1f1f1f;border:1px dashed #ff6a00;padding:12px;border-radius:10px;margin:16px;text-align:center}
-.ad-box{background:#000;border-radius:10px;padding:10px;margin:12px 0;text-align:center;color:#aaa;font-size:12px;min-height:90px;display:flex;align-items:center;justify-content:center}
-.channel-header{background:linear-gradient(135deg,#ff6a00,#ee0979);padding:20px;border-radius:12px;display:flex;gap:16px;align-items:center}
-.avatar{width:70px;height:70px;background:#fff;color:#ff4500;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:bold}
+.thumb{height:160px;background:#000} .thumb iframe{width:100%;height:100%;border:none}
+.card-body{padding:10px} .card-body h3{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.meta{font-size:11px;color:#aaa;display:flex;justify-content:space-between}
+.gain-badge{background:#ff6a00;color:#fff;padding:2px 6px;border-radius:10px;font-size:10px}
+#watch,#channelView,#earningsView{display:none;padding:14px;max-width:1200px;margin:auto}
+.video-player{aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden;margin-bottom:10px} .video-player iframe{width:100%;height:100%;border:none}
+.channel{display:flex;align-items:center;justify-content:space-between;background:#1f1f1f;padding:12px;border-radius:10px;margin:10px 0;flex-wrap:wrap;gap:8px}
+.subscribe{background:red;color:#fff;border:none;padding:8px 14px;border-radius:20px;cursor:pointer;font-weight:bold}
+.comments input{width:100%;padding:12px;border-radius:20px;border:none;background:#272727;color:#fff;margin-bottom:10px}
+.comment{background:#1f1f1f;padding:8px;border-radius:8px;margin-bottom:6px;font-size:13px}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);align-items:center;justify-content:center;z-index:200;padding:14px}
+.modal-content{background:#212121;padding:18px;border-radius:12px;width:100%;max-width:440px}
+.modal-content input,.modal-content textarea{width:100%;padding:10px;margin:7px 0;border-radius:8px;border:none;background:#000;color:#fff}
+.monetize{background:linear-gradient(135deg,#1f1f1f,#2a1a00);border:1px solid #ff6a00;padding:12px;border-radius:10px;margin:12px;text-align:center;font-size:13px}
+.ad-box{background:#000;border-radius:10px;padding:8px;margin:10px 0;text-align:center;color:#666;font-size:11px;min-height:70px;display:flex;align-items:center;justify-content:center}
+.channel-header{background:linear-gradient(135deg,#ff6a00,#ee0979);padding:18px;border-radius:12px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.avatar{width:65px;height:65px;background:#fff;color:#ff4500;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:bold}
+.earn-card{background:#1f1f1f;padding:14px;border-radius:12px;margin-bottom:10px;border-left:4px solid gold}
 </style>
 </head>
 <body>
 
 <header>
-<div class="logo" onclick="showHome()"><b>FV</b><div><h1>FREDDY V - KOLWEZI</h1><span>Scientifique | Croyant en Jesus-Christ</span></div></div>
-<div class="search"><input id="q" placeholder="Rechercher vidéos..." oninput="search()"><button>🔍</button></div>
+<div class="logo" onclick="showHome()"><b>FV</b><div><h1>FREDDY V - KOLWEZI</h1><span>Publie & Gagne - 70% pour toi</span></div></div>
+<div class="search"><input id="q" placeholder="Rechercher..." oninput="search()"><button>🔍</button></div>
 <div class="actions">
 <button class="btn btn-dark" onclick="openModal('publishModal')">+ Publier</button>
+<button class="btn btn-gold" onclick="showEarnings()">💰 Mes Gains</button>
 <button class="btn btn-orange" id="authBtn" onclick="openModal('authModal')">Compte</button>
-<button class="btn btn-green" onclick="window.open('https://wa.me/243983356734','_blank')">WhatsApp</button>
 </div>
 </header>
 
-<div class="monetize">💰 Gagne avec FREDDY V: Soutien M-Pesa: <b style="color:#ff6a00">0983356734</b> | Pubs Google AdSense activées | 1 vue = argent</div>
-
-<div class="ad-box">
-<!-- PUB ADSENSE HAUT -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0983356734" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins>
-<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-PUBLICITÉ GOOGLE - Ton revenu automatique ici
+<div class="monetize">
+💰 <b>Google paye FREDDY V via AdSense</b> → FREDDY V paye les créateurs 70% via M-Pesa 0983356734<br>
+<b style="color:gold">1 vue = 10 FC pour le créateur</b> | 1000 vues = 10.000 FC | Crée compte et gagne!
 </div>
+
+<div class="ad-box"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0983356734" data-ad-slot="1234567890" data-ad-format="auto"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>PUB GOOGLE - Google paye à chaque vue</div>
 
 <div id="home"></div>
 
 <div id="watch">
 <button class="btn btn-dark" onclick="showHome()">← Retour</button>
 <div class="video-player" id="player"></div>
-<h2 id="wTitle"></h2>
-<div class="meta"><span id="wViews"></span> • <span id="wDate"></span></div>
+<h2 id="wTitle" style="margin:8px 0;font-size:18px"></h2>
+<div class="meta"><span id="wViews"></span> • <span id="wDate"></span> • <span id="wEarn" style="color:gold"></span></div>
 <div class="channel">
-<div style="cursor:pointer" onclick="showChannel(currentWatch.userEmail)"><b id="wChannel"></b><br><small id="wSubs" style="color:#aaa"></small></div>
-<div><button class="btn btn-dark" onclick="like()">👍 <span id="wLikes">0</span></button> <button class="subscribe" id="subBtn" onclick="subscribe()">S'abonner</button></div>
+<div style="cursor:pointer" onclick="showChannel(currentWatch.userEmail)"><b id="wChannel"></b><br><small id="wMpesa" style="color:gold"></small><br><small id="wSubs" style="color:#aaa"></small></div>
+<div style="display:flex;gap:6px"><button class="btn btn-dark" onclick="like()">👍 <span id="wLikes">0</span></button><button class="btn btn-green" onclick="supportCreator()">Soutenir 💰</button><button class="subscribe" onclick="subscribe()">S'abonner</button></div>
 </div>
-<p id="wDesc" style="background:#1f1f1f;padding:10px;border-radius:8px"></p>
-<div class="ad-box"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0983356734" data-ad-slot="0987654321" data-ad-format="auto"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>PUB VIDÉO - Revenu par vue</div>
+<p id="wDesc" style="background:#1f1f1f;padding:10px;border-radius:8px;font-size:13px"></p>
+<div class="ad-box">PUB - Revenu partagé 70/30 avec créateur</div>
 <div class="comments"><h3>Commentaires</h3><input id="cInput" placeholder="Commenter..." onkeydown="if(event.key==='Enter')addComment()"><div id="cList"></div></div>
 </div>
 
 <div id="channelView">
 <button class="btn btn-dark" onclick="showHome()">← Accueil</button>
-<div class="channel-header">
-<div class="avatar" id="chAvatar">FV</div>
-<div><h2 id="chName"></h2><p id="chStats" style="font-size:13px"></p><p id="chEmail" style="font-size:11px;opacity:.8"></p></div>
-<button class="subscribe" onclick="subscribe()">S'abonner</button>
-</div>
-<div class="ad-box">PUB CHAINE - Revenu automatique</div>
-<h3 style="margin:16px 0">Toutes les vidéos de <span id="chName2"></span></h3>
-<div id="chVideos" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px"></div>
+<div class="channel-header"><div class="avatar" id="chAvatar">F</div><div><h2 id="chName"></h2><p id="chStats" style="font-size:12px"></p><p id="chMpesa" style="font-size:12px;color:gold"></p></div><button class="subscribe" onclick="subscribe()">S'abonner</button></div>
+<h3 style="margin:14px 0">Vidéos de <span id="chName2"></span> - Il gagne 70%</h3>
+<div id="chVideos" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px"></div>
 </div>
 
-<div class="modal" id="authModal"><div class="modal-content"><h3>Compte FREDDY V</h3><input id="aName" placeholder="Ton nom"><input id="aEmail" placeholder="Email"><input id="aPass" type="password" placeholder="Mot de passe"><button class="btn btn-orange" style="width:100%;margin-top:10px" onclick="register()">Créer / Connecter</button><p id="aMsg" style="font-size:12px;color:#aaa;margin-top:8px"></p><button class="btn btn-dark" style="width:100%;margin-top:8px" onclick="closeModal('authModal')">Fermer</button></div></div>
-<div class="modal" id="publishModal"><div class="modal-content"><h3>Publier vidéo</h3><input id="vTitle" placeholder="Titre"><textarea id="vDesc" placeholder="Description"></textarea><input id="vLink" placeholder="Lien YouTube"><button class="btn btn-orange" style="width:100%;margin-top:10px" onclick="publish()">Publier</button><button class="btn btn-dark" style="width:100%;margin-top:8px" onclick="closeModal('publishModal')">Annuler</button></div></div>
+<div id="earningsView">
+<button class="btn btn-dark" onclick="showHome()">← Accueil</button>
+<h2 style="margin:10px 0">💰 Mes Gains FREDDY V</h2>
+<div class="earn-card"><h3 id="eTotalViews">0 vues totales</h3><h2 id="eTotalGain" style="color:gold">0 FC</h2><p style="font-size:12px;color:#aaa">Google paye FREDDY V → FREDDY V te paye 70% via M-Pesa. Taux: 1 vue = 10 FC</p><p style="font-size:12px;margin-top:6px">Ton M-Pesa pour recevoir: <b id="eMpesa" style="color:gold"></b></p><button class="btn btn-green" style="margin-top:10px" onclick="requestPayment()">Demander paiement M-Pesa</button></div>
+<h3 style="margin:10px 0">Mes vidéos qui gagnent:</h3>
+<div id="eList"></div>
+<div class="ad-box">Tes vidéos génèrent pub Google = tu gagnes</div>
+</div>
+
+<div class="modal" id="authModal"><div class="modal-content"><h3>Compte FREDDY V - Gagne 70%</h3><input id="aName" placeholder="Ton nom complet"><input id="aEmail" placeholder="Email"><input id="aMpesa" placeholder="Ton M-Pesa pour recevoir gains (ex: 097xxxxxxx)"><input id="aPass" type="password" placeholder="Mot de passe"><button class="btn btn-orange" style="width:100%;margin-top:10px" onclick="register()">Créer compte qui gagne</button><p id="aMsg" style="font-size:12px;color:#aaa;margin-top:8px">70% des revenus pubs pour toi, payé par M-Pesa</p><button class="btn btn-dark" style="width:100%;margin-top:8px" onclick="closeModal('authModal')">Fermer</button></div></div>
+
+<div class="modal" id="publishModal"><div class="modal-content"><h3>Publier & Gagner 70%</h3><input id="vTitle" placeholder="Titre accrocheur"><textarea id="vDesc" placeholder="Description"></textarea><input id="vLink" placeholder="Lien YouTube"><input id="vMpesa" placeholder="Confirme ton M-Pesa pour gains"><p style="font-size:11px;color:gold">Tu gagneras 10 FC par vue. 1000 vues = 10.000 FC payé via M-Pesa par FREDDY V (argent vient de Google AdSense)</p><button class="btn btn-orange" style="width:100%;margin-top:10px" onclick="publish()">Publier et commencer à gagner</button><button class="btn btn-dark" style="width:100%;margin-top:8px" onclick="closeModal('publishModal')">Annuler</button></div></div>
 
 <script>
 let users=JSON.parse(localStorage.getItem('fv_users')||'[]');
 let videos=JSON.parse(localStorage.getItem('fv_videos')||'[]');
 let currentUser=JSON.parse(localStorage.getItem('fv_current')||'null');
 let currentWatch=null;
-if(videos.length==0){videos=[{id:'1',title:'Bienvenue sur FREDDY V - Jesus-Christ est Seigneur',desc:'La science cherche, Jesus sauve. Plateforme de Kolwezi.',youtubeId:'dQw4w9WgXcQ',userName:'FREDDY V',userEmail:'freddy@kolwezi.cd',views:128,likes:24,comments:[{name:'Fan Kolwezi',text:'Gloire à Dieu!'}],date:new Date().toLocaleDateString()}];save();}
+const RATE=10;
+if(videos.length==0){videos=[{id:'1',title:'Bienvenue sur FREDDY V - Publie et Gagne 70%',desc:'Ici tu gagnes comme sur YouTube. Google paye FREDDY V, FREDDY V te paye 70% via M-Pesa.',youtubeId:'dQw4w9WgXcQ',userName:'FREDDY V',userEmail:'freddy@kolwezi.cd',userMpesa:'0983356734',views:128,likes:24,comments:[{name:'Fan Kolwezi',text:'Je veux gagner aussi!'}],date:new Date().toLocaleDateString()}];save();}
 function save(){localStorage.setItem('fv_users',JSON.stringify(users));localStorage.setItem('fv_videos',JSON.stringify(videos));localStorage.setItem('fv_current',JSON.stringify(currentUser));}
 function getYtId(u){let m=u.match(/(?:v=|\.be\/|shorts\/)([a-zA-Z0-9_-]{11})/);return m?m[1]:null;}
-function openModal(id){document.getElementById(id).style.display='flex';}
+function openModal(id){document.getElementById(id).style.display='flex';if(id=='publishModal'&&currentUser)document.getElementById('vMpesa').value=currentUser.mpesa||'';}
 function closeModal(id){document.getElementById(id).style.display='none';}
-function register(){let n=document.getElementById('aName').value.trim(),e=document.getElementById('aEmail').value.trim(),p=document.getElementById('aPass').value.trim();if(!n||!e){document.getElementById('aMsg').innerText='Nom et email obligatoires';return;}let u=users.find(x=>x.email==e);if(!u){u={id:Date.now().toString(),name:n,email:e,pass:p};users.push(u);}currentUser=u;save();document.getElementById('authBtn').innerText=u.name;document.getElementById('aMsg').innerText='Connecté!';setTimeout(()=>closeModal('authModal'),800);}
-function publish(){if(!currentUser){alert('Crée compte d\'abord');openModal('authModal');return;}let t=document.getElementById('vTitle').value.trim(),d=document.getElementById('vDesc').value.trim(),l=document.getElementById('vLink').value.trim(),y=getYtId(l);if(!t||!y){alert('Titre + lien YouTube valide');return;}let v={id:Date.now().toString(),title:t,desc:d,youtubeId:y,userName:currentUser.name,userEmail:currentUser.email,views:0,likes:0,comments:[],date:new Date().toLocaleDateString()};videos.unshift(v);save();closeModal('publishModal');render(videos);alert('Publiée!');}
-function render(list){document.getElementById('home').innerHTML=list.map(v=>`<div class="card" onclick="watch('${v.id}')"><div class="thumb"><iframe src="https://www.youtube.com/embed/${v.youtubeId}" loading="lazy"></iframe></div><div class="card-body"><h3>${v.title}</h3><div class="meta"><span style="color:#ff6a00;cursor:pointer" onclick="event.stopPropagation();showChannel('${v.userEmail}')">${v.userName}</span> • ${v.views} vues</div></div></div>`).join('');}
-function watch(id){let v=videos.find(x=>x.id==id);if(!v)return;currentWatch=v;v.views++;save();hideAll();document.getElementById('watch').style.display='block';document.getElementById('player').innerHTML=`<iframe src="https://www.youtube.com/embed/${v.youtubeId}?autoplay=1" allowfullscreen></iframe>`;document.getElementById('wTitle').innerText=v.title;document.getElementById('wViews').innerText=v.views+' vues';document.getElementById('wDate').innerText=v.date;document.getElementById('wChannel').innerText=v.userName;document.getElementById('wSubs').innerText=v.userEmail;document.getElementById('wLikes').innerText=v.likes;document.getElementById('wDesc').innerText=v.desc;renderComments();}
-function showChannel(email){let vs=videos.filter(v=>v.userEmail==email);if(vs.length==0)return;let u=users.find(x=>x.email==email)||{name:vs[0].userName,email};let totalViews=vs.reduce((s,v)=>s+v.views,0);hideAll();document.getElementById('channelView').style.display='block';document.getElementById('chAvatar').innerText=u.name.charAt(0).toUpperCase();document.getElementById('chName').innerText=u.name;document.getElementById('chName2').innerText=u.name;document.getElementById('chEmail').innerText=u.email;document.getElementById('chStats').innerText=`${vs.length} vidéos • ${totalViews} vues • Chaîne FREDDY V`;document.getElementById('chVideos').innerHTML=vs.map(v=>`<div class="card" onclick="watch('${v.id}')"><div class="thumb"><iframe src="https://www.youtube.com/embed/${v.youtubeId}"></iframe></div><div class="card-body"><h3>${v.title}</h3><div class="meta">${v.views} vues • ${v.date}</div></div></div>`).join('');}
-function hideAll(){document.getElementById('home').style.display='none';document.getElementById('watch').style.display='none';document.getElementById('channelView').style.display='none';}
+function calc(v){return v*RATE;}
+function register(){let n=document.getElementById('aName').value.trim(),e=document.getElementById('aEmail').value.trim(),m=document.getElementById('aMpesa').value.trim(),p=document.getElementById('aPass').value.trim();if(!n||!e||!m){document.getElementById('aMsg').innerText='Nom, Email et M-Pesa obligatoires pour gagner';return;}let u=users.find(x=>x.email==e);if(!u){u={id:Date.now().toString(),name:n,email:e,mpesa:m,pass:p};users.push(u);}else{u.name=n;u.mpesa=m;}currentUser=u;save();document.getElementById('authBtn').innerText=u.name;document.getElementById('aMsg').innerText='Compte créé! Tu vas gagner 70%';setTimeout(()=>closeModal('authModal'),800);}
+function publish(){if(!currentUser){alert('Crée compte avec M-Pesa d\'abord');openModal('authModal');return;}let t=document.getElementById('vTitle').value.trim(),d=document.getElementById('vDesc').value.trim(),l=document.getElementById('vLink').value.trim(),mp=document.getElementById('vMpesa').value.trim(),y=getYtId(l);if(!t||!y){alert('Titre + lien YouTube valide');return;}let v={id:Date.now().toString(),title:t,desc:d,youtubeId:y,userName:currentUser.name,userEmail:currentUser.email,userMpesa:mp||currentUser.mpesa,views:0,likes:0,comments:[],date:new Date().toLocaleDateString()};videos.unshift(v);save();closeModal('publishModal');render(videos);alert('Publiée! Tu gagneras '+RATE+' FC par vue. Partage pour gagner plus!');}
+function render(list){document.getElementById('home').innerHTML=list.map(v=>`<div class="card" onclick="watch('${v.id}')"><div class="thumb"><iframe src="https://www.youtube.com/embed/${v.youtubeId}" loading="lazy"></iframe></div><div class="card-body"><h3>${v.title}</h3><div class="meta"><span style="color:#ff6a00" onclick="event.stopPropagation();showChannel('${v.userEmail}')">${v.userName}</span><span class="gain-badge">${calc(v.views)} FC</span></div><div class="meta"><span>${v.views} vues</span><span style="color:gold">Gagne 70%</span></div></div></div>`).join('');}
+function watch(id){let v=videos.find(x=>x.id==id);if(!v)return;currentWatch=v;v.views++;save();hideAll();document.getElementById('watch').style.display='block';document.getElementById('player').innerHTML=`<iframe src="https://www.youtube.com/embed/${v.youtubeId}?autoplay=1" allowfullscreen></iframe>`;document.getElementById('wTitle').innerText=v.title;document.getElementById('wViews').innerText=v.views+' vues';document.getElementById('wDate').innerText=v.date;document.getElementById('wChannel').innerText=v.userName;document.getElementById('wMpesa').innerText='M-Pesa gains: '+v.userMpesa;document.getElementById('wSubs').innerText=v.userEmail+' • Il gagne '+calc(v.views)+' FC';document.getElementById('wLikes').innerText=v.likes;document.getElementById('wDesc').innerText=v.desc;document.getElementById('wEarn').innerText=calc(v.views)+' FC gagnés';renderComments();}
+function showChannel(email){let vs=videos.filter(v=>v.userEmail==email);if(vs.length==0)return;let u=users.find(x=>x.email==email)||{name:vs[0].userName,email,mpesa:vs[0].userMpesa};let total=vs.reduce((s,v)=>s+v.views,0);hideAll();document.getElementById('channelView').style.display='block';document.getElementById('chAvatar').innerText=u.name.charAt(0).toUpperCase();document.getElementById('chName').innerText=u.name;document.getElementById('chName2').innerText=u.name;document.getElementById('chStats').innerText=`${vs.length} vidéos • ${total} vues • ${calc(total)} FC gagnés (70%)`;document.getElementById('chMpesa').innerText='M-Pesa: '+u.mpesa;document.getElementById('chVideos').innerHTML=vs.map(v=>`<div class="card" onclick="watch('${v.id}')"><div class="thumb"><iframe src="https://www.youtube.com/embed/${v.youtubeId}"></iframe></div><div class="card-body"><h3>${v.title}</h3><div class="meta"><span>${v.views} vues</span><span style="color:gold">${calc(v.views)} FC</span></div></div></div>`).join('');}
+function showEarnings(){if(!currentUser){alert('Crée compte d\'abord');openModal('authModal');return;}let vs=videos.filter(v=>v.userEmail==currentUser.email);let total=vs.reduce((s,v)=>s+v.views,0);let gain=calc(total);hideAll();document.getElementById('earningsView').style.display='block';document.getElementById('eTotalViews').innerText=total+' vues totales';document.getElementById('eTotalGain').innerText=gain+' FC (70%)';document.getElementById('eMpesa').innerText=currentUser.mpesa;document.getElementById('eList').innerHTML=vs.length==0?'<p style="color:#aaa">Tu n\'as pas encore publié. Clique + Publier pour gagner!</p>':vs.map(v=>`<div class="earn-card"><b>${v.title}</b><br><small>${v.views} vues • ${calc(v.views)} FC • ${v.date}</small></div>`).join('');}
+function hideAll(){document.getElementById('home').style.display='none';document.getElementById('watch').style.display='none';document.getElementById('channelView').style.display='none';document.getElementById('earningsView').style.display='none';}
 function showHome(){hideAll();document.getElementById('home').style.display='grid';render(videos);}
 function like(){if(!currentWatch)return;currentWatch.likes++;save();document.getElementById('wLikes').innerText=currentWatch.likes;}
 function addComment(){let t=document.getElementById('cInput').value.trim();if(!t||!currentWatch)return;let n=currentUser?currentUser.name:'Visiteur';currentWatch.comments.push({name:n,text:t});save();document.getElementById('cInput').value='';renderComments();}
 function renderComments(){document.getElementById('cList').innerHTML=currentWatch.comments.map(c=>`<div class="comment"><b>${c.name}:</b> ${c.text}</div>`).join('');}
-function subscribe(){alert('Abonné! Merci pour soutien M-Pesa 0983356734');}
+function subscribe(){alert('Abonné!');}
+function supportCreator(){if(!currentWatch)return;let m=currentWatch.userMpesa;alert('Soutenir '+currentWatch.userName+' via M-Pesa: '+m+'\n\nEt Google paye aussi 10 FC par vue via AdSense!');window.open('https://wa.me/243'+m.slice(1),'_blank');}
+function requestPayment(){if(!currentUser)return;let vs=videos.filter(v=>v.userEmail==currentUser.email);let total=vs.reduce((s,v)=>s+v.views,0);let gain=calc(total);if(gain<1000){alert('Minimum 1000 FC pour demander paiement. Tu as '+gain+' FC. Continue à partager!');return;}alert('Demande de paiement '+gain+' FC envoyée à FREDDY V (0983356734)!\n\nGoogle a payé FREDDY V, FREDDY V te paye via M-Pesa: '+currentUser.mpesa+'\n\nContacte WhatsApp 0983356734 pour recevoir.');window.open('https://wa.me/243983356734?text=Bonjour FREDDY V, je demande paiement de '+gain+' FC pour '+total+' vues. Mon M-Pesa: '+currentUser.mpesa,'_blank');}
 function search(){let s=document.getElementById('q').value.toLowerCase();render(videos.filter(v=>v.title.toLowerCase().includes(s)||v.userName.toLowerCase().includes(s)));}
 if(currentUser)document.getElementById('authBtn').innerText=currentUser.name;render(videos);
 </script>
