@@ -1,0 +1,28 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Chaîne - FREDDY-V</title><script src="https://cdn.tailwindcss.com"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></head>
+<body class="bg-white">
+<header class="flex justify-between px-3 py-2 border-b"><a href="index.html" class="bg-red-600 text-white font-black px-3 py-1 rounded">FREDDY-V</a><div class="flex gap-2"><a href="notifications.html" class="relative"><i class="fa fa-bell text-xl"></i><span id="notifCount" class="hidden absolute -top-1 -right-1 bg-red-600 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">0</span></a><a href="ma-chaine.html" class="w-7 h-7 bg-purple-600 rounded-full flex items-center justify-center text-white font-black text-xs">MF</a></div></header>
+<div id="chaineHeader" class="p-4 border-b"></div>
+<div id="videosChaine" class="grid grid-cols-2 md:grid-cols-4 gap-3 p-3"></div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, getDocs, query, where, doc, updateDoc, increment, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+const db=getFirestore(initializeApp({ apiKey: "AIzaSyCZTf68dJf0nir7IJ8QCPrVwB4EEEeclHM", authDomain: "freddy-v.firebaseapp.com", projectId: "freddy-v", storageBucket: "freddy-v.firebasestorage.app", messagingSenderId: "318263144332", appId: "1:318263144332:web:387b2ded7cf5b85d6eb0a9" }));
+const params=new URLSearchParams(window.location.search); const handle=params.get('c')||'@makolafreddy';
+async function loadChaine(){
+  const q=query(collection(db,"chaines"),where("handle","==",handle)); const snap=await getDocs(q);
+  if(snap.empty){document.getElementById('chaineHeader').innerHTML="Chaîne introuvable";return;}
+  const data=snap.docs[0].data(); const id=snap.docs[0].id;
+  document.getElementById('chaineHeader').innerHTML=`<div class="flex items-center gap-3"><div class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center text-white font-black text-xl">${data.nom[0]}</div><div><h1 class="font-black">${data.nom}</h1><p class="text-xs text-gray-500">${data.handle} • ${data.abonnes||0} abonnés • ${data.pays}</p></div><button id="btnAbo" onclick="abonner('${id}','${handle}')" class="ml-auto bg-black text-white text-xs font-bold px-4 py-2 rounded-full">S'abonner</button></div>`;
+  const vq=query(collection(db,"videos"),where("chaineHandle","==",handle)); const vsnap=await getDocs(vq);
+  let html=""; vsnap.forEach(d=>{ const v=d.data(); html+=`<div onclick="location.href='index.html?v=${d.id}'" class="cursor-pointer"><video src="${v.url}" class="w-full aspect-video rounded-xl bg-black"></video><p class="font-bold text-xs mt-1">${v.titre}</p><p class="text-[11px] text-gray-500">${v.vues||0} vues</p></div>`; });
+  document.getElementById('videosChaine').innerHTML=html||"Aucune vidéo";
+}
+window.abonner=async(id,handle)=>{
+  const email=localStorage.getItem("freddy_user")||"visiteur@gmail.com";
+  await addDoc(collection(db,"abonnements"),{userEmail:email, chaineHandle:handle, date:new Date().toISOString()});
+  await updateDoc(doc(db,"chaines",id),{abonnes:increment(1)});
+  document.getElementById('btnAbo').innerText="✅ Abonné!"; document.getElementById('btnAbo').className="ml-auto bg-gray-200 text-xs font-bold px-4 py-2 rounded-full";
+}
+loadChaine();
+</script>
+</body></html>
