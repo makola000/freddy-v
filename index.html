@@ -3,12 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FREDDY V - MAKOLA IA</title>
+<title>FREDDY-V - YouTube de Masisi</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs, doc, updateDoc, increment, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
 const firebaseConfig = {
   apiKey: "AIzaSyCZTf68dJf0nir7IJ8QCPrVwB4EEEeclHM",
   authDomain: "freddy-v.firebaseapp.com",
@@ -19,40 +20,85 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const produitsRef = collection(db, "produits");
-onSnapshot(produitsRef, (snap) => {
-  const list = document.getElementById('produits-list');
-  const count = document.getElementById('produit-count');
-  list.innerHTML = "";
-  let items = [];
-  snap.forEach(d => items.push({id:d.id, ...d.data()}));
-  count.textContent = items.length + " produits sauvegardés";
-  if(items.length === 0){
-    list.innerHTML = `<p class='text-center text-gray-400 py-10'>Aucun produit. Ajoute en bas!</p>`;
-    return;
-  }
-  items.forEach(p => {
-    list.innerHTML += `<div class="bg-white rounded-2xl shadow p-4 flex justify-between items-center"><div><b>${p.nom}</b><br><span class="text-blue-600 font-black">${p.prix} $</span> - ${p.categorie}</div><button onclick="supprimer('${p.id}')" class="bg-red-100 text-red-600 px-3 py-1 rounded-full"><i class="fas fa-trash"></i></button></div>`;
+
+let allVideos = [];
+
+window.loadVideos = async () => {
+  const q = query(collection(db, "videos"), orderBy("createdAt", "desc"));
+  onSnapshot(q, (snap)=>{
+    allVideos = [];
+    const grid = document.getElementById('videoGrid');
+    const shorts = document.getElementById('shortsGrid');
+    grid.innerHTML = ""; shorts.innerHTML = "";
+    
+    if(snap.empty){
+      grid.innerHTML = `<div class='col-span-2 text-center p-10 text-gray-500'>Aucune vidéo. Sois le premier à publier! <br><a href='publier.html' class='text-red-600 font-bold underline'>Publier une vidéo</a></div>`;
+      return;
+    }
+
+    snap.forEach(d=>{
+      const v = {id: d.id, ...d.data()};
+      allVideos.push(v);
+      if(v.type === 'short'){
+        shorts.innerHTML += `
+        <div onclick="openShort('${v.id}')" class="w-[160px] flex-shrink-0 cursor-pointer">
+          <div class="h-[280px] bg-black rounded-xl overflow-hidden relative">
+            <img src="${v.thumbnail || 'https://via.placeholder.com/160x280?text=FREDDY-V'}" class="w-full h-full object-cover">
+            <div class="absolute bottom-1 left-1 bg-black/70 text-white text-[10px] px-1 rounded">${v.vues||0} vues</div>
+          </div>
+          <p class="text-sm font-bold line-clamp-2 mt-1 leading-tight">${v.titre}</p>
+          <p class="text-xs text-gray-500">${v.vues||0} vues</p>
+        </div>`;
+      } else {
+        grid.innerHTML += `
+        <div class="bg-white rounded-xl overflow-hidden cursor-pointer" onclick="openVideo('${v.id}')">
+          <div class="aspect-video bg-black relative">
+            <img src="${v.thumbnail || 'https://via.placeholder.com/400x220?text=FREDDY-V'}" class="w-full h-full object-cover">
+            <span class="absolute bottom-2 right-2 bg-black/80 text-white text-xs px-1 rounded">${v.duree||'0:32'}</span>
+          </div>
+          <div class="p-3 flex gap-3">
+            <div class="w-8 h-8 bg-red-600 rounded-full flex-shrink-0 flex items-center justify-center text-white font-black text-xs">${(v.auteur||'M')[0]}</div>
+            <div class="flex-1">
+              <h3 class="font-bold text-sm line-clamp-2 leading-tight">${v.titre}</h3>
+              <p class="text-xs text-gray-500 mt-1">${v.auteur||'Makola Freddy'} • ${v.vues||0} vues • il y a 2h</p>
+              <div class="flex gap-3 mt-2 text-xs">
+                <button onclick="event.stopPropagation(); like('${v.id}')" class="flex items-center gap-1"><i class="fa-regular fa-thumbs-up"></i> ${v.likes||0}</button>
+                <button onclick="event.stopPropagation(); telecharger('${v.id}')" class="flex items-center gap-1"><i class="fa-solid fa-download"></i> Télécharger</button>
+              </div>
+            </div>
+            <i class="fa-solid fa-ellipsis-vertical text-gray-400"></i>
+          </div>
+        </div>`;
+      }
+    });
   });
-});
-window.ajouterProduit = async () => {
-  const nom = document.getElementById('nom').value;
-  const prix = document.getElementById('prix').value;
-  const cat = document.getElementById('cat').value;
-  if(!nom || !prix) return alert("Remplis nom et prix!");
-  await addDoc(produitsRef, { nom, prix, categorie: cat, date: new Date() });
-  document.getElementById('nom').value=""; document.getElementById('prix').value=""; document.getElementById('cat').value="";
-  alert("✅ Produit ajouté! Il restera pour toujours!");
-}
-window.supprimer = async (id) => { if(confirm("Supprimer?")) await deleteDoc(doc(db, "produits", id)); }
-</script>
-</head>
-<body class="bg-gray-100 min-h-screen">
-<header class="bg-black text-white p-4"><div class="flex justify-between items-center max-w-5xl mx-auto"><h1 class="font-black text-xl">⚡ FREDDY V</h1><span class="bg-green-500 text-xs px-3 py-1 rounded-full">● CONNECTÉ À FIREBASE</span></div></header>
-<main class="max-w-5xl mx-auto p-4">
-<div class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-3xl p-6 mb-6"><h2 class="text-2xl font-black">MAKOLA IA</h2><p>Durba • Système en ligne - Les données ne s'effacent plus!</p><p id="produit-count" class="mt-3 bg-white/20 inline-block px-3 py-1 rounded-full text-sm">Chargement...</p></div>
-<div class="bg-white rounded-2xl p-5 shadow mb-6"><h3 class="font-bold mb-3">+ Ajouter Produit</h3><div class="flex flex-col gap-3"><input id="nom" placeholder="Nom du produit (ex: Or Durba)" class="border rounded-xl p-3"><input id="prix" type="number" placeholder="Prix en $" class="border rounded-xl p-3"><input id="cat" placeholder="Catégorie (Or, Diamant...)" class="border rounded-xl p-3"><button onclick="ajouterProduit()" class="bg-black text-white rounded-xl p-3 font-bold">AJOUTER LE PRODUIT</button></div></div>
-<h3 class="font-bold mb-3">📦 Boutique en ligne</h3><div id="produits-list" class="grid gap-3"><p class="text-center text-gray-400">Chargement...</p></div>
-</main>
-</body>
-</html>
+};
+
+window.openShort = (id) => {
+  const v = allVideos.find(x=>x.id===id);
+  document.getElementById('shortModal').classList.remove('hidden');
+  document.getElementById('shortVideoSrc').src = v.url || '';
+  document.getElementById('shortTitre').textContent = v.titre;
+  document.getElementById('shortAuteur').textContent = "@"+(v.auteur||'makola');
+  document.getElementById('shortVues').textContent = (v.vues||0)+" vues";
+  document.getElementById('shortLikeCount').textContent = v.likes||0;
+  // +1 vue
+  updateDoc(doc(db, "videos", id), {vues: increment(1)});
+  updateDoc(doc(db, "createurs", "global"), {vues: increment(1)}).catch(()=>{});
+};
+window.closeShort = () => { document.getElementById('shortModal').classList.add('hidden'); document.getElementById('shortVideoSrc').src=""; };
+
+window.openVideo = (id) => {
+  const v = allVideos.find(x=>x.id===id);
+  document.getElementById('watchModal').classList.remove('hidden');
+  document.getElementById('watchVideo').src = v.url || '';
+  document.getElementById('watchTitre').textContent = v.titre;
+  document.getElementById('watchVues').textContent = (v.vues||0)+" vues";
+  document.getElementById('watchAuteur').textContent = v.auteur||'Makola Freddy';
+  loadComments(id);
+  updateDoc(doc(db, "videos", id), {vues: increment(1)});
+};
+
+window.like = async (id) => { await updateDoc(doc(db, "videos", id), {likes: increment(1)}); };
+window.enregistrer = () => { alert('✅ Vidéo enregistrée dans "Mon Compte"'); };
+window.part
