@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FREDDY-V - Compte</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;color:#fff;font-family:Arial;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:16px}
+.box{background:#151515;border-radius:20px;padding:24px;width:100%;max-width:380px;text-align:center;border:1px solid #222}
+.logo{color:#ff0040;font-weight:900;font-size:22px;margin-bottom:8px}
+.sub{color:#aaa;font-size:13px;margin-bottom:18px}
+.input{background:#fff;border:none;border-radius:12px;padding:14px 16px;width:100%;margin:8px 0;font-size:14px;color:#000}
+.select{background:#fff;border:none;border-radius:12px;padding:14px 16px;width:100%;margin:8px 0;font-size:14px;color:#000}
+.btn{background:#ff0040;color:#fff;border:none;border-radius:12px;padding:14px;width:100%;font-weight:800;font-size:14px;margin-top:10px;cursor:pointer}
+.foot{color:#777;font-size:11px;margin-top:14px}
+.link{color:#aaa;font-size:12px;margin-top:12px;display:block;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="box">
+<div class="logo">FREDDY-V</div>
+<div class="sub">1000 vues = 1$<br>Airtel Money + Western Union + MoneyGram</div>
+<input class="input" id="nom" placeholder="Nom complet (OBLIGATOIRE pour Wester)">
+<input class="input" id="whats" placeholder="WhatsApp ex: 0983356734">
+<select class="select" id="pays"><option value="">Choisis ton pays</option><option value="RDC" selected>RDC</option><option value="Congo Brazzaville">Congo Brazzaville</option><option value="Angola">Angola</option><option value="Zambie">Zambie</option></select>
+<select class="select" id="paiement"><option value="">Comment tu veux etre paye?</option><option value="Airtel Money">Airtel Money</option><option value="Western Union">Western Union</option><option value="MoneyGram">MoneyGram</option><option value="Banque">Banque</option></select>
+<input class="input" id="numero" placeholder="Numero Airtel OU Nom complet pour WU">
+<button class="btn" onclick="inscrire()">S'INSCRIRE - C'EST GRATUIT</button>
+<div class="foot">Payeur: Airtel 0983356734 - Paiement Lundi<br>FREDDY-V Kolwezi</div>
+<a href="index.html" class="link">Deja inscrit? Retour accueil</a>
+</div>
+<script>
+function inscrire(){
+let nom=document.getElementById('nom').value.trim();
+let whats=document.getElementById('whats').value.trim();
+if(!nom||!whats){alert('Nom + WhatsApp obligatoires!');return;}
+let users=[];try{users=JSON.parse(localStorage.getItem('fv_users')||'[]')}catch(e){users=[]}
+users.push({id:Date.now().toString(),name:nom,whats,joined:Date.now()});
+localStorage.setItem('fv_users',JSON.stringify(users));
+localStorage.setItem('fv_currentUser',JSON.stringify({name:nom,whats}));
+alert('Bienvenue '+nom+'! Compte cree!');
+window.location.href='index.html';
+}
+</script>
+</body>
+</html>
