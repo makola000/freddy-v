@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FREDDY-V Shorts</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+html{scroll-snap-type:y mandatory; overflow-y: scroll; height:100vh}
+.shorts{scroll-snap-align:start; height:100vh; width:100vw; position:relative; background:black; overflow:hidden}
+</style>
+</head>
+<body class="bg-black">
+<header class="fixed top-0 left-0 right-0 z-50 flex justify-between items-center p-3 bg-black/50">
+<a href="index.html" class="text-white font-black">FREDDY-V <span class="bg-red-600 px-2 rounded">Shorts</span></a>
+<a href="index.html" class="text-white"><i class="fa fa-times"></i></a>
+</header>
+
+<div id="container" class="pt-0"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, getDocs, doc, updateDoc, increment, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+const firebaseConfig = { apiKey: "AIzaSyCZTf68dJf0nir7IJ8QCPrVwB4EEEeclHM", authDomain: "freddy-v.firebaseapp.com", projectId: "freddy-v", storageBucket: "freddy-v.firebasestorage.app", messagingSenderId: "318263144332", appId: "1:318263144332:web:387b2ded7cf5b85d6eb0a9" };
+const db = getFirestore(initializeApp(firebaseConfig));
+
+function getEmbed(url){
+ if(url.includes("youtube.com/watch")){ const m=url.match(/v=([^&]+)/); return m?`https://www.youtube.com/embed/${m[1]}?autoplay=1&loop=1&controls=0&mute=1` : null; }
+ if(url.includes("youtu.be/")){ const m=url.match(/youtu\.be\/([^?&]+)/); return m?`https://www.youtube.com/embed/${m[1]}?autoplay=1&loop=1&controls=0&mute=1` : null; }
+ return url;
+}
+
+async function load(){
+ const snap=await getDocs(collection(db,"videos")); let html="";
+ snap.forEach(d=>{
+  const v=d.data(); if(!v.url) return;
+  const embed=getEmbed(v.url);
+  const isMp4 = !v.url.includes("youtube");
+  const media = isMp4 ? `<video src="${embed}" loop autoplay muted playsinline class="w-full h-full object-cover" onclick="this.muted=!this.muted"></video>` : `<iframe src="${embed}" class="w-full h-full" frameborder="0" allow="autoplay"></iframe>`;
+  html+=`
+  <div class="shorts">
+    ${media}
+    <div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent text-white">
+      <p class="font-bold text-sm">${v.titre||'Sans titre'}</p><p class="text-xs opacity-80">${v.auteur||''} • ${v.vues||0} vues</p>
+    </div>
+    <div class="absolute right-2 bottom-20 flex flex-col gap-5 items-center">
+      <button onclick="like('${d.id}',this)" class="flex flex-col items-center text-white"><div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center"><i class="fa fa-heart text-xl"></i></div><span class="text-[11px] mt-1 like-count">${v.likes||0}</span></button>
+      <button onclick="dislike(this)" class="flex flex-col items-center text-white"><div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center"><i class="fa fa-thumbs-down text-xl"></i></div><span class="text-[11px] mt-1">Pas aimé</span></button>
+      <button onclick="commenter('${d.id}')" class="flex flex-col items-center text-white"><div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center"><i class="fa fa-comment text-xl"></i></div><span class="text-[11px] mt-1">Com</span></button>
+      <button onclick="partager('${v.url}')" class="flex flex-col items-center text-white"><div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center"><i class="fa fa-share text-xl"></i></div><span class="text-[11px] mt-1">Partager</span></button>
+      <button onclick="enregistrer('${d.id}')" class="flex flex-col items-center text-white"><div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center"><i class="fa fa-bookmark text-xl"></i></div><span class="text-[11px] mt-1">Enregistré</span></button>
+      <button onclick="telecharger('${v.url}')" class="flex flex-col items-center text-white"><div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center"><i class="fa fa-download text-xl"></i></div><span class="text-[11px] mt-1">Téléch.</span></button>
+    </div>
+  </div>`;
+ });
+ document.getElementById('container').innerHTML=html || "<p class='text-white text-center mt-20'>Pas de shorts</p>";
+}
+window.like=async(id,el)=>{
+ await updateDoc(doc(db,"videos",id),{likes:increment(1)});
+ const c=el.querySelector('.like-count'); c.innerText=parseInt(c.innerText)+1; el.classList.add('text-red-500');
+}
+window.dislike=(el)=>{ el.classList.toggle('text-red-500'); }
+window.partager=async(url)=>{
+ if(navigator.share){ try{ await navigator.share({url}); }catch(e){} } else { await navigator.clipboard.writeText(url); alert("Lien copié!"); }
+}
+window.enregistrer=(id)=>{
+ let s=JSON.parse(localStorage.getItem('freddy_saved')||'[]'); if(!s.includes(id)){ s.push(id); localStorage.setItem('freddy_saved',JSON.stringify(s)); alert("✅ Enregistré!"); } else alert("Déjà enregistré");
+}
+window.telecharger=(url)=>{
+ if(url.includes('youtube')){ alert("YouTube ne se télécharge pas, seulement MP4 direct comme ton lapin"); return; }
+ const a=document.createElement('a'); a.href=url; a.download=""; a.click();
+}
+window.commenter=(id)=>{
+ const txt=prompt("Ton commentaire:"); if(!txt) return;
+ addDoc(collection(db,"commentaires"),{videoId:id, texte:txt, auteur:localStorage.getItem('freddy_user')||'Anonyme', date:new Date().toISOString()}); alert("✅ Commenté!");
+}
+load();
+</script>
+</body>
+</html>
