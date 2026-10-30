@@ -27,9 +27,13 @@ window.publier = async () => {
   const btn = document.getElementById('btn');
   const msg = document.getElementById('msg');
 
-  if(!titre || !url){ msg.innerHTML="<div class='bg-red-100 text-red-700 p-3 rounded'>Remplis titre + lien vidéo!</div>"; return; }
+  if(!titre || !url){ 
+    msg.innerHTML="<div class='bg-red-100 text-red-700 p-3 rounded'>Remplis titre + lien!</div>"; 
+    return; 
+  }
 
   btn.textContent = "Publication...";
+  btn.disabled = true;
   try {
     await addDoc(collection(db, "videos"), {
       titre: titre,
@@ -41,11 +45,12 @@ window.publier = async () => {
       likes: 0,
       createdAt: serverTimestamp()
     });
-    msg.innerHTML = `<div class='bg-green-100 text-green-700 p-4 rounded-xl font-bold'>✅ Vidéo publiée sur FREDDY-V!<br><a href='index.html' class='underline'>Voir sur Accueil YouTube</a></div>`;
-    btn.textContent = "Publié!";
+    msg.innerHTML = `<div class='bg-green-100 text-green-700 p-4 rounded-xl font-bold'>✅ Vidéo publiée!<br><a href='index.html' class='underline'>Voir sur Accueil</a></div>`;
+    btn.textContent = "✅ Publié!";
   } catch(e){
-    msg.innerHTML = `<div class='bg-red-100 text-red-700 p-3 rounded'>Erreur: ${e.message}</div>`;
+    msg.innerHTML = `<div class='bg-red-100 p-3 rounded'>Erreur: ${e.message}<br>Vérifie règles Firestore: allow read, write: if true;</div>`;
     btn.textContent = "Réessayer";
+    btn.disabled = false;
   }
 };
 </script>
@@ -53,25 +58,21 @@ window.publier = async () => {
 <body class="bg-[#f9f9f9] p-4">
 <div class="max-w-md mx-auto bg-white p-6 rounded-2xl mt-6 shadow">
 <h1 class="font-black text-xl">📤 Publier sur FREDDY-V</h1>
-<p class="text-sm text-gray-500">Comme YouTube - Ta vidéo sera visible sur Accueil</p>
 
-<label class="font-bold text-sm mt-6 block">Titre de la vidéo</label>
-<input id="titre" placeholder="Ex: Ma vie à Masisi - Vlog 1" class="w-full p-3 border-2 rounded-xl mt-1">
+<label class="font-bold text-sm mt-6 block">Titre</label>
+<input id="titre" placeholder="Ex: Ma vie à Masisi" class="w-full p-3 border-2 rounded-xl mt-1">
 
-<label class="font-bold text-sm mt-4 block">Lien de la vidéo (YouTube, MP4, ou lien direct)</label>
-<input id="url" placeholder="https://... ou colle lien vidéo" class="w-full p-3 border-2 rounded-xl mt-1">
-<p class="text-xs text-gray-400 mt-1">Astuce: Prends un lien MP4 ou YouTube pour test</p>
+<label class="font-bold text-sm mt-4 block">Lien vidéo (pour test: colle https://www.w3schools.com/html/mov_bbb.mp4)</label>
+<input id="url" placeholder="https://..." class="w-full p-3 border-2 rounded-xl mt-1">
 
 <label class="font-bold text-sm mt-4 block">Type</label>
 <select id="type" class="w-full p-3 border-2 rounded-xl mt-1">
-  <option value="video">Vidéo normale (Accueil)</option>
+  <option value="video">Vidéo normale</option>
   <option value="short">Shorts Vertical</option>
 </select>
 
-<button id="btn" onclick="publier()" class="w-full bg-red-600 text-white py-4 rounded-xl font-black mt-6">🚀 PUBLIER MAINTENANT</button>
-
+<button id="btn" onclick="publier()" class="w-full bg-red-600 text-white py-4 rounded-xl font-black mt-6">🚀 PUBLIER</button>
 <div id="msg" class="mt-4"></div>
-
 <a href="index.html" class="block text-center mt-6 underline">← Retour Accueil</a>
 </div>
 </body>
