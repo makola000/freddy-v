@@ -3,105 +3,148 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FREDDY-V - YouTube</title>
+<title>FREDDY-V</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
-<body class="bg-[#f9f9f9]">
+<body class="bg-[#f5f5f5]">
 
-<header class="bg-white sticky top-0 z-40 flex items-center justify-between p-3 border-b">
-  <h1 class="font-black text-xl"><span class="bg-red-600 text-white px-2 py-1 rounded">FREDDY</span>-V</h1>
-  <div class="flex gap-2">
-    <a href="publier.html" class="bg-black text-white px-3 py-1 rounded-full text-xs font-bold">+ Publier</a>
-    <a href="admin.html" class="bg-yellow-400 w-8 h-8 rounded-full flex items-center justify-center font-black">M</a>
+<!-- HEADER comme ta capture -->
+<header class="bg-white flex justify-between items-center p-3 sticky top-0 z-50 border-b">
+  <div class="flex items-center">
+    <span class="bg-red-600 text-white font-black px-3 py-1 rounded-md text-lg">FREDDY</span>
+    <span class="font-black text-xl ml-1">-V</span>
+  </div>
+  <div class="flex items-center gap-2">
+    <a href="publier.html" class="bg-black text-white px-4 py-1.5 rounded-full text-sm font-bold">+ Publier</a>
+    <div class="w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center font-black">M</div>
   </div>
 </header>
 
-<div class="p-2 flex gap-2 overflow-x-auto text-xs">
-  <a href="inscription.html" class="bg-black text-white px-4 py-2 rounded-full font-bold whitespace-nowrap">Mon Compte</a>
-  <a href="inscription.html" class="bg-white border px-4 py-2 rounded-full font-bold whitespace-nowrap">Abonnements</a>
-  <span class="bg-white border px-4 py-2 rounded-full whitespace-nowrap">Musique</span>
-  <span class="bg-white border px-4 py-2 rounded-full whitespace-nowrap">Masisi</span>
-</div>
+<!-- CONTENU COMME TA CAPTURE -->
+<div class="bg-white p-3 grid grid-cols-2 gap-3">
+  <!-- DEMO SHORT -->
+  <div id="card-demo" class="cursor-pointer">
+    <div class="w-full h-[220px] bg-gradient-to-b from-red-500 to-[#2b0000] rounded-xl flex items-center justify-center">
+      <span class="text-white font-black text-sm">DEMO SHORT</span>
+    </div>
+    <p class="font-bold text-sm mt-2 leading-tight">Bienvenue sur<br>FREDDY-V</p>
+    <p id="vues-demo" class="text-xs text-gray-500 mt-1">1.2K vues</p>
+  </div>
 
-<div class="bg-white p-3 mt-2">
-  <h2 class="font-black flex items-center gap-2"><i class="fa-solid fa-bolt text-red-600"></i> Shorts</h2>
-  <div id="shorts" class="flex gap-3 overflow-x-auto mt-3">
-    <div onclick="openShort()" class="w-[140px] flex-shrink-0 cursor-pointer">
-      <div class="h-[240px] bg-gradient-to-b from-red-500 to-black rounded-xl flex items-center justify-center text-white font-black">DEMO SHORT</div>
-      <p class="text-sm font-bold mt-1">Bienvenue sur FREDDY-V</p>
-      <p class="text-xs text-gray-500">1.2K vues</p>
+  <!-- SHORT 2 -->
+  <div id="card-short2" class="cursor-pointer">
+    <div class="w-full h-[220px] bg-gradient-to-b from-[#3b82f6] to-[#0a0f1f] rounded-xl flex items-center justify-center">
+      <span class="text-white font-black text-sm">SHORT 2</span>
     </div>
-    <div onclick="openShort()" class="w-[140px] flex-shrink-0 cursor-pointer">
-      <div class="h-[240px] bg-gradient-to-b from-blue-500 to-black rounded-xl flex items-center justify-center text-white font-black">SHORT 2</div>
-      <p class="text-sm font-bold mt-1">Masisi c'est beau</p>
-      <p class="text-xs text-gray-500">856 vues</p>
-    </div>
+    <p class="font-bold text-sm mt-2">Masisi c'est beau</p>
+    <p id="vues-short2" class="text-xs text-gray-500 mt-1">856 vues</p>
   </div>
 </div>
 
-<div id="videos" class="p-2 grid grid-cols-1 gap-3 mt-2">
-  <div onclick="openVideo()" class="bg-white rounded-xl overflow-hidden cursor-pointer">
-    <div class="aspect-video bg-black flex items-center justify-center text-white font-black text-xl text-center p-4">VIDÉO FREDDY-V - Clique moi!</div>
-    <div class="p-3 flex gap-3">
-      <div class="w-9 h-9 bg-red-600 rounded-full flex items-center justify-center text-white font-black">M</div>
-      <div>
-        <h3 class="font-bold text-sm">Première vidéo sur FREDDY-V - YouTube de Masisi!</h3>
-        <p class="text-xs text-gray-500">Makola Freddy • 0 vues • Maintenant</p>
-        <div class="flex gap-3 mt-2 text-xs">
-          <span><i class="fa-regular fa-thumbs-up"></i> Like</span>
-          <span><i class="fa-solid fa-download"></i> Télécharger</span>
-          <span><i class="fa-regular fa-comment"></i> Commentaire</span>
-        </div>
+<!-- VIDÉO PRINCIPALE COMME TA CAPTURE -->
+<div class="bg-white mt-2">
+  <div id="card-video" class="cursor-pointer">
+    <div class="w-full aspect-video bg-black flex items-center justify-center p-4">
+      <span class="text-white font-black text-lg text-center">VIDÉO FREDDY-V - Clique moi!</span>
+    </div>
+  </div>
+  <div class="p-3 flex gap-3">
+    <div class="w-9 h-9 bg-red-600 rounded-full flex items-center justify-center text-white font-black flex-shrink-0">M</div>
+    <div>
+      <h3 class="font-bold text-sm leading-tight">Première vidéo sur FREDDY-V - YouTube de Masisi!</h3>
+      <p class="text-xs text-gray-500 mt-1">Makola Freddy • <span id="vues-principale">0 vues</span> • Maintenant</p>
+      <div class="flex gap-4 mt-2 text-xs text-gray-700">
+        <span><i class="fa-regular fa-thumbs-up"></i> Like</span>
+        <span><i class="fa-solid fa-download"></i> Télécharger</span>
+        <span><i class="fa-regular fa-comment"></i> Commentaire</span>
       </div>
     </div>
   </div>
 </div>
 
-<!-- SHORT MODAL avec boutons à droite -->
-<div id="shortModal" class="hidden fixed inset-0 bg-black z-50 flex justify-center">
-  <div class="relative w-full max-w-[400px] h-full bg-black">
-    <button onclick="closeShort()" class="absolute top-4 left-4 text-white text-2xl z-10"><i class="fa-solid fa-xmark"></i></button>
-    <div class="w-full h-full flex items-center justify-center text-white text-2xl font-black text-center">VIDÉO SHORT EN COURS<br><span class="text-sm font-normal">FREDDY-V</span></div>
-    <div class="absolute bottom-24 left-3 text-white">
-      <p class="font-black text-sm">@makola_freddy</p>
-      <p class="text-sm mt-1">Bienvenue sur FREDDY-V! 🔥</p>
-      <p class="text-xs opacity-70">12K vues • Masisi</p>
-    </div>
-    <div class="absolute bottom-24 right-2 flex flex-col gap-5 text-white text-center">
-      <button onclick="alert('❤️ Aimé! +1 Like')" class="flex flex-col items-center"><div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-2xl"><i class="fa-solid fa-heart"></i></div><span class="text-xs mt-1">12K</span><span class="text-[10px]">Aimé</span></button>
-      <button onclick="alert('🔖 Enregistré dans Mon Compte')" class="flex flex-col items-center"><div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-xl"><i class="fa-solid fa-bookmark"></i></div><span class="text-[10px]">Enregistrer</span></button>
-      <button onclick="alert('🔗 Lien copié: freddy-v')" class="flex flex-col items-center"><div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-xl"><i class="fa-solid fa-share"></i></div><span class="text-[10px]">Partager</span></button>
-      <button onclick="alert('⬇️ Téléchargement...')" class="flex flex-col items-center"><div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-xl"><i class="fa-solid fa-download"></i></div><span class="text-[10px]">Télécharger</span></button>
-    </div>
-  </div>
-</div>
+<!-- 🔥 COMPTEUR VUES TEMPS RÉEL -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-<!-- VIDEO MODAL -->
-<div id="videoModal" class="hidden fixed inset-0 bg-white z-50 overflow-y-auto">
-  <button onclick="document.getElementById('videoModal').classList.add('hidden')" class="p-3 font-bold"><i class="fa-solid fa-arrow-left"></i> Retour</button>
-  <div class="w-full aspect-video bg-black flex items-center justify-center text-white">LECTURE VIDÉO FREDDY-V</div>
-  <div class="p-3">
-    <h2 class="font-black">Ma première vidéo FREDDY-V!</h2>
-    <p class="text-sm text-gray-500">0 vues • Like • Télécharger • Commentaire</p>
-    <div class="flex gap-2 mt-3">
-      <button class="bg-gray-100 px-3 py-2 rounded-full text-xs font-bold"><i class="fa-regular fa-thumbs-up"></i> Like</button>
-      <button class="bg-gray-100 px-3 py-2 rounded-full text-xs font-bold"><i class="fa-solid fa-download"></i> Télécharger la vidéo</button>
-      <button class="bg-gray-100 px-3 py-2 rounded-full text-xs font-bold"><i class="fa-solid fa-share"></i> Partager</button>
-    </div>
-    <div class="mt-6">
-      <h3 class="font-bold">Commentaires</h3>
-      <input placeholder="Ajouter un commentaire..." class="w-full border-b p-2 text-sm mt-2">
-      <div class="text-sm py-2 mt-2"><b>Makola:</b> Première vidéo! 🔥</div>
-      <div class="text-sm py-2"><b>Visiteur:</b> Félicitations FREDDY-V!</div>
-    </div>
-  </div>
-</div>
+const firebaseConfig = {
+  apiKey: "AIzaSyCZTf68dJf0nir7IJ8QCPrVwB4EEEeclHM",
+  authDomain: "freddy-v.firebaseapp.com",
+  projectId: "freddy-v",
+  storageBucket: "freddy-v.firebasestorage.app",
+  messagingSenderId: "318263144332",
+  appId: "1:318263144332:web:387b2ded7cf5b85d6eb0a9"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-<script>
-function openShort(){ document.getElementById('shortModal').classList.remove('hidden'); }
-function closeShort(){ document.getElementById('shortModal').classList.add('hidden'); }
-function openVideo(){ document.getElementById('videoModal').classList.remove('hidden'); }
+async function getVues(nom){
+  try{
+    const ref = doc(db, "vues", nom);
+    const snap = await getDoc(ref);
+    if(snap.exists()) return snap.data().vues;
+    return null;
+  }catch(e){ return null; }
+}
+
+async function addVue(nom){
+  try{
+    const ref = doc(db, "vues", nom);
+    const snap = await getDoc(ref);
+    if(!snap.exists()){
+      await setDoc(ref, { vues: 1, nom: nom });
+      return 1;
+    } else {
+      await updateDoc(ref, { vues: increment(1) });
+      const newSnap = await getDoc(ref);
+      return newSnap.data().vues;
+    }
+  }catch(e){
+    // Si Firebase bloque, utilise localStorage
+    let local = parseInt(localStorage.getItem(nom) || "0") + 1;
+    localStorage.setItem(nom, local);
+    return local;
+  }
+}
+
+// Affiche les vues au chargement
+(async()=>{
+  let v1 = await getVues("demo-short");
+  if(v1) document.getElementById('vues-demo').innerText = v1 >= 1000 ? (v1/1000).toFixed(1)+'K vues' : v1+' vues';
+  else {
+    let local = localStorage.getItem("demo-short");
+    if(local) document.getElementById('vues-demo').innerText = local+' vues';
+  }
+  
+  let v2 = await getVues("short-2");
+  if(v2) document.getElementById('vues-short2').innerText = v2+' vues';
+  
+  let v3 = await getVues("video-principale");
+  if(v3) document.getElementById('vues-principale').innerText = v3+' vues';
+  else {
+    let local = localStorage.getItem("video-principale");
+    if(local) document.getElementById('vues-principale').innerText = local+' vues';
+  }
+})();
+
+// Clic DEMO SHORT
+document.getElementById('card-demo').onclick = async ()=>{
+  let vues = await addVue("demo-short");
+  document.getElementById('vues-demo').innerText = vues >= 1000 ? (vues/1000).toFixed(1)+'K vues' : vues+' vues';
+};
+
+// Clic SHORT 2
+document.getElementById('card-short2').onclick = async ()=>{
+  let vues = await addVue("short-2");
+  document.getElementById('vues-short2').innerText = vues+' vues';
+};
+
+// Clic VIDÉO PRINCIPALE
+document.getElementById('card-video').onclick = async ()=>{
+  let vues = await addVue("video-principale");
+  document.getElementById('vues-principale').innerText = vues+' vues';
+};
 </script>
 
 </body>
