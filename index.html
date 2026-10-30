@@ -3,63 +3,80 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FREDDY-V - Générateur Nimbo & Cours</title>
+<title>FREDDY-V</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-body{background:#0f0f0f;color:white;padding-bottom:80px}
+body{background:#0f0f0f;color:white;padding-bottom:140px}
 .banner{background:#e60000;color:white;text-align:center;padding:8px;font-weight:800;font-size:13px}
-.header{display:flex;justify-content:space-between;align-items:center;padding:12px;background:#1e1e1e;position:sticky;top:0}
-.logo{font-weight:900;color:#a78bfa;font-size:20px}
+.header{display:flex;justify-content:space-between;align-items:center;padding:12px;background:#1e1e1e;position:sticky;top:0;z-index:10}
+.logo{font-weight:900;color:#a78bfa;font-size:18px}
 .search-box{padding:12px;background:#1e1e1e}
 .search-box input{width:100%;padding:12px;border-radius:10px;border:none;background:#2a2a2a;color:white}
 .generator{background:#1e1e1e;margin:12px;border-radius:14px;padding:14px;border:1px solid #333}
 .generator input,.generator select{width:100%;padding:11px;border-radius:8px;border:none;background:#2a2a2a;color:white;margin-bottom:10px}
-.gen-btn{background:linear-gradient(135deg,#ff0055,#a855f7);color:white;border:none;padding:13px;width:100%;border-radius:10px;font-weight:900;cursor:pointer}
+.gen-btn{background:linear-gradient(135deg,#ff0055,#a855f7);color:white;border:none;padding:13px;width:100%;border-radius:10px;font-weight:900}
 .cats{display:flex;gap:8px;overflow-x:auto;padding:0 12px 10px}
 .cat{white-space:nowrap;padding:6px 14px;border-radius:20px;background:#2a2a2a;border:none;color:#aaa;font-size:13px}
 .cat.active{background:white;color:black;font-weight:700}
 .video-card{background:#1e1e1e;margin:12px;border-radius:12px;overflow:hidden;border:1px solid #2a2a2a}
-.thumb{height:180px;background:linear-gradient(135deg,#3b0764,#7e22ce);display:flex;align-items:center;justify-content:center;font-size:60px;position:relative}
+.thumb{height:160px;background:linear-gradient(135deg,#3b0764,#7e22ce);display:flex;align-items:center;justify-content:center;font-size:50px;position:relative;cursor:pointer}
 .duration{position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,0.8);padding:2px 6px;border-radius:4px;font-size:12px}
-.info{padding:10px}.views{color:#22c55e;font-weight:700}
-.bottom{display:flex;justify-content:space-around;background:#1e1e1e;padding:8px 0;position:fixed;bottom:0;width:100%;border-top:1px solid #333}
+.info{padding:10px}
+.actions{display:flex;gap:8px;margin-top:8px}
+.act-btn{flex:1;padding:8px;border-radius:8px;border:none;font-size:12px;font-weight:700;cursor:pointer}
+.download{background:#2563eb;color:white}
+.comment{background:#2a2a2a;color:white}
+.comments-box{background:#111;padding:10px;display:none}
+.comments-box input{width:100%;padding:8px;border-radius:6px;border:none;background:#2a2a2a;color:white;margin-bottom:6px;font-size:13px}
+.cmt{font-size:12px;padding:4px 0;border-bottom:1px solid #222}
+.bottom{display:flex;justify-content:space-around;background:#1e1e1e;padding:8px 0;position:fixed;bottom:0;width:100%;border-top:1px solid #333;z-index:20}
+.bottom div{font-size:11px;color:#888;text-align:center;cursor:pointer}
+.modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);z-index:100;padding:20px;overflow-y:auto}
+.modal-box{background:#1e1e1e;border-radius:14px;padding:20px;max-width:400px;margin:40px auto;border:1px solid #333}
+.modal-box input{width:100%;padding:12px;border-radius:8px;border:none;background:#2a2a2a;color:white;margin-bottom:10px}
+.modal-btn{background:#22c55e;color:white;border:none;padding:12px;width:100%;border-radius:10px;font-weight:800}
 </style>
 </head>
 <body>
-<div class="banner">1000 vues = 1$ | CREATEUR GAGNE 80% (0,80$) | Paiement LUNDI Airtel:0983356734 - WU - MoneyGram</div>
-<div class="header"><div class="logo">📹 FREDDY-V</div><div>🔔 👤</div></div>
-<div class="search-box">
-<input id="searchInput" placeholder="🔍 Cherche: Nimbo 50, cours soudure..." oninput="filterVideos()">
-</div>
+<div class="banner">1000 vues = 1$ | CREATEUR GAGNE 80% (0,80$) | Paiement LUNDI Airtel:0983356734</div>
+<div class="header"><div class="logo">📹 FREDDY-V</div><div><span onclick="openCompte()">👤</span></div></div>
+<div class="search-box"><input id="searchInput" placeholder="🔍 Cherche Nimbo, cours..." oninput="render()"></div>
 <div class="generator">
-<h3 style="color:#facc15;margin-bottom:10px">✨ Générer & Publier IA</h3>
-<input id="titleInput" placeholder="Titre: Nimbo za Kitabu 123, Cours Électricité...">
-<select id="typeSelect">
-<option value="Nimbo za Kitabu">🎵 Nimbo za Kitabu</option>
-<option value="Gospel">🙏 Gospel</option>
-<option value="Cours Technique">🔧 Cours Technique (5-10 min)</option>
-<option value="Musique">🎤 Musique</option>
-<option value="Sagesse">📖 Sagesse</option>
-</select>
-<button class="gen-btn" onclick="generateVideo()">+ Générer et Publier Maintenant</button>
+<h3 style="color:#facc15;margin-bottom:8px">✨ Générer & Publier IA</h3>
+<input id="titleInput" placeholder="Titre: Nimbo 123, Cours soudure...">
+<select id="typeSelect"><option>🎵 Nimbo za Kitabu</option><option>🙏 Gospel</option><option>🔧 Cours Technique</option><option>🎤 Musique</option></select>
+<button class="gen-btn" onclick="checkAndGen()">+ Générer et Publier</button>
+<p id="compteStatus" style="font-size:11px;color:#888;text-align:center;margin-top:6px"></p>
 </div>
-<div class="cats">
-<button class="cat active" onclick="filterCat('Tous',this)">Tous</button>
-<button class="cat" onclick="filterCat('Nimbo za Kitabu',this)">Nimbo</button>
-<button class="cat" onclick="filterCat('Gospel',this)">Gospel</button>
-<button class="cat" onclick="filterCat('Cours Technique',this)">Cours</button>
-</div>
+<div class="cats"><button class="cat active" onclick="filterCat('Tous',this)">Tous</button><button class="cat" onclick="filterCat('Nimbo za Kitabu',this)">Nimbo</button><button class="cat" onclick="filterCat('Cours Technique',this)">Cours</button></div>
 <div id="videoList"></div>
-<div class="bottom"><div>🏠 Accueil</div><div>➕ Publier</div><div>💰 Gains</div><div>👤 Profil</div></div>
+<div class="bottom"><div onclick="location.reload()">🏠<br>Accueil</div><div onclick="document.getElementById('titleInput').focus()">➕<br>Publier</div><div onclick="openGains()">💰<br>Gains</div><div onclick="openCompte()">👤<br>Profil</div></div>
+
+<div id="compteModal" class="modal"><div class="modal-box"><span style="float:right;cursor:pointer" onclick="closeCompte()">✕</span><h3 style="color:#facc15;text-align:center">👤 Compte</h3><div id="accountDisplay"></div><input id="nomInput" placeholder="Nom complet"><input id="phoneInput" placeholder="Airtel Money"><input id="passInput" type="password" placeholder="Mot de passe"><button class="modal-btn" onclick="creerCompte()">✅ Créer & S'abonner</button><button style="background:#2563eb;margin-top:8px" class="modal-btn" onclick="loginCompte()">🔑 Se connecter</button></div></div>
+
 <script>
-let videos=JSON.parse(localStorage.getItem('freddy_v_videos')||'[]');
-if(videos.length===0){videos=[{id:1,title:"Nimbo za Kitabu 1 - Mungu ni Mwema",type:"Nimbo za Kitabu",views:1250,duration:"4:32",icon:"🎵"},{id:2,title:"Cours Technique: Soudure de base 5 min",type:"Cours Technique",views:890,duration:"5:15",icon:"🔧"},{id:3,title:"Gospel Morning - Louange du Dimanche",type:"Gospel",views:3420,duration:"6:20",icon:"🙏"}];save();}
-function save(){localStorage.setItem('freddy_v_videos',JSON.stringify(videos));}
-function generateVideo(){const title=document.getElementById('titleInput').value.trim();const type=document.getElementById('typeSelect').value;if(!title){alert('Écris le titre!');return;}const icons={"Nimbo za Kitabu":"🎵","Gospel":"🙏","Cours Technique":"🔧","Musique":"🎤","Sagesse":"📖"};const durations={"Nimbo za Kitabu":"3:45","Gospel":"5:20","Cours Technique":"7:30"};const newVideo={id:Date.now(),title:title,type:type,views:0,duration:durations[type]||"5:00",icon:icons[type]||"🎬"};videos.unshift(newVideo);save();document.getElementById('titleInput').value='';render();alert('✅ Publié! '+title);}
-function render(){const list=document.getElementById('videoList');const search=document.getElementById('searchInput').value.toLowerCase();let filtered=videos.filter(v=>(currentCat==='Tous'||v.type===currentCat)&&(v.title.toLowerCase().includes(search)));if(filtered.length===0){list.innerHTML='<div style="text-align:center;padding:40px;color:#666">Aucune vidéo. Publie la première!</div>';return;}list.innerHTML=filtered.map(v=>`<div class="video-card" onclick="addView(${v.id})"><div class="thumb">${v.icon}<span class="duration">${v.duration}</span></div><div style="padding:10px"><h4 style="font-size:14px">${v.title}</h4><div style="font-size:12px;color:#888"><span>${v.type}</span> • <span style="color:#22c55e;font-weight:700">${v.views} vues</span> • <span style="color:#facc15">${(v.views*0.0008).toFixed(2)}$</span></div></div></div>`).join('');}
-function addView(id){const v=videos.find(x=>x.id===id);if(v){v.views++;save();render();}}
-let currentCat='Tous';function filterCat(cat,btn){currentCat=cat;document.querySelectorAll('.cat').forEach(b=>b.classList.remove('active'));btn.classList.add('active');render();}
-function filterVideos(){render();}render();
+let videos=JSON.parse(localStorage.getItem('freddy_videos_v3')||'[]');
+let user=JSON.parse(localStorage.getItem('freddy_user')||'null');
+let currentCat='Tous';
+if(videos.length===0){videos=[{id:1,title:"Nimbo za Kitabu 1 - Mungu ni Mwema",type:"Nimbo za Kitabu",views:1250,duration:"4:32",icon:"🎵",auteur:"FREDDY-V",comments:["Très belle chanson!","Que Dieu te bénisse"]},{id:2,title:"Cours Technique: Soudure 5 min",type:"Cours Technique",views:890,duration:"5:15",icon:"🔧",auteur:"Admin",comments:[]}];save();}
+function save(){localStorage.setItem('freddy_videos_v3',JSON.stringify(videos));}
+function saveUser(){localStorage.setItem('freddy_user',JSON.stringify(user));updateStatus();}
+function updateStatus(){const el=document.getElementById('compteStatus');if(user){el.innerHTML=`✅ ${user.nom} | ${user.vues||0} vues | ${( (user.vues||0)*0.0008).toFixed(2)}$`;el.style.color='#22c55e';}else{el.textContent='Connecte-toi pour publier et gagner';}}
+function openCompte(){document.getElementById('compteModal').style.display='block';showAccount();}
+function closeCompte(){document.getElementById('compteModal').style.display='none';}
+function showAccount(){const d=document.getElementById('accountDisplay');if(user){d.innerHTML=`<div style="background:#2a2a2a;padding:10px;border-radius:8px;text-align:center;font-size:13px;margin-bottom:10px">👤 <b>${user.nom}</b><br>📱 ${user.phone}<br>👁️ ${user.vues||0} vues | 💰 ${((user.vues||0)*0.0008).toFixed(2)}$</div>`;}else{d.innerHTML='<div style="background:#2a2a2a;padding:10px;border-radius:8px;text-align:center;font-size:12px">Crée ton compte pour gagner 0,80$/1000 vues</div>';}}
+function creerCompte(){const nom=document.getElementById('nomInput').value.trim();const phone=document.getElementById('phoneInput').value.trim();const pass=document.getElementById('passInput').value.trim();if(!nom||!phone||!pass){alert('Remplis tout!');return;}user={nom,phone,pass,vues:0};saveUser();showAccount();alert('✅ Compte créé '+nom);closeCompte();}
+function loginCompte(){const phone=document.getElementById('phoneInput').value.trim();const pass=document.getElementById('passInput').value.trim();if(user&&user.phone===phone&&user.pass===pass){alert('Connecté '+user.nom);closeCompte();updateStatus();}else{alert('Erreur, crée compte d\'abord');}}
+function checkAndGen(){if(!user){openCompte();return;}generateVideo();}
+function generateVideo(){const title=document.getElementById('titleInput').value.trim();const type=document.getElementById('typeSelect').value;if(!title){alert('Titre!');return;}const icons={"🎵 Nimbo za Kitabu":"🎵","🙏 Gospel":"🙏","🔧 Cours Technique":"🔧","🎤 Musique":"🎤"};const newVideo={id:Date.now(),title:title,type:type.replace(/^[^\w]+/,'').trim()||type,views:0,duration:"5:00",icon:icons[type]||"🎬",auteur:user.nom,comments:[]};videos.unshift(newVideo);save();document.getElementById('titleInput').value='';render();}
+function render(){const list=document.getElementById('videoList');const search=document.getElementById('searchInput').value.toLowerCase();let filtered=videos.filter(v=>(currentCat==='Tous'||v.type.includes(currentCat)||v.title.includes(currentCat))&&(v.title.toLowerCase().includes(search)));list.innerHTML=filtered.map(v=>`<div class="video-card"><div class="thumb" onclick="addView(${v.id})">${v.icon}<span class="duration">${v.duration}</span></div><div class="info"><h4 style="font-size:14px">${v.title}</h4><div style="font-size:12px;color:#888">Par ${v.auteur} • <span style="color:#22c55e;font-weight:700">${v.views} vues</span> • <span style="color:#facc15">${(v.views*0.0008).toFixed(2)}$</span> • 💬 ${v.comments.length} commentaires</div><div class="actions"><button class="act-btn download" onclick="downloadVideo('${v.title}')">⬇️ Télécharger</button><button class="act-btn comment" onclick="toggleComments(${v.id})">💬 Commenter</button></div></div><div id="cmt-${v.id}" class="comments-box"><div id="list-${v.id}">${v.comments.map(c=>`<div class="cmt">👤 ${c}</div>`).join('')}</div><input id="input-${v.id}" placeholder="Écris un commentaire..." onkeydown="if(event.key==='Enter')addComment(${v.id})"><button class="act-btn comment" onclick="addComment(${v.id})">Envoyer</button></div></div>`).join('');}
+function addView(id){const v=videos.find(x=>x.id===id);if(v){v.views++;if(user){user.vues=(user.vues||0)+1;saveUser();}save();render();}}
+function toggleComments(id){const el=document.getElementById('cmt-'+id);el.style.display=el.style.display==='block'?'none':'block';}
+function addComment(id){const input=document.getElementById('input-'+id);const text=input.value.trim();if(!text)return;const v=videos.find(x=>x.id===id);v.comments.push(text);save();render();document.getElementById('cmt-'+id).style.display='block';}
+function downloadVideo(title){alert('⬇️ Téléchargement de \"'+title+'\" démarré!\\n\\nEn vrai, ce sera un fichier MP3/MP4 Nimbo za Kitabu.\\nPour l\\'instant c\\'est une simulation, mais avec Firebase on mettra le vrai fichier.');}
+function filterCat(cat,btn){currentCat=cat;document.querySelectorAll('.cat').forEach(b=>b.classList.remove('active'));btn.classList.add('active');render();}
+function openGains(){if(!user){openCompte();return;}alert(`💰 GAINS\\n${user.nom}\\nVues: ${user.vues||0}\\n$ ${((user.vues||0)*0.0008).toFixed(2)}\\nPaiement LUNDI ${user.phone}`);}
+render();updateStatus();
 </script>
 </body>
 </html>
