@@ -7,108 +7,117 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body class="bg-gray-100 min-h-screen">
-<header class="bg-white border-b px-3 py-2.5 flex justify-between items-center">
-<a href="index.html" class="font-black text-sm"><span class="bg-red-600 text-white px-2 py-1 rounded">FREDDY</span>-V</a>
-<a href="ma-chaine.html" class="text-xs font-bold bg-gray-100 px-3 py-1 rounded-full">MF Ma chaîne</a>
+<body class="bg-white min-h-screen">
+<header class="flex justify-between items-center px-4 py-3 border-b sticky top-0 bg-white z-10">
+<a href="index.html" class="bg-red-600 text-white font-black px-3 py-1 rounded">FREDDY-V</a>
+<a href="ma-chaine.html" class="w-8 h-8 bg-black rounded-full flex items-center justify-center text-white"><i class="fa fa-user text-xs"></i></a>
 </header>
 
 <div class="max-w-md mx-auto p-4">
-<h1 class="font-black text-lg mt-2">Publier depuis ton téléphone 📱</h1>
-<p class="text-xs text-gray-500">Sans YouTube, sans carte, 100% gratuit</p>
+<h1 class="font-black text-xl mt-2">Publier une vidéo <i class="fa fa-video text-red-600"></i></h1>
+<p class="text-xs text-gray-500 mt-1">Comme YouTube - Ta vidéo sera envoyée à tous tes abonnés</p>
 
-<div class="bg-white rounded-xl p-4 mt-4 shadow">
-<label class="block border-2 border-dashed border-red-300 rounded-xl p-6 text-center cursor-pointer bg-red-50">
-<i class="fa fa-mobile text-3xl text-red-600"></i>
-<p class="font-black text-sm mt-2">CLIQUE ICI - Choisir vidéo</p>
-<p class="text-[11px] text-gray-500">Depuis ta galerie</p>
-<input type="file" id="fileInput" accept="video/*" class="hidden" onchange="previewFile()">
-</label>
+<div class="mt-6">
+<label class="font-bold text-sm">Titre * (comme YouTube)</label>
+<input id="titre" placeholder="Ex: Ma première vidéo à Kinshasa" class="w-full border-2 rounded-xl px-4 py-3 text-sm mt-2 focus:border-red-600 outline-none">
 
-<p id="fileName" class="hidden text-xs font-bold text-green-600 mt-3"></p>
-<video id="preview" class="hidden w-full rounded-xl mt-3" controls></video>
-
-<div class="mt-4 space-y-3">
-<input id="titre" placeholder="Titre * ex: Ma prédication" class="w-full border rounded-lg px-3 py-3 text-sm">
-<input id="auteur" value="Makola Freddy" class="w-full border rounded-lg px-3 py-3 text-sm font-bold">
-<select id="type" class="w-full border rounded-lg px-3 py-3 text-sm">
-<option value="video">Vidéo normale</option>
-<option value="short">Short</option>
-</select>
-</div>
+<label class="font-bold text-sm mt-4 block">Choisir vidéo depuis téléphone *</label>
+<input id="fileInput" type="file" accept="video/*" class="w-full border-2 border-dashed rounded-xl px-4 py-6 text-sm mt-2 text-center">
+<p class="text-[11px] text-gray-400 mt-1">Max 100MB - MP4 recommandé - Directement du téléphone</p>
 
 <div id="progressBox" class="hidden mt-4">
-<div class="w-full bg-gray-200 rounded-full h-3"><div id="progressBar" class="bg-red-600 h-3 rounded-full transition-all" style="width:0%"></div></div>
-<p id="progressText" class="text-xs text-center mt-2 font-bold">0%</p>
+<div class="w-full bg-gray-200 rounded-full h-2"><div id="progressBar" class="bg-red-600 h-2 rounded-full" style="width:0%"></div></div>
+<p id="progressText" class="text-xs text-center mt-1">0%</p>
 </div>
 
-<button id="btnPublier" onclick="publier()" class="w-full bg-red-600 text-white font-black py-4 rounded-full mt-5 text-sm"><i class="fa fa-cloud-upload"></i> Publier maintenant</button>
-<p id="msg" class="text-center text-sm font-bold mt-4"></p>
+<button id="btnPublier" onclick="publier()" class="w-full bg-red-600 text-white font-black py-4 rounded-full mt-6"><i class="fa fa-upload"></i> Publier sur FREDDY-V</button>
+<p id="msg" class="text-xs text-center mt-3"></p>
 </div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
 const firebaseConfig = { apiKey: "AIzaSyCZTf68dJf0nir7IJ8QCPrVwB4EEEeclHM", authDomain: "freddy-v.firebaseapp.com", projectId: "freddy-v", storageBucket: "freddy-v.firebasestorage.app", messagingSenderId: "318263144332", appId: "1:318263144332:web:387b2ded7cf5b85d6eb0a9" };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-let selectedFile=null;
-window.previewFile=function(){
-  const f=document.getElementById('fileInput').files[0];
-  if(!f) return;
-  selectedFile=f;
-  document.getElementById('fileName').innerText="✅ "+f.name+" - "+(f.size/1024/1024).toFixed(1)+" MB";
-  document.getElementById('fileName').classList.remove('hidden');
-  const p=document.getElementById('preview');
-  p.src=URL.createObjectURL(f);
-  p.classList.remove('hidden');
+async function uploadGofile(file){
+  const form = new FormData(); form.append("file", file);
+  const res = await fetch("https://store1.gofile.io/uploadFile",{method:"POST",body:form});
+  const data = await res.json();
+  if(data.status==="ok"){ return data.data.downloadPage; }
+  throw new Error("Gofile échoué");
 }
 
-window.publier=async function(){
+window.publier=async()=>{
   const titre=document.getElementById('titre').value.trim();
-  if(!titre){ alert("Mets un titre!"); return; }
-  if(!selectedFile){ alert("Choisis d'abord une vidéo dans ton téléphone!"); return; }
+  const file=document.getElementById('fileInput').files[0];
+  if(!titre){alert("Mets un titre!");return;}
+  if(!file){alert("Choisis une vidéo depuis ton téléphone!");return;}
+
+  const userEmail=localStorage.getItem("freddy_user");
+  const chaineNom=localStorage.getItem("freddy_chaine")||"Makola Freddy";
+  if(!userEmail){alert("Connecte-toi d'abord!"); window.location.href="connexion.html"; return;}
+
+  const handle="@"+chaineNom.toLowerCase().replace(/\s+/g,"");
   
-  const btn=document.getElementById('btnPublier');
-  btn.disabled=true;
-  btn.innerText="Upload en cours... ne ferme pas";
-  document.getElementById('progressBox').classList.remove('hidden');
-  document.getElementById('progressBar').style.width="30%";
-  document.getElementById('progressText').innerText="Envoi en cours...";
+  document.getElementById('btnPublier').disabled=true;
+  document.getElementById('btnPublier').innerText="Upload en cours...";
+  document.getElementById('progressBox').classList.remove("hidden");
+  document.getElementById('progressText').innerText="Envoi vers serveur...";
 
   try{
-    const formData = new FormData();
-    formData.append('reqtype','fileupload');
-    formData.append('fileToUpload',selectedFile);
-    
-    const res = await fetch('https://catbox.moe/user/api.php', { method:'POST', body:formData });
-    const url = await res.text();
-    
-    if(!url.includes('http')) throw new Error(url);
-    
-    document.getElementById('progressBar').style.width="80%";
-    document.getElementById('progressText').innerText="Sauvegarde...";
-    
-    await addDoc(collection(db,"videos"),{
+    // Simulation progress
+    let p=0; const inter=setInterval(()=>{ p+=5; if(p>90) p=90; document.getElementById('progressBar').style.width=p+"%"; document.getElementById('progressText').innerText=p+"%"; },300);
+
+    const fileUrl = await uploadGofile(file);
+    clearInterval(inter);
+    document.getElementById('progressBar').style.width="100%";
+    document.getElementById('progressText').innerText="100% - Sauvegarde...";
+
+    // 1. Créer la vidéo (comme YouTube)
+    const docRef = await addDoc(collection(db,"videos"),{
       titre: titre,
-      auteur: document.getElementById('auteur').value,
-      type: document.getElementById('type').value,
-      url: url.trim(),
-      vues:0,
+      url: fileUrl,
+      auteur: chaineNom,
+      chaineHandle: handle,
+      chaineEmail: userEmail,
+      vues: 0,
+      likes: 0,
       date: new Date().toISOString()
     });
-    
-    document.getElementById('progressBar').style.width="100%";
-    document.getElementById('progressText').innerText="✅ Fini!";
-    document.getElementById('msg').innerText="🎉 Vidéo publiée sur ta chaîne MF!";
-    document.getElementById('msg').className="text-center text-sm font-bold mt-4 text-green-600";
-    setTimeout(()=>{ window.location.href="ma-chaine.html"; },1500);
+
+    document.getElementById('msg').innerText="Vidéo publiée! Envoi des notifications...";
+
+    // 2. ENVOYER NOTIFICATIONS À TOUS LES ABONNÉS (système YouTube)
+    const q=query(collection(db,"abonnements"),where("chaineHandle","==",handle));
+    const snap=await getDocs(q);
+    let count=0;
+    for(const d of snap.docs){
+      await addDoc(collection(db,"notifications"),{
+        userEmail: d.data().userEmail,
+        titre: titre,
+        chaine: chaineNom,
+        chaineHandle: handle,
+        videoId: docRef.id,
+        videoUrl: fileUrl,
+        lu: false,
+        date: new Date().toISOString()
+      });
+      count++;
+    }
+
+    document.getElementById('msg').innerHTML=`✅ <b>Publié!</b> ${count} abonnés notifiés!`;
+    document.getElementById('btnPublier').innerText="✅ Publié! Voir";
+    setTimeout(()=>{ window.location.href="index.html?v="+docRef.id; },1500);
+
   }catch(e){
-    alert("Erreur: "+e.message+" Réessaie avec une vidéo plus petite (<50MB)");
-    btn.disabled=false;
-    btn.innerText="Réessayer";
+    document.getElementById('msg').innerText="❌ Erreur: "+e.message;
+    document.getElementById('btnPublier').disabled=false;
+    document.getElementById('btnPublier').innerText="Réessayer";
+    document.getElementById('progressBox').classList.add("hidden");
   }
 }
 </script>
