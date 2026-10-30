@@ -3,51 +3,144 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FREDDY-V INTERNATIONAL</title>
+<title>FREDDY-V - Accueil</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-body{background:#111;color:#fff;font-family:Arial;padding:15px}
-.box{background:#222;padding:20px;border-radius:12px;max-width:400px;margin:auto}
-input,select{width:100%;padding:13px;margin:8px 0;border-radius:8px;border:none;font-size:15px}
-button{width:100%;padding:15px;background:#ff0040;color:#fff;border:none;border-radius:8px;font-weight:bold;font-size:17px;margin-top:10px}
-h2{text-align:center;color:#ff0040;margin:0}
-.p{color:#aaa;font-size:13px;text-align:center}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0f0f0f;color:#fff;font-family:Arial}
+.header{position:sticky;top:0;z-index:100;background:#0f0f0f;display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid #222}
+.logo{color:#fff;font-weight:900;text-decoration:none;display:flex;gap:4px;align-items:center}
+.logo i{color:#f00;font-size:22px}
+.right{display:flex;gap:8px;align-items:center}
+.btn-gold{background:gold;color:#000;padding:6px 12px;border-radius:20px;font-weight:700;font-size:11px;text-decoration:none}
+.btn-red{background:#ff0040;color:#fff;padding:7px 14px;border-radius:20px;font-weight:700;font-size:11px;border:none;cursor:pointer}
+.btn-white{background:#fff;color:#000;padding:7px 14px;border-radius:20px;font-weight:700;font-size:11px;border:none;cursor:pointer;text-decoration:none}
+.av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#ff0040,#ffaa00);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px}
+.tabs{display:flex;gap:6px;padding:10px;overflow:auto;border-bottom:1px solid #222}
+.tab{background:#272727;padding:6px 10px;border-radius:6px;font-size:12px;cursor:pointer;white-space:nowrap}
+.tab.active{background:#fff;color:#000}
+.pay{margin:10px;background:linear-gradient(90deg,#ff0040,#8a0020);padding:10px 12px;border-radius:10px;font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;padding:12px}
+.card{cursor:pointer}
+.thumb{aspect-ratio:16/9;background:#000;border-radius:10px;overflow:hidden;position:relative}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.dur{position:absolute;bottom:5px;right:5px;background:#000000cc;padding:2px 5px;border-radius:4px;font-size:10px}
+.info{display:flex;gap:8px;padding:8px 0}
+.title{font-size:13px;line-height:16px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ch{font-size:11px;color:#aaa}
+.st{font-size:11px;color:#aaa}
+.shortsT{font-size:16px;font-weight:700;margin:18px 12px 10px}
+.shortsG{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;padding:0 12px}
+.sCard{cursor:pointer}
+.sThumb{aspect-ratio:9/16;background:#222;border-radius:10px;overflow:hidden}
+.sThumb img{width:100%;height:100%;object-fit:cover}
+.sTitle{font-size:11px;margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:#000000e6;z-index:2000;display:none;align-items:center;justify-content:center;padding:8px}
+.modal.active{display:flex}
+.box{background:#212121;border-radius:14px;width:100%;max-width:780px;max-height:95vh;overflow:auto}
+.mHead{padding:12px;border-bottom:1px solid #333;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#212121}
+.mBody{padding:12px}
+.input{background:#121212;border:1px solid #333;border-radius:6px;padding:10px;color:#fff;width:100%;margin:6px 0;font-size:13px}
+.player{aspect-ratio:16/9;background:#000;border-radius:10px;overflow:hidden}
+.player iframe{width:100%;height:100%;border:none}
+.act{display:flex;gap:6px;margin:10px 0;flex-wrap:wrap}
+.aBtn{background:#272727;border:none;color:#fff;padding:7px 10px;border-radius:16px;font-size:11px;cursor:pointer}
+.comment{padding:6px 0;border-bottom:1px solid #222;display:flex;gap:6px}
+.publish-box{background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:12px;margin:12px}
 </style>
 </head>
 <body>
-<div class="box">
-<h2>🎬 FREDDY-V</h2>
-<p class="p">1000 vues = 1$<br>Airtel Money + Western Union + MoneyGram</p>
-<input id="nom" placeholder="Nom complet (OBLIGATOIRE pour Western Union)">
-<input id="whatsapp" placeholder="WhatsApp ex: 0983356734">
-<select id="pays">
-<option value="">Choisis ton pays</option>
-<option value="RDC">🇨🇩 RDC</option>
-<option value="France">🇫🇷 France</option>
-<option value="Belgique">🇧🇪 Belgique</option>
-<option value="USA">🇺🇸 USA</option>
-<option value="Cameroun">🇨🇲 Cameroun</option>
-<option value="Autre">🌍 Autre</option>
-</select>
-<select id="paiement">
-<option value="">Comment tu veux être payé?</option>
-<option value="Airtel Money">📱 Airtel Money RDC - 0983356734</option>
-<option value="Orange Money">🟠 Orange Money RDC</option>
-<option value="M-Pesa">🔵 M-Pesa / Vodacom</option>
-<option value="Western Union">🌍 Western Union - Monde</option>
-<option value="MoneyGram">💸 MoneyGram - Monde</option>
-<option value="Banque IBAN">🏦 Banque / IBAN Europe</option>
-</select>
-<input id="details" placeholder="Numéro Airtel OU Nom complet pour WU">
-<button onclick="inscrire()">S'INSCRIRE - C'EST GRATUIT</button>
-<p class="p">Payeur: Airtel 0983356734 - Paiement Lundi<br>FREDDY-V Kolwezi</p>
+<div class="header">
+<a href="index.html" class="logo"><i class="fa-brands fa-youtube"></i> FREDDY-V</a>
+<div class="right">
+<a href="admin.html" class="btn-gold">ADMIN</a>
+<button class="btn-red" onclick="openPublish()">+ Publier</button>
+<a href="inscription.html" class="btn-white" id="compteBtn">Compte</a>
+<div class="av" id="av">F</div>
 </div>
-
-<script type="module">
-import {initializeApp} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import {getFirestore,collection,addDoc} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
-const firebaseConfig={apiKey:"AIzaSyB83-XXXX",authDomain:"freddy-v.firebaseapp.com",projectId:"freddy-v",storageBucket:"freddy-v.appspot.com",messagingSenderId:"XXX",appId:"XXX"};
-const app=initializeApp(firebaseConfig);
-const db=getFirestore(app);
-
-window.inscrire=async()=>{
-let n=document.getElementById("nom").value.trim
+</div>
+<div class="tabs">
+<div class="tab active" onclick="setCat('all',this)">Tous</div>
+<div class="tab" onclick="setCat('musique',this)">Musique</div>
+<div class="tab" onclick="setCat('gospel',this)">Gospel</div>
+<div class="tab" onclick="setCat('sagesse',this)">Sagesse</div>
+<div class="tab" onclick="setCat('kolwezi',this)">Kolwezi</div>
+<div class="tab" onclick="setCat('comedy',this)">Comedie</div>
+</div>
+<div class="pay"><b>1000 vues = 1$ - Lundi - Airtel:0983356734 - WU - MoneyGram</b> <span id="logged" style="color:gold"></span></div>
+<div id="publishArea" style="display:none">
+<div class="publish-box">
+<h4>Publier comme YouTube</h4>
+<input class="input" id="pTitle" placeholder="Titre de ta video">
+<input class="input" id="pYt" placeholder="ID YouTube ex: jNQXAC9IVRw">
+<select class="input" id="pCat"><option value="musique">Musique</option><option value="gospel">Gospel</option><option value="sagesse">Sagesse</option><option value="kolwezi">Kolwezi</option><option value="comedy">Comedie</option></select>
+<button class="btn-red" style="width:100%;padding:10px" onclick="publishVideo()">Publier sur accueil</button>
+</div>
+</div>
+<div class="grid" id="main"></div>
+<div class="shortsT">Shorts</div>
+<div class="shortsG" id="shorts"></div>
+<div class="shortsT">Videos recentes</div>
+<div class="grid" id="recent"></div>
+<div class="modal" id="watchModal">
+<div class="box">
+<div class="mHead"><h3 id="wT" style="font-size:13px"></h3><span onclick="closeM('watchModal')" style="cursor:pointer">X</span></div>
+<div class="mBody">
+<div style="display:flex;gap:12px;flex-wrap:wrap">
+<div style="flex:2;min-width:280px">
+<div class="player"><iframe id="wF" src="" allowfullscreen></iframe></div>
+<div style="margin-top:8px"><div id="wC" style="font-weight:700;font-size:13px"></div><div id="wS" style="color:#aaa;font-size:11px"></div>
+<div class="act">
+<button class="aBtn" id="lBtn" onclick="like()">Like <span id="lC">0</span></button>
+<button class="aBtn" onclick="downloadV()" style="background:#ff0040">Telecharger</button>
+<button class="aBtn" onclick="shareV()">Partager</button>
+</div>
+<h4 id="cT" style="margin-top:12px;font-size:13px">Commentaires</h4>
+<div style="display:flex;gap:4px;margin:8px 0"><input class="input" id="cIn" placeholder="Commenter..." style="margin:0"><button class="btn-red" onclick="addC()">Envoyer</button></div>
+<div id="cList"></div>
+</div>
+</div>
+<div style="flex:1;min-width:200px"><h4 style="font-size:13px">A regarder</h4><div id="sugg"></div></div>
+</div>
+</div>
+</div>
+</div>
+<script>
+let curCat='all'; let curV=null;
+let defaults=[
+{id:'jNQXAC9IVRw',title:'Freddy V - Jesus est Seigneur',author:'FREDDY-V Musique',cat:'gospel',views:45000,likes:342,comments:[{name:'Makola',text:'Gloire!'}],dur:'4:12'},
+{id:'dQw4w9WgXcQ',title:'La sagesse de Makola',author:'Makola Sagesse',cat:'sagesse',views:12400,likes:120,comments:[],dur:'8:21'},
+{id:'kJQP7kiw5Fk',title:'Kolwezi - Vie au Lualaba',author:'FREDDY-V Kolwezi',cat:'kolwezi',views:8900,likes:89,comments:[],dur:'12:34'},
+{id:'RgKAFK5djSk',title:'Gospel Adoration',author:'FREDDY-V Gospel',cat:'gospel',views:15600,likes:560,comments:[],dur:'5:45'},
+{id:'9bZkp7q19f0',title:'Mix Freddy V 2024',author:'FREDDY-V',cat:'musique',views:23400,likes:890,comments:[],dur:'1:02:15'},
+{id:'NUsoVlDFqZg',title:'Comedie Freddy V',author:'FREDDY-V',cat:'comedy',views:6700,likes:234,comments:[],dur:'2:15'}
+];
+function getStored(){try{return JSON.parse(localStorage.getItem('fv_videos')||'[]')}catch(e){return[]}}
+function getAll(){let s=getStored().map(v=>({id:v.ytId||v.id,title:v.title,author:v.author,cat:v.cat||'musique',views:v.views||0,likes:v.likes||0,comments:v.commentsList||v.comments||[],dur:v.dur||'4:12'}));let m=[...s,...defaults];let seen={};let out=[];for(let v of m){if(!seen[v.id]){seen[v.id]=1;out.push(v)}}return out}
+function save(a){localStorage.setItem('fv_videos',JSON.stringify(a))}
+function getCur(){try{return JSON.parse(localStorage.getItem('fv_currentUser')||'null')}catch(e){return null}}
+function setCat(c,el){curCat=c;document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');render()}
+function fmt(n){if(n>=1000)return (n/1000).toFixed(1)+'k';return n}
+function render(){
+let all=getAll();let f=all.filter(v=>curCat==='all'||v.cat===curCat);
+let mg=document.getElementById('main');mg.innerHTML='';f.forEach(v=>mg.appendChild(card(v)));
+let rg=document.getElementById('recent');rg.innerHTML='';f.slice().reverse().slice(0,4).forEach(v=>rg.appendChild(card(v)));
+let sg=document.getElementById('shorts');sg.innerHTML='';f.slice(0,6).forEach(v=>sg.appendChild(sCard(v)));
+let cur=getCur();let lg=document.getElementById('logged');let av=document.getElementById('av');let btn=document.getElementById('compteBtn');
+if(cur){lg.innerText='Connecte: '+cur.name;av.innerText=cur.name[0];btn.innerHTML=' '+cur.name;}else{lg.innerText='Pas connecte - Clique Compte';av.innerText='F';btn.innerHTML=' Compte';}
+}
+function card(v){let d=document.createElement('div');d.className='card';d.onclick=()=>openW(v);d.innerHTML=`<div class="thumb"><img src="https://img.youtube.com/vi/${v.id}/hqdefault.jpg"><div class="dur">${v.dur}</div></div><div class="info"><div class="av">${v.author[0]}</div><div><div class="title">${v.title}</div><div class="ch">${v.author}</div><div class="st">${fmt(v.views)} vues</div></div></div>`;return d}
+function sCard(v){let d=document.createElement('div');d.className='sCard';d.onclick=()=>openW(v);d.innerHTML=`<div class="sThumb"><img src="https://img.youtube.com/vi/${v.id}/hqdefault.jpg"></div><div class="sTitle">${v.title}</div>`;return d}
+function openPublish(){let cur=getCur();if(!cur){alert('Cree ton compte! Clique Compte');window.location.href='inscription.html';return;}let area=document.getElementById('publishArea');area.style.display=area.style.display==='none'?'block':'none';}
+function publishVideo(){let title=document.getElementById('pTitle').value.trim();let yt=document.getElementById('pYt').value.trim();let cat=document.getElementById('pCat').value;if(!title||!yt){alert('Titre + ID obligatoire');return;}let m=yt.match(/(?:v=|youtu\.be\/)([^&]+)/);if(m) yt=m[1];let cur=getCur();let author=cur?cur.name:'FREDDY-V';let stored=getStored();stored.unshift({ytId:yt,title,author,cat,views:1,likes:0,commentsList:[],dur:'4:12'});save(stored);alert('Video publiee!');document.getElementById('pTitle').value='';document.getElementById('pYt').value='';document.getElementById('publishArea').style.display='none';render();}
+function closeM(id){document.getElementById(id).classList.remove('active');if(id==='watchModal')document.getElementById('wF').src=''}
+function openW(v){curV=v;let st=getStored();let f=st.find(x=>(x.ytId||x.id)===v.id);if(f){f.views=(f.views||0)+1;save(st);v.views=f.views}else{v.views=(v.views||0)+1}document.getElementById('wT').innerText=v.title;document.getElementById('wC').innerText=v.author;document.getElementById('wS').innerText=fmt(v.views)+' vues - '+v.cat;document.getElementById('lC').innerText=v.likes;document.getElementById('wF').src='https://www.youtube.com/embed/'+v.id+'?autoplay=1';renderCom(v);let all=getAll().filter(x=>x.id!==v.id).slice(0,4);let sg=document.getElementById('sugg');sg.innerHTML='';all.forEach(s=>{let d=card(s);d.style.marginBottom='8px';sg.appendChild(d)});document.getElementById('watchModal').classList.add('active');render();}
+function renderCom(v){let list=document.getElementById('cList');let cl=v.comments||[];document.getElementById('cT').innerText=cl.length+' Commentaires';list.innerHTML='';if(cl.length===0){list.innerHTML='<p style="color:#777;font-size:11px">Sois premier!</p>';return}cl.forEach(c=>{let d=document.createElement('div');d.className='comment';d.innerHTML=`<div class="av" style="width:24px;height:24px;font-size:10px">${c.name[0]}</div><div><b style="font-size:11px">${c.name}</b><p style="font-size:11px">${c.text}</p></div>`;list.appendChild(d)})}
+function addC(){let txt=document.getElementById('cIn').value.trim();if(!txt||!curV)return;let cur=getCur();let name=cur?cur.name:'Visiteur';curV.comments=curV.comments||[];curV.comments.unshift({name,text:txt});let st=getStored();let f=st.find(x=>(x.ytId||x.id)===curV.id);if(f){f.commentsList=curV.comments;save(st)}document.getElementById('cIn').value='';renderCom(curV);render()}
+function like(){if(!curV)return;curV.likes++;document.getElementById('lC').innerText=curV.likes;let st=getStored();let f=st.find(x=>(x.ytId||x.id)===curV.id);if(f){f.likes=curV.likes;save(st)}render()}
+function downloadV(){if(!curV)return;window.open('https://www.y2mate.com/youtube/'+curV.id,'_blank')}
+function shareV(){if(!curV)return;let link='https://www.youtube.com/watch?v='+curV.id;navigator.clipboard.writeText(link);alert('Lien copie:'+link)}
+render();
+</script>
+</body>
+</html>
