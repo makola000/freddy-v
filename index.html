@@ -3,80 +3,89 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FREDDY-V</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-body{background:#0f0f0f;color:white;padding-bottom:140px}
-.banner{background:#e60000;color:white;text-align:center;padding:8px;font-weight:800;font-size:13px}
-.header{display:flex;justify-content:space-between;align-items:center;padding:12px;background:#1e1e1e;position:sticky;top:0;z-index:10}
-.logo{font-weight:900;color:#a78bfa;font-size:18px}
-.search-box{padding:12px;background:#1e1e1e}
-.search-box input{width:100%;padding:12px;border-radius:10px;border:none;background:#2a2a2a;color:white}
-.generator{background:#1e1e1e;margin:12px;border-radius:14px;padding:14px;border:1px solid #333}
-.generator input,.generator select{width:100%;padding:11px;border-radius:8px;border:none;background:#2a2a2a;color:white;margin-bottom:10px}
-.gen-btn{background:linear-gradient(135deg,#ff0055,#a855f7);color:white;border:none;padding:13px;width:100%;border-radius:10px;font-weight:900}
-.cats{display:flex;gap:8px;overflow-x:auto;padding:0 12px 10px}
-.cat{white-space:nowrap;padding:6px 14px;border-radius:20px;background:#2a2a2a;border:none;color:#aaa;font-size:13px}
-.cat.active{background:white;color:black;font-weight:700}
-.video-card{background:#1e1e1e;margin:12px;border-radius:12px;overflow:hidden;border:1px solid #2a2a2a}
-.thumb{height:160px;background:linear-gradient(135deg,#3b0764,#7e22ce);display:flex;align-items:center;justify-content:center;font-size:50px;position:relative;cursor:pointer}
-.duration{position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,0.8);padding:2px 6px;border-radius:4px;font-size:12px}
-.info{padding:10px}
-.actions{display:flex;gap:8px;margin-top:8px}
-.act-btn{flex:1;padding:8px;border-radius:8px;border:none;font-size:12px;font-weight:700;cursor:pointer}
-.download{background:#2563eb;color:white}
-.comment{background:#2a2a2a;color:white}
-.comments-box{background:#111;padding:10px;display:none}
-.comments-box input{width:100%;padding:8px;border-radius:6px;border:none;background:#2a2a2a;color:white;margin-bottom:6px;font-size:13px}
-.cmt{font-size:12px;padding:4px 0;border-bottom:1px solid #222}
-.bottom{display:flex;justify-content:space-around;background:#1e1e1e;padding:8px 0;position:fixed;bottom:0;width:100%;border-top:1px solid #333;z-index:20}
-.bottom div{font-size:11px;color:#888;text-align:center;cursor:pointer}
-.modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);z-index:100;padding:20px;overflow-y:auto}
-.modal-box{background:#1e1e1e;border-radius:14px;padding:20px;max-width:400px;margin:40px auto;border:1px solid #333}
-.modal-box input{width:100%;padding:12px;border-radius:8px;border:none;background:#2a2a2a;color:white;margin-bottom:10px}
-.modal-btn{background:#22c55e;color:white;border:none;padding:12px;width:100%;border-radius:10px;font-weight:800}
-</style>
-</head>
-<body>
-<div class="banner">1000 vues = 1$ | CREATEUR GAGNE 80% (0,80$) | Paiement LUNDI Airtel:0983356734</div>
-<div class="header"><div class="logo">📹 FREDDY-V</div><div><span onclick="openCompte()">👤</span></div></div>
-<div class="search-box"><input id="searchInput" placeholder="🔍 Cherche Nimbo, cours..." oninput="render()"></div>
-<div class="generator">
-<h3 style="color:#facc15;margin-bottom:8px">✨ Générer & Publier IA</h3>
-<input id="titleInput" placeholder="Titre: Nimbo 123, Cours soudure...">
-<select id="typeSelect"><option>🎵 Nimbo za Kitabu</option><option>🙏 Gospel</option><option>🔧 Cours Technique</option><option>🎤 Musique</option></select>
-<button class="gen-btn" onclick="checkAndGen()">+ Générer et Publier</button>
-<p id="compteStatus" style="font-size:11px;color:#888;text-align:center;margin-top:6px"></p>
-</div>
-<div class="cats"><button class="cat active" onclick="filterCat('Tous',this)">Tous</button><button class="cat" onclick="filterCat('Nimbo za Kitabu',this)">Nimbo</button><button class="cat" onclick="filterCat('Cours Technique',this)">Cours</button></div>
-<div id="videoList"></div>
-<div class="bottom"><div onclick="location.reload()">🏠<br>Accueil</div><div onclick="document.getElementById('titleInput').focus()">➕<br>Publier</div><div onclick="openGains()">💰<br>Gains</div><div onclick="openCompte()">👤<br>Profil</div></div>
+<title>FREDDY V - MAKOLA IA | Durba</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-<div id="compteModal" class="modal"><div class="modal-box"><span style="float:right;cursor:pointer" onclick="closeCompte()">✕</span><h3 style="color:#facc15;text-align:center">👤 Compte</h3><div id="accountDisplay"></div><input id="nomInput" placeholder="Nom complet"><input id="phoneInput" placeholder="Airtel Money"><input id="passInput" type="password" placeholder="Mot de passe"><button class="modal-btn" onclick="creerCompte()">✅ Créer & S'abonner</button><button style="background:#2563eb;margin-top:8px" class="modal-btn" onclick="loginCompte()">🔑 Se connecter</button></div></div>
+const firebaseConfig = {
+  apiKey: "AIzaSyCZTf68dJf0nir7IJ8QCPrVwB4EEEeclHM",
+  authDomain: "freddy-v.firebaseapp.com",
+  projectId: "freddy-v",
+  storageBucket: "freddy-v.firebasestorage.app",
+  messagingSenderId: "318263144332",
+  appId: "1:318263144332:web:387b2ded7cf5b85d6eb0a9"
+};
 
-<script>
-let videos=JSON.parse(localStorage.getItem('freddy_videos_v3')||'[]');
-let user=JSON.parse(localStorage.getItem('freddy_user')||'null');
-let currentCat='Tous';
-if(videos.length===0){videos=[{id:1,title:"Nimbo za Kitabu 1 - Mungu ni Mwema",type:"Nimbo za Kitabu",views:1250,duration:"4:32",icon:"🎵",auteur:"FREDDY-V",comments:["Très belle chanson!","Que Dieu te bénisse"]},{id:2,title:"Cours Technique: Soudure 5 min",type:"Cours Technique",views:890,duration:"5:15",icon:"🔧",auteur:"Admin",comments:[]}];save();}
-function save(){localStorage.setItem('freddy_videos_v3',JSON.stringify(videos));}
-function saveUser(){localStorage.setItem('freddy_user',JSON.stringify(user));updateStatus();}
-function updateStatus(){const el=document.getElementById('compteStatus');if(user){el.innerHTML=`✅ ${user.nom} | ${user.vues||0} vues | ${( (user.vues||0)*0.0008).toFixed(2)}$`;el.style.color='#22c55e';}else{el.textContent='Connecte-toi pour publier et gagner';}}
-function openCompte(){document.getElementById('compteModal').style.display='block';showAccount();}
-function closeCompte(){document.getElementById('compteModal').style.display='none';}
-function showAccount(){const d=document.getElementById('accountDisplay');if(user){d.innerHTML=`<div style="background:#2a2a2a;padding:10px;border-radius:8px;text-align:center;font-size:13px;margin-bottom:10px">👤 <b>${user.nom}</b><br>📱 ${user.phone}<br>👁️ ${user.vues||0} vues | 💰 ${((user.vues||0)*0.0008).toFixed(2)}$</div>`;}else{d.innerHTML='<div style="background:#2a2a2a;padding:10px;border-radius:8px;text-align:center;font-size:12px">Crée ton compte pour gagner 0,80$/1000 vues</div>';}}
-function creerCompte(){const nom=document.getElementById('nomInput').value.trim();const phone=document.getElementById('phoneInput').value.trim();const pass=document.getElementById('passInput').value.trim();if(!nom||!phone||!pass){alert('Remplis tout!');return;}user={nom,phone,pass,vues:0};saveUser();showAccount();alert('✅ Compte créé '+nom);closeCompte();}
-function loginCompte(){const phone=document.getElementById('phoneInput').value.trim();const pass=document.getElementById('passInput').value.trim();if(user&&user.phone===phone&&user.pass===pass){alert('Connecté '+user.nom);closeCompte();updateStatus();}else{alert('Erreur, crée compte d\'abord');}}
-function checkAndGen(){if(!user){openCompte();return;}generateVideo();}
-function generateVideo(){const title=document.getElementById('titleInput').value.trim();const type=document.getElementById('typeSelect').value;if(!title){alert('Titre!');return;}const icons={"🎵 Nimbo za Kitabu":"🎵","🙏 Gospel":"🙏","🔧 Cours Technique":"🔧","🎤 Musique":"🎤"};const newVideo={id:Date.now(),title:title,type:type.replace(/^[^\w]+/,'').trim()||type,views:0,duration:"5:00",icon:icons[type]||"🎬",auteur:user.nom,comments:[]};videos.unshift(newVideo);save();document.getElementById('titleInput').value='';render();}
-function render(){const list=document.getElementById('videoList');const search=document.getElementById('searchInput').value.toLowerCase();let filtered=videos.filter(v=>(currentCat==='Tous'||v.type.includes(currentCat)||v.title.includes(currentCat))&&(v.title.toLowerCase().includes(search)));list.innerHTML=filtered.map(v=>`<div class="video-card"><div class="thumb" onclick="addView(${v.id})">${v.icon}<span class="duration">${v.duration}</span></div><div class="info"><h4 style="font-size:14px">${v.title}</h4><div style="font-size:12px;color:#888">Par ${v.auteur} • <span style="color:#22c55e;font-weight:700">${v.views} vues</span> • <span style="color:#facc15">${(v.views*0.0008).toFixed(2)}$</span> • 💬 ${v.comments.length} commentaires</div><div class="actions"><button class="act-btn download" onclick="downloadVideo('${v.title}')">⬇️ Télécharger</button><button class="act-btn comment" onclick="toggleComments(${v.id})">💬 Commenter</button></div></div><div id="cmt-${v.id}" class="comments-box"><div id="list-${v.id}">${v.comments.map(c=>`<div class="cmt">👤 ${c}</div>`).join('')}</div><input id="input-${v.id}" placeholder="Écris un commentaire..." onkeydown="if(event.key==='Enter')addComment(${v.id})"><button class="act-btn comment" onclick="addComment(${v.id})">Envoyer</button></div></div>`).join('');}
-function addView(id){const v=videos.find(x=>x.id===id);if(v){v.views++;if(user){user.vues=(user.vues||0)+1;saveUser();}save();render();}}
-function toggleComments(id){const el=document.getElementById('cmt-'+id);el.style.display=el.style.display==='block'?'none':'block';}
-function addComment(id){const input=document.getElementById('input-'+id);const text=input.value.trim();if(!text)return;const v=videos.find(x=>x.id===id);v.comments.push(text);save();render();document.getElementById('cmt-'+id).style.display='block';}
-function downloadVideo(title){alert('⬇️ Téléchargement de \"'+title+'\" démarré!\\n\\nEn vrai, ce sera un fichier MP3/MP4 Nimbo za Kitabu.\\nPour l\\'instant c\\'est une simulation, mais avec Firebase on mettra le vrai fichier.');}
-function filterCat(cat,btn){currentCat=cat;document.querySelectorAll('.cat').forEach(b=>b.classList.remove('active'));btn.classList.add('active');render();}
-function openGains(){if(!user){openCompte();return;}alert(`💰 GAINS\\n${user.nom}\\nVues: ${user.vues||0}\\n$ ${((user.vues||0)*0.0008).toFixed(2)}\\nPaiement LUNDI ${user.phone}`);}
-render();updateStatus();
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// CHARGER PRODUITS EN TEMPS REEL
+const produitsRef = collection(db, "produits");
+onSnapshot(produitsRef, (snap) => {
+  const list = document.getElementById('produits-list');
+  const count = document.getElementById('produit-count');
+  list.innerHTML = "";
+  let items = [];
+  snap.forEach(d => items.push({id:d.id, ...d.data()}));
+  count.textContent = items.length + " produits";
+  if(items.length === 0){
+    list.innerHTML = `<div class="col-span-2 text-center py-10 text-gray-500"><i class="fas fa-box-open text-4xl mb-3"></i><p>Aucun produit. Ajoute ton premier!</p></div>`;
+    return;
+  }
+  items.forEach(p => {
+    list.innerHTML += `
+    <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+      <div class="h-32 bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-3xl">
+        <i class="fas fa-${p.icone||'shopping-bag'}"></i>
+      </div>
+      <div class="p-4">
+        <h3 class="font-bold text-lg">${p.nom}</h3>
+        <p class="text-sm text-gray-500">${p.categorie||'Général'}</p>
+        <div class="flex justify-between items-center mt-3">
+          <span class="font-black text-blue-600 text-xl">${p.prix} $</span>
+          <button onclick="supprimer('${p.id}')" class="text-red-500"><i class="fas fa-trash"></i></button>
+        </div>
+      </div>
+    </div>`;
+  });
+});
+
+// AJOUTER PRODUIT
+window.ajouterProduit = async () => {
+  const nom = document.getElementById('nom').value;
+  const prix = document.getElementById('prix').value;
+  const cat = document.getElementById('cat').value;
+  if(!nom || !prix) return alert("Remplis nom et prix!");
+  await addDoc(produitsRef, { nom, prix, categorie: cat, icone: "shopping-bag", date: new Date() });
+  document.getElementById('nom').value=""; document.getElementById('prix').value="";
+  alert("✅ Produit ajouté! Visible sur tous les téléphones!");
+}
+
+window.supprimer = async (id) => {
+  if(confirm("Supprimer ce produit?")) await deleteDoc(doc(db, "produits", id));
+}
 </script>
-</body>
-</html>
+</head>
+<body class="bg-gray-100 min-h-screen">
+<header class="bg-black text-white p-4 sticky top-0 z-10">
+  <div class="flex justify-between items-center max-w-5xl mx-auto">
+    <h1 class="font-black text-xl"><i class="fas fa-bolt text-yellow-400"></i> FREDDY V</h1>
+    <span class="bg-green-500 text-xs px-3 py-1 rounded-full animate-pulse">● CONNECTÉ À FIREBASE</span>
+  </div>
+</header>
+
+<main class="max-w-5xl mx-auto p-4">
+  <div class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-3xl p-6 mb-6">
+    <h2 class="text-2xl font-black">MAKOLA IA</h2>
+    <p class="opacity-80">Durba • Système en ligne - Les données ne s'effacent plus!</p>
+    <p id="produit-count" class="mt-2 bg-white/20 inline-block px-3 py-1 rounded-full text-sm">Chargement...</p>
+  </div>
+
+  <!-- FORMULAIRE -->
+  <div class="bg-white rounded-2xl p-5 shadow mb-6">
+    <h3 class="font-bold mb-4"><i class="fas fa-plus"></i> Ajouter Produit</h3>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+      <input id
