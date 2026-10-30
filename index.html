@@ -3,42 +3,58 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FREDDY-V</title>
+<title>FREDDY-V - YouTube Masisi</title>
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-white">
+<body class="bg-white text-black">
 
-<header class="flex justify-between p-3 border-b sticky top-0 bg-white">
-<h1 class="font-bold">FREDDY-V <span class="bg-red-600 text-white px-1 rounded">TV</span></h1>
-<a href="publier.html" class="bg-red-600 text-white px-4 py-1 rounded-full text-sm">+ Publier</a>
+<header class="flex justify-between items-center p-3 border-b sticky top-0 bg-white z-50">
+<h1 class="font-bold text-xl">FREDDY-V <span class="bg-red-600 text-white px-1 rounded">TV</span></h1>
+<a href="publier.html" class="bg-red-600 text-white px-4 py-1.5 rounded-full text-sm font-bold">+ Publier</a>
 </header>
 
-<div id="videos" class="p-3">Chargement... ⏳</div>
+<div id="videos" class="p-3 grid gap-3">
+<p class="text-center text-gray-500 mt-10">Chargement de tes vidéos... ⏳</p>
+</div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-async function start(){
- try{
-  const t = await (await fetch('./publier.html')).text();
-  const m = t.match(/const firebaseConfig = \{([\s\S]*?)\};/);
-  const cfg = Function('"use strict";return {'+m[1]+'}')();
-  
-  const app = initializeApp(cfg);
-  const db = getFirestore(app);
-  const snap = await getDocs(query(collection(db,"videos"), orderBy("timestamp","desc")));
+const firebaseConfig = {
+  apiKey: "AIzaSyCZTf68dJf0nir7IJ8QCPrVwB4EEEeclHM",
+  authDomain: "freddy-v.firebaseapp.com",
+  projectId: "freddy-v",
+  storageBucket: "freddy-v.firebasestorage.app",
+  messagingSenderId: "318263144332",
+  appId: "1:318263144332:web:387b2ded7cf5b85d6eb0a9"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+async function load(){
   const c = document.getElementById('videos');
-  if(snap.empty){ c.innerHTML='Aucune vidéo. <a href="publier.html" class="text-red-600">Publie</a>'; return; }
-  let h='';
-  snap.forEach(doc=>{
-   const v=doc.data();
-   h+=`<div class="flex gap-3 border-b pb-3 mb-3"><div class="w-36 h-20 bg-black rounded-lg flex items-center justify-center text-white">▶️</div><div><b class="text-sm">${v.titre}</b><p class="text-xs text-gray-500">${v.auteur||'Freddy'} • ${v.type}</p><a href="${v.url}" target="_blank" class="text-xs bg-red-600 text-white px-3 py-1 rounded-full mt-1 inline-block">▶️ Voir</a></div></div>`;
-  });
-  c.innerHTML=h;
- }catch(e){ document.getElementById('videos').innerHTML='<p class="text-red-600 text-center">Erreur: '+e.message+'</p>'; }
+  try{
+    const q = query(collection(db, "videos"), orderBy("timestamp","desc"));
+    const snap = await getDocs(q);
+    if(snap.empty){
+      c.innerHTML = `<div class="text-center p-10"><p class="text-4xl">📭</p><p class="mt-2">Aucune vidéo encore</p><a href="publier.html" class="mt-4 inline-block bg-red-600 text-white px-6 py-2 rounded-full">+ Publier maintenant</a></div>`;
+      return;
+    }
+    let html="";
+    snap.forEach(d=>{
+      const v=d.data();
+      const date = v.timestamp ? new Date(v.timestamp.seconds*1000).toLocaleDateString() : 'Aujourd\'hui';
+      html+=`<div class="flex gap-3 border-b pb-4"><div class="w-40 h-24 bg-black rounded-xl flex items-center justify-center text-white text-2xl flex-shrink-0">▶️</div><div class="flex-1"><h3 class="font-bold text-sm">${v.titre}</h3><p class="text-xs text-gray-500 mt-1">${v.auteur||'Makola Freddy'} • ${date} • ${v.type||'Normal'}</p><a href="${v.url}" target="_blank" class="mt-2 inline-block bg-red-600 text-white text-xs px-3 py-1 rounded-full">▶️ Voir vidéo</a></div></div>`;
+    });
+    c.innerHTML=html;
+  }catch(e){
+    c.innerHTML=`<p class="text-center text-red-600 p-4">Erreur Firebase: ${e.message}<br>Va dans Firebase Console → Firestore → Rules → mets allow read, write: if true;</p>`;
+    console.error(e);
+  }
 }
-start();
+load();
 </script>
 </body>
 </html>
