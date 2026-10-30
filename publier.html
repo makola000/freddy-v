@@ -1,124 +1,45 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Publier - FREDDY-V</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
-<body class="bg-white min-h-screen">
-<header class="flex justify-between items-center px-4 py-3 border-b sticky top-0 bg-white z-10">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Publier - FREDDY-V</title><script src="https://cdn.tailwindcss.com"></script></head>
+<body class="bg-white p-4">
 <a href="index.html" class="bg-red-600 text-white font-black px-3 py-1 rounded">FREDDY-V</a>
-<a href="ma-chaine.html" class="w-8 h-8 bg-black rounded-full flex items-center justify-center text-white"><i class="fa fa-user text-xs"></i></a>
-</header>
-
-<div class="max-w-md mx-auto p-4">
-<h1 class="font-black text-xl mt-2">Publier une vidéo <i class="fa fa-video text-red-600"></i></h1>
-<p class="text-xs text-gray-500 mt-1">Comme YouTube - Ta vidéo sera envoyée à tous tes abonnés</p>
-
-<div class="mt-6">
-<label class="font-bold text-sm">Titre * (comme YouTube)</label>
-<input id="titre" placeholder="Ex: Ma première vidéo à Kinshasa" class="w-full border-2 rounded-xl px-4 py-3 text-sm mt-2 focus:border-red-600 outline-none">
-
-<label class="font-bold text-sm mt-4 block">Choisir vidéo depuis téléphone *</label>
-<input id="fileInput" type="file" accept="video/*" class="w-full border-2 border-dashed rounded-xl px-4 py-6 text-sm mt-2 text-center">
-<p class="text-[11px] text-gray-400 mt-1">Max 100MB - MP4 recommandé - Directement du téléphone</p>
-
-<div id="progressBox" class="hidden mt-4">
-<div class="w-full bg-gray-200 rounded-full h-2"><div id="progressBar" class="bg-red-600 h-2 rounded-full" style="width:0%"></div></div>
-<p id="progressText" class="text-xs text-center mt-1">0%</p>
-</div>
-
-<button id="btnPublier" onclick="publier()" class="w-full bg-red-600 text-white font-black py-4 rounded-full mt-6"><i class="fa fa-upload"></i> Publier sur FREDDY-V</button>
+<h1 class="font-black text-xl mt-4">Publier vidéo (lien direct)</h1>
+<input id="titre" placeholder="Titre *" class="w-full border-2 rounded-xl px-4 py-3 text-sm mt-4">
+<input id="file" type="file" accept="video/*" class="w-full border-2 border-dashed rounded-xl px-4 py-6 mt-3">
+<button id="btn" onclick="publier()" class="w-full bg-red-600 text-white font-black py-4 rounded-full mt-4">Publier</button>
 <p id="msg" class="text-xs text-center mt-3"></p>
-</div>
-</div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
 const firebaseConfig = { apiKey: "AIzaSyCZTf68dJf0nir7IJ8QCPrVwB4EEEeclHM", authDomain: "freddy-v.firebaseapp.com", projectId: "freddy-v", storageBucket: "freddy-v.firebasestorage.app", messagingSenderId: "318263144332", appId: "1:318263144332:web:387b2ded7cf5b85d6eb0a9" };
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const db = getFirestore(initializeApp(firebaseConfig));
 
-async function uploadGofile(file){
-  const form = new FormData(); form.append("file", file);
-  const res = await fetch("https://store1.gofile.io/uploadFile",{method:"POST",body:form});
-  const data = await res.json();
-  if(data.status==="ok"){ return data.data.downloadPage; }
-  throw new Error("Gofile échoué");
+async function uploadCatbox(file){
+ const fd=new FormData(); fd.append("reqtype","fileupload"); fd.append("fileToUpload",file);
+ const res=await fetch("https://catbox.moe/user/api.php",{method:"POST",body:fd});
+ const url=await res.text();
+ if(url.startsWith("https://")) return url.trim();
+ throw new Error("Catbox: "+url);
 }
 
 window.publier=async()=>{
-  const titre=document.getElementById('titre').value.trim();
-  const file=document.getElementById('fileInput').files[0];
-  if(!titre){alert("Mets un titre!");return;}
-  if(!file){alert("Choisis une vidéo depuis ton téléphone!");return;}
-
-  const userEmail=localStorage.getItem("freddy_user");
-  const chaineNom=localStorage.getItem("freddy_chaine")||"Makola Freddy";
-  if(!userEmail){alert("Connecte-toi d'abord!"); window.location.href="connexion.html"; return;}
-
-  const handle="@"+chaineNom.toLowerCase().replace(/\s+/g,"");
-  
-  document.getElementById('btnPublier').disabled=true;
-  document.getElementById('btnPublier').innerText="Upload en cours...";
-  document.getElementById('progressBox').classList.remove("hidden");
-  document.getElementById('progressText').innerText="Envoi vers serveur...";
-
-  try{
-    // Simulation progress
-    let p=0; const inter=setInterval(()=>{ p+=5; if(p>90) p=90; document.getElementById('progressBar').style.width=p+"%"; document.getElementById('progressText').innerText=p+"%"; },300);
-
-    const fileUrl = await uploadGofile(file);
-    clearInterval(inter);
-    document.getElementById('progressBar').style.width="100%";
-    document.getElementById('progressText').innerText="100% - Sauvegarde...";
-
-    // 1. Créer la vidéo (comme YouTube)
-    const docRef = await addDoc(collection(db,"videos"),{
-      titre: titre,
-      url: fileUrl,
-      auteur: chaineNom,
-      chaineHandle: handle,
-      chaineEmail: userEmail,
-      vues: 0,
-      likes: 0,
-      date: new Date().toISOString()
-    });
-
-    document.getElementById('msg').innerText="Vidéo publiée! Envoi des notifications...";
-
-    // 2. ENVOYER NOTIFICATIONS À TOUS LES ABONNÉS (système YouTube)
-    const q=query(collection(db,"abonnements"),where("chaineHandle","==",handle));
-    const snap=await getDocs(q);
-    let count=0;
-    for(const d of snap.docs){
-      await addDoc(collection(db,"notifications"),{
-        userEmail: d.data().userEmail,
-        titre: titre,
-        chaine: chaineNom,
-        chaineHandle: handle,
-        videoId: docRef.id,
-        videoUrl: fileUrl,
-        lu: false,
-        date: new Date().toISOString()
-      });
-      count++;
-    }
-
-    document.getElementById('msg').innerHTML=`✅ <b>Publié!</b> ${count} abonnés notifiés!`;
-    document.getElementById('btnPublier').innerText="✅ Publié! Voir";
-    setTimeout(()=>{ window.location.href="index.html?v="+docRef.id; },1500);
-
-  }catch(e){
-    document.getElementById('msg').innerText="❌ Erreur: "+e.message;
-    document.getElementById('btnPublier').disabled=false;
-    document.getElementById('btnPublier').innerText="Réessayer";
-    document.getElementById('progressBox').classList.add("hidden");
-  }
+ const titre=document.getElementById('titre').value.trim();
+ const file=document.getElementById('file').files[0];
+ if(!titre||!file){ alert("Titre + vidéo"); return; }
+ const email=localStorage.getItem("freddy_user"); const chaineNom=localStorage.getItem("freddy_chaine")||"Makola Freddy";
+ if(!email){ location.href="connexion.html"; return; }
+ const handle="@"+chaineNom.toLowerCase().replace(/\s+/g,"");
+ document.getElementById('btn').innerText="Upload..."; document.getElementById('btn').disabled=true;
+ try{
+  const fileUrl=await uploadCatbox(file);
+  const docRef=await addDoc(collection(db,"videos"),{titre:titre,url:fileUrl,auteur:chaineNom,chaineHandle:handle,chaineEmail:email,vues:0,likes:0,date:new Date().toISOString()});
+  // notifs
+  const q=query(collection(db,"abonnements"),where("chaineHandle","==",handle));
+  const snap=await getDocs(q); for(const d of snap.docs){ await addDoc(collection(db,"notifications"),{userEmail:d.data().userEmail,titre:titre,chaine:chaineNom,chaineHandle:handle,videoId:docRef.id,videoUrl:fileUrl,lu:false,date:new Date().toISOString()}); }
+  document.getElementById('msg').innerText="✅ Publié! Lien direct: "+fileUrl;
+  setTimeout(()=>location.href="index.html",1500);
+ }catch(e){ document.getElementById('msg').innerText="❌ "+e.message; document.getElementById('btn').disabled=false; document.getElementById('btn').innerText="Réessayer"; }
 }
 </script>
 </body>
