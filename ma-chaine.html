@@ -17,19 +17,26 @@
 <a href="publier.html" class="bg-black text-white px-4 py-1.5 rounded-full text-sm font-bold"><i class="fa fa-plus mr-1"></i> Publier</a>
 </header>
 
-<!-- BANNER CHAINE -->
 <div class="bg-gradient-to-r from-red-600 to-black h-32"></div>
 
 <div class="bg-white p-4 -mt-10 relative mx-3 rounded-xl shadow">
-<div class="flex gap-4 items-end">
+<div class="flex gap-4 items-start">
 <img src="https://ui-avatars.com/api/?name=Makola+Freddy&background=ff0000&color=fff&size=80" class="w-20 h-20 rounded-full border-4 border-white -mt-10">
-<div>
-<h1 class="font-black text-lg">Makola Freddy Officiel</h1>
-<p class="text-xs text-gray-500">@makolafreddy • <span id="nbVideos">0</span> vidéos • <span id="totalVues">0</span> vues</p>
-<p class="text-xs mt-1">Bienvenue sur ma chaîne FREDDY-V! 🙏 Prédications, motivations, vie.</p>
+<div class="flex-1">
+<h1 class="font-black text-[16px]">Makola Freddy Officiel</h1>
+<p class="text-[11px] text-gray-500">@makolafreddy • <span id="nbVideos">0</span> vidéos • <span id="totalVues">0</span> vues</p>
+<p class="text-[11px] text-gray-500"><span id="nbAbos" class="font-bold text-black">0</span> abonnés</p>
+<p class="text-xs mt-2">Bienvenue sur ma chaîne FREDDY-V! 🙏 Prédications, motivations, vie.</p>
 </div>
 </div>
-<button onclick="window.location='publier.html'" class="w-full mt-4 bg-red-600 text-white py-2.5 rounded-full font-bold text-sm">+ Publier une vidéo sur ma chaîne</button>
+
+<!-- BOUTONS ABONNER -->
+<div class="flex gap-2 mt-4">
+<button id="btnAbo" onclick="abonner()" class="flex-1 bg-red-600 text-white py-2.5 rounded-full font-black text-sm flex items-center justify-center gap-2">
+<i class="fa fa-bell"></i> S'abonner
+</button>
+<button onclick="window.location='publier.html'" class="flex-1 bg-gray-100 py-2.5 rounded-full font-bold text-sm">+ Publier</button>
+</div>
 </div>
 
 <div id="player" class="hidden bg-black sticky top-[49px] z-50">
@@ -44,7 +51,7 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, getDocs, doc, getDoc, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 const firebaseConfig = { apiKey: "AIzaSyCZTf68dJf0nir7IJ8QCPrVwB4EEEeclHM", authDomain: "freddy-v.firebaseapp.com", projectId: "freddy-v", storageBucket: "freddy-v.firebasestorage.app", messagingSenderId: "318263144332", appId: "1:318263144332:web:387b2ded7cf5b85d6eb0a9" };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
@@ -53,6 +60,37 @@ function getId(url){ if(!url) return ""; let id=""; if(url.includes("youtu.be/")
 function toEmbed(url){ return "https://www.youtube.com/embed/"+getId(url); }
 window.closePlayer=function(){ document.getElementById('player').classList.add('hidden'); document.getElementById('playerBox').innerHTML=''; }
 window.playVideo=function(url){ const embed=toEmbed(url); document.getElementById('playerBox').innerHTML=`<iframe src="${embed}?autoplay=1" class="w-full h-[280px]" frameborder="0" allowfullscreen></iframe>`; document.getElementById('player').classList.remove('hidden'); window.scrollTo({top:0,behavior:'smooth'}); }
+
+const chaineRef = doc(db, "chaines", "makola");
+const aboKey = "abonne_makola";
+
+async function initAbos(){
+  let data = (await getDoc(chaineRef)).data();
+  if(!data){ await setDoc(chaineRef, {abonnes:0}); data={abonnes:0}; }
+  document.getElementById('nbAbos').innerText = data.abonnes||0;
+  if(localStorage.getItem(aboKey)==="1"){
+    const btn=document.getElementById('btnAbo');
+    btn.innerHTML='<i class="fa fa-check"></i> Abonné';
+    btn.classList.remove('bg-red-600'); btn.classList.add('bg-gray-800');
+  }
+}
+window.abonner=async function(){
+  const btn=document.getElementById('btnAbo');
+  const deja = localStorage.getItem(aboKey)==="1";
+  if(deja){
+    await updateDoc(chaineRef,{abonnes:increment(-1)});
+    localStorage.removeItem(aboKey);
+    btn.innerHTML='<i class="fa fa-bell"></i> S\'abonner';
+    btn.classList.add('bg-red-600'); btn.classList.remove('bg-gray-800');
+  }else{
+    await updateDoc(chaineRef,{abonnes:increment(1)});
+    localStorage.setItem(aboKey,"1");
+    btn.innerHTML='<i class="fa fa-check"></i> Abonné';
+    btn.classList.remove('bg-red-600'); btn.classList.add('bg-gray-800');
+  }
+  const newData = (await getDoc(chaineRef)).data();
+  document.getElementById('nbAbos').innerText=newData.abonnes||0;
+}
 
 async function load(){
   const snap = await getDocs(collection(db,"videos"));
@@ -70,7 +108,7 @@ async function load(){
   document.getElementById('nbVideos').innerText=nb;
   document.getElementById('totalVues').innerText=vues;
 }
-load();
+initAbos(); load();
 </script>
 </body>
 </html>
