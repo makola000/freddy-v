@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FREDDY-V</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -12,7 +11,7 @@
 <a href="index.html" class="bg-red-600 text-white font-black px-3 py-1 rounded">FREDDY-V</a>
 <div class="flex items-center gap-3">
 <a href="publier.html" class="bg-gray-100 w-8 h-8 rounded-full flex items-center justify-center"><i class="fa fa-plus"></i></a>
-<a href="notifications.html"><i class="fa fa-bell text-xl"></i></a>
+<a href="notifications.html"><i class="fa fa-bell"></i></a>
 <a href="ma-chaine.html" class="w-8 h-8 bg-black rounded-full flex items-center justify-center text-white text-xs">M</a>
 </div>
 </header>
@@ -32,41 +31,68 @@ const firebaseConfig = { apiKey: "AIzaSyCZTf68dJf0nir7IJ8QCPrVwB4EEEeclHM", auth
 const db = getFirestore(initializeApp(firebaseConfig));
 let videos=[]; let currentHandle=null; let currentId=null;
 
+function getEmbed(url){
+ if(!url) return null;
+ // YouTube playlist ?list=RD...
+ if(url.includes("list=")){
+  const m=url.match(/list=([^&]+)/);
+  if(m) return {type:"yt-playlist", embed:`https://www.youtube.com/embed/videoseries?list=${m[1]}`, thumb:`https://img.youtube.com/vi/${url.match(/v=([^&]+)/)?.[1]||'0'}/hqdefault.jpg`};
+ }
+ // YouTube video watch?v=
+ if(url.includes("youtube.com/watch")){
+  const m=url.match(/v=([^&]+)/); if(m) return {type:"yt", embed:`https://www.youtube.com/embed/${m[1]}`, thumb:`https://img.youtube.com/vi/${m[1]}/hqdefault.jpg`};
+ }
+ // youtu.be/
+ if(url.includes("youtu.be/")){
+  const m=url.match(/youtu\.be\/([^?&]+)/); if(m) return {type:"yt", embed:`https://www.youtube.com/embed/${m[1]}`, thumb:`https://img.youtube.com/vi/${m[1]}/hqdefault.jpg`};
+ }
+ // direct mp4
+ return {type:"mp4", embed:url, thumb:null};
+}
+
 async function load(){
  try{
   const snap = await getDocs(collection(db,"videos"));
-  videos=[]; snap.forEach(d=>videos.push({id:d.id, ...d.data()}));
-  const status=document.getElementById('status');
-  const grid=document.getElementById('grid');
-  if(videos.length===0){ status.innerHTML="Aucune vidéo pour le moment.<br><a href='publier.html' class='text-red-600 font-bold'>Publie la première!</a>"; return; }
+  videos=[]; snap.forEach(d=>{ const data=d.data(); if(data.url) videos.push({id:d.id, ...data}); });
+  const status=document.getElementById('status'); const grid=document.getElementById('grid');
+  if(videos.length===0){ status.innerHTML="Aucune vidéo. <a href='publier.html' class='text-red-600 font-bold'>Publier</a>"; return; }
   status.style.display="none";
   let h=""; videos.reverse().forEach(v=>{
-    const t=(v.titre||"Sans titre").replace(/'/g," ");
+    const em=getEmbed(v.url); if(!em) return;
+    const t=(v.titre||"Sans titre").replace(/'/g," ").replace(/"/g,"");
     const a=(v.auteur||"Inconnu").replace(/'/g," ");
-    h+=`<div onclick="play('${v.url}','${t}','${a}','${v.id}','${v.chaineHandle||''}')" class="cursor-pointer"><div class="w-full aspect-video bg-black rounded-xl overflow-hidden"><video src="${v.url}" class="w-full h-full object-cover" muted></video></div><p class="font-bold text-xs mt-1">${v.titre}</p><p class="text-[11px] text-gray-500">${v.auteur} • ${v.vues||0} vues</p></div>`;
+    const thumb=em.thumb ? `<img src="${em.thumb}" class="w-full h-full object-cover">` : `<video src="${em.embed}" class="w-full h-full object-cover" muted></video>`;
+    const safeUrl=v.url.replace(/'/g,"");
+    h+=`<div onclick="play('${safeUrl}','${t}','${a}','${v.id}','${v.chaineHandle||''}')" class="cursor-pointer"><div class="w-full aspect-video bg-black rounded-xl overflow-hidden">${thumb}</div><p class="font-bold text-xs mt-1">${v.titre}</p><p class="text-[11px] text-gray-500">${v.auteur} • ${v.vues||0} vues • ${em.type.includes('yt')?'YouTube':'MP4'}</p></div>`;
   }); grid.innerHTML=h;
- }catch(e){ document.getElementById('status').innerText="Erreur: "+e.message+" - Va dans Firebase Console > Firestore > créer collection videos"; console.log(e); }
+ }catch(e){ document.getElementById('status').innerText="Erreur: "+e.message; console.log(e); }
 }
 window.play=async function(url,titre,auteur,id,handle){
  currentHandle=handle; currentId=id;
- document.getElementById('playerBox').innerHTML=`<video id="mainVideo" src="${url}" controls autoplay class="w-full h-full"></video>`;
+ const em=getEmbed(url);
+ let playerHTML="";
+ if(em.type==="mp4"){ playerHTML=`<video id="mainVideo" src="${em.embed}" controls autoplay class="w-full h-full"></video>`; }
+ else { playerHTML=`<iframe src="${em.embed}" class="w-full h-full" frameborder="0" allowfullscreen allow="autoplay"></iframe>`; }
+ document.getElementById('playerBox').innerHTML=playerHTML;
  document.getElementById('playerTitre').innerText=titre;
  document.getElementById('playerAuteur').innerText=auteur;
- document.getElementById('playerVues').innerText="En lecture - vue comptée après 30s";
+ document.getElementById('playerVues').innerText= em.type==="mp4" ? "Vue comptée après 30s" : "Vidéo YouTube";
  document.getElementById('player').classList.remove('hidden');
  window.scrollTo({top:0,behavior:'smooth'});
- let counted=false;
- const videoEl=document.getElementById('mainVideo');
- videoEl.addEventListener('timeupdate', async ()=>{
-  if(videoEl.currentTime>=30 && !counted){
-   counted=true;
-   try{
-    const {doc,updateDoc,increment} = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
-    await updateDoc(doc(db,"videos",id),{vues: increment(1)});
-    document.getElementById('playerVues').innerText="✅ Vue comptée +1";
-   }catch(e){ console.log(e); }
-  }
- });
+ if(em.type==="mp4"){
+  let counted=false;
+  const videoEl=document.getElementById('mainVideo');
+  videoEl.addEventListener('timeupdate', async ()=>{
+   if(videoEl.currentTime>=30 && !counted){
+    counted=true;
+    try{
+     const {doc,updateDoc,increment} = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
+     await updateDoc(doc(db,"videos",id),{vues: increment(1)});
+     document.getElementById('playerVues').innerText="✅ Vue comptée +1";
+    }catch(e){}
+   }
+  });
+ }
 }
 window.abonner=async()=>{
  if(!currentHandle){ alert("Pas de chaîne"); return; }
