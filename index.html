@@ -9,98 +9,94 @@
 <body class="bg-white">
 <header class="flex justify-between items-center px-3 py-3 border-b sticky top-0 bg-white z-50">
 <a href="index.html" class="bg-red-600 text-white font-black px-3 py-1 rounded">FREDDY-V</a>
-<div class="flex items-center gap-3">
+<div class="flex items-center gap-2">
+<a href="shorts.html" class="bg-black text-white text-xs font-bold px-3 py-1.5 rounded-full">Shorts</a>
 <a href="publier.html" class="bg-gray-100 w-8 h-8 rounded-full flex items-center justify-center"><i class="fa fa-plus"></i></a>
 <a href="notifications.html"><i class="fa fa-bell"></i></a>
-<a href="ma-chaine.html" class="w-8 h-8 bg-black rounded-full flex items-center justify-center text-white text-xs">M</a>
 </div>
 </header>
 
-<div id="player" class="hidden bg-black">
-<div id="playerBox" class="w-full aspect-video bg-black"></div>
-<div class="p-3 bg-white"><h2 id="playerTitre" class="font-bold text-sm"></h2><p id="playerAuteur" class="text-xs text-gray-500"></p><button id="btnAbonner" onclick="abonner()" class="mt-2 bg-black text-white text-xs px-4 py-1.5 rounded-full">S'abonner</button><p id="playerVues" class="text-xs text-gray-500 mt-2"></p></div>
-</div>
+<div id="player" class="hidden bg-black"><div id="playerBox" class="w-full aspect-video bg-black"></div>
+<div class="p-3 bg-white"><h2 id="playerTitre" class="font-bold"></h2><p id="playerAuteur" class="text-xs text-gray-500 mb-3"></p>
+<div class="flex gap-2 overflow-x-auto"><button id="btnLike" onclick="like()" class="flex items-center gap-1.5 bg-gray-100 px-4 py-1.5 rounded-full text-xs font-bold"><i class="fa fa-thumbs-up"></i> <span id="likeCount">0</span></button><button onclick="partager()" class="bg-gray-100 px-4 py-1.5 rounded-full text-xs font-bold"><i class="fa fa-share"></i> Partager</button><a id="btnDownload" href="#" download class="bg-gray-100 px-4 py-1.5 rounded-full text-xs font-bold"><i class="fa fa-download"></i> Télécharger</a><button onclick="enregistrer()" class="bg-gray-100 px-4 py-1.5 rounded-full text-xs font-bold"><i class="fa fa-bookmark"></i> Enregistré</button></div>
+<p id="playerVues" class="text-xs text-gray-500 mt-2"></p><div class="mt-4 border-t pt-3"><h3 class="font-bold text-sm"><span id="comCount">0</span> Commentaires</h3><div class="flex gap-2 my-2"><input id="comInput" placeholder="Commentaire..." class="flex-1 border-b text-sm p-1 outline-none"><button onclick="commenter()" class="bg-blue-600 text-white text-xs px-3 py-1 rounded">Envoyer</button></div><div id="comList"></div></div></div></div>
 
 <div id="status" class="text-center py-10 text-sm text-gray-500">Chargement...</div>
-<div id="grid" class="grid grid-cols-1 md:grid-cols-3 gap-3 p-3"></div>
+<div id="feed" class="p-3 space-y-6"></div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, getDocs, doc, updateDoc, increment, addDoc, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 const firebaseConfig = { apiKey: "AIzaSyCZTf68dJf0nir7IJ8QCPrVwB4EEEeclHM", authDomain: "freddy-v.firebaseapp.com", projectId: "freddy-v", storageBucket: "freddy-v.firebasestorage.app", messagingSenderId: "318263144332", appId: "1:318263144332:web:387b2ded7cf5b85d6eb0a9" };
 const db = getFirestore(initializeApp(firebaseConfig));
-let videos=[]; let currentHandle=null; let currentId=null;
+let videos=[]; let currentId=null; let currentUrl=null;
 
 function getEmbed(url){
  if(!url) return null;
- // YouTube playlist ?list=RD...
- if(url.includes("list=")){
-  const m=url.match(/list=([^&]+)/);
-  if(m) return {type:"yt-playlist", embed:`https://www.youtube.com/embed/videoseries?list=${m[1]}`, thumb:`https://img.youtube.com/vi/${url.match(/v=([^&]+)/)?.[1]||'0'}/hqdefault.jpg`};
- }
- // YouTube video watch?v=
- if(url.includes("youtube.com/watch")){
-  const m=url.match(/v=([^&]+)/); if(m) return {type:"yt", embed:`https://www.youtube.com/embed/${m[1]}`, thumb:`https://img.youtube.com/vi/${m[1]}/hqdefault.jpg`};
- }
- // youtu.be/
- if(url.includes("youtu.be/")){
-  const m=url.match(/youtu\.be\/([^?&]+)/); if(m) return {type:"yt", embed:`https://www.youtube.com/embed/${m[1]}`, thumb:`https://img.youtube.com/vi/${m[1]}/hqdefault.jpg`};
- }
- // direct mp4
- return {type:"mp4", embed:url, thumb:null};
+ if(url.includes("list=")){ const m=url.match(/list=([^&]+)/); if(m) return {type:"yt-playlist", embed:`https://www.youtube.com/embed/videoseries?list=${m[1]}`, thumb:`https://i.ytimg.com/vi/7lCDErO1u7M/hqdefault.jpg`}; }
+ if(url.includes("youtube.com/watch")){ const m=url.match(/v=([^&]+)/); if(m) return {type:"yt", embed:`https://www.youtube.com/embed/${m[1]}`, thumb:`https://img.youtube.com/vi/${m[1]}/hqdefault.jpg`, isShort: url.toLowerCase().includes("shorts") || url.includes("#shorts")}; }
+ if(url.includes("youtu.be/")){ const m=url.match(/youtu\.be\/([^?&]+)/); if(m) return {type:"yt", embed:`https://www.youtube.com/embed/${m[1]}`, thumb:`https://img.youtube.com/vi/${m[1]}/hqdefault.jpg`, isShort:false}; }
+ return {type:"mp4", embed:url, thumb:null, isShort: url.toLowerCase().includes("shorts")};
 }
 
 async function load(){
- try{
-  const snap = await getDocs(collection(db,"videos"));
-  videos=[]; snap.forEach(d=>{ const data=d.data(); if(data.url) videos.push({id:d.id, ...data}); });
-  const status=document.getElementById('status'); const grid=document.getElementById('grid');
-  if(videos.length===0){ status.innerHTML="Aucune vidéo. <a href='publier.html' class='text-red-600 font-bold'>Publier</a>"; return; }
-  status.style.display="none";
-  let h=""; videos.reverse().forEach(v=>{
-    const em=getEmbed(v.url); if(!em) return;
-    const t=(v.titre||"Sans titre").replace(/'/g," ").replace(/"/g,"");
-    const a=(v.auteur||"Inconnu").replace(/'/g," ");
-    const thumb=em.thumb ? `<img src="${em.thumb}" class="w-full h-full object-cover">` : `<video src="${em.embed}" class="w-full h-full object-cover" muted></video>`;
-    const safeUrl=v.url.replace(/'/g,"");
-    h+=`<div onclick="play('${safeUrl}','${t}','${a}','${v.id}','${v.chaineHandle||''}')" class="cursor-pointer"><div class="w-full aspect-video bg-black rounded-xl overflow-hidden">${thumb}</div><p class="font-bold text-xs mt-1">${v.titre}</p><p class="text-[11px] text-gray-500">${v.auteur} • ${v.vues||0} vues • ${em.type.includes('yt')?'YouTube':'MP4'}</p></div>`;
-  }); grid.innerHTML=h;
- }catch(e){ document.getElementById('status').innerText="Erreur: "+e.message; console.log(e); }
-}
-window.play=async function(url,titre,auteur,id,handle){
- currentHandle=handle; currentId=id;
- const em=getEmbed(url);
- let playerHTML="";
- if(em.type==="mp4"){ playerHTML=`<video id="mainVideo" src="${em.embed}" controls autoplay class="w-full h-full"></video>`; }
- else { playerHTML=`<iframe src="${em.embed}" class="w-full h-full" frameborder="0" allowfullscreen allow="autoplay"></iframe>`; }
- document.getElementById('playerBox').innerHTML=playerHTML;
- document.getElementById('playerTitre').innerText=titre;
- document.getElementById('playerAuteur').innerText=auteur;
- document.getElementById('playerVues').innerText= em.type==="mp4" ? "Vue comptée après 30s" : "Vidéo YouTube";
- document.getElementById('player').classList.remove('hidden');
- window.scrollTo({top:0,behavior:'smooth'});
- if(em.type==="mp4"){
-  let counted=false;
-  const videoEl=document.getElementById('mainVideo');
-  videoEl.addEventListener('timeupdate', async ()=>{
-   if(videoEl.currentTime>=30 && !counted){
-    counted=true;
-    try{
-     const {doc,updateDoc,increment} = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
-     await updateDoc(doc(db,"videos",id),{vues: increment(1)});
-     document.getElementById('playerVues').innerText="✅ Vue comptée +1";
-    }catch(e){}
+ const snap = await getDocs(collection(db,"videos")); videos=[]; snap.forEach(d=>{ const data=d.data(); if(data.url) videos.push({id:d.id, ...data}); });
+ const status=document.getElementById('status'); const feed=document.getElementById('feed');
+ if(videos.length===0){ status.innerHTML="Aucune vidéo. <a href='publier.html' class='text-red-600 font-bold'>Publier</a>"; return; }
+ status.style.display="none";
+ videos.reverse();
+ // Séparer Shorts et Normales
+ let normales = []; let shorts = [];
+ videos.forEach(v=>{
+   const em=getEmbed(v.url); if(!em) return;
+   v._em=em;
+   if(em.isShort || (v.titre && v.titre.toLowerCase().includes("#shorts"))){ shorts.push(v); } else normales.push(v);
+ });
+ // Si pas de shorts tagués, on prend 1 sur 3 comme shorts pour démo
+ if(shorts.length===0 && normales.length>4){ shorts = normales.splice(2,2); }
+
+ let html=""; let normalIndex=0;
+ while(normalIndex < normales.length){
+   // 4 normales
+   const chunk = normales.slice(normalIndex, normalIndex+4);
+   html+=`<div class="grid grid-cols-1 md:grid-cols-2 gap-3">${chunk.map(v=>cardNormal(v)).join('')}</div>`;
+   normalIndex+=4;
+   // Shorts shelf après 4 normales
+   if(shorts.length>0 && normalIndex < normales.length + 4){
+     const sChunk = shorts.splice(0,6);
+     if(sChunk.length>0){
+       html+=`<div class="border-t pt-4"><div class="flex justify-between items-center mb-2"><h2 class="font-black flex items-center gap-2"><span class="bg-red-600 text-white p-1 rounded"><i class="fa fa-bolt"></i></span> Shorts</h2><a href="shorts.html" class="text-xs font-bold">Voir tout <i class="fa fa-chevron-right"></i></a></div><div class="flex gap-2 overflow-x-auto pb-2">${sChunk.map(v=>cardShort(v)).join('')}</div></div>`;
+       shorts.push(...sChunk); // garde pour boucle suivante
+       shorts = shorts.slice(sChunk.length);
+     }
    }
-  });
  }
+ feed.innerHTML=html;
 }
-window.abonner=async()=>{
- if(!currentHandle){ alert("Pas de chaîne"); return; }
- const email=localStorage.getItem("freddy_user"); if(!email){ location.href="connexion.html"; return; }
- const {addDoc} = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
- await addDoc(collection(db,"abonnements"),{userEmail:email, chaineHandle:currentHandle, date:new Date().toISOString()});
- document.getElementById('btnAbonner').innerText="✅ Abonné";
+
+function cardNormal(v){
+ const thumb=v._em.thumb ? `<img src="${v._em.thumb}" class="w-full h-full object-cover">` : `<video src="${v._em.embed}" class="w-full h-full object-cover" muted></video>`;
+ return `<div onclick="play('${v.url.replace(/'/g,"")}','${(v.titre||'').replace(/'/g," ")}','${(v.auteur||'').replace(/'/g," ")}','${v.id}',${v.likes||0})" class="cursor-pointer"><div class="w-full aspect-video bg-black rounded-xl overflow-hidden">${thumb}</div><p class="font-bold text-sm mt-1 line-clamp-2">${v.titre}</p><p class="text-[11px] text-gray-500">${v.auteur} • ${v.vues||0} vues</p></div>`;
 }
+function cardShort(v){
+ const thumb=v._em.thumb ? `<img src="${v._em.thumb}" class="w-full h-full object-cover">` : `<video src="${v._em.embed}" class="w-full h-full object-cover" muted></video>`;
+ return `<div onclick="location.href='shorts.html'" class="min-w-[140px] w-[140px] cursor-pointer"><div class="w-full h-[220px] bg-black rounded-xl overflow-hidden">${thumb}</div><p class="text-xs font-bold mt-1 line-clamp-2">${v.titre}</p><p class="text-[10px] text-gray-500">${v.vues||0} vues</p></div>`;
+}
+
+window.play=async function(url,titre,auteur,id,likes){
+ currentId=id; currentUrl=url;
+ const em=getEmbed(url);
+ let html=""; if(em.type==="mp4"){ html=`<video id="mainVideo" src="${em.embed}" controls autoplay class="w-full h-full"></video>`; document.getElementById('btnDownload').href=em.embed; document.getElementById('btnDownload').style.display="flex"; }
+ else { html=`<iframe src="${em.embed}" class="w-full h-full" frameborder="0" allowfullscreen></iframe>`; document.getElementById('btnDownload').style.display="none"; }
+ document.getElementById('playerBox').innerHTML=html;
+ document.getElementById('playerTitre').innerText=titre; document.getElementById('playerAuteur').innerText=auteur; document.getElementById('likeCount').innerText=likes; document.getElementById('player').classList.remove('hidden'); window.scrollTo({top:0,behavior:'smooth'});
+ loadComments(id);
+}
+window.like=async()=>{ if(!currentId) return; await updateDoc(doc(db,"videos",currentId),{likes:increment(1)}); document.getElementById('likeCount').innerText=parseInt(document.getElementById('likeCount').innerText)+1; }
+window.partager=async()=>{ if(navigator.share){ try{ await navigator.share({title:document.getElementById('playerTitre').innerText, url:currentUrl}); }catch(e){} } else { await navigator.clipboard.writeText(currentUrl); alert("Lien copié!"); } }
+window.enregistrer=()=>{ let saved=JSON.parse(localStorage.getItem('freddy_saved')||'[]'); if(!saved.includes(currentId)){ saved.push(currentId); localStorage.setItem('freddy_saved',JSON.stringify(saved)); alert("✅ Enregistré!"); } }
+window.commenter=async()=>{ const txt=document.getElementById('comInput').value.trim(); if(!txt) return; await addDoc(collection(db,"commentaires"),{videoId:currentId, texte:txt, auteur: localStorage.getItem('freddy_user')||'Anonyme', date:new Date().toISOString()}); document.getElementById('comInput').value=""; loadComments(currentId); }
+async function loadComments(videoId){ const q=query(collection(db,"commentaires"), where("videoId","==",videoId)); const snap=await getDocs(q); let list=[]; snap.forEach(d=>list.push(d.data())); list.sort((a,b)=>new Date(b.date)-new Date(a.date)); document.getElementById('comCount').innerText=list.length; document.getElementById('comList').innerHTML=list.map(c=>`<div class="flex gap-2 text-xs mb-2"><div class="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center">${c.auteur[0]}</div><div><p class="font-bold">${c.auteur}</p><p>${c.texte}</p></div></div>`).join('')||"<p class='text-xs text-gray-400'>Pas de commentaires</p>"; }
 load();
 </script>
 </body>
