@@ -1,0 +1,12 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Notifs - FREDDY-V</title><script src="https://cdn.tailwindcss.com"></script></head>
+<body class="bg-white p-3"><a href="index.html" class="font-black text-sm">← FREDDY-V</a><h1 class="font-black mt-4">Notifications 🔔</h1><div id="list" class="mt-4 space-y-2"></div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, getDocs, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+const db=getFirestore(initializeApp({ apiKey: "AIzaSyCZTf68dJf0nir7IJ8QCPrVwB4EEEeclHM", authDomain: "freddy-v.firebaseapp.com", projectId: "freddy-v", storageBucket: "freddy-v.firebasestorage.app", messagingSenderId: "318263144332", appId: "1:318263144332:web:387b2ded7cf5b85d6eb0a9" }));
+const email=localStorage.getItem("freddy_user")||"visiteur@gmail.com";
+const q=query(collection(db,"notifications"),where("userEmail","==",email),orderBy("date","desc")); const snap=await getDocs(q);
+let html=""; snap.forEach(d=>{ const n=d.data(); html+=`<div class="bg-gray-100 p-3 rounded-xl"><p class="font-bold text-sm">${n.titre}</p><p class="text-xs text-gray-500">${n.chaine} • <a href="index.html?v=${n.videoId}" class="text-red-600">Voir</a></p></div>`; });
+document.getElementById('list').innerHTML=html||"Aucune notification. Abonne-toi à des chaînes!";
+</script>
+</body></html>
