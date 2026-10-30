@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Publier - FREDDY-V</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCZTf68dJf0nir7IJ8QCPrVwB4EEEeclHM",
+  authDomain: "freddy-v.firebaseapp.com",
+  projectId: "freddy-v",
+  storageBucket: "freddy-v.firebasestorage.app",
+  messagingSenderId: "318263144332",
+  appId: "1:318263144332:web:387b2ded7cf5b85d6eb0a9"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+window.publier = async () => {
+  const titre = document.getElementById('titre').value.trim();
+  const url = document.getElementById('url').value.trim();
+  const type = document.getElementById('type').value;
+  const btn = document.getElementById('btn');
+  const msg = document.getElementById('msg');
+
+  if(!titre || !url){
+    msg.innerHTML = "<div class='bg-red-100 text-red-700 p-3 rounded-xl'>Remplis Titre + Lien vidéo!</div>";
+    return;
+  }
+
+  btn.textContent = "Publication en cours...";
+  btn.disabled = true;
+
+  try {
+    await addDoc(collection(db, "videos"), {
+      titre: titre,
+      url: url,
+      thumbnail: url,
+      type: type,
+      auteur: "Makola Freddy",
+      vues: 0,
+      likes: 0,
+      createdAt: serverTimestamp()
+    });
+    
+    msg.innerHTML = `<div class='bg-green-100 text-green-800 p-4 rounded-xl font-bold'>
+    ✅ Vidéo publiée sur FREDDY-V!<br><br>
+    Elle va apparaître sur l'accueil YouTube!<br>
+    <a href='index.html' class='bg-black text-white px-4 py-2 rounded-full inline-block mt-3'>👉 Voir sur Accueil</a>
+    </div>`;
+    btn.textContent = "✅ Publié!";
+    
+    document.getElementById('titre').value = "";
+    document.getElementById('url').value = "";
+
+  } catch(e){
+    msg.innerHTML = `<div class='bg-red-100 text-red-700 p-3 rounded-xl'>
+    Erreur: ${e.message}<br><br>
+    <b>Solution:</b> Va sur Firebase Console → Firestore → Rules → Mets:<br>
+    <code>allow read, write: if true;</code>
+    </div>`;
+    btn.textContent = "Réessayer";
+    btn.disabled = false;
+  }
+};
+</script>
+</head>
+<body class="bg-[#f9f9f9] p-4">
+<div class="max-w-md mx-auto bg-white p-6 rounded-2xl mt-6 shadow-2xl border">
+<h1 class="font-black text-2xl">📤 Publier sur FREDDY-V</h1>
+<p class="text-sm text-gray-500">Avec Firebase - Ta vidéo va sur Accueil YouTube</p>
+
+<label class="font-bold text-sm mt-6 block">Titre de la vidéo</label>
+<input id="titre" placeholder="Ex: Ma vie à Masisi - Vlog 1" class="w-full p-4 border-2 rounded-xl mt-1">
+
+<label class="font-bold text-sm mt-4 block">Lien de la vidéo</label>
+<input id="url" placeholder="Colle lien YouTube ou MP4" value="https://www.w3schools.com/html/mov_bbb.mp4" class="w-full p-4 border-2 rounded-xl mt-1 text-xs">
+<p class="text-[11px] text-gray-400 mt-1">Pour test, laisse le lien exemple, ça marche direct</p>
+
+<label class="font-bold text-sm mt-4 block">Type</label>
+<select id="type" class="w-full p-4 border-2 rounded-xl mt-1">
+  <option value="video">Vidéo normale (Accueil)</option>
+  <option value="short">Shorts Vertical</option>
+</select>
+
+<button id="btn" onclick="publier()" class="w-full bg-red-600 text-white py-4 rounded-xl font-black mt-6">🚀 PUBLIER AVEC FIREBASE</button>
+
+<div id="msg" class="mt-4"></div>
+
+<a href="index.html" class="block text-center mt-6 underline text-sm">← Retour Accueil YouTube</a>
+<a href="admin.html" class="block text-center mt-2 text-xs text-gray-500">Voir ADMIN</a>
+</div>
+</body>
+</html>
