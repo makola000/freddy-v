@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Connexion - FREDDY-V</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+<div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-lg">
+<div class="text-center">
+<a href="index.html" class="bg-red-600 text-white font-black px-4 py-2 rounded text-lg">FREDDY-V</a>
+<h2 class="font-black text-xl mt-4">Bon retour! 👋</h2>
+<p class="text-xs text-gray-500 mt-1">Connecte-toi à ta chaîne comme sur YouTube</p>
+</div>
+
+<input id="email" type="email" placeholder="Email *" class="w-full border-2 rounded-xl px-4 py-3 text-sm mt-6 focus:border-red-600 outline-none">
+<input id="password" type="password" placeholder="Mot de passe *" class="w-full border-2 rounded-xl px-4 py-3 text-sm mt-3 focus:border-red-600 outline-none">
+
+<button id="btn" onclick="connecter()" class="w-full bg-black text-white font-black py-3.5 rounded-full mt-6">
+<i class="fa fa-sign-in-alt"></i> Se connecter
+</button>
+
+<p class="text-xs text-center mt-4">Pas de compte? <a href="inscription.html" class="text-red-600 font-bold">Créer une chaîne</a></p>
+<p class="text-[11px] text-center text-gray-400 mt-2"><a href="index.html">← Continuer sans compte</a></p>
+
+<p id="msg" class="text-xs text-center mt-3 font-bold"></p>
+
+<div class="mt-6 bg-gray-50 p-3 rounded-xl">
+<p class="text-[11px] font-bold">💡 Comme YouTube:</p>
+<p class="text-[11px] text-gray-500">1 compte = 1 chaîne = tu peux publier + t'abonner</p>
+</div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = { apiKey: "AIzaSyCZTf68dJf0nir7IJ8QCPrVwB4EEEeclHM", authDomain: "freddy-v.firebaseapp.com", projectId: "freddy-v", storageBucket: "freddy-v.firebasestorage.app", messagingSenderId: "318263144332", appId: "1:318263144332:web:387b2ded7cf5b85d6eb0a9" };
+const db = getFirestore(initializeApp(firebaseConfig));
+
+window.connecter=async()=>{
+  const email=document.getElementById('email').value.trim();
+  const pass=document.getElementById('password').value.trim();
+  const msg=document.getElementById('msg');
+  const btn=document.getElementById('btn');
+
+  if(!email||!pass){ msg.innerText="❌ Remplis email + mot de passe"; msg.className="text-xs text-center mt-3 font-bold text-red-600"; return; }
+
+  btn.innerText="Vérification..."; btn.disabled=true;
+  msg.innerText=""; 
+
+  try{
+    const q=query(collection(db,"users"), where("email","==",email), where("password","==",pass));
+    const snap=await getDocs(q);
+
+    if(snap.empty){
+      msg.innerText="❌ Email ou mot de passe incorrect";
+      msg.className="text-xs text-center mt-3 font-bold text-red-600";
+      btn.innerText="Se connecter"; btn.disabled=false;
+      return;
+    }
+
+    const data=snap.docs[0].data();
+    localStorage.setItem("freddy_user", data.email);
+    localStorage.setItem("freddy_chaine", data.chaine);
+    localStorage.setItem("freddy_nom", data.nom);
+
+    msg.innerText="✅ Connecté! Redirection...";
+    msg.className="text-xs text-center mt-3 font-bold text-green-600";
+    btn.innerText="✅ Connecté!";
+
+    setTimeout(()=>{ window.location.href="index.html"; },1000);
+
+  }catch(e){
+    msg.innerText="❌ Erreur: "+e.message;
+    msg.className="text-xs text-center mt-3 font-bold text-red-600";
+    btn.innerText="Se connecter"; btn.disabled=false;
+  }
+}
+
+// Si déjà connecté, va direct à l'accueil
+if(localStorage.getItem("freddy_user")){
+  // document.getElementById('msg').innerText="Déjà connecté: "+localStorage.getItem("freddy_user");
+}
+</script>
+</body>
+</html>
