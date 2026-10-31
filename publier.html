@@ -1,46 +1,28 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Publier - FREDDY-V</title><script src="https://cdn.tailwindcss.com"></script></head>
-<body class="bg-white p-4">
-<a href="index.html" class="bg-red-600 text-white font-black px-3 py-1 rounded">FREDDY-V</a>
-<h1 class="font-black text-xl mt-4">Publier vidéo (lien direct)</h1>
-<input id="titre" placeholder="Titre *" class="w-full border-2 rounded-xl px-4 py-3 text-sm mt-4">
-<input id="file" type="file" accept="video/*" class="w-full border-2 border-dashed rounded-xl px-4 py-6 mt-3">
-<button id="btn" onclick="publier()" class="w-full bg-red-600 text-white font-black py-4 rounded-full mt-4">Publier</button>
-<p id="msg" class="text-xs text-center mt-3"></p>
-
+<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Publier - FREDDY-V</title><script src="https://cdn.tailwindcss.com"></script>
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-const firebaseConfig = { apiKey: "AIzaSyCZTf68dJf0nir7IJ8QCPrVwB4EEEeclHM", authDomain: "freddy-v.firebaseapp.com", projectId: "freddy-v", storageBucket: "freddy-v.firebasestorage.app", messagingSenderId: "318263144332", appId: "1:318263144332:web:387b2ded7cf5b85d6eb0a9" };
-const db = getFirestore(initializeApp(firebaseConfig));
-
-async function uploadCatbox(file){
- const fd=new FormData(); fd.append("reqtype","fileupload"); fd.append("fileToUpload",file);
- const res=await fetch("https://catbox.moe/user/api.php",{method:"POST",body:fd});
- const url=await res.text();
- if(url.startsWith("https://")) return url.trim();
- throw new Error("Catbox: "+url);
-}
-
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+const firebaseConfig = {apiKey:"AIzaSyCZTf68dJf0nir7IJ8QCPrVwB4EEEeclHM",authDomain:"freddy-v.firebaseapp.com",projectId:"freddy-v",storageBucket:"freddy-v.firebasestorage.app",messagingSenderId:"318263144332",appId:"1:318263144332:web:387b2ded7cf5b85d6eb0a9"};
+const app=initializeApp(firebaseConfig);const db=getFirestore(app);
 window.publier=async()=>{
- const titre=document.getElementById('titre').value.trim();
- const file=document.getElementById('file').files[0];
- if(!titre||!file){ alert("Titre + vidéo"); return; }
- const email=localStorage.getItem("freddy_user"); const chaineNom=localStorage.getItem("freddy_chaine")||"Makola Freddy";
- if(!email){ location.href="connexion.html"; return; }
- const handle="@"+chaineNom.toLowerCase().replace(/\s+/g,"");
- document.getElementById('btn').innerText="Upload..."; document.getElementById('btn').disabled=true;
- try{
-  const fileUrl=await uploadCatbox(file);
-  const docRef=await addDoc(collection(db,"videos"),{titre:titre,url:fileUrl,auteur:chaineNom,chaineHandle:handle,chaineEmail:email,vues:0,likes:0,date:new Date().toISOString()});
-  // notifs
-  const q=query(collection(db,"abonnements"),where("chaineHandle","==",handle));
-  const snap=await getDocs(q); for(const d of snap.docs){ await addDoc(collection(db,"notifications"),{userEmail:d.data().userEmail,titre:titre,chaine:chaineNom,chaineHandle:handle,videoId:docRef.id,videoUrl:fileUrl,lu:false,date:new Date().toISOString()}); }
-  document.getElementById('msg').innerText="✅ Publié! Lien direct: "+fileUrl;
-  setTimeout(()=>location.href="index.html",1500);
- }catch(e){ document.getElementById('msg').innerText="❌ "+e.message; document.getElementById('btn').disabled=false; document.getElementById('btn').innerText="Réessayer"; }
+const tel=localStorage.getItem('freddy_tel');const nom=localStorage.getItem('freddy_nom');
+if(!tel){alert("Connecte-toi d'abord");location.href="connexion.html";return;}
+const titre=document.getElementById('titre').value.trim();const lien=document.getElementById('lien').value.trim();
+const btn=document.getElementById('btnPub');const msg=document.getElementById('msg');
+if(!titre||!lien){msg.innerHTML=`<div class='bg-red-100 p-3 rounded'>Titre + Lien YouTube ou MP4 obligatoire</div>`;return;}
+btn.textContent="Publication...";btn.disabled=true;
+try{await addDoc(collection(db,"videos"),{titre:titre, lien:lien, ownerTel:tel, ownerNom:nom, vues:0, date:new Date().toISOString(), revenusOwner:0, revenusFreddy:0});
+msg.innerHTML=`<div class='bg-green-100 p-3 rounded'>Vidéo publiée! 🎉</div>`;setTimeout(()=>location.href="index.html",1000);
+}catch(e){msg.innerHTML=`<div class='bg-red-100 p-3 rounded'>Erreur: ${e.message}</div>`;btn.textContent="Publier";btn.disabled=false;}
 }
-</script>
-</body>
-</html>
+window.onload=()=>{const tel=localStorage.getItem('freddy_tel');if(!tel) location.href="connexion.html"; document.getElementById('user').innerText=localStorage.getItem('freddy_nom')||tel;}
+</script></head>
+<body class="bg-black text-white min-h-screen p-4"><div class="max-w-md mx-auto mt-6">
+<h1 class="text-2xl font-black">Publier une vidéo</h1><p class="text-gray-400 text-sm">Connecté en tant que <span id="user" class="font-bold text-white"></span></p>
+<div class="bg-white text-black p-6 rounded-2xl mt-4">
+<label class="font-bold">Titre de ta vidéo</label><input id="titre" placeholder="Ex: Chantier qui tourne mal - Kolwezi" class="w-full p-3 border rounded-xl mt-1 mb-4">
+<label class="font-bold">Lien YouTube ou MP4</label><input id="lien" placeholder="https://youtube.com/..." class="w-full p-3 border rounded-xl mt-1">
+<p class="text-xs text-gray-500 mb-4">Colle le lien YouTube de ta vidéo, ou lien MP4</p>
+<button id="btnPub" onclick="publier()" class="w-full bg-red-600 text-white p-4 rounded-xl font-black">PUBLIER ET GAGNER 80%</button><div id="msg" class="mt-4"></div></div>
+<a href="ma-chaine.html" class="block text-center mt-4 text-gray-400">→ Ma chaîne / Mes revenus</a>
+<a href="index.html" class="block text-center mt-2 text-gray-400">← Accueil</a></div></body></html>
