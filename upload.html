@@ -1,66 +1,57 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Publier - FREDDY-V</title><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script><style>body{background:#000;color:#fff;margin:0;font-family:Arial;padding:15px}input,button{width:100%;padding:14px;margin:8px 0;border-radius:10px;border:0;box-sizing:border-box}input{background:#222;color:#fff}button{background:red;color:#fff;font-weight:bold;font-size:16px}progress{width:100%;height:24px;border-radius:10px}.top{margin-bottom:10px}.err{color:#ff5555;background:#220;padding:10px;border-radius:8px;margin:10px 0}</style></head><body>
-<div class="top"><b onclick="location.href='index.html'">← FREDDY-V</b></div>
-<h2>📱 Publier MA vidéo<br><small style="color:#888">Max 500MB - 100% pour toi</small></h2>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Publier - FREDDY-V</title><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script><style>body{background:#000;color:#fff;margin:0;font-family:Arial;padding:15px}input,button{width:100%;padding:14px;margin:8px 0;border-radius:10px;border:0;box-sizing:border-box}input{background:#222;color:#fff}button{background:red;color:#fff;font-weight:bold}progress{width:100%;height:24px}</style></head><body>
+<div><b onclick="location.href='index.html'">← FREDDY-V</b></div>
+<h2>📱 Publier MA vidéo (SANS Firebase Storage)<br><small style="color:#888">Max 500MB - Marche à Masisi</small></h2>
 <input type="file" id="file" accept="video/*">
 <input id="titre" placeholder="Titre: Ex: Jesus est vivant">
 <input id="auteur" value="Makola Freddy">
-<button onclick="uploadPhone()">📱 PUBLIER MA VIDÉO (500MB MAX)</button>
+<button onclick="uploadDirect()">📱 PUBLIER MAINTENANT</button>
 <progress id="prog" value="0" max="100" style="display:none"></progress>
-<div id="msg" style="margin:12px 0;padding:10px;background:#111;border-radius:8px"></div>
-<div id="err" class="err" style="display:none"></div>
+<div id="msg" style="margin:12px 0;padding:12px;background:#111;border-radius:8px"></div>
 <script>
-const cfg={
-  apiKey:"AIzaSyCZTfMR94q2t4W1c0N7LK5YpN14M8iBVvA",
-  authDomain:"freddy-v.firebaseapp.com",
-  projectId:"freddy-v",
-  storageBucket:"freddy-v.firebasestorage.app"
-};
+const cfg={apiKey:"AIzaSyCZTfMR94q2t4W1c0N7LK5YpN14M8iBVvA",authDomain:"freddy-v.firebaseapp.com",projectId:"freddy-v"};
 if(!firebase.apps.length)firebase.initializeApp(cfg);
 const db=firebase.firestore();
-const storage=firebase.storage();
 
-async function uploadPhone(){
+async function uploadDirect(){
   const file=document.getElementById('file').files[0];
   const titre=document.getElementById('titre').value.trim();
-  const auteur=document.getElementById('auteur').value.trim()||"Makola Freddy";
+  const auteur=document.getElementById('auteur').value||"Makola Freddy";
   const msg=document.getElementById('msg');
-  const err=document.getElementById('err');
   const prog=document.getElementById('prog');
-  err.style.display="none";
+  if(!file||!titre){msg.innerHTML="❌ Choisis vidéo + titre";return}
+  if(file.size>500*1024*1024){msg.innerHTML="❌ Trop grosse >500MB";return}
   
-  if(!file||!titre){msg.innerHTML="❌ Choisis fichier + titre";return}
-  if(file.size>500*1024*1024){msg.innerHTML="❌ Trop grosse! "+(file.size/1024/1024).toFixed(1)+"MB > 500MB";return}
-  
-  prog.style.display="block";
-  msg.innerHTML=`⏳ Préparation ${ (file.size/1024/1024).toFixed(1)}MB...`;
+  prog.style.display="block"; prog.value=10;
+  msg.innerHTML=`⏳ Upload ${ (file.size/1024/1024).toFixed(1)}MB vers serveur... Ne ferme pas, ça peut prendre 2-3min à Masisi`;
   
   try{
-    const ref=storage.ref().child(`videos/${Date.now()}_${file.name}`);
-    const task=ref.put(file);
-    task.on('state_changed',
-      s=>{
-        const pct=(s.bytesTransferred/s.totalBytes)*100;
-        prog.value=pct;
-        msg.innerHTML=`⏳ ${pct.toFixed(0)}% - ${(s.bytesTransferred/1024/1024).toFixed(1)}MB / ${(s.totalBytes/1024/1024).toFixed(1)}MB`;
-      },
-      e=>{
-        err.style.display="block";
-        if(e.code==="storage/unauthorized"){err.innerHTML="❌ ERREUR PERMISSION: Va sur console.firebase.google.com/project/freddy-v/storage -> Rules -> Mets 'allow read, write: if true;'"}
-        else if(e.code==="storage/bucket-not-found" || e.message.includes("bucket")){err.innerHTML="❌ BUCKET NON TROUVÉ: Va sur console.firebase.google.com/project/freddy-v/storage -> Clique 'Commencer' et passe en Blaze (gratuit)"}
-        else if(e.code==="storage/retry-limit-exceeded" || e.code==="storage/unknown"){err.innerHTML="❌ PLAN SPARK BLOQUÉ: Ton projet est en Spark. Il faut passer en Blaze (gratuit, 5GB gratuit). Va sur console -> Mettre à niveau en Blaze -> "+e.message}
-        else{err.innerHTML="❌ ERREUR: "+e.code+" - "+e.message}
-        prog.style.display="none";
-      },
-      async()=>{
-        const url=await ref.getDownloadURL();
-        await db.collection("videos").add({url:url,titre:titre,auteur:auteur,vues:0,likes:0,type:"phone",timestamp:firebase.firestore.FieldValue.serverTimestamp()});
-        msg.innerHTML=`✅ SUCCÈS! "${titre}" publié! <br><a href='index.html' style='color:red;font-weight:bold'>→ Voir sur FREDDY-V</a>`;
-        prog.style.display="none";
-      }
-    );
+    const form=new FormData();
+    form.append("reqtype","fileupload");
+    form.append("fileToUpload",file);
+    
+    prog.value=30;
+    const res=await fetch("https://catbox.moe/user/api.php",{method:"POST",body:form});
+    const url=await res.text();
+    
+    if(!url.startsWith("https://")) throw new Error(url);
+    
+    prog.value=80;
+    msg.innerHTML=`⏳ Serveur OK, enregistrement dans FREDDY-V...`;
+    
+    await db.collection("videos").add({
+      url:url.trim(),
+      titre:titre,
+      auteur:auteur,
+      vues:0, likes:0, type:"phone",
+      timestamp:firebase.firestore.FieldValue.serverTimestamp()
+    });
+    
+    prog.value=100;
+    msg.innerHTML=`✅ SUCCÈS! "${titre}" publié!<br>URL: ${url}<br><a href='index.html' style='color:red;font-weight:bold'>→ VOIR SUR FREDDY-V</a>`;
+    prog.style.display="none";
   }catch(e){
-    err.style.display="block";
-    err.innerHTML="❌ ERREUR: "+e.message;
+    msg.innerHTML=`❌ ERREUR: ${e.message}<br><br>SOLUTION RAPIDE: Upload ta vidéo sur YouTube avec l'app YouTube, puis copie le lien YouTube et colle-le dans FREDDY-V. YouTube a stockage illimité gratuit!`;
+    prog.style.display="none";
   }
 }
 </script></body></html>
