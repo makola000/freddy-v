@@ -1,0 +1,32 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><title>Admin Revenus - FREDDY-V</title>
+<style>body{font-family:Arial;padding:20px} table{width:100%;border-collapse:collapse} td,th{border:1px solid #ccc;padding:8px}</style>
+</head><body>
+<h2>👑 Admin - Revenus FREDDY-V (20% toi / 80% créateurs)</h2>
+<div id="stats"></div>
+<h3>Demandes de retrait du monde</h3>
+<table><thead><tr><th>Créateur</th><th>Pays</th><th>Numéro</th><th>Montant 80%</th><th>Statut</th></tr></thead><tbody id="liste"></tbody></table>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const firebaseConfig = { apiKey: "METS_TA_CONFIG_ICI" };
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+async function load(){
+ let totalVues=0; const videos = await getDocs(collection(db, "videos"));
+ videos.forEach(d=> totalVues += (d.data().vues || 0));
+ const revenuTotal = totalVues * 0.01;
+ const pourToi = revenuTotal * 0.20;
+ const pourCreateurs = revenuTotal * 0.80;
+ document.getElementById("stats").innerHTML = `Vues totales monde: ${totalVues}<br>Revenu Google total: $${revenuTotal.toFixed(2)}<br><b>Ton bénéfice 20%: $${pourToi.toFixed(2)}</b><br>À payer créateurs 80%: $${pourCreateurs.toFixed(2)}<hr>`;
+
+ const retraits = await getDocs(collection(db, "retraits"));
+ let html=""; retraits.forEach(d=>{
+   const r=d.data();
+   html+=`<tr><td>${r.uid}</td><td>${r.pays}</td><td>${r.numero}</td><td>$${r.montant}</td><td>${r.statut}</td></tr>`;
+ });
+ document.getElementById("liste").innerHTML=html;
+}
+load();
+</script></body></html>
