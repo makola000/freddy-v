@@ -1,0 +1,50 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><title>Mes Revenus - FREDDY-V</title>
+<style>body{font-family:Arial;padding:20px;background:#f5f5f5}.card{background:white;padding:20px;border-radius:10px;margin:10px 0;box-shadow:0 2px 5px #ccc} .money{color:green;font-weight:bold;font-size:24px}</style>
+</head><body>
+<h2>💰 Mes Revenus FREDDY-V (80%)</h2>
+<div class="card">
+<p>Vues totales: <b id="vues">0</b></p>
+<p>Revenu total: $<b id="total">0</b></p>
+<p class="money">Mon argent (80%): $<b id="moi">0</b></p>
+<p>Part FREDDY-V (20%): $<b id="freddy">0</b></p>
+</div>
+<div class="card">
+<h3>Retirer mon argent</h3>
+<select id="pays"><option value="CD">RDC - M-Pesa / Airtel Money</option><option value="US">USA - PayPal / Banque</option><option value="FR">France - Banque</option><option value="AUTRE">Autre pays</option></select><br><br>
+<input id="numero" placeholder="Numéro M-Pesa / PayPal / IBAN"><br><br>
+<button id="retirer">Demander retrait 80%</button>
+<p id="msg"></p>
+</div>
+<a href="index.html">Retour accueil</a>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, collection, query, where, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = { apiKey: "METS_TA_CONFIG_ICI", authDomain: "METS_TA_CONFIG_ICI", projectId: "METS_TA_CONFIG_ICI" };
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+onAuthStateChanged(auth, async (user)=>{
+ if(!user){ location.href="connexion.html"; return; }
+ const q = query(collection(db, "videos"), where("uid", "==", user.uid));
+ const snap = await getDocs(q);
+ let vuesTotales = 0;
+ snap.forEach(d=>{ vuesTotales += (d.data().vues || 0); });
+ const total = vuesTotales * 0.01; // $0.01 par vue = $10 pour 1000 vues (tu peux changer)
+ const pourMoi = total * 0.80;
+ const pourFreddy = total * 0.20;
+ document.getElementById("vues").innerText = vuesTotales;
+ document.getElementById("total").innerText = total.toFixed(2);
+ document.getElementById("moi").innerText = pourMoi.toFixed(2);
+ document.getElementById("freddy").innerText = pourFreddy.toFixed(2);
+
+ document.getElementById("retirer").onclick = async ()=>{
+   if(pourMoi < 5){ alert("Minimum $5 pour retirer"); return; }
+   await addDoc(collection(db, "retraits"), { uid: user.uid, montant: pourMoi, pays: pays.value, numero: numero.value, date: new Date(), statut: "en attente" });
+   msg.innerText = "✅ Demande envoyée! Tu recevras $"+pourMoi.toFixed(2)+" sur "+numero.value+" (80%)";
+ };
+});
+</script></body></html>
