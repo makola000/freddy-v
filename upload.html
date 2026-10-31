@@ -1,0 +1,27 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Publier - FREDDY-V</title><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script><style>body{background:#000;color:#fff;margin:0;font-family:Arial;padding:15px}input,button{width:100%;padding:14px;margin:8px 0;border-radius:10px;border:0;box-sizing:border-box}input{background:#222;color:#fff}button{background:red;color:#fff;font-weight:bold;font-size:16px}.top{padding:10px 0}</style></head><body>
+<div class="top"><b onclick="location.href='index.html'">← FREDDY-V</b></div>
+<h2>+ Publier une vidéo YouTube</h2>
+<input id="url" placeholder="Colle lien YouTube ici: https://youtube.com/watch?v=...">
+<input id="titre" placeholder="Titre de ta vidéo: Ex: Commencement">
+<input id="auteur" placeholder="Ta chaîne: Makola Freddy" value="Makola Freddy">
+<button onclick="publier()">PUBLIER MAINTENANT</button>
+<div id="msg" style="margin-top:15px"></div>
+<script>
+const cfg={apiKey:"AIzaSyCZTfMR94q2t4W1c0N7LK5YpN14M8iBVvA",authDomain:"freddy-v.firebaseapp.com",projectId:"freddy-v"};if(!firebase.apps.length)firebase.initializeApp(cfg);const db=firebase.firestore();
+function getYTId(u){let m=(u||"").match(/(?:v=|be\/|embed\/|shorts\/)([^&?]+)/);return m?m[1]:"";}
+async function publier(){
+  const url=document.getElementById('url').value.trim();
+  const titre=document.getElementById('titre').value.trim();
+  const auteur=document.getElementById('auteur').value.trim()||"Makola Freddy";
+  const msg=document.getElementById('msg');
+  if(!url||!titre){msg.innerHTML="❌ Mets lien + titre";return}
+  const yt=getYTId(url);if(!yt){msg.innerHTML="❌ Lien YouTube invalide";return}
+  msg.innerHTML="⏳ Publication...";
+  try{
+    await db.collection("videos").add({url:url,youtubeId:yt,titre:titre,auteur:auteur,vues:0,likes:0,timestamp:firebase.firestore.FieldValue.serverTimestamp(),type:"youtube"});
+    await db.collection("chaines").doc(auteur).set({nom:auteur,abonnes:0},{merge:true});
+    msg.innerHTML="✅ Publié! <a href='index.html' style='color:red'>Voir Accueil</a>";
+    document.getElementById('url').value="";document.getElementById('titre').value="";
+  }catch(e){msg.innerHTML="ERREUR: "+e.message}
+}
+</script></body></html>
