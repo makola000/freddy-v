@@ -1,60 +1,53 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><title>Mes Revenus - FREDDY-V</title>
-<style>body{font-family:Arial;padding:20px;background:#f5f5f5}.card{background:white;padding:20px;border-radius:10px;margin:10px 0;box-shadow:0 2px 5px #ccc} .money{color:green;font-weight:bold;font-size:24px} button{background:#ff0000;color:white;padding:10px 20px;border:none;border-radius:5px}</style>
-</head><body>
-<h2>💰 Mes Revenus FREDDY-V (80%)</h2>
-<div class="card">
-<p>Vues totales: <b id="vues">0</b></p>
-<p>Revenu total: $<b id="total">0</b></p>
-<p class="money">Mon argent (80%): $<b id="moi">0</b></p>
-<p>Part FREDDY-V (20%): $<b id="freddy">0</b></p>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mes Revenus - FREDDY-V</title>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<style>
+body{background:#0f0f0f;color:#fff;font-family:Arial;padding:20px;text-align:center}
+.box{background:#1f1f1f;padding:20px;border-radius:15px;margin-top:20px}
+h1{color:#ff0000}
+.money{font-size:40px;color:#00ff00;font-weight:bold}
+.btn{background:#ff0000;color:#fff;padding:12px 20px;border-radius:20px;text-decoration:none;display:inline-block;margin-top:20px}
+</style>
+</head>
+<body>
+<h1>💰 MES REVENUS</h1>
+<a class="btn" href="index.html">Retour aux vidéos</a>
+<div class="box">
+<p>Vues totales:</p>
+<div class="money" id="vues">Chargement...</div>
+<p>Mon argent (80%):</p>
+<div class="money" id="argent">$0.00</div>
+<p>Part FREDDY-V (20%):</p>
+<div id="freddy">$0.00</div>
 </div>
-<div class="card">
-<h3>Retirer mon argent</h3>
-<select id="pays"><option value="CD">RDC - M-Pesa / Airtel Money</option><option value="US">USA - PayPal</option><option value="FR">France - Banque</option></select><br><br>
-<input id="numero" placeholder="Numéro M-Pesa / PayPal / IBAN" style="width:90%;padding:10px"><br><br>
-<button id="retirer">Demander retrait 80%</button>
-<p id="msg"></p>
-</div>
-<a href="index.html">Retour accueil</a>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, collection, query, where, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
+<script>
 const firebaseConfig = {
-  apiKey: "AIzaSyCZTf68dJf0nir7IJ8QCPrVwB4EEEecIHM",
-  authDomain: "freddy-v.firebaseapp.com",
-  projectId: "freddy-v",
-  storageBucket: "freddy-v.firebasestorage.app",
-  messagingSenderId: "318263144332",
-  appId: "1:318263144332:web:387b2ded7cf5b85d6eb0a9"
+apiKey: "AIzaSyCZTf68dJf0nir7IJ8QCPrVwB4EEEeclHM",
+authDomain: "freddy-v.firebaseapp.com",
+projectId: "freddy-v",
+storageBucket: "freddy-v.firebasestorage.app",
+messagingSenderId: "318263144332",
+appId: "1:318263144332:web:387b2ded7cf5b85d6eb0a9"
 };
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-onAuthStateChanged(auth, async (user)=>{
- if(!user){ location.href="connexion.html"; return; }
- const q = query(collection(db, "videos"), where("uid", "==", user.uid));
- const snap = await getDocs(q);
- let vuesTotales = 0;
- snap.forEach(d=>{ vuesTotales += (d.data().vues || 0); });
- const total = vuesTotales * 0.01;
- const pourMoi = total * 0.80;
- const pourFreddy = total * 0.20;
- document.getElementById("vues").innerText = vuesTotales;
- document.getElementById("total").innerText = total.toFixed(2);
- document.getElementById("moi").innerText = pourMoi.toFixed(2);
- document.getElementById("freddy").innerText = pourFreddy.toFixed(2);
-
- document.getElementById("retirer").onclick = async ()=>{
-   const num = document.getElementById("numero").value;
-   const paysVal = document.getElementById("pays").value;
-   if(pourMoi < 1){ alert("Continue à publier pour atteindre $1"); return; }
-   if(!num){ alert("Mets ton numéro"); return; }
-   await addDoc(collection(db, "retraits"), { uid: user.uid, montant: pourMoi, pays: paysVal, numero: num, date: new Date(), statut: "en attente" });
-   document.getElementById("msg").innerText = "✅ Demande envoyée! Tu recevras $"+pourMoi.toFixed(2)+" (80%) sur "+num;
- };
+if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+db.collection("revenus").doc("makola").onSnapshot((doc)=>{
+if(doc.exists){
+const d=doc.data();
+document.getElementById("vues").innerText=d.vuesTotales||0;
+document.getElementById("argent").innerText="$"+(d.monArgent||0).toFixed(2);
+document.getElementById("freddy").innerText="$"+(d.partFreddyV||0).toFixed(2);
+}else{
+document.getElementById("vues").innerText="0";
+document.getElementById("argent").innerText="$0.00";
+}
 });
-</script></body></html>
+</script>
+</body>
+</html>
