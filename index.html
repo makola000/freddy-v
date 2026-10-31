@@ -3,99 +3,67 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FREDDY-V - Vidéos du Monde</title>
+<title>FREDDY-V - Kolwezi</title>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <style>
-body{margin:0;font-family:Arial;background:#000;color:#fff}
-header{background:#ff0000;padding:10px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
-header a{color:white;text-decoration:none;margin:0 8px;font-weight:bold}
-.video-box{width:100%;max-width:500px;margin:15px auto;background:#111;border-radius:10px;overflow:hidden}
-video{width:100%;display:block}
-.info{padding:10px}
-.stats{color:#0f0;font-size:13px}
-button{padding:8px 15px;border:none;border-radius:5px;cursor:pointer}
-.btn-view{background:#ff0000;color:white;width:100%;margin-top:5px}
+body{background:#0f0f0f;color:#fff;font-family:Arial;padding:10px}
+.header{display:flex;justify-content:space-between;align-items:center}
+.btn{background:#ff0000;color:#fff;padding:10px 15px;border-radius:20px;text-decoration:none}
+.video-card{background:#1f1f1f;margin:10px 0;padding:10px;border-radius:10px}
+.video-card video{width:100%;border-radius:10px}
 </style>
 </head>
 <body>
-<header>
-<b>FREDDY-V 🌍</b>
-<div>
-<a href="revenus.html">💰 Revenus</a>
-<a href="admin-revenus.html" id="adminLink" style="display:none">👑 Admin</a>
-<a href="connexion.html" id="loginLink">Connexion</a>
+
+<div class="header">
+  <h2>FREDDY-V</h2>
+  <a class="btn" href="revenus.html">Mes Revenus</a>
 </div>
-</header>
 
-<div id="videos"></div>
+<p>Plateforme Vidéo Kolwezi - $0.01 par vue (80% pour toi)</p>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, collection, getDocs, doc, updateDoc, increment, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+<div class="video-card">
+  <video controls poster="https://via.placeholder.com/320x180?text=FREDDY-V">
+    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+  </video>
+  <h3>Vidéo Test Kolwezi 1</h3>
+  <button onclick="compterVue('video1','makola')" style="background:red;color:white;padding:10px;width:100%;border:none;border-radius:5px">▶ REGARDER = +$0.01</button>
+</div>
 
+<div class="video-card">
+  <video controls poster="https://via.placeholder.com/320x180?text=FREDDY-V">
+    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+  </video>
+  <h3>Vidéo Test Kolwezi 2</h3>
+  <button onclick="compterVue('video2','makola')" style="background:red;color:white;padding:10px;width:100%;border:none;border-radius:5px">▶ REGARDER = +$0.01</button>
+</div>
+
+<script>
+// CONFIG FIREBASE - REMPLACE PAR TON VRAI API KEY
 const firebaseConfig = {
-  apiKey: "AIzaSyCZTf68dJf0nir7IJ8QCPrVwB4EEEecIHM",
+  apiKey: "AIzaSy...COLLE_TON_API_KEY",
   authDomain: "freddy-v.firebaseapp.com",
-  projectId: "freddy-v",
-  storageBucket: "freddy-v.firebasestorage.app",
-  messagingSenderId: "318263144332",
-  appId: "1:318263144332:web:387b2ded7cf5b85d6eb0a9"
+  projectId: "freddy-v"
 };
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
-let currentUser = null;
-onAuthStateChanged(auth, (user)=>{
-  currentUser = user;
-  if(user){
-    document.getElementById("loginLink").innerText = "Déconnexion";
-    if(user.email === "makola000@gmail.com" || user.uid === "ADMIN"){
-       document.getElementById("adminLink").style.display = "inline";
-    }
-  }
-});
-
-async function chargerVideos(){
-  const snap = await getDocs(collection(db, "videos"));
-  let html = "";
-  snap.forEach(d=>{
-    const v = d.data();
-    const vues = v.vues || 0;
-    const gainTotal = vues * 0.01;
-    html += `
-    <div class="video-box">
-      <video src="${v.url}" controls poster="${v.miniature || ''}" data-id="${d.id}"></video>
-      <div class="info">
-        <b>${v.titre || 'Vidéo FREDDY-V'}</b><br>
-        <span class="stats">${vues} vues • $${gainTotal.toFixed(2)} généré (80% pour ${v.nom || 'créateur'} / 20% FREDDY-V)</span><br>
-        <button class="btn-view" onclick="compterVue('${d.id}')">▶️ Regarder = Compter $0.01</button>
-      </div>
-    </div>`;
-  });
-  document.getElementById("videos").innerHTML = html || "<p style='text-align:center'>Aucune vidéo encore. Publie ta première!</p>";
-  
-  // COMPTEUR AUTOMATIQUE AU PLAY
-  document.querySelectorAll("video").forEach(video=>{
-    video.addEventListener("play", async ()=>{
-      const id = video.getAttribute("data-id");
-      compterVue(id);
-    }, {once:true});
-  });
+// FONCTION QUI FAIT GAGNER DE L'ARGENT
+function compterVue(videoId, createurId){
+  const gain = 0.01;
+  db.collection("videos").doc(videoId).set({
+    vues: firebase.firestore.FieldValue.increment(1)
+  },{merge:true});
+  db.collection("revenus").doc(createurId).set({
+    vuesTotales: firebase.firestore.FieldValue.increment(1),
+    monArgent: firebase.firestore.FieldValue.increment(gain*0.8),
+    partFreddyV: firebase.firestore.FieldValue.increment(gain*0.2),
+    revenuTotal: firebase.firestore.FieldValue.increment(gain)
+  },{merge:true});
+  alert("✅ Vue comptée! +$0.01 ajouté! Va voir dans Mes Revenus");
 }
-
-window.compterVue = async (idVideo)=>{
-  try{
-    const ref = doc(db, "videos", idVideo);
-    await updateDoc(ref, { vues: increment(1) });
-    console.log("Vue comptée +$0.01");
-    // Optionnel: log pour admin
-    await addDoc(collection(db, "vues_logs"), { videoId: idVideo, date: serverTimestamp(), gain: 0.01 });
-    setTimeout(chargerVideos, 500);
-  }catch(e){ console.log(e); }
-};
-
-chargerVideos();
 </script>
+
 </body>
 </html>
