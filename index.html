@@ -1,54 +1,82 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FREDDY-V - Kolwezi</title>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-<style>
-body{background:#0f0f0f;color:#fff;font-family:Arial;padding:10px}
-.video-card{background:#1f1f1f;padding:15px;border-radius:15px;margin-bottom:20px}
-video{width:100%;border-radius:10px}
-.btn-regarder{background:#ff0000;color:#fff;border:none;padding:12px;width:100%;border-radius:20px;font-weight:bold;margin-top:10px}
-.top{display:flex;justify-content:space-between}
-a{color:#00ff00;text-decoration:none;font-weight:bold}
-</style>
-</head>
-<body>
-<div class="top"><h2>FREDDY-V</h2><a href="revenus.html">💰 Revenus</a></div>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FREDDY-V - Vidéos du Congo</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+import { getFirestore, collection, getDocs, doc, updateDoc, increment, getDoc, setDoc, orderBy, query } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-<div class="video-card">
-<h3>Video Test 1 - Kolwezi</h3>
-<video src="https://www.w3schools.com/html/mov_bbb.mp4" controls></video>
-<button class="btn-regarder" onclick="compterVue('video1')">REGARDER = +$0.01</button>
-<p><span id="views-video1">0</span> vues</p>
-</div>
-
-<div class="video-card">
-<h3>Video Test 2 - Chantier</h3>
-<video src="https://www.w3schools.com/html/movie.mp4" controls></video>
-<button class="btn-regarder" onclick="compterVue('video2')">REGARDER = +$0.01</button>
-<p><span id="views-video2">0</span> vues</p>
-</div>
-
-<div class="video-card">
-<h3>😂 CHANTIER QUI TOURNE MAL - KOLWEZI [VRAIE]</h3>
-<video src="https://www.w3schools.com/html/mov_bbb.mp4" controls></video>
-<button class="btn-regarder" onclick="compterVue('video_chantier')">REGARDER = +$0.01</button>
-<p><span id="views-video_chantier">0</span> vues - TA VRAIE VIDEO ARRIVE</p>
-</div>
-
-<script>
 const firebaseConfig = {apiKey:"AIzaSyCZTf68dJf0nir7IJ8QCPrVwB4EEEeclHM",authDomain:"freddy-v.firebaseapp.com",projectId:"freddy-v",storageBucket:"freddy-v.firebasestorage.app",messagingSenderId:"318263144332",appId:"1:318263144332:web:387b2ded7cf5b85d6eb0a9"};
-if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-const db=firebase.firestore();
-function compterVue(id){
-db.collection("videos").doc(id).update({vues:firebase.firestore.FieldValue.increment(1)}).catch(()=>db.collection("videos").doc(id).set({vues:1}));
-db.collection("revenus").doc("makola").set({vuesTotales:firebase.firestore.FieldValue.increment(1),monArgent:firebase.firestore.FieldValue.increment(0.008),partFreddyV:firebase.firestore.FieldValue.increment(0.002)},{merge:true});
-alert("Vue comptee! +$0.01 ajoute!");
-let e=document.getElementById("views-"+id); if(e) e.innerText=parseInt(e.innerText||0)+1;
+const app=initializeApp(firebaseConfig);const db=getFirestore(app);
+
+async function chargerVideos(){
+ const cont=document.getElementById('videos');
+ cont.innerHTML="Chargement...";
+ try{
+  const q=query(collection(db,"videos"));
+  const snap=await getDocs(q);
+  if(snap.empty){cont.innerHTML=`<div class='bg-white text-black p-6 rounded-xl text-center'>Aucune vidéo encore.<br>Sois le premier à <a href='publier.html' class='text-red-600 font-bold'>publier!</a></div>`;return;}
+  let html="";
+  snap.forEach(d=>{
+   const v=d.data(); const id=d.id;
+   let embed="";
+   if(v.lien.includes("youtube")||v.lien.includes("youtu.be")){
+     let vid=v.lien.split("v=")[1]; if(!vid) vid=v.lien.split("/").pop(); if(vid) vid=vid.split("&")[0];
+     embed=`<iframe src="https://www.youtube.com/embed/${vid}" class="w-full h-48 rounded-xl" allowfullscreen></iframe>`;
+   } else { embed=`<video src="${v.lien}" controls class="w-full h-48 rounded-xl bg-black"></video>`;}
+   html+=`<div class="bg-white text-black p-3 rounded-2xl mb-4">
+   ${embed}
+   <h3 class="font-black mt-2">${v.titre}</h3>
+   <p class="text-xs text-gray-500">Par ${v.ownerNom} - ${v.vues||0} vues</p>
+   <button onclick="voir('${id}','${v.ownerTel}')" class="mt-2 w-full bg-black text-white p-2 rounded-xl text-sm font-bold">REGARDER (+0.01$)</button>
+   </div>`;
+  });
+  cont.innerHTML=html;
+ }catch(e){cont.innerHTML=`Erreur: ${e.message}`;}
 }
+
+window.voir=async(id, ownerTel)=>{
+ try{
+  const videoRef=doc(db,"videos",id);
+  await updateDoc(videoRef,{vues: increment(1), revenusOwner: increment(0.008), revenusFreddy: increment(0.002)});
+  const revRef=doc(db,"revenus",ownerTel);
+  const revSnap=await getDoc(revRef);
+  if(revSnap.exists()){await updateDoc(revRef,{vuesTotales: increment(1), monArgent: increment(0.008), partFreddyV: increment(0.002)});}
+  else{await setDoc(revRef,{vuesTotales:1, monArgent:0.008, partFreddyV:0.002});}
+  const myTel=localStorage.getItem('freddy_tel');
+  if(myTel){
+   const myRev=doc(db,"revenus",myTel);
+   const s=await getDoc(myRev);
+   if(!s.exists()) await setDoc(myRev,{vuesTotales:0,monArgent:0,partFreddyV:0});
+  }
+  // Gains pour TOI Makola (admin)
+  const adminRef=doc(db,"revenus","ADMIN_MAKOLA");
+  const a=await getDoc(adminRef);
+  if(a.exists()) await updateDoc(adminRef,{partFreddyV: increment(0.002), vuesTotales: increment(1)});
+  else await setDoc(adminRef,{vuesTotales:1, monArgent:0, partFreddyV:0.002, nom:"Makola Admin"});
+
+  alert("Vue comptée! +0.008$ pour le créateur, +0.002$ pour toi Makola! Regarde tes revenus.");
+  chargerVideos();
+ }catch(e){alert("Erreur vue: "+e.message);}
+}
+
+window.onload=chargerVideos;
 </script>
+</head>
+<body class="bg-black text-white min-h-screen">
+<div class="max-w-md mx-auto p-4">
+<header class="flex justify-between items-center py-4">
+<h1 class="text-2xl font-black">FREDDY-V</h1>
+<div class="text-xs"><a href="publier.html" class="bg-red-600 px-3 py-2 rounded-full font-bold">+ PUBLIER</a> <a href="ma-chaine.html" class="bg-white text-black px-3 py-2 rounded-full ml-1">MOI</a></div>
+</header>
+<p class="text-gray-400 text-sm mb-4">YouTube du Congo - Gagne 80% par vue</p>
+<div id="videos"></div>
+<div class="mt-8 text-center text-xs text-gray-500">
+<a href="inscription.html" class="text-white underline">S'inscrire</a> | <a href="connexion.html" class="text-white underline">Connexion</a> | <a href="revenus.html" class="text-white underline">Mes Revenus</a>
+<br><br>Ton site officiel: https://makola0.github.io/freddy-v/
+</div>
+</div>
 </body>
 </html>
