@@ -1,82 +1,32 @@
 <!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FREDDY-V - Vidéos du Congo</title>
-<script src="https://cdn.tailwindcss.com"></script>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><title>FREDDY-V</title>
+<style>body{background:#000;color:#fff;font-family:Arial;padding:10px}.header{display:flex;justify-content:space-between}.btn{padding:8px 14px;border-radius:20px;border:0;font-weight:bold}.btn-red{background:#e50914;color:#fff}.btn-white{background:#fff;color:#000}.card{background:#111;border-radius:10px;padding:10px;margin:15px 0}.thumb{width:100%;border-radius:8px}</style></head><body>
+<div class="header"><b>FREDDY-V</b><div><button class="btn btn-red" onclick="location.href='publier.html'">+ PUBLIER</button> <button class="btn btn-white" onclick="location.href='ma-chaine.html'">MOI</button></div></div>
+<div id="videos">Chargement...</div>
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-import { getFirestore, collection, getDocs, doc, updateDoc, increment, getDoc, setDoc, orderBy, query } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-
-const firebaseConfig = {apiKey:"AIzaSyCZTf68dJf0nir7IJ8QCPrVwB4EEEeclHM",authDomain:"freddy-v.firebaseapp.com",projectId:"freddy-v",storageBucket:"freddy-v.firebasestorage.app",messagingSenderId:"318263144332",appId:"1:318263144332:web:387b2ded7cf5b85d6eb0a9"};
-const app=initializeApp(firebaseConfig);const db=getFirestore(app);
-
-async function chargerVideos(){
- const cont=document.getElementById('videos');
- cont.innerHTML="Chargement...";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+import { getFirestore, collection, getDocs, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+import { firebaseConfig } from "./firebase.js";
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+async function load(){
+ const c=document.getElementById('videos');
  try{
-  const q=query(collection(db,"videos"));
-  const snap=await getDocs(q);
-  if(snap.empty){cont.innerHTML=`<div class='bg-white text-black p-6 rounded-xl text-center'>Aucune vidéo encore.<br>Sois le premier à <a href='publier.html' class='text-red-600 font-bold'>publier!</a></div>`;return;}
-  let html="";
+  const snap=await getDocs(collection(db,"videos"));
+  if(snap.empty){c.innerHTML="Aucune video";return;}
+  let h="";
   snap.forEach(d=>{
-   const v=d.data(); const id=d.id;
-   let embed="";
-   if(v.lien.includes("youtube")||v.lien.includes("youtu.be")){
-     let vid=v.lien.split("v=")[1]; if(!vid) vid=v.lien.split("/").pop(); if(vid) vid=vid.split("&")[0];
-     embed=`<iframe src="https://www.youtube.com/embed/${vid}" class="w-full h-48 rounded-xl" allowfullscreen></iframe>`;
-   } else { embed=`<video src="${v.lien}" controls class="w-full h-48 rounded-xl bg-black"></video>`;}
-   html+=`<div class="bg-white text-black p-3 rounded-2xl mb-4">
-   ${embed}
-   <h3 class="font-black mt-2">${v.titre}</h3>
-   <p class="text-xs text-gray-500">Par ${v.ownerNom} - ${v.vues||0} vues</p>
-   <button onclick="voir('${id}','${v.ownerTel}')" class="mt-2 w-full bg-black text-white p-2 rounded-xl text-sm font-bold">REGARDER (+0.01$)</button>
-   </div>`;
+   const v=d.data()||{};
+   const thumb=v.youtubeId?`https://img.youtube.com/vi/${v.youtubeId}/hqdefault.jpg`:"";
+   h+=`<div class="card"><img class="thumb" src="${thumb}"><h3>${v.titre||'Video'}</h3><p>${v.vues||0} vues</p><button class="btn btn-red" onclick="regarder('${d.id}','${v.userId||''}')">REGARDER</button></div>`;
   });
-  cont.innerHTML=html;
- }catch(e){cont.innerHTML=`Erreur: ${e.message}`;}
+  c.innerHTML=h;
+ }catch(e){c.innerHTML="Erreur: "+e.message;}
 }
-
-window.voir=async(id, ownerTel)=>{
- try{
-  const videoRef=doc(db,"videos",id);
-  await updateDoc(videoRef,{vues: increment(1), revenusOwner: increment(0.008), revenusFreddy: increment(0.002)});
-  const revRef=doc(db,"revenus",ownerTel);
-  const revSnap=await getDoc(revRef);
-  if(revSnap.exists()){await updateDoc(revRef,{vuesTotales: increment(1), monArgent: increment(0.008), partFreddyV: increment(0.002)});}
-  else{await setDoc(revRef,{vuesTotales:1, monArgent:0.008, partFreddyV:0.002});}
-  const myTel=localStorage.getItem('freddy_tel');
-  if(myTel){
-   const myRev=doc(db,"revenus",myTel);
-   const s=await getDoc(myRev);
-   if(!s.exists()) await setDoc(myRev,{vuesTotales:0,monArgent:0,partFreddyV:0});
-  }
-  // Gains pour TOI Makola (admin)
-  const adminRef=doc(db,"revenus","ADMIN_MAKOLA");
-  const a=await getDoc(adminRef);
-  if(a.exists()) await updateDoc(adminRef,{partFreddyV: increment(0.002), vuesTotales: increment(1)});
-  else await setDoc(adminRef,{vuesTotales:1, monArgent:0, partFreddyV:0.002, nom:"Makola Admin"});
-
-  alert("Vue comptée! +0.008$ pour le créateur, +0.002$ pour toi Makola! Regarde tes revenus.");
-  chargerVideos();
- }catch(e){alert("Erreur vue: "+e.message);}
-}
-
-window.onload=chargerVideos;
+window.regarder=async(id,prop)=>{
+ await updateDoc(doc(db,"videos",id),{vues:increment(1)});
+ alert("Vue comptee!");location.reload();
+};
+load();
 </script>
-</head>
-<body class="bg-black text-white min-h-screen">
-<div class="max-w-md mx-auto p-4">
-<header class="flex justify-between items-center py-4">
-<h1 class="text-2xl font-black">FREDDY-V</h1>
-<div class="text-xs"><a href="publier.html" class="bg-red-600 px-3 py-2 rounded-full font-bold">+ PUBLIER</a> <a href="ma-chaine.html" class="bg-white text-black px-3 py-2 rounded-full ml-1">MOI</a></div>
-</header>
-<p class="text-gray-400 text-sm mb-4">YouTube du Congo - Gagne 80% par vue</p>
-<div id="videos"></div>
-<div class="mt-8 text-center text-xs text-gray-500">
-<a href="inscription.html" class="text-white underline">S'inscrire</a> | <a href="connexion.html" class="text-white underline">Connexion</a> | <a href="revenus.html" class="text-white underline">Mes Revenus</a>
-<br><br>Ton site officiel: https://makola0.github.io/freddy-v/
-</div>
-</div>
-</body>
-</html>
+</body></html>
