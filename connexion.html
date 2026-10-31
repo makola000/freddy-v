@@ -1,27 +1,22 @@
 <!DOCTYPE html>
-<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Connexion FREDDY-V</title><script src="https://cdn.tailwindcss.com"></script></head>
-<body class="bg-white flex items-center justify-center min-h-screen p-4">
-<div class="w-full max-w-sm">
-<h1 class="font-black text-2xl mb-4 text-center"><span class="bg-red-600 text-white px-2 rounded">FREDDY-V</span></h1>
-<div id="info" class="text-sm mb-3"></div>
-<input id="email" type="email" placeholder="Email" value="kibwemakola@gmail.com" class="w-full border p-3 rounded mb-2">
-<input id="pass" type="password" placeholder="Mot de passe" class="w-full border p-3 rounded mb-3">
-<button onclick="login()" class="w-full bg-black text-white p-3 rounded font-bold">Se connecter et rester connecté</button>
-<p class="text-xs text-gray-500 mt-3 text-center">Une fois connecté, tu n'auras plus besoin de retaper. Ton compte restera enregistré sur ton téléphone comme YouTube.</p>
-</div>
-<script>
-const saved = localStorage.getItem('freddy_user');
-if(saved){ document.getElementById('info').innerHTML="✅ Déjà connecté: <b>"+saved+"</b><br><a href='publier.html' class='text-blue-600 font-bold'>Aller publier →</a> | <a href='#' onclick='logout()' class='text-red-600'>Se déconnecter</a>"; }
-function login(){
- const e=document.getElementById('email').value.trim();
- const p=document.getElementById('pass').value.trim();
- if(!e || !p){ alert("Remplis email + mot de passe"); return; }
- // On enregistre pour toujours
- localStorage.setItem('freddy_user', e);
- localStorage.setItem('freddy_pass', btoa(p)); // crypté simple
- alert("✅ Connecté! Maintenant va publier, tu n'auras plus besoin de mot de passe");
- location.href="publier.html";
+<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Connexion - FREDDY-V</title><script src="https://cdn.tailwindcss.com"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+const firebaseConfig = {apiKey:"AIzaSyCZTf68dJf0nir7IJ8QCPrVwB4EEEeclHM",authDomain:"freddy-v.firebaseapp.com",projectId:"freddy-v",storageBucket:"freddy-v.firebasestorage.app",messagingSenderId:"318263144332",appId:"1:318263144332:web:387b2ded7cf5b85d6eb0a9"};
+const app=initializeApp(firebaseConfig);const db=getFirestore(app);
+window.seConnecter=async()=>{
+const tel=document.getElementById('tel').value.trim();const msg=document.getElementById('msg');const btn=document.getElementById('btnCo');
+if(!tel){msg.innerHTML=`<div class='bg-red-100 text-red-700 p-3 rounded'>Mets ton numéro WhatsApp</div>`;return;}
+btn.textContent="Vérification...";btn.disabled=true;
+try{const d=await getDoc(doc(db,"utilisateurs",tel));if(!d.exists()){msg.innerHTML=`<div class='bg-red-100 p-3 rounded'>Compte non trouvé. Inscris-toi d'abord.</div>`;btn.textContent="Se connecter";btn.disabled=false;return;}
+localStorage.setItem('freddy_tel',tel);localStorage.setItem('freddy_nom',d.data().nom);
+msg.innerHTML=`<div class='bg-green-100 p-3 rounded'>Bienvenue ${d.data().nom}!</div>`;setTimeout(()=>location.href="ma-chaine.html",800);
+}catch(e){msg.innerHTML=`<div class='bg-red-100 p-3 rounded'>Erreur: ${e.message}</div>`;btn.textContent="Se connecter";btn.disabled=false;}
 }
-function logout(){ localStorage.removeItem('freddy_user'); localStorage.removeItem('freddy_pass'); location.reload(); }
-</script>
-</body></html>
+</script></head>
+<body class="bg-black text-white min-h-screen p-4"><div class="max-w-md mx-auto mt-10">
+<h1 class="text-3xl font-black text-center">CONNEXION</h1><div class="bg-white text-black p-6 rounded-2xl mt-6">
+<label class="font-bold">Numéro WhatsApp</label><input id="tel" type="tel" placeholder="097xxxxxxx" class="w-full p-3 border rounded-xl mt-1 mb-4">
+<button id="btnCo" onclick="seConnecter()" class="w-full bg-black text-white p-4 rounded-xl font-black">SE CONNECTER</button><div id="msg" class="mt-4"></div>
+<p class="text-xs text-center mt-4">Pas de compte? <a href="inscription.html" class="text-red-600 font-bold">Créer</a></p></div><a href="index.html" class="block text-center mt-6 text-gray-400">← Accueil</a></div></body></html>
