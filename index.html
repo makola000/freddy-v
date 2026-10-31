@@ -12,56 +12,54 @@ body{background:#0f0f0f;color:#fff;font-family:Arial;padding:10px}
 .btn{background:#ff0000;color:#fff;padding:10px 15px;border-radius:20px;text-decoration:none}
 .video-card{background:#1f1f1f;margin:10px 0;padding:10px;border-radius:10px}
 .video-card video{width:100%;border-radius:10px}
+.play-btn{background:red;color:white;padding:12px;width:100%;border:none;border-radius:5px;font-weight:bold;font-size:16px}
 </style>
 </head>
 <body>
 
 <div class="header">
-  <h2>FREDDY-V</h2>
-  <a class="btn" href="revenus.html">Mes Revenus</a>
+<h2>FREDDY-V</h2>
+<a class="btn" href="revenus.html">Mes Revenus</a>
 </div>
-
-<p>Plateforme Vidéo Kolwezi - $0.01 par vue (80% pour toi)</p>
+<p>Kolwezi - $0.01 par vue (80% pour toi)</p>
 
 <div class="video-card">
-  <video controls poster="https://via.placeholder.com/320x180?text=FREDDY-V">
-    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-  </video>
-  <h3>Vidéo Test Kolwezi 1</h3>
-  <button onclick="compterVue('video1','makola')" style="background:red;color:white;padding:10px;width:100%;border:none;border-radius:5px">▶ REGARDER = +$0.01</button>
+<video controls poster="https://via.placeholder.com/320x180?text=FREDDY-V">
+<source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+</video>
+<h3>Video Test 1</h3>
+<button class="play-btn" onclick="compterVue('video1','makola')">REGARDER = +$0.01</button>
 </div>
 
 <div class="video-card">
-  <video controls poster="https://via.placeholder.com/320x180?text=FREDDY-V">
-    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-  </video>
-  <h3>Vidéo Test Kolwezi 2</h3>
-  <button onclick="compterVue('video2','makola')" style="background:red;color:white;padding:10px;width:100%;border:none;border-radius:5px">▶ REGARDER = +$0.01</button>
+<video controls poster="https://via.placeholder.com/320x180?text=FREDDY-V">
+<source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+</video>
+<h3>Video Test 2</h3>
+<button class="play-btn" onclick="compterVue('video2','makola')">REGARDER = +$0.01</button>
 </div>
 
 <script>
-// CONFIG FIREBASE - REMPLACE PAR TON VRAI API KEY
 const firebaseConfig = {
-  apiKey: "AIzaSy...COLLE_TON_API_KEY",
-  authDomain: "freddy-v.firebaseapp.com",
-  projectId: "freddy-v"
+apiKey: "AIzaSyCZTf68dJf0nir7IJ8QCPrVwB4EEEeclHM",
+authDomain: "freddy-v.firebaseapp.com",
+projectId: "freddy-v",
+storageBucket: "freddy-v.firebasestorage.app",
+messagingSenderId: "318263144332",
+appId: "1:318263144332:web:387b2ded7cf5b85d6eb0a9"
 };
 if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-
-// FONCTION QUI FAIT GAGNER DE L'ARGENT
 function compterVue(videoId, createurId){
-  const gain = 0.01;
-  db.collection("videos").doc(videoId).set({
-    vues: firebase.firestore.FieldValue.increment(1)
-  },{merge:true});
-  db.collection("revenus").doc(createurId).set({
-    vuesTotales: firebase.firestore.FieldValue.increment(1),
-    monArgent: firebase.firestore.FieldValue.increment(gain*0.8),
-    partFreddyV: firebase.firestore.FieldValue.increment(gain*0.2),
-    revenuTotal: firebase.firestore.FieldValue.increment(gain)
-  },{merge:true});
-  alert("✅ Vue comptée! +$0.01 ajouté! Va voir dans Mes Revenus");
+const gain=0.01;
+db.collection("videos").doc(videoId).set({vues:firebase.firestore.FieldValue.increment(1)},{merge:true});
+db.collection("revenus").doc(createurId).set({
+vuesTotales:firebase.firestore.FieldValue.increment(1),
+monArgent:firebase.firestore.FieldValue.increment(gain*0.8),
+partFreddyV:firebase.firestore.FieldValue.increment(gain*0.2),
+revenuTotal:firebase.firestore.FieldValue.increment(gain)
+},{merge:true});
+alert("Vue comptee! +$0.01 ajoute! Va voir Mes Revenus");
 }
 </script>
 
