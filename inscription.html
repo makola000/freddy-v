@@ -6,8 +6,8 @@
 <title>Inscription - FREDDY-V</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCZTf68dJf0nir7IJ8QCPrVwB4EEEeclHM",
@@ -25,62 +25,48 @@ window.sInscrire = async () => {
   const tel = document.getElementById('tel').value.trim();
   const btn = document.getElementById('btnInscrire');
   const msg = document.getElementById('msg');
-
   if(!nom || !tel){
-    msg.innerHTML = "<div class='bg-red-100 text-red-700 p-3 rounded-lg'>Remplis ton nom et ton numéro Airtel!</div>";
+    msg.innerHTML = `<div class='bg-red-100 text-red-700 p-3 rounded'>Remplis Nom et Numéro WhatsApp</div>`;
     return;
   }
-
   btn.textContent = "Enregistrement...";
   btn.disabled = true;
-
-  try {
-    await addDoc(collection(db, "createurs"), {
-      nom: nom,
-      telephone: tel,
-      airtel: tel,
-      paiement: "Airtel Money",
-      vues: 0,
-      createdAt: serverTimestamp()
-    });
-    
-    msg.innerHTML = `<div class='bg-green-100 text-green-700 p-4 rounded-xl font-bold'>✅ Félicitations ${nom}!<br>Tu es inscrit sur FREDDY-V!<br><br>Tu vas apparaître dans ADMIN maintenant.<br><a href='admin.html' class='underline text-green-800'>👉 Clique ici pour voir ADMIN</a></div>`;
-    btn.textContent = "✅ Inscrit!";
-    
-    // Vide les champs
-    document.getElementById('nom').value = "";
-    document.getElementById('tel').value = "";
-    
-  } catch(e){
-    msg.innerHTML = `<div class='bg-red-100 text-red-700 p-3 rounded-lg'>Erreur: ${e.message}<br>Assure-toi que tes règles Firestore sont: allow read, write: if true;</div>`;
-    btn.textContent = "Réessayer";
-    btn.disabled = false;
+  try{
+    const ref = doc(db, "utilisateurs", tel);
+    const exist = await getDoc(ref);
+    if(exist.exists()){
+      msg.innerHTML = `<div class='bg-yellow-100 text-yellow-700 p-3 rounded'>Ce numéro existe déjà! Connecte-toi.</div>`;
+      btn.textContent = "S'inscrire"; btn.disabled=false; return;
+    }
+    await setDoc(ref, {nom:nom, tel:tel, solde:0, vues:0, date: new Date().toISOString(), partFreddyV:0});
+    await setDoc(doc(db, "revenus", tel), {vuesTotales:0, monArgent:0, partFreddyV:0, nom:nom});
+    localStorage.setItem('freddy_tel', tel);
+    localStorage.setItem('freddy_nom', nom);
+    msg.innerHTML = `<div class='bg-green-100 text-green-700 p-3 rounded'>Compte créé! Bienvenue ${nom} 🎉</div>`;
+    setTimeout(()=>{ window.location.href="ma-chaine.html"; }, 1000);
+  }catch(e){
+    console.log(e);
+    msg.innerHTML = `<div class='bg-red-100 text-red-700 p-3 rounded'>Erreur: ${e.message}</div>`;
+    btn.textContent = "Réessayer"; btn.disabled=false;
   }
 };
 </script>
 </head>
 <body class="bg-black text-white min-h-screen p-4">
 <div class="max-w-md mx-auto mt-10">
-<h1 class="text-3xl font-black text-center">🚀 Rejoins <span class="text-red-500">FREDDY-V</span></h1>
-<p class="text-center text-gray-400 mt-2">Le YouTube de Masisi - Gagne 80%</p>
-
-<div class="bg-white text-black p-6 rounded-2xl mt-8 shadow-2xl">
-  <label class="font-bold text-sm">Ton Nom Complet</label>
-  <input id="nom" type="text" placeholder="Ex: Makola Freddy" class="w-full p-4 border-2 rounded-xl mt-1 mb-4 text-black">
-
-  <label class="font-bold text-sm">Numéro Airtel Money</label>
-  <input id="tel" type="tel" placeholder="Ex: 0983356734" class="w-full p-4 border-2 rounded-xl mt-1 mb-2 text-black">
-  <p class="text-xs text-gray-500 mb-6">C'est là que tu recevras ton argent LUNDI</p>
-
-  <button id="btnInscrire" onclick="sInscrire()" class="w-full bg-red-600 text-white py-4 rounded-xl font-black text-lg">🔥 S'INSCRIRE MAINTENANT</button>
-  
-  <div id="msg" class="mt-4"></div>
-
-  <p class="text-xs text-center text-gray-500 mt-6">1000 vues = 1$ | Toi 80% = 0,80$ | FREDDY-V 20%</p>
+<h1 class="text-3xl font-black text-center">FREDDY-V</h1>
+<p class="text-center text-gray-400 mt-2">Crée ton compte et gagne 80%</p>
+<div class="bg-white text-black p-6 rounded-2xl mt-6">
+<label class="font-bold text-sm">Ton Nom</label>
+<input id="nom" type="text" placeholder="Ex: Jean Kolwezi" class="w-full p-3 border rounded-xl mt-1 mb-4">
+<label class="font-bold text-sm">Numéro WhatsApp</label>
+<input id="tel" type="tel" placeholder="Ex: 097xxxxxxx" class="w-full p-3 border rounded-xl mt-1">
+<p class="text-xs text-gray-500 mb-6">C'est ton identifiant pour te connecter</p>
+<button id="btnInscrire" onclick="sInscrire()" class="w-full bg-red-600 text-white p-4 rounded-xl font-black">CRÉER MON COMPTE - GAGNER</button>
+<div id="msg" class="mt-4"></div>
+<p class="text-xs text-center text-gray-500 mt-4">Tu as déjà un compte? <a href="connexion.html" class="text-red-600 font-bold">Connecte-toi</a></p>
 </div>
-
-<a href="index.html" class="block text-center mt-6 underline text-gray-400">← Retour Accueil</a>
-<a href="admin.html" class="block text-center mt-2 font-bold text-yellow-400">ADMIN → Voir les créateurs</a>
+<a href="index.html" class="block text-center mt-6 text-gray-400">← Retour accueil</a>
 </div>
 </body>
 </html>
