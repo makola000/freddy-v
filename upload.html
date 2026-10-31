@@ -1,27 +1,62 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Publier - FREDDY-V</title><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script><style>body{background:#000;color:#fff;margin:0;font-family:Arial;padding:15px}input,button{width:100%;padding:14px;margin:8px 0;border-radius:10px;border:0;box-sizing:border-box}input{background:#222;color:#fff}button{background:red;color:#fff;font-weight:bold;font-size:16px}.top{padding:10px 0}</style></head><body>
-<div class="top"><b onclick="location.href='index.html'">← FREDDY-V</b></div>
-<h2>+ Publier une vidéo YouTube</h2>
-<input id="url" placeholder="Colle lien YouTube ici: https://youtube.com/watch?v=...">
-<input id="titre" placeholder="Titre de ta vidéo: Ex: Commencement">
-<input id="auteur" placeholder="Ta chaîne: Makola Freddy" value="Makola Freddy">
-<button onclick="publier()">PUBLIER MAINTENANT</button>
-<div id="msg" style="margin-top:15px"></div>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Publier - FREDDY-V</title><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script><style>body{background:#000;color:#fff;margin:0;font-family:Arial;padding:15px}input,button{width:100%;padding:14px;margin:8px 0;border-radius:10px;border:0;box-sizing:border-box}input{background:#222;color:#fff}button{background:red;color:#fff;font-weight:bold;font-size:16px}progress{width:100%;height:24px;border-radius:10px}.top{margin-bottom:15px}</style></head><body>
+<div class="top"><b onclick="location.href='index.html'" style="font-size:18px">← FREDDY-V</b></div>
+<h2>📱 Publier MA vidéo du téléphone<br><small style="font-size:12px;color:#888">Max 500MB - 100% pour toi</small></h2>
+<input type="file" id="file" accept="video/*">
+<input id="titre" placeholder="Titre de ta vidéo">
+<input id="auteur" placeholder="Chaîne" value="Makola Freddy">
+<button onclick="uploadPhone()">📱 PUBLIER MA VIDÉO (500MB MAX)</button>
+<progress id="prog" value="0" max="100" style="display:none"></progress>
+<div id="msg" style="margin:12px 0;padding:10px;background:#111;border-radius:8px;min-height:20px"></div>
+<hr style="border:0;border-top:1px solid #222;margin:25px 0">
+<h3>🔗 Ou publier lien YouTube (tes propres vidéos YouTube)</h3>
+<input id="yturl" placeholder="https://youtube.com/watch?v=...">
+<button onclick="publishYT()" style="background:#222">Publier lien YouTube</button>
 <script>
-const cfg={apiKey:"AIzaSyCZTfMR94q2t4W1c0N7LK5YpN14M8iBVvA",authDomain:"freddy-v.firebaseapp.com",projectId:"freddy-v"};if(!firebase.apps.length)firebase.initializeApp(cfg);const db=firebase.firestore();
+const cfg={apiKey:"AIzaSyCZTfMR94q2t4W1c0N7LK5YpN14M8iBVvA",authDomain:"freddy-v.firebaseapp.com",projectId:"freddy-v",storageBucket:"freddy-v.appspot.com"};
+if(!firebase.apps.length)firebase.initializeApp(cfg);
+const db=firebase.firestore();
+const storage=firebase.storage();
 function getYTId(u){let m=(u||"").match(/(?:v=|be\/|embed\/|shorts\/)([^&?]+)/);return m?m[1]:"";}
-async function publier(){
-  const url=document.getElementById('url').value.trim();
+async function uploadPhone(){
+  const file=document.getElementById('file').files[0];
   const titre=document.getElementById('titre').value.trim();
   const auteur=document.getElementById('auteur').value.trim()||"Makola Freddy";
   const msg=document.getElementById('msg');
-  if(!url||!titre){msg.innerHTML="❌ Mets lien + titre";return}
-  const yt=getYTId(url);if(!yt){msg.innerHTML="❌ Lien YouTube invalide";return}
-  msg.innerHTML="⏳ Publication...";
+  const prog=document.getElementById('prog');
+  if(!file||!titre){msg.innerHTML="❌ Choisis vidéo + titre";return}
+  if(file.size>500*1024*1024){msg.innerHTML="❌ Trop grosse! Max 500MB. Ta vidéo fait "+(file.size/1024/1024).toFixed(1)+"MB";return}
+  prog.style.display="block";
+  msg.innerHTML="⏳ Upload "+(file.size/1024/1024).toFixed(1)+"MB en cours... Ne ferme pas!";
   try{
-    await db.collection("videos").add({url:url,youtubeId:yt,titre:titre,auteur:auteur,vues:0,likes:0,timestamp:firebase.firestore.FieldValue.serverTimestamp(),type:"youtube"});
-    await db.collection("chaines").doc(auteur).set({nom:auteur,abonnes:0},{merge:true});
-    msg.innerHTML="✅ Publié! <a href='index.html' style='color:red'>Voir Accueil</a>";
-    document.getElementById('url').value="";document.getElementById('titre').value="";
+    const ref=storage.ref().child(`videos/${Date.now()}_${file.name}`);
+    const task=ref.put(file);
+    task.on('state_changed',
+      s=>{
+        prog.value=(s.bytesTransferred/s.totalBytes)*100;
+        msg.innerHTML=`⏳ ${prog.value.toFixed(0)}% - ${(s.bytesTransferred/1024/1024).toFixed(1)}MB / ${(s.totalBytes/1024/1024).toFixed(1)}MB`;
+      },
+      e=>{msg.innerHTML="❌ ERREUR: "+e.message;prog.style.display="none";},
+      async()=>{
+        const url=await ref.getDownloadURL();
+        await db.collection("videos").add({url:url,titre:titre,auteur:auteur,vues:0,likes:0,type:"phone",timestamp:firebase.firestore.FieldValue.serverTimestamp()});
+        msg.innerHTML=`✅ SUCCÈS! "${titre}" publié! <br><a href='index.html' style='color:red;font-weight:bold'>→ Voir sur FREDDY-V</a>`;
+        prog.style.display="none";
+        document.getElementById('file').value="";document.getElementById('titre').value="";
+      }
+    );
+  }catch(e){msg.innerHTML="❌ ERREUR: "+e.message}
+}
+async function publishYT(){
+  const url=document.getElementById('yturl').value.trim();
+  const titre=document.getElementById('titre').value.trim();
+  const auteur=document.getElementById('auteur').value.trim()||"Makola Freddy";
+  const msg=document.getElementById('msg');
+  if(!url||!titre){msg.innerHTML="❌ Mets lien YouTube + titre";return}
+  const yt=getYTId(url);
+  if(!yt){msg.innerHTML="❌ Lien YouTube invalide";return}
+  try{
+    await db.collection("videos").add({url:url,youtubeId:yt,titre:titre,auteur:auteur,vues:0,likes:0,type:"youtube",timestamp:firebase.firestore.FieldValue.serverTimestamp()});
+    msg.innerHTML=`✅ Lien YouTube publié! <a href='index.html' style='color:red'>Voir</a>`;
   }catch(e){msg.innerHTML="ERREUR: "+e.message}
 }
 </script></body></html>
