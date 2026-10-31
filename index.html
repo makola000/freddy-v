@@ -1,32 +1,29 @@
-<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><title>FREDDY-V</title>
-<style>body{background:#000;color:#fff;font-family:Arial;padding:10px}.header{display:flex;justify-content:space-between}.btn{padding:8px 14px;border-radius:20px;border:0;font-weight:bold}.btn-red{background:#e50914;color:#fff}.btn-white{background:#fff;color:#000}.card{background:#111;border-radius:10px;padding:10px;margin:15px 0}.thumb{width:100%;border-radius:8px}</style></head><body>
-<div class="header"><b>FREDDY-V</b><div><button class="btn btn-red" onclick="location.href='publier.html'">+ PUBLIER</button> <button class="btn btn-white" onclick="location.href='ma-chaine.html'">MOI</button></div></div>
-<div id="videos">Chargement...</div>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import { getFirestore, collection, getDocs, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
-import { firebaseConfig } from "./firebase.js";
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>FREDDY-V</title><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script><style>body{background:#000;color:#fff;margin:0;font-family:Arial}.top{display:flex;justify-content:space-between;padding:10px;background:#111;position:sticky;top:0;z-index:10;align-items:center}.btn{border:0;padding:8px 12px;border-radius:20px;font-weight:bold}.btn-red{background:red;color:#fff}.btn-dark{background:#222;color:#fff}.card{background:#151515;margin:10px;border-radius:12px;overflow:hidden}.thumb{width:100%;height:180px;object-fit:cover;background:#222}.info{padding:10px}.actions{display:flex;justify-content:space-around;padding:8px 0 10px;border-top:1px solid #222;margin-top:8px}.act{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px}.act button{width:36px;height:36px;border-radius:50%;border:0;background:#222;color:#fff;font-size:18px}.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#111;display:flex;justify-content:space-around;padding:10px 0;border-top:1px solid #222;z-index:20}</style></head><body>
+<div class="top"><b>FREDDY-V</b><div><button onclick="location.href='shorts.html'" class="btn btn-dark">▶ Shorts</button><button onclick="location.href='upload.html'" class="btn btn-red">+ PUBLIER</button><button onclick="location.href='revenus.html'" class="btn btn-dark">MOI</button></div></div>
+<div id="box" style="padding-bottom:70px">Chargement...</div>
+<div class="bottom-nav"><span onclick="location.href='index.html'">🏠 Accueil</span><span onclick="location.href='shorts.html'">▶ Shorts</span><span onclick="location.href='upload.html'">＋</span><span onclick="location.href='revenus.html'">👤 Moi</span></div>
+<script>
+const cfg={apiKey:"AIzaSyCZTfMR94q2t4W1c0N7LK5YpN14M8iBVvA",authDomain:"freddy-v.firebaseapp.com",projectId:"freddy-v"};if(!firebase.apps.length)firebase.initializeApp(cfg);const db=firebase.firestore();
+function getYTId(u){let m=(u||"").match(/(?:v=|be\/|embed\/|shorts\/)([^&?]+)/);return m?m[1]:"";}
+function shareLink(url,t){if(navigator.share){navigator.share({title:t,url:url})}else{navigator.clipboard.writeText(url);alert("Lien copié!")}} 
+function downloadLink(url){navigator.clipboard.writeText(url);alert("Lien copié! Colle dans savefrom.net pour télécharger:\n"+url)}
+async function likeIt(id){await db.collection("videos").doc(id).update({likes:firebase.firestore.FieldValue.increment(1)});let el=document.getElementById('l-'+id);el.innerText=parseInt(el.innerText)+1}
+function saveIt(id){let s=JSON.parse(localStorage.getItem('saved')||"[]");if(!s.includes(id)){s.push(id);localStorage.setItem('saved',JSON.stringify(s));alert("✅ Enregistré! Va dans MOI pour voir")}else alert("Déjà enregistré")}
 async function load(){
- const c=document.getElementById('videos');
- try{
-  const snap=await getDocs(collection(db,"videos"));
-  if(snap.empty){c.innerHTML="Aucune video";return;}
-  let h="";
-  snap.forEach(d=>{
-   const v=d.data()||{};
-   const thumb=v.youtubeId?`https://img.youtube.com/vi/${v.youtubeId}/hqdefault.jpg`:"";
-   h+=`<div class="card"><img class="thumb" src="${thumb}"><h3>${v.titre||'Video'}</h3><p>${v.vues||0} vues</p><button class="btn btn-red" onclick="regarder('${d.id}','${v.userId||''}')">REGARDER</button></div>`;
-  });
-  c.innerHTML=h;
- }catch(e){c.innerHTML="Erreur: "+e.message;}
-}
-window.regarder=async(id,prop)=>{
- await updateDoc(doc(db,"videos",id),{vues:increment(1)});
- alert("Vue comptee!");location.reload();
-};
-load();
-</script>
-</body></html>
+  const box=document.getElementById('box');
+  try{
+    const snap=await db.collection("videos").get();
+    if(snap.empty){box.innerHTML="<div style='text-align:center;padding:40px'>Aucune vidéo</div>";return}
+    let h="";snap.forEach(d=>{
+      const v=d.data();const url=v.url||"";const yt=v.youtubeId||getYTId(url);const thumb=yt?`https://img.youtube.com/vi/${yt}/mqdefault.jpg`:"https://via.placeholder.com/320x180?text=FREDDY-V";
+      h+=`<div class="card"><div onclick="db.collection('videos').doc('${d.id}').update({vues:firebase.firestore.FieldValue.increment(1)});window.open('${url}','_blank')"><img class="thumb" src="${thumb}"><div class="info"><b>${v.titre||'.'}</b><br><small>${v.auteur||'Makola'} - ${v.vues||0} vues - $${((v.vues||0)*0.0064).toFixed(3)} (80%)</small></div></div>
+      <div class="actions">
+        <div class="act"><button onclick="likeIt('${d.id}')">❤️</button><small id="l-${d.id}">${v.likes||0}</small><small>Aime</small></div>
+        <div class="act"><button onclick="shareLink('${url}','${v.titre||''}')">🔗</button><small>Partager</small></div>
+        <div class="act"><button onclick="downloadLink('${url}')">⬇️</button><small>Télécharger</small></div>
+        <div class="act"><button onclick="saveIt('${d.id}')">💾</button><small>Enregistrer</small></div>
+      </div></div>`;
+    });box.innerHTML=h;
+  }catch(e){box.innerHTML="ERREUR: "+e.message}
+}load();
+</script></body></html>
