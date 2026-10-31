@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,60 +8,47 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <style>
 body{background:#0f0f0f;color:#fff;font-family:Arial;padding:10px}
-.header{display:flex;justify-content:space-between;align-items:center}
-.btn{background:#ff0000;color:#fff;padding:10px 15px;border-radius:20px;text-decoration:none}
-.video-card{background:#1f1f1f;margin:10px 0;padding:10px;border-radius:10px}
-.video-card video{width:100%;border-radius:10px}
-.play-btn{background:red;color:white;padding:12px;width:100%;border:none;border-radius:5px;font-weight:bold;font-size:16px}
+.video-card{background:#1f1f1f;padding:15px;border-radius:15px;margin-bottom:20px}
+video{width:100%;border-radius:10px}
+.btn-regarder{background:#ff0000;color:#fff;border:none;padding:12px;width:100%;border-radius:20px;font-weight:bold;margin-top:10px}
+.top{display:flex;justify-content:space-between}
+a{color:#00ff00;text-decoration:none;font-weight:bold}
 </style>
 </head>
 <body>
-
-<div class="header">
-<h2>FREDDY-V</h2>
-<a class="btn" href="revenus.html">Mes Revenus</a>
-</div>
-<p>Kolwezi - $0.01 par vue (80% pour toi)</p>
+<div class="top"><h2>FREDDY-V</h2><a href="revenus.html">💰 Revenus</a></div>
 
 <div class="video-card">
-<video controls poster="https://via.placeholder.com/320x180?text=FREDDY-V">
-<source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-</video>
-<h3>Video Test 1</h3>
-<button class="play-btn" onclick="compterVue('video1','makola')">REGARDER = +$0.01</button>
+<h3>Video Test 1 - Kolwezi</h3>
+<video src="https://www.w3schools.com/html/mov_bbb.mp4" controls></video>
+<button class="btn-regarder" onclick="compterVue('video1')">REGARDER = +$0.01</button>
+<p><span id="views-video1">0</span> vues</p>
 </div>
 
 <div class="video-card">
-<video controls poster="https://via.placeholder.com/320x180?text=FREDDY-V">
-<source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-</video>
-<h3>Video Test 2</h3>
-<button class="play-btn" onclick="compterVue('video2','makola')">REGARDER = +$0.01</button>
+<h3>Video Test 2 - Chantier</h3>
+<video src="https://www.w3schools.com/html/movie.mp4" controls></video>
+<button class="btn-regarder" onclick="compterVue('video2')">REGARDER = +$0.01</button>
+<p><span id="views-video2">0</span> vues</p>
+</div>
+
+<div class="video-card">
+<h3>😂 CHANTIER QUI TOURNE MAL - KOLWEZI [VRAIE]</h3>
+<video src="https://www.w3schools.com/html/mov_bbb.mp4" controls></video>
+<button class="btn-regarder" onclick="compterVue('video_chantier')">REGARDER = +$0.01</button>
+<p><span id="views-video_chantier">0</span> vues - TA VRAIE VIDEO ARRIVE</p>
 </div>
 
 <script>
-const firebaseConfig = {
-apiKey: "AIzaSyCZTf68dJf0nir7IJ8QCPrVwB4EEEeclHM",
-authDomain: "freddy-v.firebaseapp.com",
-projectId: "freddy-v",
-storageBucket: "freddy-v.firebasestorage.app",
-messagingSenderId: "318263144332",
-appId: "1:318263144332:web:387b2ded7cf5b85d6eb0a9"
-};
+const firebaseConfig = {apiKey:"AIzaSyCZTf68dJf0nir7IJ8QCPrVwB4EEEeclHM",authDomain:"freddy-v.firebaseapp.com",projectId:"freddy-v",storageBucket:"freddy-v.firebasestorage.app",messagingSenderId:"318263144332",appId:"1:318263144332:web:387b2ded7cf5b85d6eb0a9"};
 if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-function compterVue(videoId, createurId){
-const gain=0.01;
-db.collection("videos").doc(videoId).set({vues:firebase.firestore.FieldValue.increment(1)},{merge:true});
-db.collection("revenus").doc(createurId).set({
-vuesTotales:firebase.firestore.FieldValue.increment(1),
-monArgent:firebase.firestore.FieldValue.increment(gain*0.8),
-partFreddyV:firebase.firestore.FieldValue.increment(gain*0.2),
-revenuTotal:firebase.firestore.FieldValue.increment(gain)
-},{merge:true});
-alert("Vue comptee! +$0.01 ajoute! Va voir Mes Revenus");
+const db=firebase.firestore();
+function compterVue(id){
+db.collection("videos").doc(id).update({vues:firebase.firestore.FieldValue.increment(1)}).catch(()=>db.collection("videos").doc(id).set({vues:1}));
+db.collection("revenus").doc("makola").set({vuesTotales:firebase.firestore.FieldValue.increment(1),monArgent:firebase.firestore.FieldValue.increment(0.008),partFreddyV:firebase.firestore.FieldValue.increment(0.002)},{merge:true});
+alert("Vue comptee! +$0.01 ajoute!");
+let e=document.getElementById("views-"+id); if(e) e.innerText=parseInt(e.innerText||0)+1;
 }
 </script>
-
 </body>
 </html>
