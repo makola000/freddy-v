@@ -1,28 +1,82 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>FREDDY-V Worldwide</title><style>body{background:#000;color:#fff;font-family:Arial;padding:15px;max-width:500px;margin:auto}header{text-align:center;padding:10px;font-weight:bold}.card{background:#111;padding:20px;border-radius:16px;margin:12px 0;border:1px solid #222}input,select{width:100%;padding:12px;border-radius:10px;border:1px solid #333;background:#000;color:#fff;margin:8px 0}button{width:100%;padding:14px;border-radius:10px;border:0;background:red;color:#fff;font-weight:bold;cursor:pointer;font-size:15px}small{opacity:0.6} .lang{display:flex;gap:8px;justify-content:center;margin:8px} .lang button{width:auto;padding:6px 12px;background:#222;font-size:12px}</style></head><body>
-<header>🌍 FREDDY-V MONDIAL</header>
-<div class="lang"><button onclick="setLang('fr')">FR</button><button onclick="setLang('en')">EN</button><button onclick="setLang('sw')">SW</button></div>
-<div class="card" id="form"><h3 id="t1">Créer ton compte mondial</h3><input id="name" placeholder="Nom" value="Freddy makola"><select id="country"><option value="+243" selected>🇨🇩 +243 Congo</option><option value="+33">🇫🇷 +33 France</option><option value="+1">🇺🇸 +1 USA</option><option value="+32">🇧🇪 +32 Belgique</option><option value="+44">🇬🇧 +44 UK</option><option value="+other">🌍 Other</option></select><input id="phone" placeholder="Phone" value="+243983356734"><input id="email" placeholder="Email" value="kibwemakola@gmail.com"><button onclick="create()" id="btn">🌍 Créer compte mondial</button><p id="msg" style="color:yellow"></p><small id="info">80% pour toi, 20% FREDDY-V. Paiement mondial.</small></div>
-<div class="card" id="dash" style="display:none"><h3 id="hello"></h3><p>💰 Solde: $<b id="bal">0.000</b></p><p>📱 <span id="p1"></span></p><button onclick="location.href='upload.html'">📤 PUBLIER NORMALE + SHORTS</button><button onclick="location.href='index.html'" style="background:#222;margin-top:10px">🏠 Accueil</button><button onclick="logout()" style="background:#444;margin-top:10px">Logout</button></div>
-<script type="module">
-import{initializeApp}from"https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";import{getDatabase,ref,push}from"https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-const cfg={apiKey:"AIzaSyCZTf68dJf0nir7IJ8QCPrVwB4EEEeclHM",authDomain:"freddy-v.firebaseapp.com",databaseURL:"https://freddy-v-default-rtdb.firebaseio.com",projectId:"freddy-v",storageBucket:"freddy-v.firebasestorage.app",messagingSenderId:"318263144332",appId:"1:318263144332:web:387b2ded7cf5b85d6eb0a9"};
-const app=initializeApp(cfg);const db=getDatabase(app);
-let u=JSON.parse(localStorage.getItem('freddy_user')||'null');if(u)show(u);
-window.create=async()=>{
- let name=document.getElementById('name').value.trim();
- let phone=document.getElementById('phone').value.trim();
- let email=document.getElementById('email').value.trim();
- let country=document.getElementById('country').value;
- let msg=document.getElementById('msg');
- if(!name||!phone){msg.innerText='Nom et phone requis';return}
- msg.innerText='⏳ Création...';
- let user={username:name,phone:phone,email:email,country:country,uid:Date.now().toString(),balance:0,worldwide:true,time:Date.now()};
- try{await push(ref(db,'users'),user); msg.innerText='✅ Compte gardé dans Firebase!';}
- catch(e){msg.innerText='✅ Compte local (Firebase: '+e.message+')';}
- localStorage.setItem('freddy_user',JSON.stringify(user));
- setTimeout(()=>{show(user);alert('🌍 Bienvenue '+name+'! Compte créé avec '+phone)},500);
-};
-function show(user){document.getElementById('form').style.display='none';document.getElementById('dash').style.display='block';document.getElementById('hello').innerText='Salut '+user.username+' 🔥';document.getElementById('p1').innerText=user.phone;document.getElementById('bal').innerText='0.000'}
-window.logout=()=>{localStorage.removeItem('freddy_user');location.reload()}
-window.setLang=(l)=>{localStorage.setItem('freddy_lang',l)}
-</script></body></html>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Compte - FREDDY-V</title>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<style>
+body{margin:0;background:#000;color:#fff;font-family:Arial;padding:15px}
+.card{background:#111;border:1px solid #333;border-radius:16px;padding:20px;max-width:400px;margin:20px auto}
+input,select{width:100%;padding:14px;margin:8px 0;border-radius:10px;border:0;background:#222;color:#fff;box-sizing:border-box}
+button{background:red;color:#fff;border:0;padding:14px;width:100%;border-radius:12px;font-weight:bold;font-size:16px;margin-top:10px;cursor:pointer}
+</style>
+</head>
+<body>
+<div onclick="location.href='index.html'" style="cursor:pointer">← FREDDY-V Accueil (3 vidéos)</div>
+
+<div class="card">
+<h2>Créer ton compte mondial</h2>
+<input id="name" value="Freddy makola">
+<select id="country"><option value="+243">🇨🇩 +243 Congo</option><option value="+250">🇷🇼 +250 Rwanda</option></select>
+<input id="phone" value="983356734">
+<input id="email" value="kibwemakola@gmail.com">
+<button id="btnCreate">🌍 Créer compte mondial (Firebase)</button>
+<p id="msg" style="color:#aaa;margin-top:12px;text-align:center">Coffre-fort Firebase sécurisé 🔒<br>80% pour toi, 20% FREDDY-V</p>
+</div>
+
+<script>
+// CONFIG FIREBASE - TON COFFRE-FORT
+const cfg={apiKey:"AIzaSyCZTfMR94q2t4W1c0N7LK5YpN14M8iBVvA",authDomain:"freddy-v.firebaseapp.com",projectId:"freddy-v"};
+if(!firebase.apps.length)firebase.initializeApp(cfg);
+const db=firebase.firestore();
+
+document.getElementById('btnCreate').addEventListener('click', async function(){
+  const name=document.getElementById('name').value.trim();
+  let phone=document.getElementById('phone').value.trim();
+  const email=document.getElementById('email').value.trim();
+  const country=document.getElementById('country').value;
+  const msg=document.getElementById('msg');
+  const btn=document.getElementById('btnCreate');
+  
+  if(!name || !phone){msg.innerHTML="❌ Mets nom et numéro";return;}
+  
+  phone=phone.replace(/\+/g,'').replace(/^0/,'').replace(/^243/,'');
+  const fullPhone=country+phone;
+  
+  btn.innerText="⏳ Sauvegarde dans coffre-fort...";
+  msg.innerHTML="🔒 Connexion au coffre-fort Firebase...";
+  
+  const userData={
+    name:name,
+    phone:fullPhone,
+    email:email,
+    country:country,
+    balance:0,
+    totalViews:0,
+    earnings:0,
+    created: firebase.firestore.FieldValue.serverTimestamp()
+  };
+  
+  try{
+    // SAUVE DANS FIREBASE - LE COFFRE-FORT
+    await db.collection("users").doc(fullPhone).set(userData);
+    
+    // SAUVE AUSSI LOCAL
+    localStorage.setItem('freddy_user', JSON.stringify(userData));
+    
+    msg.innerHTML="✅ Compte créé dans le coffre-fort Firebase! 🌍🔒<br>Bienvenue "+name+"!";
+    btn.innerText="✅ Compte créé!";
+    
+    setTimeout(()=>{window.location.href='index.html';},1500);
+    
+  }catch(e){
+    msg.innerHTML="⚠️ Firebase: "+e.message+"<br>Mais compte sauvé localement!";
+    localStorage.setItem('freddy_user', JSON.stringify(userData));
+    setTimeout(()=>{window.location.href='index.html';},2000);
+  }
+});
+</script>
+</body>
+</html>
