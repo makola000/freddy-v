@@ -1,38 +1,52 @@
-<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PUBLIER - FREDDY-V</title>
-<style>body{background:#000;color:#fff;font-family:Arial;padding:15px}input,textarea,select{width:100%;padding:12px;margin:8px 0;background:#222;color:#fff;border:1px solid #333;border-radius:8px}button{background:red;color:#fff;padding:14px;width:100%;border:none;border-radius:8px;font-weight:bold;margin-top:10px}</style>
+<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Publier - FREDDY-V</title>
+<style>body{background:#000;color:#fff;font-family:Arial;padding:20px}input,textarea{width:100%;padding:12px;margin:8px 0;background:#111;border:1px solid #333;color:#fff;border-radius:8px}button{background:red;color:#fff;padding:14px;width:100%;border:none;border-radius:8px;font-weight:bold;cursor:pointer; margin-top:10px}#msg{margin-top:15px;text-align:center}</style>
 </head><body>
-<h2>+ PUBLIER</h2>
-<select id="type"><option>📹 Vidéo YouTube (n'importe laquelle)</option></select>
-<input id="url" placeholder="https://youtu.be/XXXX" value="https://youtu.be/XkjkuER1EV4?si=CR2JMTGuA-_pn">
-<input id="title" placeholder="Titre vidéo" value="David amani">
-<input id="name" placeholder="Ton nom" value="Makola Freddy">
-<textarea id="desc" placeholder="Description">Like et partager</textarea>
-<button onclick="publier()">PUBLIER</button>
-<div id="msg" style="margin-top:15px"></div>
-<script>
-async function publier(){
- let data={
-  url:document.getElementById('url').value,
-  title:document.getElementById('title').value,
-  name:document.getElementById('name').value,
-  desc:document.getElementById('desc').value,
-  date:Date.now()
- };
- // On sauve dans la base mondiale gratuite
- let res = await fetch('https://api.npoint.io/1a2b3c4d5e6f7g8h9i0j-freddyv', {
-  method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data)
- }).catch(async()=>{
-  // Si npoint ne marche pas, on utilise jsonbin fallback
-  let r = await fetch('https://freddy-v-default-rtdb.firebaseio.com/videos.json', {
-   method:'POST', body:JSON.stringify(data)
-  });
-  return r;
- });
- document.getElementById('msg').innerHTML = '✅ Publié! <a href="index.html" style="color:red">Voir dans FREDDY-V</a>';
- // Sauve aussi local pour toi
- let local = JSON.parse(localStorage.getItem('freddy_videos')||'[]'); local.push(data); localStorage.setItem('freddy_videos', JSON.stringify(local));
+<h2>Publier sur FREDDY-V (Mondial)</h2>
+<input id="url" placeholder="Lien YouTube, ex: https://youtu.be/XXXX ou https://youtube.com/shorts/XXXX">
+<input id="title" placeholder="Titre de la vidéo">
+<input id="name" placeholder="Ton nom: Makola Freddy">
+<textarea id="desc" placeholder="Description"></textarea>
+<button onclick="publier()">PUBLIER POUR TOUT LE MONDE</button>
+<p id="msg"></p>
+<a href="index.html" style="color:#aaa">← Retour accueil</a>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCZTf68dJf0nir7IJ8QCPrVwB4EEEeclHM",
+  authDomain: "freddy-v.firebaseapp.com",
+  databaseURL: "https://freddy-v-default-rtdb.firebaseio.com",
+  projectId: "freddy-v",
+  storageBucket: "freddy-v.firebasestorage.app",
+  messagingSenderId: "318263144332",
+  appId: "1:318263144332:web:387b2ded7cf5b85d6eb0a9"
+};
+
+const app = initializeApp(firebaseConfig); 
+const db = getDatabase(app);
+
+window.publier = async function(){
+  const v = {
+    url: document.getElementById('url').value.trim(),
+    title: document.getElementById('title').value.trim(),
+    name: document.getElementById('name').value.trim(),
+    desc: document.getElementById('desc').value.trim(),
+    time: Date.now()
+  };
+  if(!v.url || !v.title){
+    document.getElementById('msg').innerText='❌ Remplis lien et titre';
+    return;
+  }
+  document.getElementById('msg').innerText='⏳ Publication mondiale...';
+  try {
+    await push(ref(db,'videos'), v);
+    document.getElementById('msg').innerText='✅ Publié! Tout le monde va voir sur FREDDY-V!';
+    setTimeout(()=>location.href='index.html', 1200);
+  } catch(e){
+    document.getElementById('msg').innerText='❌ Erreur: ' + e.message;
+  }
 }
 </script>
 </body></html>
