@@ -1,42 +1,40 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Publier - FREDDY-V</title><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script><style>body{background:#000;color:#fff;margin:0;font-family:Arial;padding:15px}input,button{width:100%;padding:14px;margin:8px 0;border-radius:10px;border:0;box-sizing:border-box}input{background:#222;color:#fff}button{color:#fff;font-weight:bold;font-size:16px} .ok{background:#111;padding:15px;border-radius:10px;margin:10px 0;border-left:4px solid #0f0}</style></head><body>
-<div><b onclick="location.href='index.html'">← FREDDY-V</b></div>
-<h2>📱 Publier MA vidéo<br><small style="color:#0f0">Solution 100% Masisi - Via YouTube</small></h2>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Publier - FREDDY-V International</title><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script><style>body{background:#000;color:#fff;margin:0;font-family:Arial;padding:15px}input,button,select{width:100%;padding:14px;margin:8px 0;border-radius:10px;border:0;box-sizing:border-box}input,select{background:#222;color:#fff}button{background:red;color:#fff;font-weight:bold;font-size:16px} .banner{background:linear-gradient(90deg,red,#900);padding:15px;border-radius:12px;text-align:center;margin-bottom:15px}</style></head><body>
+<div class="banner"><b style="font-size:22px">🌍 FREDDY-V INTERNATIONAL</b><br>La plateforme vidéo mondiale</div>
+<div style="margin-bottom:10px"><b onclick="location.href='index.html'">← Retour Accueil</b></div>
 
-<div class="ok">
-<b>ÉTAPE 1 (sur ton téléphone):</b><br>
-1. Ouvre l'app <b>YouTube</b><br>
-2. Clique <b>+</b> → <b>Mettre en ligne une vidéo</b><br>
-3. Choisis ta vidéo <b>13652.mp4 La repentance</b><br>
-4. Titre: La repentance, Visibilité: Public<br>
-5. Publie! (YouTube = stockage gratuit illimité!)<br>
-6. Après publication, clique <b>Partager → Copier le lien</b>
-</div>
+<h2>📤 Publier une vidéo mondiale</h2>
+<select id="type"><option value="video">📹 Vidéo</option><option value="live">🔴 DIRECT LIVE International</option></select>
+<input id="yturl" placeholder="Lien YouTube: https://youtu.be/... ou https://youtube.com/live/...">
+<input id="titre" placeholder="Titre de ta vidéo (tous pays)">
+<input id="auteur" placeholder="Ta chaîne / Nom" value="Makola Freddy">
+<input id="pays" placeholder="Pays: Ex: RDC, France, USA, International">
 
-<input id="yturl" placeholder="ÉTAPE 2: Colle ici le lien YouTube. Ex: https://youtu.be/...">
-<input id="titre" placeholder="Titre: La repentance" value="La repentance">
-<input id="auteur" value="Makola Freddy">
-<button onclick="publishYT()" style="background:red">🔗 PUBLIER SUR FREDDY-V MAINTENANT</button>
-<button onclick="location.href='index.html'" style="background:#222">← Voir FREDDY-V</button>
-
-<div id="msg" style="margin:12px 0;padding:12px;background:#111;border-radius:8px;min-height:20px"></div>
+<button onclick="publish()">🌍 PUBLIER INTERNATIONALEMENT</button>
+<div id="msg" style="margin:15px 0;padding:15px;background:#111;border-radius:10px;min-height:20px"></div>
 
 <script>
 const cfg={apiKey:"AIzaSyCZTfMR94q2t4W1c0N7LK5YpN14M8iBVvA",authDomain:"freddy-v.firebaseapp.com",projectId:"freddy-v"};
 if(!firebase.apps.length)firebase.initializeApp(cfg);
 const db=firebase.firestore();
-function getYTId(u){let m=(u||"").match(/(?:v=|be\/|embed\/|shorts\/)([^&?\/]+)/);return m?m[1]:"";}
-async function publishYT(){
+function getYTId(u){let m=(u||"").match(/(?:v=|be\/|embed\/|shorts\/|live\/)([^&?\/]+)/);return m?m[1]:"";}
+async function publish(){
   const url=document.getElementById('yturl').value.trim();
-  const titre=document.getElementById('titre').value.trim()||"La repentance";
-  const auteur=document.getElementById('auteur').value||"Makola Freddy";
+  const titre=document.getElementById('titre').value.trim();
+  const auteur=document.getElementById('auteur').value.trim()||"Makola Freddy";
+  const pays=document.getElementById('pays').value.trim()||"International";
+  const type=document.getElementById('type').value;
   const msg=document.getElementById('msg');
-  if(!url){msg.innerHTML="❌ Colle d'abord le lien YouTube de l'ÉTAPE 1";return}
+  if(!url||!titre){msg.innerHTML="❌ Ajoute lien YouTube + titre";return}
   const yt=getYTId(url);
-  if(!yt){msg.innerHTML="❌ Lien invalide. Il doit ressembler à https://youtu.be/abc ou https://youtube.com/watch?v=abc";return}
-  msg.innerHTML="⏳ Publication...";
+  if(!yt){msg.innerHTML="❌ Lien YouTube invalide";return}
+  msg.innerHTML="⏳ Publication internationale...";
   try{
-    await db.collection("videos").add({url:url,youtubeId:yt,titre:titre,auteur:auteur,vues:0,likes:0,type:"youtube",timestamp:firebase.firestore.FieldValue.serverTimestamp()});
-    msg.innerHTML=`✅ SUCCÈS! "${titre}" est maintenant sur FREDDY-V!<br><br><a href='index.html' style='color:red;font-weight:bold;font-size:20px'>→ VOIR MA VIDÉO SUR FREDDY-V</a><br><br>Ta vidéo est hébergée par YouTube (gratuit, illimité) mais affichée sur TON site FREDDY-V! C'est 100% pour toi!`;
-  }catch(e){msg.innerHTML="❌ ERREUR: "+e.message}
+    await db.collection("videos").add({
+      url:url, youtubeId:yt, titre:titre, auteur:auteur, pays:pays,
+      vues:0, likes:0, type:type, isLive:type==="live",
+      timestamp:firebase.firestore.FieldValue.serverTimestamp()
+    });
+    msg.innerHTML=`✅ 🌍 Publié dans le monde!<br><b>"${titre}"</b> par ${auteur} (${pays})<br><br><a href='index.html' style='color:red;font-weight:bold;font-size:20px'>→ VOIR SUR FREDDY-V INTERNATIONAL</a><br><br>Tout le monde peut maintenant voir ta vidéo, en RDC, en France, aux USA, partout!`;
+  }catch(e){msg.innerHTML="❌ "+e.message}
 }
 </script></body></html>
