@@ -1,58 +1,42 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Publier - FREDDY-V V3</title><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script><style>body{background:#000;color:#fff;margin:0;font-family:Arial;padding:15px}input,button{width:100%;padding:14px;margin:8px 0;border-radius:10px;border:0;box-sizing:border-box}input{background:#222;color:#fff}button{background:red;color:#fff;font-weight:bold}progress{width:100%;height:24px}#msg{margin:12px 0;padding:12px;background:#111;border-radius:8px;word-break:break-all}</style></head><body>
-<div><b onclick="location.href='index.html?v=3'">← FREDDY-V</b></div>
-<h2>📱 Publier V3<br><small style="color:#0f0">Max 500MB - Serveur 2 pour RDC</small></h2>
-<input type="file" id="file" accept="video/*">
-<input id="titre" placeholder="Titre: La repentance">
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Publier - FREDDY-V</title><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script><style>body{background:#000;color:#fff;margin:0;font-family:Arial;padding:15px}input,button{width:100%;padding:14px;margin:8px 0;border-radius:10px;border:0;box-sizing:border-box}input{background:#222;color:#fff}button{color:#fff;font-weight:bold;font-size:16px} .ok{background:#111;padding:15px;border-radius:10px;margin:10px 0;border-left:4px solid #0f0}</style></head><body>
+<div><b onclick="location.href='index.html'">← FREDDY-V</b></div>
+<h2>📱 Publier MA vidéo<br><small style="color:#0f0">Solution 100% Masisi - Via YouTube</small></h2>
+
+<div class="ok">
+<b>ÉTAPE 1 (sur ton téléphone):</b><br>
+1. Ouvre l'app <b>YouTube</b><br>
+2. Clique <b>+</b> → <b>Mettre en ligne une vidéo</b><br>
+3. Choisis ta vidéo <b>13652.mp4 La repentance</b><br>
+4. Titre: La repentance, Visibilité: Public<br>
+5. Publie! (YouTube = stockage gratuit illimité!)<br>
+6. Après publication, clique <b>Partager → Copier le lien</b>
+</div>
+
+<input id="yturl" placeholder="ÉTAPE 2: Colle ici le lien YouTube. Ex: https://youtu.be/...">
+<input id="titre" placeholder="Titre: La repentance" value="La repentance">
 <input id="auteur" value="Makola Freddy">
-<button onclick="uploadV3()">📱 PUBLIER "La repentance"</button>
-<progress id="prog" value="0" max="100" style="display:none"></progress>
-<div id="msg">En attente de 13652.mp4...</div>
+<button onclick="publishYT()" style="background:red">🔗 PUBLIER SUR FREDDY-V MAINTENANT</button>
+<button onclick="location.href='index.html'" style="background:#222">← Voir FREDDY-V</button>
+
+<div id="msg" style="margin:12px 0;padding:12px;background:#111;border-radius:8px;min-height:20px"></div>
+
 <script>
 const cfg={apiKey:"AIzaSyCZTfMR94q2t4W1c0N7LK5YpN14M8iBVvA",authDomain:"freddy-v.firebaseapp.com",projectId:"freddy-v"};
 if(!firebase.apps.length)firebase.initializeApp(cfg);
 const db=firebase.firestore();
-
-async function uploadV3(){
-  const file=document.getElementById('file').files[0];
+function getYTId(u){let m=(u||"").match(/(?:v=|be\/|embed\/|shorts\/)([^&?\/]+)/);return m?m[1]:"";}
+async function publishYT(){
+  const url=document.getElementById('yturl').value.trim();
   const titre=document.getElementById('titre').value.trim()||"La repentance";
   const auteur=document.getElementById('auteur').value||"Makola Freddy";
-  const msg=document.getElementById('msg'); const prog=document.getElementById('prog');
-  if(!file){msg.innerHTML="❌ Choisis fichier";return}
-  if(file.size>500*1024*1024){msg.innerHTML="❌ >500MB";return}
-  prog.style.display="block"; prog.value=10;
-  msg.innerHTML=`⏳ Upload ${ (file.size/1024/1024).toFixed(1)}MB en cours vers Serveur 2... Ne ferme pas!`;
-
+  const msg=document.getElementById('msg');
+  if(!url){msg.innerHTML="❌ Colle d'abord le lien YouTube de l'ÉTAPE 1";return}
+  const yt=getYTId(url);
+  if(!yt){msg.innerHTML="❌ Lien invalide. Il doit ressembler à https://youtu.be/abc ou https://youtube.com/watch?v=abc";return}
+  msg.innerHTML="⏳ Publication...";
   try{
-    // ESSAI 1: tmpfiles.org - marche en Afrique, CORS OK
-    const fd=new FormData(); fd.append("file",file);
-    prog.value=25;
-    let res=await fetch("https://tmpfiles.org/api/v1/upload",{method:"POST",body:fd});
-    let data=await res.json();
-    console.log(data);
-    let videoUrl=data.data?.url?.replace("tmpfiles.org/","tmpfiles.org/dl/") || null;
-    
-    if(!videoUrl){
-      // ESSAI 2: transfer.sh si tmpfiles échoue
-      prog.value=50; msg.innerHTML="⏳ Essai serveur 2...";
-      res=await fetch(`https://transfer.sh/${encodeURIComponent(file.name)}`,{method:"PUT",body:file});
-      videoUrl=(await res.text()).trim();
-    }
-    
-    if(!videoUrl || !videoUrl.startsWith("http")) throw new Error("Upload échoué: "+videoUrl);
-    
-    prog.value=80; msg.innerHTML=`⏳ Vidéo envoyée! Sauvegarde dans FREDDY-V...<br>${videoUrl}`;
-    
-    await db.collection("videos").add({
-      url:videoUrl, titre:titre, auteur:auteur, vues:0, likes:0, type:"phone",
-      timestamp:firebase.firestore.FieldValue.serverTimestamp()
-    });
-    
-    prog.value=100;
-    msg.innerHTML=`✅ SUCCÈS! "${titre}" est en ligne!<br><br>URL: ${videoUrl}<br><br><a href='index.html?v=3' style='color:red;font-weight:bold;font-size:18px'>→ VOIR SUR FREDDY-V MAINTENANT</a>`;
-    prog.style.display="none";
-  }catch(e){
-    msg.innerHTML=`❌ ERREUR: ${e.message}<br><br><b>SOLUTION 100% GARANTIE qui marche à Masisi:</b><br>1. Ouvre app YouTube<br>2. Clique + -> Publier vidéo -> Choisis 13652.mp4 "La repentance"<br>3. Publie sur ta chaîne Makola Freddy<br>4. Copie le lien YouTube<br>5. Dans FREDDY-V, publie le lien YouTube - Ça marche toujours!`;
-    prog.style.display="none";
-  }
+    await db.collection("videos").add({url:url,youtubeId:yt,titre:titre,auteur:auteur,vues:0,likes:0,type:"youtube",timestamp:firebase.firestore.FieldValue.serverTimestamp()});
+    msg.innerHTML=`✅ SUCCÈS! "${titre}" est maintenant sur FREDDY-V!<br><br><a href='index.html' style='color:red;font-weight:bold;font-size:20px'>→ VOIR MA VIDÉO SUR FREDDY-V</a><br><br>Ta vidéo est hébergée par YouTube (gratuit, illimité) mais affichée sur TON site FREDDY-V! C'est 100% pour toi!`;
+  }catch(e){msg.innerHTML="❌ ERREUR: "+e.message}
 }
 </script></body></html>
