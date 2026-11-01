@@ -1,19 +1,34 @@
 <!DOCTYPE html>
-<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FREDDY-V</title>
-<style>*{margin:0;padding:0;box-sizing:border-box}body{background:#000;color:#fff;font-family:Arial;padding-bottom:70px}header{display:flex;justify-content:space-between;align-items:center;padding:12px;background:#111;position:sticky;top:0;z-index:10}header a{background:red;color:#fff;padding:8px 14px;border-radius:20px;text-decoration:none;font-weight:bold}.video-card{background:#111;margin:10px;border-radius:10px;overflow:hidden;border:1px solid #222}.thumb{width:100%;height:200px;background:#222;display:flex;align-items:center;justify-content:center;position:relative;cursor:pointer}.thumb img{width:100%;height:100%;object-fit:cover}.info{padding:10px}.actions{display:flex;justify-content:space-around;padding:8px;border-top:1px solid #222}.actions button{background:none;border:none;color:#aaa;font-size:12px;cursor:pointer}
-.shorts-section{padding:10px}.shorts-title{font-weight:bold;margin:10px 0 5px 10px}.shorts-scroll{display:flex;overflow-x:auto;gap:10px;padding:0 10px;scrollbar-width:none}.shorts-scroll::-webkit-scrollbar{display:none}.short-card{min-width:130px;max-width:130px;background:#111;border-radius:10px;overflow:hidden;border:1px solid #222;cursor:pointer}.short-thumb{width:130px;height:230px;background:#222;position:relative}.short-thumb img{width:100%;height:100%;object-fit:cover}.short-info{padding:5px;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#111;display:flex;justify-content:space-around;padding:10px 0;border-top:1px solid #222}.bottom-nav a{color:#777;text-decoration:none;font-size:12px;text-align:center}.bottom-nav a.active{color:red}#player{position:fixed;top:0;left:0;right:0;bottom:0;background:#000;z-index:100;display:none;flex-direction:column;align-items:center;justify-content:center}#player.short-mode iframe{width:56%;height:80%;max-width:350px;border-radius:10px}#player.normal-mode iframe{width:100%;height:60%;margin-top:50px}.close{position:absolute;top:10px;right:15px;font-size:30px;cursor:pointer;z-index:101}
-</style></head><body>
-<header><b>FREDDY-V</b><a href="upload.html">+ PUBLIER</a></header>
-<div class="shorts-section" id="shortsSec" style="display:none"><div class="shorts-title">🔥 Shorts</div><div class="shorts-scroll" id="shortsList"></div></div>
-<div id="videos">Chargement mondial...</div>
-<div class="bottom-nav"><a class="active">🏠<br>Accueil</a><a>🎬<br>Shorts</a><a href="upload.html">➕<br></a><a>👤<br>Moi</a></div>
-<div id="player"><span class="close" onclick="closePlayer()">✕</span><iframe id="yt" src="" frameborder="0" allowfullscreen></iframe></div>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FREDDY-V - Mondial</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;color:#fff;font-family:Arial}
+header{padding:14px;text-align:center;background:#111;font-weight:bold;font-size:18px;position:sticky;top:0;z-index:10}
+#videos{padding:10px;max-width:500px;margin:0 auto}
+.video-card{background:#111;border-radius:16px;overflow:hidden;margin-bottom:20px;position:relative;border:1px solid #222}
+.views-badge{position:absolute;top:10px;left:10px;background:rgba(0,0,0,0.8);padding:4px 10px;border-radius:20px;font-size:12px;z-index:2}
+.video-info{padding:10px}
+.video-actions{display:flex;justify-content:space-around;padding:12px 5px;border-top:1px solid #222;background:#0f0f0f}
+.action-btn{background:none;border:none;color:#fff;cursor:pointer;text-align:center;font-size:12px;line-height:1.2;flex:1}
+.action-btn span{display:block;font-size:11px;margin-top:2px;opacity:0.8}
+.action-btn.active{color:#ff3040}
+iframe{width:100%;border:0;display:block}
+.short-frame{height:520px!important}
+.normal-frame{height:230px}
+</style>
+</head>
+<body>
+<header>🔥 FREDDY-V MONDIAL</header>
+<div id="videos">Chargement...</div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {getDatabase, ref, onValue, runTransaction} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
 const firebaseConfig = {
   apiKey: "AIzaSyCZTf68dJf0nir7IJ8QCPrVwB4EEEeclHM",
   authDomain: "freddy-v.firebaseapp.com",
@@ -23,22 +38,71 @@ const firebaseConfig = {
   messagingSenderId: "318263144332",
   appId: "1:318263144332:web:387b2ded7cf5b85d6eb0a9"
 };
-const app = initializeApp(firebaseConfig); 
+
+const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+const videosRef = ref(db, 'videos');
 
-function getId(url){if(!url)return''; if(url.includes('shorts/')) return url.split('shorts/')[1].split('?')[0].split('/')[0]; if(url.includes('youtu.be/')) return url.split('youtu.be/')[1].split('?')[0]; if(url.includes('v=')) return url.split('v=')[1].split('&')[0]; return '';}
-function isShort(url){return url.includes('shorts/');}
-window.playVideo=function(url, short=false){let id=getId(url);let embed='https://www.youtube.com/embed/'+id+'?autoplay=1&playsinline=1&rel=0';let p=document.getElementById('player');p.className=short?'short-mode':'normal-mode';document.getElementById('yt').src=embed;p.style.display='flex';}
-window.closePlayer=function(){document.getElementById('player').style.display='none';document.getElementById('yt').src='';}
-function makeCard(v){let id=getId(v.url);let thumb='https://img.youtube.com/vi/'+id+'/hqdefault.jpg';return `<div class="video-card"><div class="thumb" onclick="playVideo('${v.url}', false)"><img src="${thumb}"><span style="position:absolute;font-size:40px">▶️</span></div><div class="info"><h3>${v.title}</h3><small>${v.name} • ${v.desc||''} • $0.000 (80%)</small></div><div class="actions"><button>❤️ Aime</button><button>🔗 Partager</button><button>⬇️ Télécharger</button><button>🔖 Enregistrer</button></div></div>`;}
-function makeShortCard(v){let id=getId(v.url);let thumb='https://img.youtube.com/vi/'+id+'/hqdefault.jpg';return `<div class="short-card" onclick="playVideo('${v.url}', true)"><div class="short-thumb"><img src="${thumb}"><span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:30px">▶️</span></div><div class="short-info">${v.title}</div></div>`;}
+function getId(url){
+  const m = (url||'').match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|shorts\/))([a-zA-Z0-9_-]+)/);
+  return m?m[1]:'';
+}
 
-onValue(ref(db,'videos'), (snap)=>{
-  const data=snap.val(); const list=data?Object.values(data):[];
-  let html=''; let shortsHtml='';
-  list.reverse().forEach(v=>{if(isShort(v.url)){shortsHtml+=makeShortCard(v);}else{html+=makeCard(v);}});
-  if(shortsHtml){document.getElementById('shortsSec').style.display='block';document.getElementById('shortsList').innerHTML=shortsHtml;}
-  document.getElementById('videos').innerHTML=html||'<p style="padding:20px">Aucune vidéo</p>';
+onValue(videosRef, snap=>{
+  const data = snap.val();
+  const container = document.getElementById('videos');
+  if(!data){ container.innerHTML='<p style="text-align:center;margin-top:50px">Aucune vidéo. Sois le premier!</p>'; return; }
+  const liked = JSON.parse(localStorage.getItem('freddy_liked')||'{}');
+  const saved = JSON.parse(localStorage.getItem('freddy_saved')||'{}');
+  let html='';
+  Object.entries(data).reverse().forEach(([key,v])=>{
+    const id = getId(v.url);
+    const isShort = (v.url||'').includes('shorts');
+    html+=`
+    <div class="video-card" data-key="${key}">
+      <div class="views-badge">👁️ ${v.views||0} vues</div>
+      <iframe class="${isShort?'short-frame':'normal-frame'}" src="https://www.youtube.com/embed/${id}" allowfullscreen></iframe>
+      <div class="video-info"><b>${v.title||'Sans titre'}</b><br><small style="opacity:0.6">Par ${v.author||'Anonyme'} - $0.000</small></div>
+      <div class="video-actions">
+        <button class="action-btn ${liked[key]?'active':''}" onclick="likeVideo('${key}')"><div style="font-size:22px">❤️</div><span>${v.likes||0}</span><span>Aime</span></button>
+        <button class="action-btn" onclick="shareVideo('${key}')"><div style="font-size:22px">🔗</div><span>Partager</span></button>
+        <button class="action-btn" onclick="downloadVideo('${v.url}')"><div style="font-size:22px">⬇️</div><span>Télécharger</span></button>
+        <button class="action-btn ${saved[key]?'active':''}" onclick="saveVideo('${key}')"><div style="font-size:22px">${saved[key]?'🔖':'📑'}</div><span>${saved[key]?'Enregistré':'Enregistrer'}</span></button>
+      </div>
+    </div>`;
+  });
+  container.innerHTML=html;
+});
+
+window.likeVideo = (key)=>{
+  const liked = JSON.parse(localStorage.getItem('freddy_liked')||'{}');
+  const r = ref(db, `videos/${key}/likes`);
+  if(liked[key]){ delete liked[key]; runTransaction(r, c=>(c||1)-1); }
+  else { liked[key]=true; runTransaction(r, c=>(c||0)+1); }
+  localStorage.setItem('freddy_liked', JSON.stringify(liked));
+};
+window.saveVideo = (key)=>{
+  const saved = JSON.parse(localStorage.getItem('freddy_saved')||'{}');
+  if(saved[key]){ delete saved[key]; alert('❌ Retiré des enregistrés'); }
+  else { saved[key]=true; alert('✅ Vidéo enregistrée!'); }
+  localStorage.setItem('freddy_saved', JSON.stringify(saved));
+};
+window.shareVideo = (key)=>{
+  const link = `https://makola000.github.io/freddy-v/?v=${key}`;
+  if(navigator.share){ navigator.share({title:'FREDDY-V', url:link}); }
+  else { navigator.clipboard.writeText(link); alert('Lien copié: '+link); }
+};
+window.downloadVideo = (url)=>{
+  const id = getId(url);
+  const dlLink = `https://www.youtube.com/watch?v=${id}`;
+  navigator.clipboard.writeText(dlLink);
+  alert('Lien YouTube copié! YouTube bloque le téléchargement direct.');
+  window.open(dlLink,'_blank');
+};
+document.addEventListener('click', e=>{
+  const card = e.target.closest('.video-card');
+  if(card){ runTransaction(ref(db, `videos/${card.dataset.key}/views`), c=>(c||0)+1); }
 });
 </script>
-</body></html>
+</body>
+</html>
