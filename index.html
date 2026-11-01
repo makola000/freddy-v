@@ -1,26 +1,30 @@
 <!DOCTYPE html>
 <html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FREDDY-V</title>
-<style>*{margin:0;padding:0;box-sizing:border-box}body{background:#000;color:#fff;font-family:Arial;padding-bottom:70px}header{display:flex;justify-content:space-between;align-items:center;padding:12px;background:#111;position:sticky;top:0}header a{background:red;color:#fff;padding:8px 14px;border-radius:20px;text-decoration:none;font-weight:bold}.video-card{background:#111;margin:10px;border-radius:10px;overflow:hidden;border:1px solid #222}.thumb{width:100%;height:200px;background:#222;display:flex;align-items:center;justify-content:center;position:relative;cursor:pointer}.thumb img{width:100%;height:100%;object-fit:cover}.info{padding:10px}.actions{display:flex;justify-content:space-around;padding:8px;border-top:1px solid #222}.actions button{background:none;border:none;color:#aaa;font-size:12px;cursor:pointer}.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#111;display:flex;justify-content:space-around;padding:10px 0;border-top:1px solid #222}.bottom-nav a{color:#777;text-decoration:none;font-size:12px;text-align:center}.bottom-nav a.active{color:red}#player{position:fixed;top:0;left:0;right:0;bottom:0;background:#000;z-index:100;display:none;flex-direction:column}#player iframe{width:100%;height:60%;margin-top:50px}.close{position:absolute;top:10px;right:15px;font-size:30px;cursor:pointer}</style>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{background:#000;color:#fff;font-family:Arial;padding-bottom:70px}header{display:flex;justify-content:space-between;align-items:center;padding:12px;background:#111;position:sticky;top:0;z-index:10}header a{background:red;color:#fff;padding:8px 14px;border-radius:20px;text-decoration:none;font-weight:bold}.video-card{background:#111;margin:10px;border-radius:10px;overflow:hidden;border:1px solid #222}.thumb{width:100%;height:200px;background:#222;display:flex;align-items:center;justify-content:center;position:relative;cursor:pointer}.thumb img{width:100%;height:100%;object-fit:cover}.info{padding:10px}.actions{display:flex;justify-content:space-around;padding:8px;border-top:1px solid #222}.actions button{background:none;border:none;color:#aaa;font-size:12px;cursor:pointer}
+/* SHORTS VERTICAL */
+.shorts-section{padding:10px}.shorts-title{font-weight:bold;margin:10px 0 5px 10px}.shorts-scroll{display:flex;overflow-x:auto;gap:10px;padding:0 10px;scrollbar-width:none}.shorts-scroll::-webkit-scrollbar{display:none}.short-card{min-width:130px;max-width:130px;background:#111;border-radius:10px;overflow:hidden;border:1px solid #222;cursor:pointer}.short-thumb{width:130px;height:230px;background:#222;position:relative}.short-thumb img{width:100%;height:100%;object-fit:cover}.short-info{padding:5px;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#111;display:flex;justify-content:space-around;padding:10px 0;border-top:1px solid #222}.bottom-nav a{color:#777;text-decoration:none;font-size:12px;text-align:center}.bottom-nav a.active{color:red}#player{position:fixed;top:0;left:0;right:0;bottom:0;background:#000;z-index:100;display:none;flex-direction:column;align-items:center;justify-content:center}#player.short-mode iframe{width:56%;height:80%;max-width:350px;border-radius:10px}#player.normal-mode iframe{width:100%;height:60%;margin-top:50px}.close{position:absolute;top:10px;right:15px;font-size:30px;cursor:pointer;z-index:101}
+</style>
 </head><body>
 <header><b>FREDDY-V</b><a href="upload.html">+ PUBLIER</a></header>
-<div id="videos">Chargement des vidéos du monde...</div>
+
+<div class="shorts-section" id="shortsSec" style="display:none">
+<div class="shorts-title">🔥 Shorts</div>
+<div class="shorts-scroll" id="shortsList"></div>
+</div>
+
+<div id="videos">Chargement...</div>
 <div class="bottom-nav"><a class="active">🏠<br>Accueil</a><a>🎬<br>Shorts</a><a href="upload.html">➕<br></a><a>👤<br>Moi</a></div>
-<div id="player"><span class="close" onclick="document.getElementById('player').style.display='none';document.getElementById('yt').src=''">✕</span><iframe id="yt" src="" frameborder="0" allowfullscreen></iframe></div>
+<div id="player"><span class="close" onclick="closePlayer()">✕</span><iframe id="yt" src="" frameborder="0" allowfullscreen></iframe></div>
 <script>
-function playVideo(url){document.getElementById('yt').src=url.replace('watch?v=','embed/').replace('youtu.be/','www.youtube.com/embed/').split('?')[0]+'?autoplay=1';document.getElementById('player').style.display='flex';}
-function makeCard(v){
- let thumb='https://via.placeholder.com/400x200/222/fff?text=FREDDY-V'; let id=''; if(v.url.includes('youtu.be/')) id=v.url.split('youtu.be/')[1].split('?')[0]; if(v.url.includes('v=')) id=v.url.split('v=')[1].split('&')[0]; if(id) thumb='https://img.youtube.com/vi/'+id+'/hqdefault.jpg';
- return `<div class="video-card"><div class="thumb" onclick="playVideo('${v.url}')"><img src="${thumb}"><span style="position:absolute;font-size:40px">▶️</span></div><div class="info"><h3>${v.title}</h3><small>${v.name} • ${v.desc||''} • $0.000 (80%)</small></div><div class="actions"><button onclick="this.textContent='❤️ Aime (1)';this.style.color='red'">❤️ Aime</button><button onclick="navigator.clipboard.writeText(location.href);alert('Lien copié!')">🔗 Partager</button><button onclick="alert('Pour télécharger YouTube utilise SnapTube')">⬇️ Télécharger</button><button onclick="this.textContent='🔖 Enregistré ✓';this.style.color='#0f0'">🔖 Enregistrer</button></div></div>`;
-}
-async function load(){
- // 1. Charge local d'abord
- let local=JSON.parse(localStorage.getItem('freddy_videos')||'[]');
- let html=''; local.reverse().forEach(v=>html+=makeCard(v));
- // 2. Charge mondial depuis Firebase (gratuit, tout le monde voit)
- try{let r=await fetch('https://freddy-v-default-rtdb.firebaseio.com/videos.json');let data=await r.json();if(data){Object.values(data).reverse().forEach(v=>{html+=makeCard(v);});}}catch(e){}
- if(!html) html='<p style="padding:20px">Aucune vidéo. Sois le premier à publier!</p>'; document.getElementById('videos').innerHTML=html;
-}
+function getId(url){if(url.includes('shorts/')) return url.split('shorts/')[1].split('?')[0].split('/')[0]; if(url.includes('youtu.be/')) return url.split('youtu.be/')[1].split('?')[0]; if(url.includes('v=')) return url.split('v=')[1].split('&')[0]; return '';}
+function isShort(url){return url.includes('shorts/') || url.toLowerCase().includes('short');}
+function playVideo(url, short=false){let id=getId(url);let embed='https://www.youtube.com/embed/'+id+'?autoplay=1&playsinline=1&rel=0';let p=document.getElementById('player');p.className=short?'short-mode':'normal-mode';document.getElementById('yt').src=embed;p.style.display='flex';}
+function closePlayer(){document.getElementById('player').style.display='none';document.getElementById('yt').src='';}
+function makeCard(v){let id=getId(v.url);let thumb='https://img.youtube.com/vi/'+id+'/hqdefault.jpg';return `<div class="video-card"><div class="thumb" onclick="playVideo('${v.url}', false)"><img src="${thumb}"><span style="position:absolute;font-size:40px">▶️</span></div><div class="info"><h3>${v.title}</h3><small>${v.name} • ${v.desc||''} • $0.000 (80%)</small></div><div class="actions"><button>❤️ Aime</button><button>🔗 Partager</button><button>⬇️ Télécharger</button><button>🔖 Enregistrer</button></div></div>`;}
+function makeShortCard(v){let id=getId(v.url);let thumb='https://img.youtube.com/vi/'+id+'/hqdefault.jpg';return `<div class="short-card" onclick="playVideo('${v.url}', true)"><div class="short-thumb"><img src="${thumb}"><span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:30px">▶️</span></div><div class="short-info">${v.title}</div></div>`;}
+function load(){let local=JSON.parse(localStorage.getItem('freddy_videos')||'[]');let html='';let shortsHtml='';local.reverse().forEach(v=>{if(isShort(v.url)){shortsHtml+=makeShortCard(v);}else{html+=makeCard(v);}});if(shortsHtml){document.getElementById('shortsSec').style.display='block';document.getElementById('shortsList').innerHTML=shortsHtml;}document.getElementById('videos').innerHTML=html||'<p style="padding:20px">Publie ta première vidéo!</p>';}
 load();
 </script>
 </body></html>
