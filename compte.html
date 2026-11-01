@@ -1,47 +1,28 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>FREDDY-V Account Worldwide</title><style>body{background:#000;color:#fff;font-family:Arial;padding:15px;max-width:500px;margin:0 auto}header{text-align:center;padding:10px}.card{background:#111;padding:20px;border-radius:16px;margin:12px 0;border:1px solid #222}input,select{width:100%;padding:12px;border-radius:10px;border:1px solid #333;background:#000;color:#fff;margin:8px 0}button{width:100%;padding:14px;border-radius:10px;border:0;background:red;color:#fff;font-weight:bold;cursor:pointer}small{opacity:0.6;display:block;margin-top:8px}.lang{display:flex;gap:8px;justify-content:center;margin:10px 0}.lang button{width:auto;padding:6px 12px;background:#222;font-size:12px}</style></head><body>
-<header>🌍 FREDDY-V WORLDWIDE</header>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>FREDDY-V Worldwide</title><style>body{background:#000;color:#fff;font-family:Arial;padding:15px;max-width:500px;margin:auto}header{text-align:center;padding:10px;font-weight:bold}.card{background:#111;padding:20px;border-radius:16px;margin:12px 0;border:1px solid #222}input,select{width:100%;padding:12px;border-radius:10px;border:1px solid #333;background:#000;color:#fff;margin:8px 0}button{width:100%;padding:14px;border-radius:10px;border:0;background:red;color:#fff;font-weight:bold;cursor:pointer;font-size:15px}small{opacity:0.6} .lang{display:flex;gap:8px;justify-content:center;margin:8px} .lang button{width:auto;padding:6px 12px;background:#222;font-size:12px}</style></head><body>
+<header>🌍 FREDDY-V MONDIAL</header>
 <div class="lang"><button onclick="setLang('fr')">FR</button><button onclick="setLang('en')">EN</button><button onclick="setLang('sw')">SW</button></div>
-
-<div class="card" id="formCard">
-<h3 id="t1">Créer ton compte mondial</h3>
-<input id="username" placeholder="Nom / Username" value="Freddy makola">
-<select id="country"><option value="+243" selected>🇨🇩 +243 Congo</option><option value="+33">🇫🇷 +33 France</option><option value="+1">🇺🇸 +1 USA</option><option value="+32">🇧🇪 +32 Belgique</option><option value="+44">🇬🇧 +44 UK</option><option value="+91">🇮🇳 +91 India</option><option value="+234">🇳🇬 +234 Nigeria</option><option value="+27">🇿🇦 +27 South Africa</option><option value="+other">🌍 Other</option></select>
-<input id="phone" placeholder="Numéro / Phone" value="+243983356734">
-<input id="email" placeholder="Email (optionnel)" value="kibwemakola@gmail.com">
-<button onclick="create()" id="btnCreate">🌍 Créer compte mondial - Create Account</button>
-<small id="info">80% pour toi, 20% pour FREDDY-V. Paiement mondial: Mobile Money, PayPal, Bank.</small>
-<p id="msg" style="color:yellow;margin-top:10px"></p>
-</div>
-
-<div class="card" id="dashCard" style="display:none"><h3 id="hello"></h3><p>🌍 Solde / Balance: $<b id="bal">0.000</b></p><p>👥 Followers: <b id="subs">0</b></p><p>📱 <span id="myphone"></span></p><p>📧 <span id="myemail"></span></p><button onclick="location.href='upload.html'" id="bPub">📤 Publier vidéo mondiale</button><button onclick="location.href='index.html'" style="background:#222;margin-top:10px">🏠 Accueil mondial</button><button onclick="logout()" style="background:#444;margin-top:10px">Logout / Déconnexion</button></div>
-
+<div class="card" id="form"><h3 id="t1">Créer ton compte mondial</h3><input id="name" placeholder="Nom" value="Freddy makola"><select id="country"><option value="+243" selected>🇨🇩 +243 Congo</option><option value="+33">🇫🇷 +33 France</option><option value="+1">🇺🇸 +1 USA</option><option value="+32">🇧🇪 +32 Belgique</option><option value="+44">🇬🇧 +44 UK</option><option value="+other">🌍 Other</option></select><input id="phone" placeholder="Phone" value="+243983356734"><input id="email" placeholder="Email" value="kibwemakola@gmail.com"><button onclick="create()" id="btn">🌍 Créer compte mondial</button><p id="msg" style="color:yellow"></p><small id="info">80% pour toi, 20% FREDDY-V. Paiement mondial.</small></div>
+<div class="card" id="dash" style="display:none"><h3 id="hello"></h3><p>💰 Solde: $<b id="bal">0.000</b></p><p>📱 <span id="p1"></span></p><button onclick="location.href='upload.html'">📤 PUBLIER NORMALE + SHORTS</button><button onclick="location.href='index.html'" style="background:#222;margin-top:10px">🏠 Accueil</button><button onclick="logout()" style="background:#444;margin-top:10px">Logout</button></div>
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";import{getDatabase,ref,push}from"https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 const cfg={apiKey:"AIzaSyCZTf68dJf0nir7IJ8QCPrVwB4EEEeclHM",authDomain:"freddy-v.firebaseapp.com",databaseURL:"https://freddy-v-default-rtdb.firebaseio.com",projectId:"freddy-v",storageBucket:"freddy-v.firebasestorage.app",messagingSenderId:"318263144332",appId:"1:318263144332:web:387b2ded7cf5b85d6eb0a9"};
-let db=null;try{const app=initializeApp(cfg);db=getDatabase(app);}catch(e){console.log("Firebase offline",e)}
-let u=JSON.parse(localStorage.getItem('freddy_user')||'null'); if(u) show(u);
-const trans={fr:{t1:"Créer ton compte mondial",btn:"🌍 Créer compte mondial",info:"80% pour toi, 20% pour FREDDY-V. Paiement mondial: Mobile Money, PayPal, Bank."},en:{t1:"Create your worldwide account",btn:"🌍 Create worldwide account",info:"80% for you, 20% for FREDDY-V. Worldwide payout."},sw:{t1:"Tengeneza akaunti yako",btn:"🌍 Tengeneza akaunti",info:"80% kwako, 20% kwa FREDDY-V. Malipo duniani kote."}};
-window.setLang=(l)=>{const t=trans[l];document.getElementById('t1').innerText=t.t1;document.getElementById('btnCreate').innerText=t.btn;document.getElementById('info').innerText=t.info;localStorage.setItem('freddy_lang',l)}
-let savedLang=localStorage.getItem('freddy_lang')||'fr';setLang(savedLang);
+const app=initializeApp(cfg);const db=getDatabase(app);
+let u=JSON.parse(localStorage.getItem('freddy_user')||'null');if(u)show(u);
 window.create=async()=>{
-  const name=document.getElementById('username').value.trim();
-  const country=document.getElementById('country').value;
-  const phone=document.getElementById('phone').value.trim();
-  const email=document.getElementById('email').value.trim();
-  const msg=document.getElementById('msg');
-  if(!name||!phone){msg.innerText='⚠️ Nom et téléphone requis';return}
-  msg.innerText='⏳ Création...';
-  const user={username:name,phone:phone,country:country,email:email,uid:Date.now()+'_'+Math.random().toString(36).substr(2,5),balance:0,subs:0,worldwide:true,time:Date.now()};
-  localStorage.setItem('freddy_user',JSON.stringify(user));
-  try{
-    if(db){await push(ref(db,'users'),user); msg.innerText='✅ Sauvegardé en ligne!';}
-    else{msg.innerText='✅ Sauvegardé localement!';}
-  }catch(e){
-    console.log(e);
-    msg.innerText='✅ Compte créé localement (hors ligne): '+e.message;
-  }
-  setTimeout(()=>{show(user);alert('🌍 Compte créé! Bienvenue '+name+' - Ton numéro '+phone+' est enregistré!')},500);
+ let name=document.getElementById('name').value.trim();
+ let phone=document.getElementById('phone').value.trim();
+ let email=document.getElementById('email').value.trim();
+ let country=document.getElementById('country').value;
+ let msg=document.getElementById('msg');
+ if(!name||!phone){msg.innerText='Nom et phone requis';return}
+ msg.innerText='⏳ Création...';
+ let user={username:name,phone:phone,email:email,country:country,uid:Date.now().toString(),balance:0,worldwide:true,time:Date.now()};
+ try{await push(ref(db,'users'),user); msg.innerText='✅ Compte gardé dans Firebase!';}
+ catch(e){msg.innerText='✅ Compte local (Firebase: '+e.message+')';}
+ localStorage.setItem('freddy_user',JSON.stringify(user));
+ setTimeout(()=>{show(user);alert('🌍 Bienvenue '+name+'! Compte créé avec '+phone)},500);
 };
-function show(user){document.getElementById('formCard').style.display='none';document.getElementById('dashCard').style.display='block';document.getElementById('hello').innerText='🌍 Salut '+user.username+' 🔥';document.getElementById('bal').innerText=(user.balance||0).toFixed(3);document.getElementById('myphone').innerText=user.phone;document.getElementById('myemail').innerText=user.email||'';document.getElementById('subs').innerText=user.subs||0}
+function show(user){document.getElementById('form').style.display='none';document.getElementById('dash').style.display='block';document.getElementById('hello').innerText='Salut '+user.username+' 🔥';document.getElementById('p1').innerText=user.phone;document.getElementById('bal').innerText='0.000'}
 window.logout=()=>{localStorage.removeItem('freddy_user');location.reload()}
+window.setLang=(l)=>{localStorage.setItem('freddy_lang',l)}
 </script></body></html>
