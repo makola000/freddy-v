@@ -2,106 +2,139 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FREDDY-V</title>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <style>
-body{margin:0;background:#000;color:#fff;font-family:Arial}
-.header{display:flex;justify-content:space-between;align-items:center;padding:12px 15px;border-bottom:1px solid #222;position:sticky;top:0;background:#000;z-index:100}
-.header b{font-size:18px}
-.header a{color:#fff;text-decoration:none;margin-left:10px;font-size:14px}
-.btn-pub{background:red;padding:7px 14px;border-radius:20px;font-weight:bold}
-.video-card{padding:12px;border-bottom:1px solid #222}
-.thumb-wrap{position:relative;width:100%;aspect-ratio:16/9;background:#111;border-radius:12px;overflow:hidden;cursor:pointer}
-.thumb-wrap img{width:100%;height:100%;object-fit:cover}
-.thumb-wrap iframe{width:100%;height:100%;border:0}
-.info{padding:10px 0}
-.info b{font-size:15px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;color:#fff;font-family:Arial,sans-serif}
+header{display:flex;justify-content:space-between;align-items:center;padding:12px;background:#111;position:sticky;top:0;z-index:10}
+header b{color:#fff;font-size:22px}
+header a{background:#ff0000;color:#fff;padding:8px 14px;border-radius:20px;text-decoration:none;font-weight:bold;font-size:14px}
+.video-card{background:#111;margin:10px;border-radius:10px;overflow:hidden;border:1px solid #222}
+.thumb{width:100%;height:200px;background:#222;display:flex;align-items:center;justify-content:center;position:relative;cursor:pointer}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.thumb span{position:absolute;font-size:40px}
+.info{padding:10px}
+.info h3{font-size:15px;margin-bottom:4px}
 .info small{color:#aaa}
-.actions{display:flex;gap:18px;margin-top:8px;color:#aaa;font-size:14px;cursor:pointer}
-.bottom{position:fixed;bottom:0;left:0;width:100%;background:#000;border-top:1px solid #222;display:flex;justify-content:space-around;padding:10px 0}
-.bottom div{text-align:center;font-size:12px;color:#aaa}
-.bottom div.active{color:#fff}
-#playerBox{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:9999;overflow:auto}
+.actions{display:flex;justify-content:space-around;padding:8px;border-top:1px solid #222}
+.actions button{background:none;border:none;color:#aaa;font-size:13px;cursor:pointer;padding:6px}
+.actions button:hover{color:#fff}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#111;display:flex;justify-content:space-around;padding:10px 0;border-top:1px solid #222}
+.bottom-nav a{color:#777;text-decoration:none;font-size:12px;text-align:center}
+.bottom-nav a.active{color:#ff0000}
+#player{position:fixed;top:0;left:0;right:0;bottom:0;background:#000;z-index:100;display:none;flex-direction:column}
+#player iframe{width:100%;height:60%;margin-top:50px}
+#player .close{position:absolute;top:10px;right:15px;font-size:30px;cursor:pointer}
 </style>
 </head>
 <body>
 
-<div class="header">
- <div><b>FREDDY-V</b> <span style="margin-left:15px;color:#aaa;font-size:14px">Shorts</span></div>
- <div><a href="upload.html" class="btn-pub">+ PUBLIER</a> <span style="margin-left:10px">MOI</span></div>
+<header>
+<b>FREDDY-V</b>
+<a href="upload.html">+ PUBLIER</a>
+</header>
+
+<!-- EXEMPLE VIDEO 1 -->
+<div class="video-card" data-url="https://www.youtube.com/embed/dQw4w9WgXcQ">
+<div class="thumb" onclick="playVideo(this)">
+<img src="https://via.placeholder.com/400x200/222/fff?text=FREDDY-V">
+<span>▶️</span>
+</div>
+<div class="info">
+<h3>Makola Freddy - Test vidéo</h3>
+<small>0 vues • $0.000 (80%) • Makola</small>
+</div>
+<div class="actions">
+<button>❤️ Aime</button>
+<button>🔗 Partager</button>
+<button>⬇️ Télécharger</button>
+<button>🔖 Enregistrer</button>
+</div>
 </div>
 
-<div id="playerBox">
- <div style="padding:12px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #222"><b id="pTitreHead">FREDDY-V</b><b onclick="closePlayer()" style="background:red;padding:8px 14px;border-radius:20px;cursor:pointer">✕ Fermer</b></div>
- <div id="playerContent"></div>
- <div style="padding:12px"><b id="pTitre"></b><br><small id="pAuteur" style="color:#aaa"></small><div style="margin-top:12px;display:flex;gap:18px;color:#aaa"><span>❤️ Aime</span><span>🔗 Partager</span><span>⬇️ Télécharger</span><span>💾 Enregistrer</span></div></div>
+<!-- TU DUPLIQUES CETTE CARTE POUR CHAQUE VIDEO DEPUIS upload.html -->
+
+<div class="bottom-nav">
+<a href="index.html" class="active">🏠<br>Accueil</a>
+<a href="#">🎬<br>Shorts</a>
+<a href="upload.html">➕<br></a>
+<a href="#">👤<br>Moi</a>
 </div>
 
-<div id="videos" style="padding-bottom:70px">
- <div style="padding:20px;text-align:center;color:#aaa">Chargement...</div>
-</div>
-
-<div class="bottom">
- <div class="active" onclick="location.href='index.html'">🏠<br>Accueil</div>
- <div>▶️<br>Shorts</div>
- <div onclick="location.href='upload.html'">➕<br> </div>
- <div>👤<br>Moi</div>
+<!-- LECTEUR INTERNE -->
+<div id="player">
+<span class="close" onclick="document.getElementById('player').style.display='none'">✕</span>
+<iframe id="yt" src="" frameborder="0" allowfullscreen></iframe>
 </div>
 
 <script>
-const cfg={apiKey:"AIzaSyCZTfMR94q2t4W1c0N7LK5YpN14M8iBVvA",authDomain:"freddy-v.firebaseapp.com",projectId:"freddy-v"};
-if(!firebase.apps.length)firebase.initializeApp(cfg);
-const db=firebase.firestore();
-
-function playInFreddyV(id,type,titre,auteur){
- document.getElementById('playerBox').style.display='block';
- document.getElementById('pTitreHead').innerText=titre;
- document.getElementById('pTitre').innerText=titre;
- document.getElementById('pAuteur').innerText=auteur+' • 0 vues • $0.000 (80%)';
- let c=document.getElementById('playerContent');
- if(type==='photo'){
-   c.innerHTML='<img src="'+id+'" style="width:100%;max-height:60vh;object-fit:contain;background:#111">';
- } else {
-   c.innerHTML='<iframe src="https://www.youtube.com/embed/'+id+'?autoplay=1&rel=0&modestbranding=1" style="width:100%;height:52vh;border:0" allowfullscreen allow="autoplay; encrypted-media"></iframe>';
- }
- window.scrollTo(0,0);
-}
-function closePlayer(){
- document.getElementById('playerBox').style.display='none';
- document.getElementById('playerContent').innerHTML='';
+// JOUER VIDEO DANS FREDDY-V (pas YouTube)
+function playVideo(el){
+let url = el.parentElement.dataset.url;
+document.getElementById('yt').src = url + '?autoplay=1';
+document.getElementById('player').style.display='flex';
 }
 
-db.collection("videos").orderBy("timestamp","desc").onSnapshot(snap=>{
- let html='';
- snap.forEach(doc=>{
-  let v=doc.data();
-  let id=v.youtubeId||'';
-  let type=v.type||'video';
-  let titre=(v.titre||'Sans titre').replace(/'/g,"\\'");
-  let auteur=(v.auteur||'Anonyme').replace(/'/g,"\\'");
-  let thumb='';
-  if(type==='photo'){
-    thumb='<img src="'+id+'" onerror="this.src=\'https://via.placeholder.com/320x180/111/fff?text=FREDDY-V\'">';
-  } else {
-    thumb='<img src="https://img.youtube.com/vi/'+id+'/hqdefault.jpg" onerror="this.src=\'https://via.placeholder.com/320x180/111/fff?text=FREDDY-V\'"><div style="position:absolute;bottom:8px;right:8px;background:#000a;padding:3px 6px;border-radius:4px;font-size:12px">▶️</div>';
-  }
-  html+=`
-  <div class="video-card">
-   <div class="thumb-wrap" onclick="playInFreddyV('${id}','${type}','${titre}','${auteur}')">
-    ${thumb}
-   </div>
-   <div class="info">
-    <b>${v.titre||'Sans titre'}</b><br>
-    <small>${v.auteur||'Anonyme'} - 0 vues - $0.000 (80%)</small>
-    <div class="actions">
-     <span>❤️ Aime</span><span>🔗 Partager</span><span>⬇️ Télécharger</span><span>💾 Enregistrer</span>
-    </div>
-   </div>
-  </div>`;
- });
- document.getElementById('videos').innerHTML=html||'<div style="padding:20px;text-align:center">Aucune vidéo. <a href="upload.html" style="color:red">Publie la première!</a></div>';
+// CHARGER LES VIDEOS PUBLIÉES
+let videos = JSON.parse(localStorage.getItem('freddy_videos')||'[]');
+videos.forEach(v=>{
+document.body.insertAdjacentHTML('afterbegin',`
+<div class="video-card" data-url="${v.url.replace('watch?v=','embed/')}">
+<div class="thumb" onclick="playVideo(this)">
+<img src="${v.thumb||'https://via.placeholder.com/400x200/222/fff?text=FREDDY-V'}">
+<span>▶️</span>
+</div>
+<div class="info"><h3>${v.title}</h3><small>0 vues • $0.000 (80%) • ${v.name}</small></div>
+<div class="actions"><button>❤️ Aime</button><button>🔗 Partager</button><button>⬇️ Télécharger</button><button>🔖 Enregistrer</button></div>
+</div>`);
+});
+
+// LES 4 BOUTONS QUI MARCHENT MAINTENANT
+document.addEventListener('click', function(e){
+if(!e.target.matches('button')) return;
+
+let card = e.target.closest('.video-card');
+
+// AIME
+if(e.target.textContent.includes('Aime')){
+let key='like_'+card.querySelector('h3').textContent;
+let n=parseInt(localStorage.getItem(key)||0)+1;
+localStorage.setItem(key,n);
+e.target.textContent='❤️ Aime ('+n+')';
+e.target.style.color='red';
+}
+
+// PARTAGER
+if(e.target.textContent.includes('Partager')){
+let title=card.querySelector('h3').textContent;
+let url=card.dataset.url;
+if(navigator.share){
+navigator.share({title:title, text:'Regarde sur FREDDY-V', url: location.href});
+} else {
+navigator.clipboard.writeText(location.href+' - '+title);
+alert('Lien copié! Colle sur WhatsApp');
+}
+}
+
+// TELECHARGER
+if(e.target.textContent.includes('Télécharger')){
+let img=card.querySelector('img').src;
+if(img.includes('placeholder')||img.includes('FREDDY-V')){
+alert('Ceci est une vidéo YouTube, téléchargement bloqué par YouTube. Pour les PHOTOS ça marche!');
+} else {
+let a=document.createElement('a'); a.href=img; a.download='freddy-v.jpg'; a.click();
+}
+}
+
+// ENREGISTRER
+if(e.target.textContent.includes('Enregistrer')){
+let saved=JSON.parse(localStorage.getItem('freddy_saved')||'[]');
+saved.push(card.outerHTML);
+localStorage.setItem('freddy_saved', JSON.stringify(saved));
+e.target.textContent='🔖 Enregistré ✓';
+e.target.style.color='#00ff00';
+}
 });
 </script>
 </body>
