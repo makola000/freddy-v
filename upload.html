@@ -1,30 +1,64 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Publier - FREDDY-V</title><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script><style>body{background:#000;color:#fff;margin:0;font-family:Arial;padding:15px}input,button,select{width:100%;padding:14px;margin:8px 0;border-radius:10px;border:0;box-sizing:border-box}input,select{background:#222;color:#fff}button{background:red;color:#fff;font-weight:bold}</style></head><body>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Publier - FREDDY-V</title><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script><style>body{background:#000;color:#fff;margin:0;font-family:Arial;padding:15px}input,button,select,textarea{width:100%;padding:14px;margin:8px 0;border-radius:10px;border:0;box-sizing:border-box}input,select,textarea{background:#222;color:#fff}button{background:red;color:#fff;font-weight:bold}textarea{height:80px}</style></head><body>
 <div><b onclick="location.href='index.html'">← FREDDY-V</b></div>
 <h2>+ Publier</h2>
-<select id="type"><option value="video">Vidéo</option><option value="live">DIRECT LIVE</option></select>
-<input id="yturl" placeholder="Lien YouTube (vidéo ou direct)">
-<input id="titre" placeholder="Titre">
-<input id="auteur" placeholder="Nom / Chaîne" value="Makola Freddy">
+
+<select id="type" onchange="changeType()">
+<option value="video">📹 Vidéo normale</option>
+<option value="short">🔥 Vidéo courte (1-2 min) - Chaude</option>
+<option value="photo">📸 Photo comme Facebook</option>
+<option value="live">🔴 DIRECT LIVE</option>
+</select>
+
+<div id="ytZone">
+<input id="yturl" placeholder="Lien YouTube, Shorts, ou Live">
+<small id="help" style="color:#888">Ex: youtu.be/abc ou youtube.com/shorts/abc</small>
+</div>
+
+<input id="titre" placeholder="Titre / Légende">
+<textarea id="desc" placeholder="Description (comme YouTube / Facebook)"></textarea>
+<input id="auteur" placeholder="Nom" value="Makola Freddy">
+
 <button onclick="publish()">PUBLIER</button>
 <div id="msg" style="margin:12px 0;padding:10px;background:#111;border-radius:8px"></div>
+
 <script>
 const cfg={apiKey:"AIzaSyCZTfMR94q2t4W1c0N7LK5YpN14M8iBVvA",authDomain:"freddy-v.firebaseapp.com",projectId:"freddy-v"};
 if(!firebase.apps.length)firebase.initializeApp(cfg);
 const db=firebase.firestore();
+
+function changeType(){
+  const t=document.getElementById('type').value;
+  const h=document.getElementById('help');
+  if(t==="photo") h.innerHTML="📸 Pour photo: mets lien image ou upload sur imgbb.com et colle lien";
+  else if(t==="short") h.innerHTML="🔥 Vidéo courte 1-2 min: lien YouTube Shorts (youtube.com/shorts/abc)";
+  else if(t==="live") h.innerHTML="🔴 DIRECT: lien youtube.com/live/abc";
+  else h.innerHTML="📹 Vidéo normale: youtu.be/abc";
+}
+
 function getYTId(u){let m=(u||"").match(/(?:v=|be\/|embed\/|shorts\/|live\/)([^&?\/]+)/);return m?m[1]:"";}
+
 async function publish(){
   const url=document.getElementById('yturl').value.trim();
   const titre=document.getElementById('titre').value.trim();
+  const desc=document.getElementById('desc').value.trim();
   const auteur=document.getElementById('auteur').value.trim()||"Makola Freddy";
   const type=document.getElementById('type').value;
   const msg=document.getElementById('msg');
-  if(!url||!titre){msg.innerHTML="❌ Lien + titre";return}
+  
+  if(!url||!titre){msg.innerHTML="❌ Mets lien + titre";return}
   const yt=getYTId(url);
-  if(!yt){msg.innerHTML="❌ Lien invalide";return}
+  if(!yt && type!=="photo"){msg.innerHTML="❌ Lien invalide. Utilise lien YouTube";return}
+  
   msg.innerHTML="⏳ Publication...";
   try{
-    await db.collection("videos").add({url:url,youtubeId:yt,titre:titre,auteur:auteur,vues:0,likes:0,type:type,isLive:type==="live",timestamp:firebase.firestore.FieldValue.serverTimestamp()});
-    msg.innerHTML=`✅ Publié! ${titre}<br><a href='index.html' style='color:red'>Voir</a>`;
+    await db.collection("videos").add({
+      url:url, youtubeId:yt||url, titre:titre, description:desc, auteur:auteur,
+      vues:0, likes:0, type:type, isLive:type==="live", isShort:type==="short", isPhoto:type==="photo",
+      timestamp:firebase.firestore.FieldValue.serverTimestamp()
+    });
+    let label=type==="short"?"🔥 Vidéo courte":type==="photo"?"📸 Photo":type==="live"?"🔴 DIRECT":"📹 Vidéo";
+    msg.innerHTML=`✅ ${label} "${titre}" publiée!<br><a href='index.html' style='color:red'>→ Voir sur FREDDY-V</a>`;
   }catch(e){msg.innerHTML="❌ "+e.message}
 }
+changeType();
 </script></body></html>
