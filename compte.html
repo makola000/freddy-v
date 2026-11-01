@@ -1,14 +1,23 @@
-<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Compte FREDDY-V</title>
-<style>body{background:#000;color:#fff;font-family:Arial;padding:15px;max-width:500px;margin:0 auto}.card{background:#111;padding:20px;border-radius:16px;margin:10px 0;border:1px solid #222}input{width:100%;padding:12px;border-radius:10px;border:1px solid #333;background:#000;color:#fff;margin:8px 0}button{width:100%;padding:14px;border-radius:10px;border:0;background:#ff3040;color:#fff;font-weight:bold}small{opacity:0.6}</style></head><body>
-<h2 style="text-align:center">💰 FREDDY-V Argent</h2>
-<div class="card"><h3>Créer ton compte</h3><input id="name" placeholder="Nom FREDDY-V"><input id="email" placeholder="Email Mobile Money"><input id="phone" placeholder="Numéro Airtel/Orange Money"><button onclick="create()">Créer compte + Gagner argent</button><small>80% des revenus pour toi, 20% pour FREDDY-V</small></div>
-<div class="card" id="dash" style="display:none"><h3 id="hello"></h3><p>Solde: $<b id="bal">0.000</b></p><p>Abonnés: <b id="subs">0</b></p><button style="background:#222;margin-top:10px" onclick="goUpload()">📤 Publier vidéo (upload.html)</button><button style="background:#25D366;margin-top:10px" onclick="direct()">🔴 Lancer un DIRECT</button><button style="background:#444;margin-top:10px" onclick="logout()">Déconnexion</button></div>
+<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Mon Compte - FREDDY-V</title><style>body{background:#000;color:#fff;font-family:Arial;padding:15px;max-width:500px;margin:0 auto}.card{background:#111;padding:20px;border-radius:16px;margin:10px 0;border:1px solid #222}input{width:100%;padding:12px;border-radius:10px;border:1px solid #333;background:#000;color:#fff;margin:8px 0}button{width:100%;padding:14px;border-radius:10px;border:0;background:red;color:#fff;font-weight:bold;margin-top:10px}</style></head><body>
+<h2 style="text-align:center">💰 FREDDY-V Compte</h2>
+<div class="card" id="formCard"><input id="username" placeholder="Nom FREDDY-V (ex: Freddy Beni)"><input id="email" placeholder="Email ou Mobile Money"><button onclick="create()">Créer mon compte</button><p style="font-size:12px;opacity:0.6">80% pour toi, 20% pour FREDDY-V. Même nom accepté!</p></div>
+<div class="card" id="dashCard" style="display:none"><h3 id="hello"></h3><p>Solde: $<b id="bal">0.000</b></p><p>Abonnés: <b id="subs">0</b></p><button onclick="location.href='upload.html'">📤 Publier vidéo</button><button style="background:#222" onclick="logout()">Déconnexion</button></div>
+<a href="index.html" style="color:#aaa">← Accueil</a>
 <script type="module">
-import{initializeApp}from"https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";import{getDatabase,ref,set,get}from"https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";import{getDatabase,ref,push,set}from"https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 const cfg={apiKey:"AIzaSyCZTf68dJf0nir7IJ8QCPrVwB4EEEeclHM",authDomain:"freddy-v.firebaseapp.com",databaseURL:"https://freddy-v-default-rtdb.firebaseio.com",projectId:"freddy-v",storageBucket:"freddy-v.firebasestorage.app",messagingSenderId:"318263144332",appId:"1:318263144332:web:387b2ded7cf5b85d6eb0a9"};
 const app=initializeApp(cfg);const db=getDatabase(app);
 let u=JSON.parse(localStorage.getItem('freddy_user')||'null'); if(u) show(u);
-window.create=async()=>{const name=document.getElementById('name').value;const email=document.getElementById('email').value;const phone=document.getElementById('phone').value; if(!name||!email){alert('Remplis tout');return} const user={username:name,email:email,phone:phone,balance:0,subs:0,created:Date.now()}; localStorage.setItem('freddy_user',JSON.stringify(user)); await set(ref(db,'users/'+name.replace(/[^a-z0-9]/gi,'_')),user); show(user); alert('Compte créé! Tu peux gagner de l argent maintenant!')};
-function show(user){document.getElementById('dash').style.display='block';document.getElementById('hello').innerText='Bienvenue '+user.username;document.getElementById('bal').innerText=(user.balance||0).toFixed(3)}
-window.goUpload=()=>{location.href='upload.html'}; window.direct=()=>{alert('DIRECT bientôt! Pour l instant publie des vidéos, chaque vue = $0.001 (80% pour toi)'); location.href='upload.html'}; window.logout=()=>{localStorage.removeItem('freddy_user'); location.reload()}
+window.create=async()=>{
+  const n=document.getElementById('username').value.trim();
+  const e=document.getElementById('email').value.trim();
+  if(!n||!e){alert('Remplis nom et email');return}
+  const user={username:n,email:e,uid:Date.now()+'_'+Math.random().toString(36).substr(2,5),balance:0,subs:0,time:Date.now()};
+  localStorage.setItem('freddy_user',JSON.stringify(user));
+  await push(ref(db,'users'),user);
+  show(user);
+  alert('Compte créé! Bienvenue '+n);
+};
+function show(user){document.getElementById('formCard').style.display='none';document.getElementById('dashCard').style.display='block';document.getElementById('hello').innerText='Salut '+user.username+' 🔥';document.getElementById('bal').innerText=(user.balance||0).toFixed(3)}
+window.logout=()=>{localStorage.removeItem('freddy_user');location.reload()}
 </script></body></html>
