@@ -11,6 +11,15 @@
 <a href="index.html" style="color:#aaa">← Retour accueil</a>
 
 <script type="module">
+// ===== 4 LIGNES AJOUTÉES POUR COMPTE - RIEN D'AUTRE MODIFIÉ =====
+const savedUser = JSON.parse(localStorage.getItem('freddy_user')||'null');
+if(savedUser){ 
+  setTimeout(()=>{
+    const a = document.getElementById('name');
+    if(a) a.value = savedUser.username;
+  },500);
+}
+// ===== FIN DES 4 LIGNES =====
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
 
