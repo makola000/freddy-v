@@ -1,58 +1,70 @@
 <!DOCTYPE html>
-<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Publier - FREDDY-V</title>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Publier Shorts - FREDDY-V</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-<style>body{margin:0;background:#000;color:#fff;font-family:Arial;padding:15px}
-.card{background:#111;border:1px solid #333;border-radius:16px;padding:20px;max-width:420px;margin:20px auto}
-input{width:100%;padding:14px;margin:8px 0;border-radius:10px;border:0;background:#222;color:#fff;box-sizing:border-box}
+<style>
+body{background:#000;color:#fff;font-family:Arial;padding:15px;margin:0}
+.card{background:#111;border-radius:16px;padding:20px;max-width:400px;margin:20px auto}
+input{width:100%;padding:14px;margin:10px 0;border-radius:10px;background:#222;color:#fff;border:0;box-sizing:border-box}
 button{background:red;color:#fff;border:0;padding:14px;width:100%;border-radius:12px;font-weight:bold;font-size:16px;cursor:pointer}
-</style></head><body>
-<div onclick="location.href='index.html'">← Accueil</div>
+button:disabled{opacity:0.5}
+</style>
+</head>
+<body>
 <div class="card">
-<h3>Titre de ta vidéo</h3>
-<input id="title" value="Choisir la section du cable" placeholder="Titre">
-<h3>Lien YouTube ou MP4</h3>
-<input id="link" placeholder="https://youtube.com/shorts/..." value="">
-<small style="color:#aaa">Colle le lien YouTube de ta vidéo, ou lien MP4</small>
-<button id="btnPub">🔴 Publier</button>
-<p id="msg" style="text-align:center"></p>
+<h3 style="text-align:center">📤 Publier Shorts YouTube (copié)</h3>
+<input id="t" placeholder="Titre" value="Choisir la section du cable">
+<input id="l" placeholder="Colle lien Shorts: https://youtube.com/shorts/...">
+<button id="btn">Publier sur FREDDY-V</button>
+<p id="m" style="text-align:center;margin-top:15px"></p>
+<a href="index.html" style="color:#aaa;display:block;text-align:center;margin-top:15px;text-decoration:none">← Retour Accueil</a>
 </div>
-<div style="text-align:center;margin-top:20px">
-<a href="ma-chaine.html" style="color:#aaa;text-decoration:none">→ Ma chaîne / Mes revenus</a><br><br>
-<a href="index.html" style="color:#aaa;text-decoration:none">← Accueil</a>
-</div>
+
 <script>
-const cfg={apiKey:"AIzaSyCZTfMR94q2t4W1c0N7LK5YpN14M8iBVvA",authDomain:"freddy-v.firebaseapp.com",projectId:"freddy-v"};
-if(!firebase.apps.length)firebase.initializeApp(cfg);
+const cfg={
+ apiKey:"AIzaSyCZTfMR94q2t4W1c0N7LK5YpN14M8iBVvA",
+ authDomain:"freddy-v.firebaseapp.com",
+ projectId:"freddy-v"
+};
+if(!firebase.apps.length) firebase.initializeApp(cfg);
 const db=firebase.firestore();
 
-function youtubeToId(url){
-  let id=''; const m=url.match(/(?:youtube\.com\/shorts\/|youtu\.be\/|youtube\.com\/watch\?v=)([^&\?\/]+)/);
-  if(m)id=m[1]; else id=url;
-  return id;
-}
-
-document.getElementById('btnPub').addEventListener('click', async()=>{
-  const user=JSON.parse(localStorage.getItem('freddy_user')||'{}');
-  if(!user.phone){location.href='compte.html';return;}
-  const title=document.getElementById('title').value.trim();
-  const link=document.getElementById('link').value.trim();
-  const msg=document.getElementById('msg');
-  const btn=document.getElementById('btnPub');
-  if(!title||!link){msg.innerHTML='❌ Mets titre et lien';return;}
-  btn.innerText='Publication...'; btn.disabled=true;
-  try{
-    const vidId=youtubeToId(link);
-    await db.collection('videos').add({
-      owner:user.phone, ownerName:user.name||'Makola freddy', title:title,
-      url:link, youtubeId:vidId, type: link.includes('/shorts/')?'short':'video',
-      views:0, likes:0, channelId:user.phone,
-      created: firebase.firestore.FieldValue.serverTimestamp()
-    });
-    await db.collection('chaines').doc(user.phone).set({totalVideos: firebase.firestore.FieldValue.increment(1)}, {merge:true});
-    msg.innerHTML='<div style="background:#d4edda;color:#155724;padding:12px;border-radius:10px">Vidéo publiée! 🎉<br>Elle apparaît sur accueil maintenant!</div>';
-    setTimeout(()=>location.href='index.html',1500);
-  }catch(e){msg.innerHTML='❌ '+e.message; btn.innerText='🔴 Publier'; btn.disabled=false;}
-});
-</script></body></html>
+document.getElementById('btn').onclick=async()=>{
+ const title=document.getElementById('t').value.trim();
+ const link=document.getElementById('l').value.trim();
+ const m=document.getElementById('m');
+ const btn=document.getElementById('btn');
+ 
+ if(!title||!link){m.innerHTML='❌ Mets titre et lien';return;}
+ const id=(link.match(/(?:shorts\/|youtu\.be\/|v=|embed\/)([^&\?\/]+)/)||[])[1];
+ if(!id){m.innerHTML='❌ Lien invalide<br><small>Ex: youtube.com/shorts/ABC123</small>';return;}
+ 
+ btn.disabled=true; 
+ m.innerHTML='⏳ Publication...';
+ 
+ try{
+   await db.collection('videos').add({
+     title:title,
+     url:link,
+     youtubeId:id,
+     type:'short',
+     ownerName:'Makola freddy',
+     owner:'+243983356734',
+     views:0,
+     likes:0,
+     created: new Date()
+   });
+   m.innerHTML='✅ Vidéo publiée!<br>Redirection...';
+   setTimeout(()=>location.href='index.html',1500);
+ }catch(e){
+   m.innerHTML='❌ '+e.message;
+   btn.disabled=false;
+ }
+};
+</script>
+</body>
+</html>
