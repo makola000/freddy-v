@@ -7,9 +7,8 @@
 body{background:#000;color:#fff;font-family:Arial;margin:0}
 .header{background:#111;padding:10px;display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
 .logo{color:red;font-weight:bold;font-size:18px}
-.btn{padding:8px 12px;border-radius:20px;text-decoration:none;font-weight:bold;font-size:13px;display:inline-block}
-.btn-red{background:red;color:#fff}
-.btn-white{background:#fff;color:#000}
+.btn{padding:8px 12px;border-radius:20px;text-decoration:none;font-weight:bold;font-size:13px;display:inline-block;border:0;cursor:pointer}
+.btn-red{background:red;color:#fff} .btn-white{background:#fff;color:#000} .btn-gray{background:#333;color:#fff}
 .yt-banner{background:linear-gradient(90deg,red,#900);padding:12px;text-align:center}
 .yt-banner a{background:#fff;color:red;padding:10px 20px;border-radius:25px;text-decoration:none;font-weight:bold;display:inline-block}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px}
@@ -21,13 +20,13 @@ body{background:#000;color:#fff;font-family:Arial;margin:0}
 #player iframe,#player video{width:100%;max-width:500px;border:0}
 #player iframe.short,#player video.short{aspect-ratio:9/16} #player iframe.normal,#player video.normal{aspect-ratio:16/9}
 #close{position:absolute;top:15px;right:15px;background:red;color:#fff;border:0;padding:10px 15px;border-radius:50%}
+#popSubs{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;z-index:200;justify-content:center;align-items:center;padding:20px}
+.popBox{background:#fff;color:#000;border-radius:20px;padding:20px;max-width:350px;width:100%;text-align:center}
 </style></head><body>
 
 <div class="yt-banner">
-  🌍 <b>FREDDY-V</b> par <b>Makola Kibwe</b> 
-  <br><br>
+  🌍 <b>FREDDY-V</b> par <b>Makola Kibwe</b> <br><br>
   <a href="https://www.youtube.com/@MakolaKibwe?sub_confirmation=1" target="_blank">🔴 S'ABONNER @MakolaKibwe sur YouTube</a>
-  <div style="font-size:11px;margin-top:6px;color:#ffcccc">Clique ici → Abonne-toi → Tu aides Jésus revient + Maçon Électricité à devenir mondial!</div>
 </div>
 
 <div class="header">
@@ -41,6 +40,17 @@ body{background:#000;color:#fff;font-family:Arial;margin:0}
 <div id="list" class="grid"></div>
 
 <div id="player"><button id="close" onclick="document.getElementById('player').style.display='none';document.getElementById('pContent').innerHTML=''">✕</button><div id="pContent" style="width:100%;display:flex;justify-content:center"></div></div>
+
+<div id="popSubs">
+  <div class="popBox">
+    <div style="font-size:50px">🙏</div>
+    <h2 style="margin:10px 0">N'oublie pas de t'abonner!</h2>
+    <p style="font-size:14px">Tu es sur <b>FREDDY-V</b> de <b>Makola Kibwe</b>.<br>Abonne-toi à <b>@MakolaKibwe</b> pour ne pas rater:<br>🔴 Jésus revient<br>🔴 Astuces Maçon Électricité</p>
+    <a class="btn btn-red" style="width:100%;margin:8px 0;padding:12px" href="https://www.youtube.com/@MakolaKibwe?sub_confirmation=1" target="_blank" onclick="document.getElementById('popSubs').style.display='none'">🔴 OUI, JE M'ABONNE</a>
+    <button class="btn btn-gray" style="width:100%;padding:10px" onclick="document.getElementById('popSubs').style.display='none'">Plus tard</button>
+    <div style="font-size:10px;color:#888;margin-top:8px">Tu ne verras ce message qu'une fois</div>
+  </div>
+</div>
 
 <script>
 const cfg={apiKey:"AIzaSyCZTfMR94q2t4W1c0N7LK5YpN14M8iBVvA",authDomain:"freddy-v.firebaseapp.com",projectId:"freddy-v"};
@@ -59,5 +69,12 @@ async function load(){
  });
 }
 load();
+// POPUP APRES 5 SECONDES - UNE SEULE FOIS
+setTimeout(()=>{
+  if(!localStorage.getItem('freddyv_subs_popup')){
+    document.getElementById('popSubs').style.display='flex';
+    localStorage.setItem('freddyv_subs_popup','oui');
+  }
+},5000);
 </script>
 </body></html>
