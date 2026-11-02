@@ -1,60 +1,41 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>FREDDY-V</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <style>
 body{background:#000;color:#fff;font-family:Arial;margin:0}
-.header{background:#111;padding:12px;display:flex;justify-content:space-between}
-.logo{color:red;font-weight:bold;font-size:20px}
-.btn{background:red;color:#fff;padding:8px 14px;border-radius:20px;text-decoration:none;font-weight:bold;font-size:14px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px}
-.card{background:#111;border-radius:12px;overflow:hidden}
-.card img,.card video{width:100%;aspect-ratio:9/16;object-fit:cover;background:#222;display:block}
-.info{padding:8px;font-size:12px}
-#loading{text-align:center;padding:40px;color:#888;grid-column:1/3}
-</style>
-</head>
-<body>
+.header{background:#111;padding:12px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
+.logo{color:red;font-weight:bold;font-size:20px}.btn{background:red;color:#fff;padding:8px 14px;border-radius:20px;text-decoration:none;font-weight:bold}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px}
+.card{background:#111;border-radius:12px;overflow:hidden;position:relative}
+.card img{width:100%;aspect-ratio:9/16;object-fit:cover;background:#222;display:block}
+.info{padding:6px;font-size:11px;position:absolute;bottom:0;background:linear-gradient(transparent,black);width:100%;box-sizing:border-box}
+#player{position:fixed;inset:0;background:rgba(0,0,0,0.95);display:none;z-index:100;justify-content:center;align-items:center;flex-direction:column}
+#player iframe,#player video{width:100%;max-width:400px;aspect-ratio:9/16;background:#000;border:0}
+#close{position:absolute;top:15px;right:15px;background:red;color:#fff;border:0;padding:10px 15px;border-radius:50%;font-weight:bold}
+</style></head><body>
 <div class="header"><div class="logo">FREDDY-V</div><a class="btn" href="ma-chaine.html">Ma Chaîne</a></div>
-<div id="list" class="grid"><div id="loading">⏳ Chargement des vidéos FREDDY-V...</div></div>
+<div id="list" class="grid"><p style="grid-column:1/3;text-align:center;padding:40px">⏳ Chargement...</p></div>
+<div id="player"><button id="close" onclick="closeP()">✕</button><div id="pContent" style="width:100%;display:flex;justify-content:center"></div></div>
 <script>
-const firebaseConfig={apiKey:"AIzaSyCZTfMR94q2t4W1c0N7LK5YpN14M8iBVvA",authDomain:"freddy-v.firebaseapp.com",projectId:"freddy-v",storageBucket:"freddy-v.firebasestorage.app"};
-if(!firebase.apps.length)firebase.initializeApp(firebaseConfig);
-const db=firebase.firestore();
-async function loadVideos(){
- const list=document.getElementById('list');
+const cfg={apiKey:"AIzaSyCZTfMR94q2t4W1c0N7LK5YpN14M8iBVvA",authDomain:"freddy-v.firebaseapp.com",projectId:"freddy-v"};
+firebase.initializeApp(cfg); const db=firebase.firestore();
+function closeP(){document.getElementById('player').style.display='none';document.getElementById('pContent').innerHTML='';}
+function playYT(id){document.getElementById('pContent').innerHTML=`<iframe src="https://www.youtube.com/embed/${id}?autoplay=1&rel=0" allowfullscreen></iframe>`;document.getElementById('player').style.display='flex';}
+function playFile(url){document.getElementById('pContent').innerHTML=`<video src="${url}" controls autoplay playsinline></video>`;document.getElementById('player').style.display='flex';}
+async function load(){
  try{
-  const snap=await db.collection('videos').orderBy('created','desc').limit(100).get();
-  if(snap.empty){
-   const snap2=await db.collection('videos').limit(100).get();
-   if(snap2.empty){list.innerHTML='<div id=loading>Aucune vidéo.<br><br><a href=ma-chaine.html style=color:red>Publie ta première vidéo</a></div>'; return;}
-   show(snap2,list); return;
-  }
-  show(snap,list);
- }catch(e){
-  try{
-   const snap=await db.collection('videos').limit(100).get();
-   if(snap.empty){list.innerHTML='<div id=loading>Aucune vidéo.</div>'; return;}
-   show(snap,list);
-  }catch(e2){list.innerHTML='<div id=loading style=color:#f55>Erreur: '+e2.message+'</div>';}
- }
+  let snap=await db.collection('videos').orderBy('created','desc').limit(100).get().catch(async()=>{return await db.collection('videos').limit(100).get();});
+  const list=document.getElementById('list'); list.innerHTML='';
+  snap.forEach(d=>{
+   const v=d.data(); const id=v.youtubeId||''; const url=v.videoUrl||'';
+   const thumb=id?`https://img.youtube.com/vi/${id}/hqdefault.jpg`:(url?'':`https://via.placeholder.com/320x500/111/fff?text=FREDDY-V`);
+   const click=id?`playYT('${id}')`:`playFile('${url}')`;
+   const media=id?`<img src="${thumb}">`:(url?`<video src="${url}" muted></video>`:`<img src="${thumb}">`);
+   list.innerHTML+=`<div class="card" onclick="${click}">${media}<div class="info"><b>${(v.title||'Vidéo').substring(0,30)}</b><br>${v.ownerName||''} • ${v.views||0} vues</div></div>`;
+  });
+ }catch(e){document.getElementById('list').innerHTML='Erreur: '+e.message}
 }
-function show(snap,list){
- list.innerHTML='';
- snap.forEach(doc=>{
-  const v=doc.data();
-  let media='';
-  if(v.youtubeId){media=`<img src="https://img.youtube.com/vi/${v.youtubeId}/hqdefault.jpg">`;}
-  else if(v.videoUrl){media=`<video src="${v.videoUrl}" muted playsinline></video>`;}
-  else{media=`<img src="https://via.placeholder.com/320x500/111/fff?text=FREDDY-V">`;}
-  list.innerHTML+=`<div class="card">${media}<div class="info"><b>${v.title||'Sans titre'}</b><br>${v.ownerName||'FREDDY-V'} • ${v.views||0} vues</div></div>`;
- });
-}
-loadVideos();
-</script>
-</body>
-</html>
+load();
+</script></body></html>
