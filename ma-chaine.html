@@ -4,48 +4,59 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
-<style>body{background:#000;color:#fff;font-family:Arial;padding:15px} .box{background:#111;padding:20px;border-radius:15px} input,button{width:100%;padding:14px;margin:10px 0;border-radius:10px;border:0;box-sizing:border-box} button{background:red;color:#fff;font-weight:bold;font-size:16px} #status{margin-top:15px;padding:10px;background:#222;border-radius:10px;font-size:13px;white-space:pre-wrap}</style>
+<style>body{background:#000;color:#fff;font-family:Arial;padding:15px} .box{background:#111;padding:20px;border-radius:15px} input,button{width:100%;padding:14px;margin:10px 0;border-radius:10px;border:0;box-sizing:border-box} button{background:red;color:#fff;font-weight:bold} #status{padding:10px;background:#222;border-radius:10px;margin-top:10px;white-space:pre-wrap;font-size:13px} hr{border:0;border-top:1px solid #333;margin:15px 0}</style>
 </head><body>
-<h2 style="color:red">FREDDY-V Publier</h2>
+<h2 style="color:red">FREDDY-V Publier 🌍</h2>
 <a href="index.html" style="color:#aaa">← Accueil</a>
 <div class="box">
-<p>Choisis vidéo de ton téléphone:</p>
+<p><b>Option 1: Vidéo du téléphone (nécessite carte bancaire pour activer)</b></p>
 <input type="file" id="file" accept="video/*">
-<input type="text" id="title" placeholder="Titre (ex: Ma vidéo électricité)">
-<button onclick="upload()">PUBLIER</button>
-<div id="status">En attente...</div>
+<hr>
+<p><b>Option 2: Lien YouTube (Short ou normale 7min) - 100% gratuit et mondial</b></p>
+<input type="text" id="yt" placeholder="https://youtube.com/shorts/... ou watch?v=...">
+<hr>
+<input type="text" id="title" placeholder="Titre (ex: Maçon)">
+<button onclick="publier()">PUBLIER</button>
+<div id="status">En attente... Choisis 1 seul: téléphone OU YouTube</div>
 </div>
 <script>
-const cfg={apiKey:"AIzaSyCZTfMR94q2t4W1c0N7LK5YpN14M8iBVvA",authDomain:"freddy-v.firebaseapp.com",projectId:"freddy-v",storageBucket:"freddy-v.appspot.com"};
-firebase.initializeApp(cfg);
-const db=firebase.firestore();
-const storage=firebase.storage();
-async function upload(){
+const cfg={apiKey:"AIzaSyCZTfMR94q2t4W1c0N7LK5YpN14M8iBVvA",authDomain:"freddy-v.firebaseapp.com",projectId:"freddy-v",storageBucket:"freddy-v.firebasestorage.app"};
+firebase.initializeApp(cfg); const db=firebase.firestore();
+function getYT(u){
+ let m=u.match(/shorts\/([a-zA-Z0-9_-]+)/); if(m) return {id:m[1], isShort:true};
+ m=u.match(/v=([a-zA-Z0-9_-]+)/); if(m) return {id:m[1], isShort:false};
+ m=u.match(/youtu\.be\/([a-zA-Z0-9_-]+)/); if(m) return {id:m[1], isShort:false};
+ return null;
+}
+async function publier(){
  const f=document.getElementById('file').files[0];
+ const yt=document.getElementById('yt').value.trim();
  const title=document.getElementById('title').value||'Vidéo FREDDY-V';
  const st=document.getElementById('status');
- if(!f){st.innerText='❌ Choisis d\'abord une vidéo';return;}
- if(f.size>80*1024*1024){st.innerText='❌ Vidéo trop grosse (max 80MB). Coupe la vidéo plus courte.';return;}
- st.innerText='⏳ Début upload...\nTaille: '+(f.size/1024/1024).toFixed(1)+' MB';
- try{
-  const name=Date.now()+'_'+f.name.replace(/[^a-z0-9.]/gi,'_');
-  const ref=storage.ref('videos/'+name);
-  const task=ref.put(f);
-  task.on('state_changed', (snap)=>{
-   const pct=Math.round(snap.bytesTransferred/snap.totalBytes*100);
-   st.innerText=`📤 Upload: ${pct}%\n${(snap.bytesTransferred/1024/1024).toFixed(1)} / ${(snap.totalBytes/1024/1024).toFixed(1)} MB`;
-  }, (err)=>{
-   st.innerText='❌ Erreur Storage: '+err.message+'\n\nVérifie:\n1. Firebase Console > Storage > Rules = allow read, write: if true\n2. Storage > est activé';
-  }, async ()=>{
-   st.innerText='✅ Upload fini, sauvegarde...';
-   const url=await ref.getDownloadURL();
-   await db.collection('videos').add({title:title, videoUrl:url, youtubeId:null, ownerName:'FREDDY-V', views:0, likes:0, created:firebase.firestore.FieldValue.serverTimestamp()});
-   st.innerText='✅ VIDÉO PUBLIÉE!\nRedirection vers accueil...';
-   setTimeout(()=>{location.href='index.html';},1500);
-  });
- }catch(e){
-  st.innerText='❌ Erreur: '+e.message+'\n\nSi erreur dit "bucket", va dans Firebase > Project Settings > General > regarde Default Bucket name et dis-moi le nom.';
+ if(f && yt){st.innerText='❌ Choisis UN SEUL: soit téléphone, soit YouTube'; return;}
+ if(!f && !yt){st.innerText='❌ Choisis une vidéo téléphone OU colle lien YouTube'; return;}
+ if(yt){
+  const res=getYT(yt); if(!res){st.innerText='❌ Lien invalide'; return;}
+  st.innerText='⏳ Publication YouTube '+(res.isShort?'Short':'Normale')+'...';
+  await db.collection('videos').add({title:title, youtubeId:res.id, isShort:res.isShort, videoUrl:null, ownerName:'FREDDY-V', views:0, likes:0, created:firebase.firestore.FieldValue.serverTimestamp()});
+  st.innerText='✅ PUBLIÉ en '+ (res.isShort?'SHORT vertical':'VIDÉO NORMALE horizontale'); setTimeout(()=>location.href='index.html',1200); return;
  }
+ // Téléphone
+ if(f.size>80*1024*1024){st.innerText='❌ Vidéo trop grosse max 80MB'; return;}
+ st.innerText='⏳ Upload téléphone '+ (f.size/1024/1024).toFixed(1)+'MB...';
+ try{
+  const storage=firebase.storage();
+  const ref=storage.ref('videos/'+Date.now()+'_'+f.name.replace(/[^a-z0-9.]/gi,'_'));
+  const task=ref.put(f);
+  task.on('state_changed', s=>{st.innerText=`📤 Téléphone: ${Math.round(s.bytesTransferred/s.totalBytes*100)}%`},
+  err=>{
+   let msg=err.message;
+   if(msg.includes('billing') || msg.includes('Upgrade') || err.code=='storage/unauthorized'){
+    st.innerText='❌ STORAGE BLOQUÉ: Google demande carte bancaire (Blaze) pour vidéos téléphone.\n\n✅ SOLUTION GRATUITE:\n1. Ouvre app YouTube\n2. Clique + → Importer ta vidéo téléphone\n3. Publie → Copie le lien\n4. Colle le lien ici dans Option 2\n\nTa vidéo sera mondiale sans carte!';
+   } else {st.innerText='❌ Erreur: '+msg;}
+  },
+  async ()=>{const url=await ref.getDownloadURL(); await db.collection('videos').add({title:title, videoUrl:url, youtubeId:null, isShort:false, ownerName:'FREDDY-V', views:0, created:firebase.firestore.FieldValue.serverTimestamp()}); st.innerText='✅ Vidéo téléphone PUBLIÉE!'; setTimeout(()=>location.href='index.html',1000);});
+ }catch(e){st.innerText='❌ '+e.message;}
 }
 </script>
 </body></html>
