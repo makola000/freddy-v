@@ -1,70 +1,66 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Publier Shorts - FREDDY-V</title>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ma Chaîne - FREDDY-V</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-<style>
-body{background:#000;color:#fff;font-family:Arial;padding:15px;margin:0}
-.card{background:#111;border-radius:16px;padding:20px;max-width:400px;margin:20px auto}
-input{width:100%;padding:14px;margin:10px 0;border-radius:10px;background:#222;color:#fff;border:0;box-sizing:border-box}
-button{background:red;color:#fff;border:0;padding:14px;width:100%;border-radius:12px;font-weight:bold;font-size:16px;cursor:pointer}
-button:disabled{opacity:0.5}
-</style>
-</head>
-<body>
-<div class="card">
-<h3 style="text-align:center">📤 Publier Shorts YouTube (copié)</h3>
-<input id="t" placeholder="Titre" value="Choisir la section du cable">
-<input id="l" placeholder="Colle lien Shorts: https://youtube.com/shorts/...">
-<button id="btn">Publier sur FREDDY-V</button>
-<p id="m" style="text-align:center;margin-top:15px"></p>
-<a href="index.html" style="color:#aaa;display:block;text-align:center;margin-top:15px;text-decoration:none">← Retour Accueil</a>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+<style>body{background:#000;color:#fff;font-family:Arial;padding:15px} .box{background:#111;padding:15px;border-radius:15px;margin-top:10px} input,button{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:0} button{background:red;color:#fff;font-weight:bold} .small{font-size:12px;color:#aaa}</style>
+</head><body>
+<h2 style="color:red">FREDDY-V - Publier</h2>
+<a href="index.html" style="color:#aaa">← Retour accueil</a>
+
+<div class="box">
+<p><b>1. Vidéo de ton téléphone:</b></p>
+<input type="file" id="fileInput" accept="video/*">
+<p class="small">Choisis une vidéo dans ta galerie</p>
+<hr style="border:0;border-top:1px solid #333;margin:15px 0">
+<p><b>2. Ou lien YouTube Shorts:</b></p>
+<input type="text" id="ytInput" placeholder="https://youtube.com/shorts/...">
+<p class="small">Colle le lien si tu veux copier YouTube</p>
+<hr style="border:0;border-top:1px solid #333;margin:15px 0">
+<input type="text" id="title" placeholder="Titre de la vidéo (ex: Choisir section du câble)">
+<button id="pubBtn" onclick="publier()">PUBLIER MAINTENANT</button>
+<p id="status"></p>
 </div>
 
 <script>
-const cfg={
- apiKey:"AIzaSyCZTfMR94q2t4W1c0N7LK5YpN14M8iBVvA",
- authDomain:"freddy-v.firebaseapp.com",
- projectId:"freddy-v"
-};
-if(!firebase.apps.length) firebase.initializeApp(cfg);
-const db=firebase.firestore();
-
-document.getElementById('btn').onclick=async()=>{
- const title=document.getElementById('t').value.trim();
- const link=document.getElementById('l').value.trim();
- const m=document.getElementById('m');
- const btn=document.getElementById('btn');
- 
- if(!title||!link){m.innerHTML='❌ Mets titre et lien';return;}
- const id=(link.match(/(?:shorts\/|youtu\.be\/|v=|embed\/)([^&\?\/]+)/)||[])[1];
- if(!id){m.innerHTML='❌ Lien invalide<br><small>Ex: youtube.com/shorts/ABC123</small>';return;}
- 
- btn.disabled=true; 
- m.innerHTML='⏳ Publication...';
- 
+const cfg={apiKey:"AIzaSyCZTfMR94q2t4W1c0N7LK5YpN14M8iBVvA",authDomain:"freddy-v.firebaseapp.com",projectId:"freddy-v",storageBucket:"freddy-v.appspot.com"};
+if(!firebase.apps.length)firebase.initializeApp(cfg);
+const db=firebase.firestore(); const storage=firebase.storage();
+function getYTId(url){
+ if(!url) return null;
+ let m=url.match(/shorts\/([a-zA-Z0-9_-]+)/); if(m) return m[1];
+ m=url.match(/v=([a-zA-Z0-9_-]+)/); if(m) return m[1];
+ m=url.match(/youtu\.be\/([a-zA-Z0-9_-]+)/); if(m) return m[1];
+ return null;
+}
+async function publier(){
+ const file=document.getElementById('fileInput').files[0];
+ const ytLink=document.getElementById('ytInput').value.trim();
+ const title=document.getElementById('title').value.trim()||'Vidéo FREDDY-V';
+ const btn=document.getElementById('pubBtn'); const st=document.getElementById('status');
+ if(!file && !ytLink){st.innerHTML='❌ Choisis une vidéo OU colle un lien YouTube';return;}
+ btn.disabled=true; btn.innerText='⏳ Publication...'; st.innerHTML='Patiente...';
  try{
-   await db.collection('videos').add({
-     title:title,
-     url:link,
-     youtubeId:id,
-     type:'short',
-     ownerName:'Makola freddy',
-     owner:'+243983356734',
-     views:0,
-     likes:0,
-     created: new Date()
-   });
-   m.innerHTML='✅ Vidéo publiée!<br>Redirection...';
-   setTimeout(()=>location.href='index.html',1500);
+  let data={title:title, ownerName:'FREDDY-V', views:0, likes:0, created: firebase.firestore.FieldValue.serverTimestamp()};
+  if(file){
+   st.innerHTML='📤 Upload de ta vidéo téléphone...';
+   const ref=storage.ref('videos/'+Date.now()+'_'+file.name);
+   await ref.put(file);
+   const url=await ref.getDownloadURL();
+   data.videoUrl=url; data.youtubeId=null;
+  }else{
+   const yid=getYTId(ytLink);
+   if(!yid){st.innerHTML='❌ Lien YouTube invalide'; btn.disabled=false; btn.innerText='PUBLIER MAINTENANT'; return;}
+   data.youtubeId=yid; data.videoUrl=null;
+  }
+  await db.collection('videos').add(data);
+  st.innerHTML='✅ Vidéo publiée! Redirection...';
+  setTimeout(()=>{window.location.href='index.html';},1500);
  }catch(e){
-   m.innerHTML='❌ '+e.message;
-   btn.disabled=false;
+  st.innerHTML='❌ Erreur: '+e.message+'<br>Vérifie Firebase Rules et Storage Rules en mode true'; 
+  btn.disabled=false; btn.innerText='PUBLIER MAINTENANT';
  }
-};
+}
 </script>
-</body>
-</html>
+</body></html>
