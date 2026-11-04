@@ -1,42 +1,42 @@
 <!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>FREDDY-V Mondial</title>
-<style>*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}body{background:#f5f5f5}.header{background:#000;color:#fff;padding:12px 15px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}.logo{font-weight:900;font-size:22px;line-height:1}.logo span{color:red}.search{width:38%;padding:8px 12px;border-radius:20px;border:none}.banner{background:linear-gradient(90deg,red,#000);color:#fff;padding:18px;margin:10px;border-radius:16px}.btn{background:#fff;color:red;border:none;padding:12px 18px;border-radius:10px;font-weight:900;margin:6px 6px 0 0;cursor:pointer}.btn.black{background:#000;color:#fff;border:2px solid red}.btn.gold{background:gold;color:#000;border:none}.videos{padding:0 12px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.shorts{display:flex;gap:10px;overflow-x:auto;padding-bottom:10px}.short-card{min-width:170px;background:#fff;border-radius:12px;overflow:hidden;cursor:pointer}.short-thumb{height:300px;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;text-align:center;padding:5px;position:relative;overflow:hidden}.short-thumb img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0}.card{background:#fff;border-radius:12px;overflow:hidden;cursor:pointer}.thumb{height:200px;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;position:relative;text-align:center;padding:5px;font-size:13px;overflow:hidden}.thumb img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0}.thumb span{position:relative;z-index:2;text-shadow:0 0 5px #000}.time{position:absolute;bottom:6px;right:6px;background:#000;color:#fff;font-size:11px;padding:2px 5px;border-radius:4px;z-index:3}.info{padding:8px;font-size:12px}.views{color:#666;font-size:11px}.form{background:#fff;margin:15px;padding:15px;border-radius:12px}.form input{width:100%;padding:10px;margin:6px 0;border:1px solid #ccc;border-radius:8px}.form button{background:red;color:#fff;border:none;padding:12px;width:100%;border-radius:8px;font-weight:900}.sub-btn{background:red;color:#fff;border:none;padding:8px 14px;border-radius:20px;font-weight:900;font-size:12px;cursor:pointer}.paybox{background:#fffde7;border:2px dashed gold;padding:12px;border-radius:10px;margin:12px 0}
-/* LECTEUR PLEIN ECRAN COMME TA PHOTO */
+<style>*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}body{background:#f5f5f5}.header{background:#000;color:#fff;padding:12px 15px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}.logo{font-weight:900;font-size:22px;line-height:1}.logo span{color:red}.search{width:38%;padding:8px 12px;border-radius:20px;border:none;outline:none}.banner{background:linear-gradient(90deg,red,#000);color:#fff;padding:18px;margin:10px;border-radius:16px}.btn{background:#fff;color:red;border:none;padding:12px 18px;border-radius:10px;font-weight:900;margin:6px 6px 0 0;cursor:pointer}.btn.black{background:#000;color:#fff;border:2px solid red}.btn.gold{background:gold;color:#000;border:none}.videos{padding:0 12px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.shorts{display:flex;gap:10px;overflow-x:auto;padding-bottom:10px}.short-card{min-width:170px;background:#fff;border-radius:12px;overflow:hidden;cursor:pointer}.short-thumb{height:300px;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;text-align:center;padding:5px;position:relative;overflow:hidden}.short-thumb img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0}.card{background:#fff;border-radius:12px;overflow:hidden;cursor:pointer}.thumb{height:200px;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;position:relative;text-align:center;padding:5px;font-size:13px;overflow:hidden}.thumb img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0}.thumb span{position:relative;z-index:2;text-shadow:0 0 5px #000}.time{position:absolute;bottom:6px;right:6px;background:#000;color:#fff;font-size:11px;padding:2px 5px;border-radius:4px;z-index:3}.info{padding:8px;font-size:12px}.views{color:#666;font-size:11px}.form{background:#fff;margin:15px;padding:15px;border-radius:12px}.form input{width:100%;padding:10px;margin:6px 0;border:1px solid #ccc;border-radius:8px}.form button{background:red;color:#fff;border:none;padding:12px;width:100%;border-radius:8px;font-weight:900}.sub-btn{background:red;color:#fff;border:none;padding:8px 14px;border-radius:20px;font-weight:900;font-size:12px;cursor:pointer}.paybox{background:#fffde7;border:2px dashed gold;padding:12px;border-radius:10px;margin:12px 0}
 .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100dvh;background:#000;z-index:50;padding:0}
 .modal-content{width:100%;height:100dvh;max-width:100%;background:#000;position:relative;overflow:hidden;border-radius:0}
 .player-wrap{position:absolute;top:0;left:0;width:100%;height:100%}
-#player{width:100%;height:100%}
-#player iframe{width:100%!important;height:100%!important;border:none;display:block}
-/* BOUTONS VERTICAUX A DROITE COMME SUR PHOTO */
+#player{width:100%;height:100%}#player iframe{width:100%!important;height:100%!important;border:none;display:block}
 .side-actions{position:absolute;right:10px;bottom:110px;display:flex;flex-direction:column;gap:18px;z-index:10;align-items:center}
 .side-act{background:transparent;color:#fff;border:none;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;font-weight:700}
-.side-act .ico{width:52px;height:52px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;backdrop-filter:blur(5px)}
+.side-act .ico{width:52px;height:52px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px}
 .side-act small{font-size:11px;text-shadow:0 1px 4px #000;text-align:center}
-/* INFOS EN BAS COMME SUR PHOTO */
 .bottom-info{position:absolute;left:0;right:60px;bottom:0;padding:14px 12px 18px;background:linear-gradient(transparent,rgba(0,0,0,0.85));color:#fff;z-index:9}
-.bottom-info h3{font-size:16px;text-shadow:0 1px 4px #000}
-.bottom-info p{font-size:13px;opacity:0.9}
 .close-btn{position:absolute;top:12px;left:12px;z-index:20;background:rgba(0,0,0,0.6);color:#fff;border:none;width:38px;height:38px;border-radius:50%;font-size:18px;cursor:pointer}
 .pay-modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:60;align-items:center;justify-content:center;padding:12px}
 .pay-modal-content{background:#fff;width:100%;max-width:600px;border-radius:12px;max-height:90vh;overflow-y:auto;padding:20px}
+.search-result{background:#fff;border:2px solid red;margin:10px;border-radius:12px;padding:12px;display:none}
 </style></head><body>
-<div class="header"><div class="logo">FREDDY-V<br><span>Mondial</span></div><input class="search" placeholder="Rechercher uni"><div>MK</div></div>
+<div class="header"><div class="logo">FREDDY-V<br><span>Mondial</span></div><input id="searchInput" class="search" placeholder="🔍 Rechercher un titre, une chanson..." oninput="searchVideo()"><div>MK</div></div>
+
+<!-- RESULTAT DE RECHERCHE EN HAUT -->
+<div id="searchBox" class="search-result">
+<div style="display:flex;justify-content:space-between;align-items:center"><b id="searchTitle">🔍 Résultats</b><button onclick="clearSearch()" style="background:#000;color:#fff;border:none;padding:6px 12px;border-radius:20px;cursor:pointer">✕ Effacer</button></div>
+<div id="searchResults" style="margin-top:10px"></div>
+</div>
+
 <div class="banner"><h2>Tout le monde peut publier ici</h2><p style="font-size:14px">Tout le monde publie, tout le monde crée sa chaîne<br><i>Par Makola Kibwe — Jésus revient</i></p>
 <button class="btn" onclick="document.getElementById('pub').scrollIntoView()">+ Publier une vidéo</button>
 <button class="btn black" onclick="creerChaine()">+ Créer ma chaîne</button>
 <button class="btn gold" onclick="openPay()">💰 Devenir créateur payé</button></div>
 <div style="background:#fff;margin:10px;padding:12px;border-radius:12px;border:2px solid gold;text-align:center"><b style="font-size:14px">💰 SOUTENIR / RECEVOIR L'ARGENT</b><br><span style="font-size:13px">🔵 <b>M-Pesa Plateforme FREDDY-V:</b> 0820479539</span><br><span style="font-size:13px">🔴 <b>Airtel Money Ma Chaîne Makola Kibwe:</b> 0983356734</span><br><small style="color:#666">Pour l'évangélisation et la maison</small></div>
-<div class="videos"><h3 style="margin:12px 0">Vidéos populaires</h3><div class="grid" id="grid"></div>
+<div class="videos"><h3 style="margin:12px 0" id="popularTitle">Vidéos populaires</h3><div class="grid" id="grid"></div>
 <h3 style="margin:18px 0 10px">Shorts</h3><div class="shorts" id="shorts"></div></div>
 <div class="form" id="pub"><h3>+ Publier une vidéo</h3>
 <input id="titre" placeholder="Titre (ex: La repentance)"><input id="chaine" placeholder="Ta chaîne (ex: Makola Kibwe)">
 <input id="yt" placeholder="Lien YouTube OBLIGATOIRE"><button onclick="publier()">PUBLIER MAINTENANT</button>
 <p style="font-size:11px;color:#666;margin-top:6px">⚠️ Colle le lien YouTube complet! L'image va apparaître toute seule.</p></div>
 
-<!-- LECTEUR PLEIN ECRAN -->
 <div class="modal" id="modal" onclick="fermer()"><div class="modal-content" onclick="event.stopPropagation()">
 <button class="close-btn" onclick="fermer()">✕</button>
 <div class="player-wrap"><div id="player"></div></div>
-<!-- BOUTONS A DROITE VERTICAUX COMME PHOTO -->
 <div class="side-actions">
 <button class="side-act" onclick="aimer()"><span class="ico">🤍</span><small id="sideLike">0</small></button>
 <button class="side-act" onclick="commenter()"><span class="ico">💬</span><small>Commenter</small></button>
@@ -48,8 +48,7 @@
 <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><span style="width:38px;height:38px;background:red;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900">MK</span><b id="mchaine" style="font-size:14px"></b><button id="subBtn" class="sub-btn" onclick="saboner()" style="margin-left:6px">S'abonner</button></div>
 <h3 id="mtitle"></h3><p id="mviews" style="margin-top:4px"></p>
 <p style="margin-top:8px;font-size:12px;background:rgba(255,255,255,0.15);padding:6px 8px;border-radius:8px;display:inline-block">💰 M-Pesa: 0820479539 • Airtel: 0983356734</p>
-</div>
-</div></div>
+</div></div></div>
 
 <div class="pay-modal" id="payModal" onclick="closePay()"><div class="pay-modal-content" onclick="event.stopPropagation()">
 <h2 style="color:red">💰 Devenir Créateur Payé</h2>
@@ -66,11 +65,31 @@ function save(){localStorage.setItem('freddyVVideos',JSON.stringify(videos));}
 function format(n){if(n>=1000000)return (n/1000000).toFixed(1)+'M';if(n>=1000)return (n/1000).toFixed(1)+'K';return n;}
 function getId(url){url=(url||'').trim();let m=url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([^&?\/\s]+)/);if(m)return m[1];if(/^[a-zA-Z0-9_-]{11}$/.test(url))return url;return '';}
 function getThumb(v){let id=getId(v.yt);if(id)return 'https://i.ytimg.com/vi/'+id+'/hqdefault.jpg';return '';}
+function makeCard(v,realIndex){
+let thumb=getThumb(v);let imgHtml=thumb?`<img src="${thumb}" onerror="this.style.display='none'">`:'';let viewText=format(v.views)+' vues';
+if(v.short){return `<div class="short-card" onclick="play(${realIndex})"><div class="short-thumb">${imgHtml}<span style="position:relative;z-index:2;text-shadow:0 0 5px #000">${v.t}</span></div><div class="info"><b style="font-size:11px">${v.t}</b><br><small>${v.c}</small><br><span class="views">${viewText}</span></div></div>`;}
+return `<div class="card" onclick="play(${realIndex})"><div class="thumb">${imgHtml}<span>${v.t}</span><span class="time">${format(v.views)}</span></div><div class="info"><b>${v.t}</b><br><small>${v.c}</small><br><span class="views">${viewText} • ${format(v.likes)} j'aime</span></div></div>`;
+}
 function render(){let g=document.getElementById('grid');let s=document.getElementById('shorts');g.innerHTML='';s.innerHTML='';
 if(videos.length===0){g.innerHTML='<p style="grid-column:1/3;text-align:center;color:#666;padding:20px">Aucune vidéo encore.<br>Publie ta première vidéo en bas! 👇</p>';}
-videos.forEach((v,i)=>{let viewText=format(v.views)+' vues';let thumb=getThumb(v);let imgHtml=thumb?`<img src="${thumb}" onerror="this.style.display='none'">`:''; 
-if(v.short){let d=document.createElement('div');d.className='short-card';d.onclick=()=>play(i);d.innerHTML=`<div class="short-thumb">${imgHtml}<span style="position:relative;z-index:2;text-shadow:0 0 5px #000">${v.t}</span></div><div class="info"><b style="font-size:11px">${v.t}</b><br><small>${v.c}</small><br><span class="views">${viewText}</span></div>`;s.appendChild(d);}else{let d=document.createElement('div');d.className='card';d.onclick=()=>play(i);d.innerHTML=`<div class="thumb">${imgHtml}<span>${v.t}</span><span class="time">${format(v.views)}</span></div><div class="info"><b>${v.t}</b><br><small>${v.c}</small><br><span class="views">${viewText} • ${format(v.likes)} j'aime</span></div>`;g.appendChild(d);}});}
-function publier(){let t=document.getElementById('titre').value.trim();let c=document.getElementById('chaine').value.trim();let yt=document.getElementById('yt').value.trim();if(!t||!c||!yt){alert('⚠️ Titre + Chaîne + Lien YouTube obligatoires!');return;}let id=getId(yt);if(!id){alert('Lien invalide!');return;}let embed=`https://www.youtube.com/embed/${id}`;let isShort=t.toLowerCase().includes('short')||yt.includes('/shorts/');videos.unshift({t,c,yt:embed,short:isShort,views:0,likes:0,shares:0,downloads:0,saved:0});save();render();alert('✅ Vidéo publiée avec son image!');document.getElementById('titre').value='';document.getElementById('yt').value='';}
+videos.forEach((v,i)=>{if(v.short){s.innerHTML+=makeCard(v,i);}else{g.innerHTML+=makeCard(v,i);}});}
+// RECHERCHE - TAPE LE TITRE, CA APPARAIT EN HAUT
+function searchVideo(){
+let q=document.getElementById('searchInput').value.toLowerCase().trim();
+let box=document.getElementById('searchBox');let res=document.getElementById('searchResults');
+if(q.length<2){box.style.display='none';render();return;}
+let found=[];
+videos.forEach((v,i)=>{if(v.t.toLowerCase().includes(q)||v.c.toLowerCase().includes(q)){found.push({v,i});}});
+box.style.display='block';
+document.getElementById('searchTitle').innerText='🔍 Résultats pour "'+document.getElementById('searchInput').value+'" - '+found.length+' trouvé(s)';
+if(found.length===0){res.innerHTML='<p style="color:#666">Aucune vidéo trouvée pour "'+q+'". Vérifie le titre.</p>';}
+else{
+res.innerHTML='<div class="grid">'+found.map(f=>makeCard(f.v,f.i)).join('')+'</div>';
+}
+box.scrollIntoView({behavior:'smooth'});
+}
+function clearSearch(){document.getElementById('searchInput').value='';document.getElementById('searchBox').style.display='none';render();}
+function publier(){let t=document.getElementById('titre').value.trim();let c=document.getElementById('chaine').value.trim();let yt=document.getElementById('yt').value.trim();if(!t||!c||!yt){alert('⚠️ Titre + Chaîne + Lien YouTube obligatoires!');return;}let id=getId(yt);if(!id){alert('Lien invalide!');return;}let embed=`https://www.youtube.com/embed/${id}`;let isShort=t.toLowerCase().includes('short')||yt.includes('/shorts/');videos.unshift({t,c,yt:embed,short:isShort,views:0,likes:0,shares:0,downloads:0,saved:0});save();render();alert('✅ Vidéo publiée avec son image! Maintenant on peut la chercher par son titre!');document.getElementById('titre').value='';document.getElementById('yt').value='';}
 function play(i){current=i;videos[i].views++;save();let v=videos[i];
 document.getElementById('mtitle').innerText=v.t;document.getElementById('mchaine').innerText='@'+v.c;document.getElementById('mviews').innerText=format(v.views)+' vues • '+format(v.likes)+' j\'aime';document.getElementById('sideLike').innerText=format(v.likes)||'0';document.getElementById('sideSave').innerText=v.saved?'Enregistré ✓':'Enregistrer';
 let p=document.getElementById('player');let id=getId(v.yt);if(id){p.innerHTML=`<iframe src="https://www.youtube.com/embed/${id}?autoplay=1&modestbranding=1&rel=0" allow="autoplay; fullscreen" allowfullscreen></iframe>`;}
