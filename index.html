@@ -1,80 +1,84 @@
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>FREDDY-V Mondial - @MakolaKibwe</title>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FREDDY-V Mondial - Tout le monde publie</title>
 <style>
-body{background:#000;color:#fff;font-family:Arial;margin:0}
-.header{background:#111;padding:10px;display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
-.logo{color:red;font-weight:bold;font-size:18px}
-.btn{padding:8px 12px;border-radius:20px;text-decoration:none;font-weight:bold;font-size:13px;display:inline-block;border:0;cursor:pointer}
-.btn-red{background:red;color:#fff} .btn-white{background:#fff;color:#000} .btn-gray{background:#333;color:#fff}
-.yt-banner{background:linear-gradient(90deg,red,#900);padding:12px;text-align:center}
-.yt-banner a{background:#fff;color:red;padding:10px 20px;border-radius:25px;text-decoration:none;font-weight:bold;display:inline-block}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px}
-.card{background:#111;border-radius:12px;overflow:hidden;position:relative;cursor:pointer}
-.card img,.card video{width:100%;display:block;background:#222;object-fit:cover}
-.card.short img,.card.short video{aspect-ratio:9/16} .card.normal img,.card.normal video{aspect-ratio:16/9}
-.info{position:absolute;bottom:0;left:0;right:0;padding:6px;font-size:11px;background:linear-gradient(transparent,rgba(0,0,0,0.9))}
-#player{position:fixed;inset:0;background:rgba(0,0,0,.95);display:none;z-index:100;justify-content:center;align-items:center}
-#player iframe,#player video{width:100%;max-width:500px;border:0}
-#player iframe.short,#player video.short{aspect-ratio:9/16} #player iframe.normal,#player video.normal{aspect-ratio:16/9}
-#close{position:absolute;top:15px;right:15px;background:red;color:#fff;border:0;padding:10px 15px;border-radius:50%}
-#popSubs{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;z-index:200;justify-content:center;align-items:center;padding:20px}
-.popBox{background:#fff;color:#000;border-radius:20px;padding:20px;max-width:350px;width:100%;text-align:center}
-</style></head><body>
-
-<div class="yt-banner">
-  🌍 <b>FREDDY-V</b> par <b>Makola Kibwe</b> <br><br>
-  <a href="https://www.youtube.com/@MakolaKibwe?sub_confirmation=1" target="_blank">🔴 S'ABONNER @MakolaKibwe sur YouTube</a>
-</div>
-
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#f5f5f5}
+.header{background:#000;color:#fff;padding:12px 20px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-weight:900;font-size:28px;line-height:1}
+.logo span{color:#ff0000}
+.search{width:40%;padding:10px 15px;border-radius:25px;border:none;font-size:15px}
+.banner{background:linear-gradient(90deg,#ff2a2a,#000);color:#fff;padding:22px 20px;margin:14px;border-radius:18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px}
+.banner h1{font-size:28px}
+.btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn{background:#fff;color:#d00;border:none;padding:14px 22px;border-radius:12px;font-weight:900;font-size:16px;cursor:pointer}
+.btn.black{background:#000;color:#fff;border:2px solid #ff0000}
+.videos{padding:0 20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+.thumb{height:140px;background:#222;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;position:relative}
+.time{position:absolute;bottom:8px;right:8px;background:#000;color:#fff;padding:2px 6px;border-radius:4px;font-size:12px}
+.info{padding:10px}
+.publish-form{background:#fff;margin:20px;border-radius:14px;padding:20px}
+.publish-form input,.publish-form textarea{width:100%;padding:12px;margin:8px 0;border:1px solid #ccc;border-radius:8px}
+.publish-form button{background:#ff0000;color:#fff;border:none;padding:14px;border-radius:8px;width:100%;font-weight:900;font-size:16px;cursor:pointer}
+</style>
+</head>
+<body>
 <div class="header">
-  <div class="logo">FREDDY-V</div>
-  <div>
-    <a class="btn btn-white" href="https://www.youtube.com/@MakolaKibwe" target="_blank">Voir ma chaîne</a>
-    <a class="btn btn-red" href="ma-chaine.html">Ma Chaîne + Publier</a>
-  </div>
+<div class="logo">FREDDY-V<br><span>Mondial</span></div>
+<input class="search" placeholder="Rechercher une vidéo, une chaîne...">
+<div>MK</div>
 </div>
 
-<div id="list" class="grid"></div>
-
-<div id="player"><button id="close" onclick="document.getElementById('player').style.display='none';document.getElementById('pContent').innerHTML=''">✕</button><div id="pContent" style="width:100%;display:flex;justify-content:center"></div></div>
-
-<div id="popSubs">
-  <div class="popBox">
-    <div style="font-size:50px">🙏</div>
-    <h2 style="margin:10px 0">N'oublie pas de t'abonner!</h2>
-    <p style="font-size:14px">Tu es sur <b>FREDDY-V</b> de <b>Makola Kibwe</b>.<br>Abonne-toi à <b>@MakolaKibwe</b> pour ne pas rater:<br>🔴 Jésus revient<br>🔴 Astuces Maçon Électricité</p>
-    <a class="btn btn-red" style="width:100%;margin:8px 0;padding:12px" href="https://www.youtube.com/@MakolaKibwe?sub_confirmation=1" target="_blank" onclick="document.getElementById('popSubs').style.display='none'">🔴 OUI, JE M'ABONNE</a>
-    <button class="btn btn-gray" style="width:100%;padding:10px" onclick="document.getElementById('popSubs').style.display='none'">Plus tard</button>
-    <div style="font-size:10px;color:#888;margin-top:8px">Tu ne verras ce message qu'une fois</div>
-  </div>
+<div class="banner">
+<div>
+<h1>Tout le monde peut publier ici</h1>
+<p>Tout le monde publie, tout le monde crée sa chaîne<br><i>Par Makola Kibwe — Jésus revient</i></p>
 </div>
+<div class="btns">
+<button class="btn" onclick="document.getElementById('pub').scrollIntoView()">+ Publier une vidéo</button>
+<button class="btn black">+ Créer ma chaîne</button>
+</div>
+</div>
+
+<div class="videos">
+<h2>Vidéos populaires</h2>
+<div class="grid" id="grid">
+<div class="card"><div class="thumb">Donne ta vie à Jésus<span class="time">00:45</span></div><div class="info"><b>Donne ta vie à Jésus-Christ - SHORT</b><small>Makola Kibwe • Jésus revient</small></div></div>
+<div class="card"><div class="thumb">Le parvis de Dieu<span class="time">12:34</span></div><div class="info"><b>Le parvis de Dieu - NORMALE</b><small>Makola Kibwe • Évangile</small></div></div>
+<div class="card"><div class="thumb">FREDDY-V<span class="time">08:21</span></div><div class="info"><b>Vidéo FREDDY-V - NORMALE</b><small>FREDDY-V Mondial</small></div></div>
+<div class="card"><div class="thumb">Cable Électrique<span class="time">05:45</span></div><div class="info"><b>Choisir la section du câble</b><small>Makola Kibwe • Tuto Élec</small></div></div>
+</div>
+</div>
+
+<div class="publish-form" id="pub">
+<h2>+ Publier une vidéo (Tout le monde peut publier)</h2>
+<input id="titre" placeholder="Titre de ta vidéo">
+<input id="chaine" placeholder="Nom de ta chaîne">
+<textarea id="desc" placeholder="Description..."></textarea>
+<input id="youtube" placeholder="Lien YouTube (optionnel)">
+<button onclick="publier()">PUBLIER MAINTENANT</button>
+</div>
+
+<div style="text-align:center;padding:20px;color:#666;font-size:12px">© 2024 FREDDY-V Mondial • Par Makola Kibwe - Jésus revient<br>Principal: makola000.github.io/freddy-v/ • Admin: makola000.github.io/freddy-v/admin • Inscription: makola000.github.io/freddy-v/#pub</div>
 
 <script>
-const cfg={apiKey:"AIzaSyCZTfMR94q2t4W1c0N7LK5YpN14M8iBVvA",authDomain:"freddy-v.firebaseapp.com",projectId:"freddy-v"};
-firebase.initializeApp(cfg); const db=firebase.firestore();
-function playYT(id,short){const c=short?'short':'normal';document.getElementById('pContent').innerHTML=`<iframe class="${c}" src="https://www.youtube.com/embed/${id}?autoplay=1" allowfullscreen></iframe>`;document.getElementById('player').style.display='flex';}
-function playFile(url){document.getElementById('pContent').innerHTML=`<video class="normal" src="${url}" controls autoplay></video>`;document.getElementById('player').style.display='flex';}
-async function load(){
- const s=await db.collection('videos').orderBy('created','desc').limit(100).get();
- const l=document.getElementById('list'); l.innerHTML='';
- s.forEach(d=>{
-  const v=d.data(); let html='',cls=v.isShort?'short':'normal',click='';
-  if(v.youtubeId){click=`playYT('${v.youtubeId}',${v.isShort===true})`; html=`<img src="https://img.youtube.com/vi/${v.youtubeId}/hqdefault.jpg">`;}
-  else if(v.videoUrl){click=`playFile('${v.videoUrl}')`; html=`<video src="${v.videoUrl}" muted></video>`;}
-  else return;
-  l.innerHTML+=`<div class="card ${cls}" onclick="${click}">${html}<div class="info"><b>${(v.title||'Vidéo').substring(0,28)}</b><br>${v.youtubeId?(v.isShort?'SHORT':'NORMALE'):'TÉLÉPHONE'}</div></div>`;
- });
+function publier(){
+ let t=document.getElementById('titre').value;
+ let c=document.getElementById('chaine').value;
+ if(!t||!c){alert('Remplis titre et nom de chaîne!');return;}
+ let grid=document.getElementById('grid');
+ let card=document.createElement('div');
+ card.className='card';
+ card.innerHTML=`<div class="thumb">${t}<span class="time">NEW</span></div><div class="info"><b>${t}</b><small>${c} • À l'instant</small></div>`;
+ grid.prepend(card);
+ alert('✅ Vidéo publiée! Tout le monde peut la voir maintenant!');
+ document.getElementById('titre').value='';
 }
-load();
-// POPUP APRES 5 SECONDES - UNE SEULE FOIS
-setTimeout(()=>{
-  if(!localStorage.getItem('freddyv_subs_popup')){
-    document.getElementById('popSubs').style.display='flex';
-    localStorage.setItem('freddyv_subs_popup','oui');
-  }
-},5000);
 </script>
-</body></html>
+</body>
+</html>
