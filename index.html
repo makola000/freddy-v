@@ -1,52 +1,33 @@
 <!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>FREDDY-V Mondial</title>
-<style>*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}body{background:#f5f5f5}.header{background:#000;color:#fff;padding:12px 15px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}.logo{font-weight:900;font-size:22px;line-height:1}.logo span{color:red}.search{width:32%;padding:8px 12px;border-radius:20px;border:none;outline:none}.banner{background:linear-gradient(90deg,red,#000);color:#fff;padding:18px;margin:10px;border-radius:16px}.btn{background:#fff;color:red;border:none;padding:12px 18px;border-radius:10px;font-weight:900;margin:6px 6px 0 0;cursor:pointer}.btn.black{background:#000;color:#fff;border:2px solid red}.btn.gold{background:gold;color:#000;border:none}.videos{padding:0 12px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.shorts{display:flex;gap:10px;overflow-x:auto;padding-bottom:10px}.short-card{min-width:170px;background:#fff;border-radius:12px;overflow:hidden;cursor:pointer}.short-thumb{height:300px;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;text-align:center;padding:5px;position:relative;overflow:hidden}.short-thumb img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0}.card{background:#fff;border-radius:12px;overflow:hidden;cursor:pointer}.thumb{height:200px;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;position:relative;text-align:center;padding:5px;font-size:13px;overflow:hidden}.thumb img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0}.thumb span{position:relative;z-index:2;text-shadow:0 0 5px #000}.time{position:absolute;bottom:6px;right:6px;background:#000;color:#fff;font-size:11px;padding:2px 5px;border-radius:4px;z-index:3}.info{padding:8px;font-size:12px}.views{color:#666;font-size:11px}.form{background:#fff;margin:15px;padding:15px;border-radius:12px}.form input{width:100%;padding:10px;margin:6px 0;border:1px solid #ccc;border-radius:8px}.form button{background:red;color:#fff;border:none;padding:12px;width:100%;border-radius:8px;font-weight:900}.sub-btn{background:red;color:#fff;border:none;padding:8px 14px;border-radius:20px;font-weight:900;font-size:12px;cursor:pointer}.paybox{background:#fffde7;border:2px dashed gold;padding:12px;border-radius:10px;margin:12px 0}
-.avatar{width:38px;height:38px;border-radius:50%;object-fit:cover;background:red;display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;cursor:pointer;border:2px solid #fff}
-.bell{position:relative;cursor:pointer;font-size:22px}
-.bell-badge{position:absolute;top:-6px;right:-6px;background:red;color:#fff;font-size:10px;min-width:18px;height:18px;border-radius:10px;display:flex;align-items:center;justify-content:center;padding:0 4px;font-weight:900}
-.notif-box{position:fixed;top:60px;right:10px;width:320px;max-width:90vw;background:#fff;border-radius:12px;box-shadow:0 5px 20px rgba(0,0,0,0.3);z-index:100;display:none;overflow:hidden}
-.notif-item{padding:12px;border-bottom:1px solid #eee;display:flex;gap:10px;align-items:flex-start}
-.notif-item img{width:48px;height:48px;border-radius:8px;object-fit:cover}
-.chan-avatar{width:32px;height:32px;border-radius:50%;object-fit:cover;background:#ddd;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900}
-.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100dvh;background:#000;z-index:50;padding:0}
-.modal-content{width:100%;height:100dvh;max-width:100%;background:#000;position:relative;overflow:hidden;border-radius:0}
-.player-wrap{position:absolute;top:0;left:0;width:100%;height:100%}
-#player{width:100%;height:100%}#player iframe{width:100%!important;height:100%!important;border:none;display:block}
-.side-actions{position:absolute;right:10px;bottom:110px;display:flex;flex-direction:column;gap:18px;z-index:10;align-items:center}
-.side-act{background:transparent;color:#fff;border:none;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;font-weight:700}
-.side-act .ico{width:52px;height:52px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px}
-.side-act small{font-size:11px;text-shadow:0 1px 4px #000;text-align:center}
-.bottom-info{position:absolute;left:0;right:60px;bottom:0;padding:14px 12px 18px;background:linear-gradient(transparent,rgba(0,0,0,0.85));color:#fff;z-index:9}
-.close-btn{position:absolute;top:12px;left:12px;z-index:20;background:rgba(0,0,0,0.6);color:#fff;border:none;width:38px;height:38px;border-radius:50%;font-size:18px;cursor:pointer}
-.pay-modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:60;align-items:center;justify-content:center;padding:12px}
-.pay-modal-content{background:#fff;width:100%;max-width:600px;border-radius:12px;max-height:90vh;overflow-y:auto;padding:20px}
-.search-result{background:#fff;border:2px solid red;margin:10px;border-radius:12px;padding:12px;display:none}
-.profile-preview{width:90px;height:90px;border-radius:50%;object-fit:cover;background:#eee;display:flex;align-items:center;justify-content:center;font-size:30px;margin:10px auto;border:3px solid red}
+<style>*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}body{background:#f5f5f5}.header{background:#000;color:#fff;padding:12px 15px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}.logo{font-weight:900;font-size:22px;line-height:1}.logo span{color:red}.search{width:32%;padding:8px 12px;border-radius:20px;border:none}.banner{background:linear-gradient(90deg,red,#000);color:#fff;padding:18px;margin:10px;border-radius:16px}.btn{background:#fff;color:red;border:none;padding:12px 18px;border-radius:10px;font-weight:900;margin:6px 6px 0 0;cursor:pointer}.btn.black{background:#000;color:#fff;border:2px solid red}.btn.gold{background:gold;color:#000;border:none}.videos{padding:0 12px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.shorts{display:flex;gap:10px;overflow-x:auto;padding-bottom:10px}.short-card{min-width:170px;background:#fff;border-radius:12px;overflow:hidden;cursor:pointer}.short-thumb{height:300px;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;text-align:center;padding:5px;position:relative;overflow:hidden}.short-thumb img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0}.card{background:#fff;border-radius:12px;overflow:hidden;cursor:pointer}.thumb{height:200px;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;position:relative;text-align:center;padding:5px;font-size:13px;overflow:hidden}.thumb img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0}.thumb span{position:relative;z-index:2;text-shadow:0 0 5px #000}.time{position:absolute;bottom:6px;right:6px;background:#000;color:#fff;font-size:11px;padding:2px 5px;border-radius:4px;z-index:3}.info{padding:8px;font-size:12px}.views{color:#666;font-size:11px}.form{background:#fff;margin:15px;padding:15px;border-radius:12px}.form input{width:100%;padding:10px;margin:6px 0;border:1px solid #ccc;border-radius:8px}.form button{background:red;color:#fff;border:none;padding:12px;width:100%;border-radius:8px;font-weight:900}.sub-btn{background:red;color:#fff;border:none;padding:8px 14px;border-radius:20px;font-weight:900;font-size:12px;cursor:pointer}.paybox{background:#fffde7;border:2px dashed gold;padding:12px;border-radius:10px;margin:12px 0}.avatar{width:38px;height:38px;border-radius:50%;object-fit:cover;background:red;display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;cursor:pointer;border:2px solid #fff}.bell{position:relative;cursor:pointer;font-size:22px}.bell-badge{position:absolute;top:-6px;right:-6px;background:red;color:#fff;font-size:10px;min-width:18px;height:18px;border-radius:10px;display:flex;align-items:center;justify-content:center;padding:0 4px;font-weight:900}.notif-box{position:fixed;top:60px;right:10px;width:320px;max-width:90vw;background:#fff;border-radius:12px;box-shadow:0 5px 20px rgba(0,0,0,0.3);z-index:100;display:none;overflow:hidden}.notif-item{padding:12px;border-bottom:1px solid #eee;display:flex;gap:10px}.notif-item img{width:48px;height:48px;border-radius:8px;object-fit:cover}.chan-avatar{width:32px;height:32px;border-radius:50%;object-fit:cover;background:#ddd;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900}.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100dvh;background:#000;z-index:50}.modal-content{width:100%;height:100dvh;background:#000;position:relative;overflow:hidden}.player-wrap{position:absolute;top:0;left:0;width:100%;height:100%}#player{width:100%;height:100%}#player iframe{width:100%!important;height:100%!important;border:none}.side-actions{position:absolute;right:10px;bottom:110px;display:flex;flex-direction:column;gap:18px;z-index:10}.side-act{background:transparent;color:#fff;border:none;display:flex;flex-direction:column;align-items:center;cursor:pointer}.side-act .ico{width:52px;height:52px;background:rgba(255,255,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px}.bottom-info{position:absolute;left:0;right:60px;bottom:0;padding:14px 12px 18px;background:linear-gradient(transparent,rgba(0,0,0,0.85));color:#fff;z-index:9}.close-btn{position:absolute;top:12px;left:12px;z-index:20;background:rgba(0,0,0,0.6);color:#fff;border:none;width:38px;height:38px;border-radius:50%;font-size:18px;cursor:pointer}.pay-modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:60;align-items:center;justify-content:center;padding:12px}.pay-modal-content{background:#fff;width:100%;max-width:600px;border-radius:12px;max-height:90vh;overflow-y:auto;padding:20px}.search-result{background:#fff;border:2px solid red;margin:10px;border-radius:12px;padding:12px;display:none}.profile-preview{width:90px;height:90px;border-radius:50%;object-fit:cover;background:#eee;display:flex;align-items:center;justify-content:center;font-size:30px;margin:10px auto;border:3px solid red}.chan-banner{background:#fff;margin:10px;padding:14px;border-radius:12px;border:2px solid red;display:none;text-align:center}
 </style></head><body>
-<div class="header"><div class="logo">FREDDY-V<br><span>Mondial</span></div><input id="searchInput" class="search" placeholder="🔍 Rechercher..." oninput="searchVideo()"><div style="display:flex;align-items:center;gap:14px">
-<div class="bell" onclick="toggleNotif()">🔔<span id="bellBadge" class="bell-badge" style="display:none">0</span></div>
-<div id="headerAvatar" onclick="creerChaine()" class="avatar">MK</div>
-</div></div>
-
-<!-- NOTIFICATIONS -->
+<div class="header"><div class="logo">FREDDY-V<br><span>Mondial</span></div><input id="searchInput" class="search" placeholder="🔍 Rechercher..." oninput="searchVideo()"><div style="display:flex;align-items:center;gap:14px"><div class="bell" onclick="toggleNotif()">🔔<span id="bellBadge" class="bell-badge" style="display:none">0</span></div><div id="headerAvatar" onclick="creerChaine()" class="avatar">MK</div></div></div>
 <div id="notifBox" class="notif-box"><div style="padding:12px;background:#000;color:#fff;display:flex;justify-content:space-between"><b>🔔 Notifications</b><span onclick="clearNotif()" style="cursor:pointer;font-size:12px">Tout effacer</span></div><div id="notifList"></div></div>
 
-<div id="searchBox" class="search-result"><div style="display:flex;justify-content:space-between;align-items:center"><b id="searchTitle">🔍 Résultats</b><button onclick="clearSearch()" style="background:#000;color:#fff;border:none;padding:6px 12px;border-radius:20px;cursor:pointer">✕ Effacer</button></div><div id="searchResults" style="margin-top:10px"></div></div>
+<!-- BANNIERE QUAND ON OUVRE LE LIEN D'UNE CHAINE -->
+<div id="chanBanner" class="chan-banner">
+<div id="chanBannerAvatar" style="width:70px;height:70px;border-radius:50%;background:red;color:#fff;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900;margin:0 auto 8px;overflow:hidden">MK</div>
+<h2 id="chanBannerName">Chaîne</h2><p id="chanBannerDesc" style="color:#666;font-size:13px"></p>
+<p style="margin:8px 0;font-size:12px;background:#f0f0f0;padding:8px;border-radius:8px;word-break:break-all" id="chanLinkText"></p>
+<button onclick="partagerChaine()" style="background:red;color:#fff;border:none;padding:10px 18px;border-radius:20px;font-weight:900;cursor:pointer">🔗 Partager cette chaîne</button>
+<button onclick="voirTout()" style="background:#000;color:#fff;border:none;padding:10px 18px;border-radius:20px;font-weight:900;cursor:pointer;margin-left:6px">Voir tout FREDDY-V</button>
+</div>
 
+<div id="searchBox" class="search-result"><div style="display:flex;justify-content:space-between"><b id="searchTitle">🔍 Résultats</b><button onclick="clearSearch()" style="background:#000;color:#fff;border:none;padding:6px 12px;border-radius:20px">✕ Effacer</button></div><div id="searchResults" style="margin-top:10px"></div></div>
 <div class="banner"><h2>Tout le monde peut publier ici</h2><p style="font-size:14px">Tout le monde publie, tout le monde crée sa chaîne<br><i>Par Makola Kibwe — Jésus revient</i></p>
 <button class="btn" onclick="document.getElementById('pub').scrollIntoView()">+ Publier une vidéo</button>
 <button class="btn black" onclick="creerChaine()">+ Créer ma chaîne</button>
-<button class="btn gold" onclick="openPay()">💰 Devenir créateur payé</button></div>
-<div style="background:#fff;margin:10px;padding:12px;border-radius:12px;border:2px solid gold;text-align:center"><b style="font-size:14px">💰 SOUTENIR / RECEVOIR L'ARGENT</b><br><span style="font-size:13px">🔵 <b>M-Pesa Plateforme FREDDY-V:</b> 0820479539</span><br><span style="font-size:13px">🔴 <b>Airtel Money Ma Chaîne Makola Kibwe:</b> 0983356734</span><br><small style="color:#666">Pour l'évangélisation et la maison</small></div>
+<button class="btn gold" onclick="openPay()">💰 Devenir créateur payé</button>
+<button class="btn" onclick="partagerMaChaine()" style="background:#000;color:#fff">🔗 Partager ma chaîne</button></div>
+<div style="background:#fff;margin:10px;padding:12px;border-radius:12px;border:2px solid gold;text-align:center"><b>💰 SOUTENIR / RECEVOIR</b><br><span>🔵 <b>M-Pesa FREDDY-V:</b> 0820479539</span><br><span>🔴 <b>Airtel Ma Chaîne:</b> 0983356734</span></div>
 <div class="videos"><h3 style="margin:12px 0">Vidéos populaires</h3><div class="grid" id="grid"></div>
 <h3 style="margin:18px 0 10px">Shorts</h3><div class="shorts" id="shorts"></div></div>
 <div class="form" id="pub"><h3>+ Publier une vidéo</h3>
-<input id="titre" placeholder="Titre (ex: La repentance)"><input id="chaine" placeholder="Ta chaîne (ex: Makola Kibwe)">
+<input id="titre" placeholder="Titre"><input id="chaine" placeholder="Ta chaîne">
 <input id="yt" placeholder="Lien YouTube OBLIGATOIRE"><button onclick="publier()">PUBLIER MAINTENANT</button></div>
 
-<!-- LECTEUR PLEIN ECRAN -->
 <div class="modal" id="modal" onclick="fermer()"><div class="modal-content" onclick="event.stopPropagation()">
-<button class="close-btn" onclick="fermer()">✕</button>
-<div class="player-wrap"><div id="player"></div></div>
+<button class="close-btn" onclick="fermer()">✕</button><div class="player-wrap"><div id="player"></div></div>
 <div class="side-actions">
 <button class="side-act" onclick="aimer()"><span class="ico">🤍</span><small id="sideLike">0</small></button>
 <button class="side-act" onclick="commenter()"><span class="ico">💬</span><small>Commenter</small></button>
@@ -54,30 +35,18 @@
 <button class="side-act" onclick="partager()"><span class="ico">📤</span><small>Partager</small></button>
 <button class="side-act" onclick="telecharger()"><span class="ico">⬇️</span><small>Télécharger</small></button>
 </div>
-<div class="bottom-info">
-<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><span id="playerAvatar" style="width:38px;height:38px;background:red;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;overflow:hidden">MK</span><b id="mchaine" style="font-size:14px"></b><button id="subBtn" class="sub-btn" onclick="saboner()" style="margin-left:6px">S'abonner</button></div>
-<h3 id="mtitle"></h3><p id="mviews" style="margin-top:4px"></p>
-<p style="margin-top:8px;font-size:12px;background:rgba(255,255,255,0.15);padding:6px 8px;border-radius:8px;display:inline-block">💰 M-Pesa: 0820479539 • Airtel: 0983356734</p>
-</div></div></div>
+<div class="bottom-info"><div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><span id="playerAvatar" style="width:38px;height:38px;background:red;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;overflow:hidden">MK</span><b id="mchaine"></b><button id="subBtn" class="sub-btn" onclick="saboner()" style="margin-left:6px">S'abonner</button></div><h3 id="mtitle"></h3><p id="mviews"></p><p style="margin-top:8px;font-size:12px;background:rgba(255,255,255,0.15);padding:6px 8px;border-radius:8px;display:inline-block">💰 M-Pesa: 0820479539 • Airtel: 0983356734</p></div></div></div>
 
-<!-- CREER CHAINE AVEC PHOTO -->
 <div class="pay-modal" id="chanModal"><div class="pay-modal-content">
-<h2>📸 Créer ma chaîne</h2>
-<p style="font-size:13px;color:#666;margin:8px 0">Ta photo va apparaître sur ta chaîne et tes vidéos!</p>
+<h2>📸 Créer ma chaîne</h2><p style="font-size:13px;color:#666">Ta photo va apparaître partout! Ton lien de chaîne sera créé automatiquement.</p>
 <div id="chanPreview" class="profile-preview">📷</div>
-<input type="file" id="chanPhotoInput" accept="image/*" onchange="previewPhoto(event)" style="width:100%;padding:10px;border:1px dashed #ccc;border-radius:8px">
-<input id="chanName" placeholder="Nom de ta chaîne (ex: Makola Kibwe)">
-<input id="chanDesc" placeholder="Description de ta chaîne (ex: Jésus revient)">
+<input type="file" id="chanPhotoInput" accept="image/*" onchange="previewPhoto(event)">
+<input id="chanName" placeholder="Nom de ta chaîne"><input id="chanDesc" placeholder="Description">
 <button onclick="saveChaine()" style="background:red;color:#fff;border:none;padding:12px;width:100%;border-radius:8px;font-weight:900;margin-top:8px">CRÉER MA CHAÎNE ✅</button>
-<button onclick="closeChaine()" style="background:#000;color:#fff;padding:10px;border:none;border-radius:6px;width:100%;margin-top:8px">Fermer</button>
-</div></div>
+<div id="myLinkBox" style="display:none;margin-top:12px;background:#fffde7;padding:10px;border-radius:8px;border:1px dashed gold"><b>🔗 Ton lien de chaîne:</b><br><span id="myLinkText" style="font-size:12px;word-break:break-all"></span><br><button onclick="partagerMaChaine()" style="background:#000;color:#fff;border:none;padding:8px 14px;border-radius:20px;margin-top:6px;cursor:pointer">Copier mon lien</button></div>
+<button onclick="closeChaine()" style="background:#000;color:#fff;padding:10px;border:none;border-radius:6px;width:100%;margin-top:8px">Fermer</button></div></div>
 
-<div class="pay-modal" id="payModal" onclick="closePay()"><div class="pay-modal-content" onclick="event.stopPropagation()">
-<h2 style="color:red">💰 Devenir Créateur Payé</h2>
-<p style="margin:12px 0;font-size:14px"><b>Simple pour l'Évangélisation et la Maison</b><br>FREDDY-V Mondial est pour <b>Jésus revient bientôt!</b></p>
-<div class="paybox"><b>📱 SOUTENIR / RECEVOIR:</b><br>🔵 <b>M-Pesa FREDDY-V: 0820479539</b><br>🔴 <b>Airtel Ma Chaîne: 0983356734</b></div>
-<div class="form" style="margin:0;padding:0"><input id="payNom" placeholder="Ton nom complet"><input id="payChaine" placeholder="Nom de ta chaîne"><input id="payWhat" placeholder="Ton WhatsApp"><button onclick="envoyerPay()">ENVOYER MA DEMANDE 🙏</button></div>
-<button onclick="closePay()" style="margin-top:10px;background:#000;color:#fff;padding:10px;border:none;border-radius:6px;width:100%">Fermer</button></div></div>
+<div class="pay-modal" id="payModal" onclick="closePay()"><div class="pay-modal-content" onclick="event.stopPropagation()"><h2 style="color:red">💰 Devenir Créateur Payé</h2><p><b>Simple pour l'Évangélisation et la Maison</b></p><div class="paybox"><b>📱 SOUTENIR:</b><br>🔵 M-Pesa FREDDY-V: 0820479539<br>🔴 Airtel Ma Chaîne: 0983356734</div><div class="form" style="margin:0;padding:0"><input id="payNom" placeholder="Ton nom"><input id="payChaine" placeholder="Nom chaîne"><input id="payWhat" placeholder="Ton WhatsApp"><button onclick="envoyerPay()">ENVOYER 🙏</button></div><button onclick="closePay()" style="margin-top:10px;background:#000;color:#fff;padding:10px;border:none;border-radius:6px;width:100%">Fermer</button></div></div>
 
 <script>
 let current=null;let data=JSON.parse(localStorage.getItem('freddyVData')||'{}');
@@ -85,84 +54,51 @@ let videos=JSON.parse(localStorage.getItem('freddyVVideos')||'null');
 if(!videos || (videos[0] && videos[0].yt.includes('VIDEO_ID'))){videos=[];localStorage.removeItem('freddyVVideos');}
 let myChan=JSON.parse(localStorage.getItem('myChan')||'null');
 let notifs=JSON.parse(localStorage.getItem('freddyVNotifs')||'[]');
-let tempPhoto='';
+let tempPhoto='';let currentChaineFilter='';
+function getBaseUrl(){return location.origin+location.pathname;}
+function getChaineLink(nom){let clean=nom.trim().replace(/\s+/g,'');return getBaseUrl()+'?chaine='+encodeURIComponent(clean);}
 function save(){localStorage.setItem('freddyVVideos',JSON.stringify(videos));}
 function format(n){if(n>=1000000)return (n/1000000).toFixed(1)+'M';if(n>=1000)return (n/1000).toFixed(1)+'K';return n;}
 function getId(url){url=(url||'').trim();let m=url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([^&?\/\s]+)/);if(m)return m[1];if(/^[a-zA-Z0-9_-]{11}$/.test(url))return url;return '';}
 function getThumb(v){let id=getId(v.yt);if(id)return 'https://i.ytimg.com/vi/'+id+'/hqdefault.jpg';return '';}
-function getChanPhoto(name){
-if(myChan && myChan.name===name && myChan.photo) return myChan.photo;
-return '';
-}
-function updateHeader(){
-let h=document.getElementById('headerAvatar');
-if(myChan && myChan.photo){h.innerHTML=`<img src="${myChan.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;}
-else if(myChan){h.innerText=myChan.name.substring(0,2).toUpperCase();}
-document.getElementById('chaine').value=myChan?myChan.name:'';
-}
-function makeCard(v,realIndex){
-let thumb=getThumb(v);let imgHtml=thumb?`<img src="${thumb}" onerror="this.style.display='none'">`:'';let viewText=format(v.views)+' vues';
-let photo=getChanPhoto(v.c);
-let av=photo?`<img src="${photo}" style="width:32px;height:32px;border-radius:50%;object-fit:cover">`:`<span class="chan-avatar">${v.c.substring(0,2).toUpperCase()}</span>`;
-if(v.short){return `<div class="short-card" onclick="play(${realIndex})"><div class="short-thumb">${imgHtml}<span style="position:relative;z-index:2;text-shadow:0 0 5px #000">${v.t}</span></div><div class="info"><div style="display:flex;gap:6px;align-items:center">${av}<div><b style="font-size:11px">${v.t}</b><br><small>${v.c}</small><br><span class="views">${viewText}</span></div></div></div></div>`;}
-return `<div class="card" onclick="play(${realIndex})"><div class="thumb">${imgHtml}<span>${v.t}</span><span class="time">${format(v.views)}</span></div><div class="info"><div style="display:flex;gap:8px;align-items:flex-start">${av}<div><b>${v.t}</b><br><small>${v.c}</small><br><span class="views">${viewText} • ${format(v.likes)} j'aime</span></div></div></div></div>`;
-}
+function getChanPhoto(name){if(myChan && myChan.name.replace(/\s+/g,'')===name.replace(/\s+/g,'') && myChan.photo) return myChan.photo;return '';}
+function updateHeader(){let h=document.getElementById('headerAvatar');if(myChan && myChan.photo){h.innerHTML=`<img src="${myChan.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;}else if(myChan){h.innerText=myChan.name.substring(0,2).toUpperCase();}document.getElementById('chaine').value=myChan?myChan.name:'';}
+function makeCard(v,realIndex){let thumb=getThumb(v);let imgHtml=thumb?`<img src="${thumb}" onerror="this.style.display='none'">`:'';let viewText=format(v.views)+' vues';let photo=getChanPhoto(v.c);let av=photo?`<img src="${photo}" style="width:32px;height:32px;border-radius:50%;object-fit:cover">`:`<span class="chan-avatar">${v.c.substring(0,2).toUpperCase()}</span>`;if(v.short){return `<div class="short-card" onclick="play(${realIndex})"><div class="short-thumb">${imgHtml}<span style="position:relative;z-index:2;text-shadow:0 0 5px #000">${v.t}</span></div><div class="info"><div style="display:flex;gap:6px">${av}<div><b style="font-size:11px">${v.t}</b><br><small>${v.c}</small><br><span class="views">${viewText}</span></div></div></div></div>`;}return `<div class="card" onclick="play(${realIndex})"><div class="thumb">${imgHtml}<span>${v.t}</span><span class="time">${format(v.views)}</span></div><div class="info"><div style="display:flex;gap:8px">${av}<div><b>${v.t}</b><br><small>${v.c}</small><br><span class="views">${viewText}</span></div></div></div></div>`;}
 function render(){let g=document.getElementById('grid');let s=document.getElementById('shorts');g.innerHTML='';s.innerHTML='';
-if(videos.length===0){g.innerHTML='<p style="grid-column:1/3;text-align:center;color:#666;padding:20px">Aucune vidéo encore.<br>Publie ta première vidéo en bas! 👇</p>';}
-videos.forEach((v,i)=>{if(v.short){s.innerHTML+=makeCard(v,i);}else{g.innerHTML+=makeCard(v,i);}});updateNotifBadge();updateHeader();}
-// NOTIFICATIONS
-function addNotif(titre,chaine,thumb){
-notifs.unshift({titre,chaine,thumb,date:new Date().toLocaleString()});
-if(notifs.length>20) notifs=notifs.slice(0,20);
-localStorage.setItem('freddyVNotifs',JSON.stringify(notifs));
-updateNotifBadge();
+let list=videos.map((v,i)=>({v,i})).filter(o=>!currentChaineFilter || o.v.c.replace(/\s+/g,'').toLowerCase()===currentChaineFilter.toLowerCase());
+if(list.length===0){g.innerHTML='<p style="grid-column:1/3;text-align:center;color:#666;padding:20px">Aucune vidéo pour cette chaîne encore.</p>';}
+list.forEach(o=>{if(o.v.short){s.innerHTML+=makeCard(o.v,o.i);}else{g.innerHTML+=makeCard(o.v,o.i);}});updateNotifBadge();updateHeader();}
+function checkChaineFromUrl(){
+let p=new URLSearchParams(location.search);let ch=p.get('chaine');if(ch){currentChaineFilter=ch;let b=document.getElementById('chanBanner');b.style.display='block';document.getElementById('chanBannerName').innerText='Chaîne: '+ch;document.getElementById('chanBannerDesc').innerText='Voici toutes les vidéos de '+ch+' sur FREDDY-V Mondial';document.getElementById('chanLinkText').innerText=getChaineLink(ch);let ph=getChanPhoto(ch);if(ph){document.getElementById('chanBannerAvatar').innerHTML=`<img src="${ph}" style="width:100%;height:100%;object-fit:cover">`;}else{document.getElementById('chanBannerAvatar').innerText=ch.substring(0,2).toUpperCase();}b.scrollIntoView();}
 }
-function updateNotifBadge(){
-let b=document.getElementById('bellBadge');let unread=localStorage.getItem('notifRead')||0;
-let count=notifs.length - unread;
-if(count>0){b.style.display='flex';b.innerText=count>9?'9+':count;}else{b.style.display='none';}
-let list=document.getElementById('notifList');
-if(notifs.length===0){list.innerHTML='<p style="padding:16px;color:#666;text-align:center">Aucune notification.<br>Publie une vidéo pour voir ici!</p>';}
-else{list.innerHTML=notifs.map((n,i)=>`<div class="notif-item" onclick="playFromNotif(${i})">${n.thumb?`<img src="${n.thumb}">`:'<div style="width:48px;height:48px;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;border-radius:8px">▶️</div>'}<div><b style="font-size:13px">${n.titre}</b><br><small>${n.chaine} • Nouvelle vidéo!</small><br><small style="color:#999">${n.date}</small></div></div>`).join('');}
+function voirTout(){currentChaineFilter='';document.getElementById('chanBanner').style.display='none';history.pushState({},'',getBaseUrl());render();}
+function partagerChaine(){
+let nom=currentChaineFilter||(myChan?myChan.name:'');if(!nom){alert('Crée d\'abord ta chaîne!');creerChaine();return;}
+let link=getChaineLink(nom);if(navigator.share){navigator.share({title:'Chaîne '+nom+' sur FREDDY-V',text:'Regarde mes vidéos sur FREDDY-V!',url:link});}else{navigator.clipboard.writeText(link);alert('🔗 Lien copié!\n'+link+'\n\nEnvoie-le sur WhatsApp à tes amis!');}
 }
-function toggleNotif(){
-let box=document.getElementById('notifBox');
-box.style.display=box.style.display==='block'?'none':'block';
-if(box.style.display==='block'){localStorage.setItem('notifRead',notifs.length);updateNotifBadge();}
-}
+function partagerMaChaine(){if(!myChan){alert('Crée d\'abord ta chaîne!');creerChaine();return;}let link=getChaineLink(myChan.name);navigator.clipboard.writeText(link);alert('🔗 Ton lien de chaîne copié!\n\n'+link+'\n\nEnvoie-le sur WhatsApp, Facebook, TikTok!');}
+function addNotif(titre,chaine,thumb){notifs.unshift({titre,chaine,thumb,date:new Date().toLocaleString()});if(notifs.length>20)notifs=notifs.slice(0,20);localStorage.setItem('freddyVNotifs',JSON.stringify(notifs));updateNotifBadge();}
+function updateNotifBadge(){let b=document.getElementById('bellBadge');let unread=localStorage.getItem('notifRead')||0;let count=notifs.length-unread;if(count>0){b.style.display='flex';b.innerText=count>9?'9+':count;}else{b.style.display='none';}let list=document.getElementById('notifList');if(notifs.length===0){list.innerHTML='<p style="padding:16px;color:#666;text-align:center">Aucune notification.</p>';}else{list.innerHTML=notifs.map((n,i)=>`<div class="notif-item" onclick="playFromNotif(${i})">${n.thumb?`<img src="${n.thumb}">`:'<div>▶️</div>'}<div><b style="font-size:13px">${n.titre}</b><br><small>${n.chaine}</small><br><small style="color:#999">${n.date}</small></div></div>`).join('');}}
+function toggleNotif(){let box=document.getElementById('notifBox');box.style.display=box.style.display==='block'?'none':'block';if(box.style.display==='block'){localStorage.setItem('notifRead',notifs.length);updateNotifBadge();}}
 function clearNotif(){notifs=[];localStorage.setItem('freddyVNotifs','[]');localStorage.setItem('notifRead',0);updateNotifBadge();}
-function playFromNotif(i){document.getElementById('notifBox').style.display='none';let n=notifs[i];let idx=videos.findIndex(v=>v.t===n.titre);if(idx>=0) play(idx);}
-// RECHERCHE
-function searchVideo(){
-let q=document.getElementById('searchInput').value.toLowerCase().trim();
-let box=document.getElementById('searchBox');let res=document.getElementById('searchResults');
-if(q.length<2){box.style.display='none';render();return;}
-let found=[];videos.forEach((v,i)=>{if(v.t.toLowerCase().includes(q)||v.c.toLowerCase().includes(q)){found.push({v,i});}});
-box.style.display='block';document.getElementById('searchTitle').innerText='🔍 Résultats pour "'+document.getElementById('searchInput').value+'" - '+found.length+' trouvé(s)';
-if(found.length===0){res.innerHTML='<p style="color:#666">Aucune vidéo trouvée.</p>';}else{res.innerHTML='<div class="grid">'+found.map(f=>makeCard(f.v,f.i)).join('')+'</div>';}
-box.scrollIntoView({behavior:'smooth'});
-}
+function playFromNotif(i){document.getElementById('notifBox').style.display='none';let n=notifs[i];let idx=videos.findIndex(v=>v.t===n.titre);if(idx>=0)play(idx);}
+function searchVideo(){let q=document.getElementById('searchInput').value.toLowerCase().trim();let box=document.getElementById('searchBox');let res=document.getElementById('searchResults');if(q.length<2){box.style.display='none';render();return;}let found=[];videos.forEach((v,i)=>{if(v.t.toLowerCase().includes(q)||v.c.toLowerCase().includes(q)){found.push({v,i});}});box.style.display='block';document.getElementById('searchTitle').innerText='🔍 Résultats pour "'+document.getElementById('searchInput').value+'" - '+found.length;res.innerHTML=found.length?'<div class="grid">'+found.map(f=>makeCard(f.v,f.i)).join('')+'</div>':'<p>Aucune vidéo.</p>';box.scrollIntoView({behavior:'smooth'});}
 function clearSearch(){document.getElementById('searchInput').value='';document.getElementById('searchBox').style.display='none';render();}
-// CHAINE AVEC PHOTO
-function creerChaine(){document.getElementById('chanModal').style.display='flex';if(myChan){document.getElementById('chanName').value=myChan.name;document.getElementById('chanDesc').value=myChan.desc||'';if(myChan.photo){document.getElementById('chanPreview').innerHTML=`<img src="${myChan.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;tempPhoto=myChan.photo;}}}
+function creerChaine(){document.getElementById('chanModal').style.display='flex';if(myChan){document.getElementById('chanName').value=myChan.name;document.getElementById('chanDesc').value=myChan.desc||'';if(myChan.photo){document.getElementById('chanPreview').innerHTML=`<img src="${myChan.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;tempPhoto=myChan.photo;document.getElementById('myLinkBox').style.display='block';document.getElementById('myLinkText').innerText=getChaineLink(myChan.name);}}}
 function closeChaine(){document.getElementById('chanModal').style.display='none';}
 function previewPhoto(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=function(ev){tempPhoto=ev.target.result;document.getElementById('chanPreview').innerHTML=`<img src="${tempPhoto}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;};r.readAsDataURL(f);}
-function saveChaine(){let n=document.getElementById('chanName').value.trim();let d=document.getElementById('chanDesc').value.trim();if(!n){alert('Mets le nom de ta chaîne!');return;}myChan={name:n,desc:d,photo:tempPhoto};localStorage.setItem('myChan',JSON.stringify(myChan));updateHeader();addNotif('Nouvelle chaîne créée: '+n,n,'');alert('✅ Ta chaîne "'+n+'" est créée avec ta photo!');closeChaine();render();}
-function publier(){let t=document.getElementById('titre').value.trim();let c=document.getElementById('chaine').value.trim();let yt=document.getElementById('yt').value.trim();if(!t||!c||!yt){alert('⚠️ Titre + Chaîne + Lien YouTube obligatoires!');return;}let id=getId(yt);if(!id){alert('Lien invalide!');return;}let embed=`https://www.youtube.com/embed/${id}`;let isShort=t.toLowerCase().includes('short')||yt.includes('/shorts/');videos.unshift({t,c,yt:embed,short:isShort,views:0,likes:0,shares:0,downloads:0,saved:0});save();addNotif(t,c,'https://i.ytimg.com/vi/'+id+'/hqdefault.jpg');render();alert('✅ Vidéo publiée! Tout le monde va recevoir la notification 🔔');document.getElementById('titre').value='';document.getElementById('yt').value='';}
-function play(i){current=i;videos[i].views++;save();let v=videos[i];
-document.getElementById('mtitle').innerText=v.t;document.getElementById('mchaine').innerText='@'+v.c;document.getElementById('mviews').innerText=format(v.views)+' vues • '+format(v.likes)+' j\'aime';document.getElementById('sideLike').innerText=format(v.likes)||'0';document.getElementById('sideSave').innerText=v.saved?'Enregistré ✓':'Enregistrer';
-let av=document.getElementById('playerAvatar');let ph=getChanPhoto(v.c);if(ph){av.innerHTML=`<img src="${ph}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;}else{av.innerText=v.c.substring(0,2).toUpperCase();}
-let p=document.getElementById('player');let id=getId(v.yt);if(id){p.innerHTML=`<iframe src="https://www.youtube.com/embed/${id}?autoplay=1&modestbranding=1&rel=0" allow="autoplay; fullscreen" allowfullscreen></iframe>`;}
-document.getElementById('modal').style.display='block';render();}
+function saveChaine(){let n=document.getElementById('chanName').value.trim();let d=document.getElementById('chanDesc').value.trim();if(!n){alert('Mets le nom!');return;}myChan={name:n,desc:d,photo:tempPhoto};localStorage.setItem('myChan',JSON.stringify(myChan));updateHeader();document.getElementById('myLinkBox').style.display='block';document.getElementById('myLinkText').innerText=getChaineLink(n);addNotif('Nouvelle chaîne: '+n,n,'');alert('✅ Ta chaîne "'+n+'" créée!\n\n🔗 Ton lien:\n'+getChaineLink(n)+'\n\nCopie-le et envoie-le sur WhatsApp!');closeChaine();render();}
+function publier(){let t=document.getElementById('titre').value.trim();let c=document.getElementById('chaine').value.trim();let yt=document.getElementById('yt').value.trim();if(!t||!c||!yt){alert('Remplis tout!');return;}let id=getId(yt);if(!id){alert('Lien invalide!');return;}let embed=`https://www.youtube.com/embed/${id}`;let isShort=t.toLowerCase().includes('short')||yt.includes('/shorts/');videos.unshift({t,c,yt:embed,short:isShort,views:0,likes:0,shares:0,downloads:0,saved:0});save();addNotif(t,c,'https://i.ytimg.com/vi/'+id+'/hqdefault.jpg');render();alert('✅ Publiée!');document.getElementById('titre').value='';document.getElementById('yt').value='';}
+function play(i){current=i;videos[i].views++;save();let v=videos[i];document.getElementById('mtitle').innerText=v.t;document.getElementById('mchaine').innerText='@'+v.c;document.getElementById('mviews').innerText=format(v.views)+' vues • '+format(v.likes)+' j\'aime';document.getElementById('sideLike').innerText=format(v.likes)||'0';document.getElementById('sideSave').innerText=v.saved?'Enregistré ✓':'Enregistrer';let av=document.getElementById('playerAvatar');let ph=getChanPhoto(v.c);if(ph){av.innerHTML=`<img src="${ph}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;}else{av.innerText=v.c.substring(0,2).toUpperCase();}let p=document.getElementById('player');let id=getId(v.yt);if(id){p.innerHTML=`<iframe src="https://www.youtube.com/embed/${id}?autoplay=1" allow="autoplay; fullscreen" allowfullscreen></iframe>`;}document.getElementById('modal').style.display='block';render();}
 function fermer(){document.getElementById('modal').style.display='none';document.getElementById('player').innerHTML='';}
-function saboner(){if(current===null)return;let ch=videos[current].c;let key='abo_'+ch;data[key]=!data[key];localStorage.setItem('freddyVData',JSON.stringify(data));document.getElementById('subBtn').innerText=data[key]?'Abonné ✓':"S'abonner";if(data[key]) addNotif('Nouvel abonné sur '+ch,ch,'');}
-function partager(){if(current===null)return;videos[current].shares++;save();if(navigator.share){navigator.share({title:videos[current].t,url:location.href});}else{navigator.clipboard.writeText(videos[current].yt.replace('embed/','watch?v='));alert('🔗 Lien copié!');}render();play(current);}
+function saboner(){if(current===null)return;let ch=videos[current].c;let key='abo_'+ch;data[key]=!data[key];localStorage.setItem('freddyVData',JSON.stringify(data));document.getElementById('subBtn').innerText=data[key]?'Abonné ✓':"S'abonner";}
+function partager(){if(current===null)return;videos[current].shares++;save();let link=getChaineLink(videos[current].c);if(navigator.share){navigator.share({title:videos[current].t,text:'Regarde ma vidéo sur FREDDY-V!',url:link});}else{navigator.clipboard.writeText(link);alert('🔗 Lien de la chaîne copié!\n'+link);}render();play(current);}
 function telecharger(){if(current===null)return;videos[current].downloads++;save();window.open(videos[current].yt.replace('embed/','watch?v='),'_blank');render();play(current);}
 function aimer(){if(current===null)return;let key='like_'+current;if(data[key]){videos[current].likes--;data[key]=false;}else{videos[current].likes++;data[key]=true;}localStorage.setItem('freddyVData',JSON.stringify(data));save();render();play(current);}
 function enregistrer(){if(current===null)return;let key='save_'+current;data[key]=!data[key];videos[current].saved=data[key]?1:0;localStorage.setItem('freddyVData',JSON.stringify(data));save();render();play(current);}
-function commenter(){alert('💬 Commente sur YouTube, le lien est dans Partager!');}
+function commenter(){alert('💬 Commente sur YouTube!');}
 function openPay(){document.getElementById('payModal').style.display='flex';}
 function closePay(){document.getElementById('payModal').style.display='none';}
-function envoyerPay(){let n=document.getElementById('payNom').value.trim();let c=document.getElementById('payChaine').value.trim();let w=document.getElementById('payWhat').value.trim();if(!n||!c||!w){alert('Remplis tout stp');return;}alert('🙏 Merci '+n+'! Enregistrée!');closePay();let msg=`Salut Makola! Je veux devenir créateur payé:%0ANom: ${n}%0AChaîne: ${c}%0AWhatsApp: ${w}`;window.open(`https://wa.me/243820479539?text=${msg}`,'_blank');}
-render();updateNotifBadge();
+function envoyerPay(){let n=document.getElementById('payNom').value.trim();let c=document.getElementById('payChaine').value.trim();let w=document.getElementById('payWhat').value.trim();if(!n||!c||!w){alert('Remplis tout');return;}alert('🙏 Merci '+n+'!');closePay();window.open(`https://wa.me/243820479539?text=Salut Makola! Je veux devenir créateur payé:%0ANom:${n}%0AChaîne:${c}`,'_blank');}
+render();checkChaineFromUrl();updateNotifBadge();
 </script></body></html>
