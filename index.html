@@ -1,101 +1,119 @@
-<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>FREDDY-V Mondial</title>
-<style>*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}body{background:#f5f5f5}.header{background:#000;color:#fff;padding:12px 15px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}.logo{font-weight:900;font-size:22px;line-height:1}.logo span{color:red}.search{width:32%;padding:8px 12px;border-radius:20px;border:none}.banner{background:linear-gradient(90deg,red,#000);color:#fff;padding:18px;margin:10px;border-radius:16px}.btn{background:#fff;color:red;border:none;padding:12px 18px;border-radius:10px;font-weight:900;margin:6px 6px 0 0;cursor:pointer}.btn.black{background:#000;color:#fff;border:2px solid red}.btn.gold{background:gold;color:#000;border:none}.videos{padding:0 12px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.shorts{display:flex;gap:10px;overflow-x:auto;padding-bottom:10px}.short-card{min-width:170px;background:#fff;border-radius:12px;overflow:hidden;cursor:pointer}.short-thumb{height:300px;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;text-align:center;padding:5px;position:relative;overflow:hidden}.short-thumb img,.short-thumb video{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0}.card{background:#fff;border-radius:12px;overflow:hidden;cursor:pointer}.thumb{height:200px;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;position:relative;text-align:center;padding:5px;font-size:13px;overflow:hidden}.thumb img,.thumb video{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0}.thumb span{position:relative;z-index:2;text-shadow:0 0 5px #000}.time{position:absolute;bottom:6px;right:6px;background:#000;color:#fff;font-size:11px;padding:2px 5px;border-radius:4px;z-index:3}.info{padding:8px;font-size:12px}.views{color:#666;font-size:11px}.form{background:#fff;margin:15px;padding:15px;border-radius:12px}.form input{width:100%;padding:10px;margin:6px 0;border:1px solid #ccc;border-radius:8px}.form button{background:red;color:#fff;border:none;padding:12px;width:100%;border-radius:8px;font-weight:900}.sub-btn{background:red;color:#fff;border:none;padding:8px 14px;border-radius:20px;font-weight:900;font-size:12px;cursor:pointer}.paybox{background:#fffde7;border:2px dashed gold;padding:12px;border-radius:10px;margin:12px 0}.avatar{width:38px;height:38px;border-radius:50%;background:red;display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;cursor:pointer;border:2px solid #fff;overflow:hidden}.bell{position:relative;cursor:pointer;font-size:22px}.bell-badge{position:absolute;top:-6px;right:-6px;background:red;color:#fff;font-size:10px;min-width:18px;height:18px;border-radius:10px;display:flex;align-items:center;justify-content:center;padding:0 4px;font-weight:900}.notif-box{position:fixed;top:60px;right:10px;width:320px;max-width:90vw;background:#fff;border-radius:12px;box-shadow:0 5px 20px rgba(0,0,0,0.3);z-index:100;display:none;overflow:hidden}.notif-item{padding:12px;border-bottom:1px solid #eee;display:flex;gap:10px}.chan-avatar{width:32px;height:32px;border-radius:50%;background:#ddd;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;overflow:hidden}.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100dvh;background:#000;z-index:50}.modal-content{width:100%;height:100dvh;background:#000;position:relative;overflow:hidden}.player-wrap{position:absolute;top:0;left:0;width:100%;height:100%}#player{width:100%;height:100%}#player iframe,#player video{width:100%!important;height:100%!important;border:none;display:block;object-fit:contain;background:#000}.side-actions{position:absolute;right:10px;bottom:110px;display:flex;flex-direction:column;gap:18px;z-index:10}.side-act{background:transparent;color:#fff;border:none;display:flex;flex-direction:column;align-items:center;cursor:pointer}.side-act .ico{width:52px;height:52px;background:rgba(255,255,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px}.bottom-info{position:absolute;left:0;right:60px;bottom:0;padding:14px 12px 18px;background:linear-gradient(transparent,rgba(0,0,0,0.85));color:#fff;z-index:9}.close-btn{position:absolute;top:12px;left:12px;z-index:20;background:rgba(0,0,0,0.6);color:#fff;border:none;width:38px;height:38px;border-radius:50%;font-size:18px;cursor:pointer}.pay-modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:60;align-items:center;justify-content:center;padding:12px}.pay-modal-content{background:#fff;width:100%;max-width:600px;border-radius:12px;max-height:90vh;overflow-y:auto;padding:20px}.search-result{background:#fff;border:2px solid red;margin:10px;border-radius:12px;padding:12px;display:none}.profile-preview{width:90px;height:90px;border-radius:50%;background:#eee;display:flex;align-items:center;justify-content:center;font-size:30px;margin:10px auto;border:3px solid red;overflow:hidden}.chan-banner{background:#fff;margin:10px;padding:14px;border-radius:12px;border:2px solid red;display:none;text-align:center}.tab-btn{padding:10px 14px;border:none;border-radius:20px;font-weight:900;cursor:pointer;margin-right:6px}.tab-btn.active{background:red;color:#fff}.tab-btn.inactive{background:#eee}
-</style></head><body>
-<div class="header"><div class="logo">FREDDY-V<br><span>Mondial</span></div><input id="searchInput" class="search" placeholder="🔍 Rechercher..." oninput="searchVideo()"><div style="display:flex;align-items:center;gap:14px"><div class="bell" onclick="toggleNotif()">🔔<span id="bellBadge" class="bell-badge" style="display:none">0</span></div><div id="headerAvatar" onclick="creerChaine()" class="avatar">FV</div></div></div>
-<div id="notifBox" class="notif-box"><div style="padding:12px;background:#000;color:#fff;display:flex;justify-content:space-between"><b>🔔 Notifications</b><span onclick="clearNotif()" style="cursor:pointer;font-size:12px">Tout effacer</span></div><div id="notifList"></div></div>
-<div id="chanBanner" class="chan-banner"><div id="chanBannerAvatar" style="width:70px;height:70px;border-radius:50%;background:red;color:#fff;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900;margin:0 auto 8px;overflow:hidden">FV</div><h2 id="chanBannerName">Chaîne</h2><p id="chanBannerDesc" style="color:#666;font-size:13px"></p><p style="margin:8px 0;font-size:12px;background:#f0f0f0;padding:8px;border-radius:8px;word-break:break-all" id="chanLinkText"></p><button onclick="partagerChaine()" style="background:red;color:#fff;border:none;padding:10px 18px;border-radius:20px;font-weight:900">🔗 Partager cette chaîne</button><button onclick="voirTout()" style="background:#000;color:#fff;border:none;padding:10px 18px;border-radius:20px;font-weight:900;margin-left:6px">Voir tout FREDDY-V</button></div>
-<div id="searchBox" class="search-result"><div style="display:flex;justify-content:space-between"><b id="searchTitle">🔍 Résultats</b><button onclick="clearSearch()" style="background:#000;color:#fff;border:none;padding:6px 12px;border-radius:20px">✕ Effacer</button></div><div id="searchResults" style="margin-top:10px"></div></div>
-<div class="banner"><h2>Tout le monde peut publier ici</h2><p style="font-size:14px">Tout le monde publie, tout le monde crée sa chaîne<br><i>Par Makola Kibwe — Jésus revient</i></p><p style="font-size:13px;margin-top:6px;background:rgba(255,255,255,0.2);padding:8px;border-radius:8px">▶️ YouTube officiel: <b>@freddyvmondial</b><br>🔗 youtube.com/@freddyvmondial</p><button class="btn" onclick="document.getElementById('pub').scrollIntoView()">+ Publier une vidéo</button><button class="btn black" onclick="creerChaine()">+ Créer ma chaîne</button><button class="btn gold" onclick="openPay()">💰 Devenir créateur payé</button><button class="btn" onclick="partagerMaChaine()" style="background:#000;color:#fff">🔗 Partager ma chaîne</button></div>
-<div style="background:#fff;margin:10px;padding:12px;border-radius:12px;border:2px solid gold;text-align:center"><b>💰 SOUTENIR / RECEVOIR</b><br><span>🔵 <b>M-Pesa FREDDY-V:</b> 0820479539</span><br><span>🔴 <b>Airtel Ma Chaîne:</b> 0983356734</span></div>
-<div class="videos"><h3 style="margin:12px 0">Vidéos populaires</h3><div class="grid" id="grid"></div><h3 style="margin:18px 0 10px">Shorts</h3><div class="shorts" id="shorts"></div></div>
-<div class="form" id="pub"><h3>+ Publier une vidéo</h3>
-<div style="margin:8px 0"><button id="tabYT" class="tab-btn active" onclick="switchTab('yt')">▶️ Avec lien YouTube</button><button id="tabDirect" class="tab-btn inactive" onclick="switchTab('direct')">📱 Sans YouTube - Depuis mon téléphone</button></div>
-<input id="titre" placeholder="Titre (ex: La repentance)"><input id="chaine" placeholder="Ta chaîne (ex: freddyvmondial)">
-<div id="ytBox"><input id="yt" placeholder="Lien YouTube (ex: youtube.com/@freddyvmondial)"><p style="font-size:11px;color:#666">Ou lien YouTube normal. Ta chaîne YouTube: <b>@freddyvmondial</b></p></div>
-<div id="directBox" style="display:none"><input type="file" id="videoFile" accept="video/*" style="padding:10px;border:2px dashed red"><p style="font-size:12px;color:#666">📱 Choisis une vidéo dans ta galerie. Pour que tout le monde la voie, utilise le lien YouTube pour le moment.</p><input id="mp4Link" placeholder="OU colle un lien MP4 direct (ex: https://.../video.mp4)"><input id="directThumb" placeholder="Lien image de couverture (optionnel)"></div>
-<button onclick="publier()">PUBLIER MAINTENANT</button><p id="pubStatus" style="font-size:12px;color:#666;margin-top:8px"></p></div>
-<div class="modal" id="modal" onclick="fermer()"><div class="modal-content" onclick="event.stopPropagation()"><button class="close-btn" onclick="fermer()">✕</button><div class="player-wrap"><div id="player"></div></div><div class="side-actions"><button class="side-act" onclick="aimer()"><span class="ico">🤍</span><small id="sideLike">0</small></button><button class="side-act" onclick="commenter()"><span class="ico">💬</span><small>Commenter</small></button><button class="side-act" onclick="enregistrer()"><span class="ico">🔖</span><small id="sideSave">Enregistrer</small></button><button class="side-act" onclick="partager()"><span class="ico">📤</span><small>Partager</small></button><button class="side-act" onclick="telecharger()"><span class="ico">⬇️</span><small>Télécharger</small></button></div><div class="bottom-info"><div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><span id="playerAvatar" style="width:38px;height:38px;background:red;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;overflow:hidden">FV</span><b id="mchaine"></b><button id="subBtn" class="sub-btn" onclick="saboner()" style="margin-left:6px">S'abonner</button></div><h3 id="mtitle"></h3><p id="mviews"></p><p style="margin-top:8px;font-size:12px;background:rgba(255,255,255,0.15);padding:6px 8px;border-radius:8px;display:inline-block">💰 M-Pesa: 0820479539 • Airtel: 0983356734</p></div></div></div>
-<div class="pay-modal" id="chanModal"><div class="pay-modal-content"><h2>📸 Créer ma chaîne</h2><p style="font-size:13px;color:#666">Ex: ta chaîne <b>freddyvmondial</b> sur FREDDY-V = <b>youtube.com/@freddyvmondial</b> sur YouTube</p><div id="chanPreview" class="profile-preview">📷</div><input type="file" id="chanPhotoInput" accept="image/*" onchange="previewPhoto(event)"><input id="chanName" placeholder="Nom de ta chaîne (ex: freddyvmondial)"><input id="chanDesc" placeholder="Description"><button onclick="saveChaine()" style="background:red;color:#fff;border:none;padding:12px;width:100%;border-radius:8px;font-weight:900;margin-top:8px">CRÉER MA CHAÎNE ✅</button><div id="myLinkBox" style="display:none;margin-top:12px;background:#fffde7;padding:10px;border-radius:8px;border:1px dashed gold"><b>🔗 Ton lien FREDDY-V:</b><br><span id="myLinkText" style="font-size:12px;word-break:break-all"></span><br><button onclick="partagerMaChaine()" style="background:#000;color:#fff;border:none;padding:8px 14px;border-radius:20px;margin-top:6px">Copier mon lien</button></div><button onclick="closeChaine()" style="background:#000;color:#fff;padding:10px;border:none;border-radius:6px;width:100%;margin-top:8px">Fermer</button></div></div>
-<div class="pay-modal" id="payModal" onclick="closePay()"><div class="pay-modal-content" onclick="event.stopPropagation()"><h2 style="color:red">💰 Devenir Créateur Payé</h2><div class="paybox"><b>📱 SOUTENIR:</b><br>🔵 M-Pesa FREDDY-V: 0820479539<br>🔴 Airtel Ma Chaîne: 0983356734</div><div class="form" style="margin:0;padding:0"><input id="payNom" placeholder="Ton nom"><input id="payChaine" placeholder="Nom chaîne"><input id="payWhat" placeholder="Ton WhatsApp"><button onclick="envoyerPay()">ENVOYER 🙏</button></div><button onclick="closePay()" style="margin-top:10px;background:#000;color:#fff;padding:10px;border:none;border-radius:6px;width:100%">Fermer</button></div></div>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FREDDY-V Mondial</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+body{font-family:Arial,sans-serif;background:#0f0f0f;color:white;margin:0;padding:0}
+header{background:#ff0000;padding:20px;text-align:center}
+header h1{margin:0;font-size:28px}
+header p{margin:5px 0 0}
+.container{max-width:900px;margin:auto;padding:15px}
+.card{background:#1e1e1e;padding:15px;border-radius:12px;margin-bottom:15px}
+input{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:none;box-sizing:border-box}
+button{background:#ff0000;color:white;border:none;padding:12px 20px;border-radius:8px;font-weight:bold;cursor:pointer;width:100%}
+button:hover{background:#cc0000}
+.video-card{background:#1e1e1e;padding:12px;border-radius:12px;margin-bottom:20px}
+.video-card iframe{width:100%;height:220px;border-radius:10px;border:none}
+.video-card h3{margin:10px 0 5px}
+.video-card p{color:#aaa;margin:0 0 10px}
+.delete-btn{background:#333;margin-top:10px}
+.delete-btn:hover{background:#ff0000}
+</style>
+</head>
+<body>
+
+<header>
+<h1>🔥 FREDDY-V Mondial 🔥</h1>
+<p>Publiez, Regardez, Partagez pour tout le monde</p>
+</header>
+
+<div class="container">
+
+<div class="card">
+<h2>📤 Publier une vidéo</h2>
+<input id="titre" placeholder="Titre de la vidéo : Ex: L'église se prépare">
+<input id="chaine" placeholder="Nom de ta chaîne : Ex: freddyvmondial">
+<input id="youtube_url" placeholder="Lien YouTube : Ex: https://youtube.com/watch?v=...">
+<button onclick="publier()">PUBLIER MAINTENANT</button>
+<p id="msg" style="text-align:center"></p>
+</div>
+
+<h2>🔥 Vidéos populaires</h2>
+<div id="liste">Chargement...</div>
+
+</div>
+
 <script>
-const SUPABASE_URL="https://ugffxavzyxczchxmfscq.supabase.co";
-const SUPABASE_KEY="sb_publishable_DgJKD1dhv8EsU5qmZ-6D3Q_67CtnLh6";
-const SB_HEADERS={"apikey":SUPABASE_KEY,"Authorization":"Bearer "+SUPABASE_KEY,"Content-Type":"application/json","Prefer":"return=representation"};
-let current=null;let data=JSON.parse(localStorage.getItem('freddyVData')||'{}');
-let videos=[];
-let myChan=JSON.parse(localStorage.getItem('myChan')||'null');
-if(!myChan){myChan={name:'freddyvmondial',desc:'Jésus revient - FREDDY-V Mondial',photo:''};localStorage.setItem('myChan',JSON.stringify(myChan));}
-let notifs=JSON.parse(localStorage.getItem('freddyVNotifs')||'[]');
-let tempPhoto='';let currentChaineFilter='';let pubMode='yt';
-async function loadFromSupabase(){
-  try{
-    document.getElementById('grid').innerHTML='<p style="grid-column:1/3;text-align:center;color:#666;padding:20px">Chargement depuis Supabase...</p>';
-    let r=await fetch(SUPABASE_URL+"/rest/v1/videos?select=*&order=created_at.desc",{headers:{apikey:SUPABASE_KEY,Authorization:"Bearer "+SUPABASE_KEY}});
-    if(!r.ok) throw new Error("Supabase "+r.status);
-    let rows=await r.json();
-    videos=rows.map(x=>({t:x.title||"Sans titre",c:x.channel||"freddyvmondial",yt:x.youtube_url||x.video_url||"",type:x.type||"yt",src:x.video_url||"",short:(x.title||"").toLowerCase().includes("short"),views:x.views||0,likes:x.likes||0,shares:0,downloads:0,saved:0,supa_id:x.id}));
-    render();
-  }catch(e){ console.log(e); document.getElementById('grid').innerHTML='<p style="grid-column:1/3;text-align:center;color:red;padding:20px">Erreur Supabase: '+e.message+'<br>Vérifie la table videos et la policy.</p>'; }
+const SUPABASE_URL = "https://ugffxavzyxczchxmfscq.supabase.co";
+const SUPABASE_KEY = "sb_publishable_DgJKD1dhv8EsU5qmZ-6D3Q_67CtnLh6";
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+function youtubeToEmbed(url){
+  let id = "";
+  if(url.includes("youtu.be/")) id = url.split("youtu.be/")[1].split("?")[0];
+  else if(url.includes("v=")) id = url.split("v=")[1].split("&")[0];
+  else if(url.includes("shorts/")) id = url.split("shorts/")[1].split("?")[0];
+  else if(url.includes("embed/")) id = url.split("embed/")[1].split("?")[0];
+  return {id: id, embed: "https://www.youtube.com/embed/" + id};
 }
-async function saveToSupabase(t,c,ytLink){
-  let payload={title:t,channel:c,youtube_url:ytLink,video_url:ytLink,type:"yt",views:0,likes:0};
-  let r=await fetch(SUPABASE_URL+"/rest/v1/videos",{method:"POST",headers:SB_HEADERS,body:JSON.stringify(payload)});
-  if(!r.ok){ let txt=await r.text(); throw new Error(txt.slice(0,200)); }
-  return await r.json();
-}
-function switchTab(m){pubMode=m;document.getElementById('tabYT').className='tab-btn '+(m==='yt'?'active':'inactive');document.getElementById('tabDirect').className='tab-btn '+(m==='direct'?'active':'inactive');document.getElementById('ytBox').style.display=m==='yt'?'block':'none';document.getElementById('directBox').style.display=m==='direct'?'block':'none';}
-function getBaseUrl(){return location.origin+location.pathname;}
-function getChaineLink(nom){return getBaseUrl()+'?chaine='+encodeURIComponent(nom.trim().replace(/\s+/g,''));}
-function format(n){if(n>=1000000)return (n/1000000).toFixed(1)+'M';if(n>=1000)return (n/1000).toFixed(1)+'K';return n;}
-function getId(url){url=(url||'').trim();let m=url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/|@))([^&?\/\s]+)/);if(m && m[1].length===11) return m[1];if(/^[a-zA-Z0-9_-]{11}$/.test(url))return url;return '';}
-function isYouTube(url){return url.includes('youtube.com')||url.includes('youtu.be');}
-function getThumb(v){if(v.directThumb) return v.directThumb;if(v.yt && isYouTube(v.yt)){let id=getId(v.yt);if(id)return 'https://i.ytimg.com/vi/'+id+'/hqdefault.jpg';}return '';}
-function getChanPhoto(name){if(myChan && myChan.name.replace(/\s+/g,'')===name.replace(/\s+/g,'') && myChan.photo) return myChan.photo;return '';}
-function updateHeader(){let h=document.getElementById('headerAvatar');if(myChan && myChan.photo){h.innerHTML=`<img src="${myChan.photo}" style="width:100%;height:100%;object-fit:cover">`;}else{h.innerText=myChan.name.substring(0,2).toUpperCase();}document.getElementById('chaine').value=myChan?myChan.name:'';}
-function makeCard(v,realIndex){let thumb=getThumb(v);let viewText=format(v.views)+' vues';let photo=getChanPhoto(v.c);let av=photo?`<img src="${photo}" style="width:32px;height:32px;border-radius:50%;object-fit:cover">`:`<span class="chan-avatar">${v.c.substring(0,2).toUpperCase()}</span>`;let media='';if(v.type==='direct' && v.src){media=`<video src="${v.src}" muted preload="metadata"></video>`;}else if(thumb){media=`<img src="${thumb}" onerror="this.style.display='none'">`;}let badge=v.type==='direct'?'<span style="position:absolute;top:6px;left:6px;background:red;color:#fff;font-size:10px;padding:3px 6px;border-radius:4px;z-index:3">📱 FREDDY-V Direct</span>':'';if(v.short){return `<div class="short-card" onclick="play(${realIndex})"><div class="short-thumb">${media}${badge}<span style="position:relative;z-index:2;text-shadow:0 0 5px #000">${v.t}</span></div><div class="info"><div style="display:flex;gap:6px">${av}<div><b style="font-size:11px">${v.t}</b><br><small>${v.c}</small><br><span class="views">${viewText}</span></div></div></div></div>`;}return `<div class="card" onclick="play(${realIndex})"><div class="thumb">${media}${badge}<span>${v.t}</span><span class="time">${format(v.views)}</span></div><div class="info"><div style="display:flex;gap:8px">${av}<div><b>${v.t}</b><br><small>${v.c}</small><br><span class="views">${viewText}</span></div></div></div></div>`;}
-function render(){let g=document.getElementById('grid');let s=document.getElementById('shorts');g.innerHTML='';s.innerHTML='';let list=videos.map((v,i)=>({v,i})).filter(o=>!currentChaineFilter || o.v.c.replace(/\s+/g,'').toLowerCase()===currentChaineFilter.toLowerCase());if(list.length===0){g.innerHTML='<p style="grid-column:1/3;text-align:center;color:#666;padding:20px">Aucune vidéo encore. Publie avec YouTube !</p>';}list.forEach(o=>{if(o.v.short){s.innerHTML+=makeCard(o.v,o.i);}else{g.innerHTML+=makeCard(o.v,o.i);}});updateNotifBadge();updateHeader();}
-function checkChaineFromUrl(){let p=new URLSearchParams(location.search);let ch=p.get('chaine');if(ch){currentChaineFilter=ch;let b=document.getElementById('chanBanner');b.style.display='block';document.getElementById('chanBannerName').innerText='Chaîne: '+ch;document.getElementById('chanBannerDesc').innerText='Toutes les vidéos de '+ch+' sur FREDDY-V Mondial • YouTube: @'+ch;document.getElementById('chanLinkText').innerText=getChaineLink(ch);let ph=getChanPhoto(ch);if(ph){document.getElementById('chanBannerAvatar').innerHTML=`<img src="${ph}" style="width:100%;height:100%;object-fit:cover">`;}else{document.getElementById('chanBannerAvatar').innerText=ch.substring(0,2).toUpperCase();}b.scrollIntoView();}}
-function voirTout(){currentChaineFilter='';document.getElementById('chanBanner').style.display='none';history.pushState({},'',getBaseUrl());render();}
-function partagerChaine(){let nom=currentChaineFilter||(myChan?myChan.name:'');if(!nom){creerChaine();return;}let link=getChaineLink(nom);if(navigator.share){navigator.share({title:'Chaîne '+nom+' sur FREDDY-V',url:link});}else{navigator.clipboard.writeText(link);alert('🔗 Lien copié!\n'+link);}}
-function partagerMaChaine(){if(!myChan){creerChaine();return;}let link=getChaineLink(myChan.name);navigator.clipboard.writeText(link);alert('🔗 Ton lien FREDDY-V copié!\n\n'+link+'\n\nTon YouTube: youtube.com/@'+myChan.name);}
-function addNotif(titre,chaine,thumb){notifs.unshift({titre,chaine,thumb,date:new Date().toLocaleString()});if(notifs.length>20)notifs=notifs.slice(0,20);localStorage.setItem('freddyVNotifs',JSON.stringify(notifs));updateNotifBadge();}
-function updateNotifBadge(){let b=document.getElementById('bellBadge');let unread=localStorage.getItem('notifRead')||0;let count=notifs.length-unread;if(count>0){b.style.display='flex';b.innerText=count>9?'9+':count;}else{b.style.display='none';}let list=document.getElementById('notifList');if(notifs.length===0){list.innerHTML='<p style="padding:16px;color:#666;text-align:center">Aucune notification.</p>';}else{list.innerHTML=notifs.map((n,i)=>`<div class="notif-item" onclick="playFromNotif(${i})">${n.thumb?`<img src="${n.thumb}" style="width:48px;height:48px;border-radius:8px;object-fit:cover">`:'<div>▶️</div>'}<div><b style="font-size:13px">${n.titre}</b><br><small>${n.chaine}</small><br><small style="color:#999">${n.date}</small></div></div>`).join('');}}
-function toggleNotif(){let box=document.getElementById('notifBox');box.style.display=box.style.display==='block'?'none':'block';if(box.style.display==='block'){localStorage.setItem('notifRead',notifs.length);updateNotifBadge();}}
-function clearNotif(){notifs=[];localStorage.setItem('freddyVNotifs','[]');localStorage.setItem('notifRead',0);updateNotifBadge();}
-function playFromNotif(i){document.getElementById('notifBox').style.display='none';let n=notifs[i];let idx=videos.findIndex(v=>v.t===n.titre);if(idx>=0)play(idx);}
-function searchVideo(){let q=document.getElementById('searchInput').value.toLowerCase().trim();let box=document.getElementById('searchBox');let res=document.getElementById('searchResults');if(q.length<2){box.style.display='none';render();return;}let found=[];videos.forEach((v,i)=>{if(v.t.toLowerCase().includes(q)||v.c.toLowerCase().includes(q)){found.push({v,i});}});box.style.display='block';document.getElementById('searchTitle').innerText='🔍 Résultats pour "'+document.getElementById('searchInput').value+'" - '+found.length;res.innerHTML=found.length?'<div class="grid">'+found.map(f=>makeCard(f.v,f.i)).join('')+'</div>':'<p>Aucune vidéo.</p>';}
-function clearSearch(){document.getElementById('searchInput').value='';document.getElementById('searchBox').style.display='none';render();}
-function creerChaine(){document.getElementById('chanModal').style.display='flex';if(myChan){document.getElementById('chanName').value=myChan.name;document.getElementById('chanDesc').value=myChan.desc||'';if(myChan.photo){document.getElementById('chanPreview').innerHTML=`<img src="${myChan.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;tempPhoto=myChan.photo;document.getElementById('myLinkBox').style.display='block';document.getElementById('myLinkText').innerText=getChaineLink(myChan.name);}}}
-function closeChaine(){document.getElementById('chanModal').style.display='none';}
-function previewPhoto(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=function(ev){tempPhoto=ev.target.result;document.getElementById('chanPreview').innerHTML=`<img src="${tempPhoto}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;};r.readAsDataURL(f);}
-function saveChaine(){let n=document.getElementById('chanName').value.trim();let d=document.getElementById('chanDesc').value.trim();if(!n){alert('Mets le nom!');return;}myChan={name:n,desc:d,photo:tempPhoto};localStorage.setItem('myChan',JSON.stringify(myChan));updateHeader();document.getElementById('myLinkBox').style.display='block';document.getElementById('myLinkText').innerText=getChaineLink(n);alert('✅ Chaîne "'+n+'" créée!\n\n🔗 FREDDY-V: '+getChaineLink(n)+'\n▶️ YouTube: youtube.com/@'+n);closeChaine();render();}
+
 async function publier(){
-let t=document.getElementById('titre').value.trim();let c=document.getElementById('chaine').value.trim()||'freddyvmondial';
-if(!t||!c){alert('Mets Titre + Chaîne!');return;}
-let isShort=t.toLowerCase().includes('short');
-document.getElementById('pubStatus').innerText='Envoi vers Supabase...';
-if(pubMode==='yt'){
-let yt=document.getElementById('yt').value.trim();if(!yt){alert('Mets le lien YouTube !');return;}
-let linkToSave=yt;
-if(yt.includes('@')){ linkToSave=yt; }
-else { let id=getId(yt); if(!id){alert('Lien YouTube invalide!');return;} linkToSave=`https://www.youtube.com/embed/${id}`; }
-try{ await saveToSupabase(t,c,linkToSave); addNotif(t,c,''); document.getElementById('pubStatus').innerText='✅ Publiée pour tout le monde !'; alert('✅ Publiée pour tout le monde ! Tout le monde va la voir.'); document.getElementById('titre').value=''; document.getElementById('yt').value=''; await loadFromSupabase(); }catch(e){ document.getElementById('pubStatus').innerText='❌ Erreur: '+e.message; alert('❌ Erreur Supabase:\n'+e.message+'\n\nVérifie que tu as fait le SQL dans Supabase.'); }
-}else{
-let mp4=document.getElementById('mp4Link').value.trim();
-if(mp4){ try{ await saveToSupabase(t,c,mp4); alert('✅ Publiée avec lien MP4 pour tout le monde !'); await loadFromSupabase(); }catch(e){ alert('❌ Erreur: '+e.message); } }
-else{ alert('Pour Sans YouTube : pour le moment, mets un lien MP4. Le fichier du téléphone reste seulement sur ton téléphone. Utilise YouTube pour que tout le monde voie.'); }
+  let titre = document.getElementById("titre").value;
+  let chaine = document.getElementById("chaine").value;
+  let youtube_url = document.getElementById("youtube_url").value;
+  if(!titre || !youtube_url){ alert("Mets le titre et le lien YouTube !"); return; }
+  let conv = youtubeToEmbed(youtube_url);
+  document.getElementById("msg").innerText = "Publication en cours...";
+  let { error } = await supabaseClient.from("videos").insert([{
+    title: titre,
+    channel: chaine || "FREDDY-V",
+    youtube_url: youtube_url,
+    video_url: youtube_url,
+    embed_url: conv.embed,
+    link: youtube_url
+  }]);
+  if(error){ alert("Erreur : " + error.message); document.getElementById("msg").innerText=""; }
+  else{
+    alert("Vidéo publiée ! 🎉");
+    document.getElementById("titre").value="";
+    document.getElementById("youtube_url").value="";
+    document.getElementById("msg").innerText="";
+    charger();
+  }
 }
+
+async function supprimerVideo(id){
+  let code = prompt("Code patron ?");
+  if(code !== "FREDDY123"){
+    alert("Tu n'es pas le patron !");
+    return;
+  }
+  if(!confirm("Tu veux vraiment supprimer cette vidéo ?")) return;
+  let { error } = await supabaseClient.from("videos").delete().eq("id", id);
+  if(error) alert("Erreur : " + error.message);
+  else { alert("Vidéo supprimée !"); charger(); }
 }
-function play(i){current=i;let v=videos[i];document.getElementById('mtitle').innerText=v.t;document.getElementById('mchaine').innerText='@'+v.c;document.getElementById('mviews').innerText=format(v.views)+' vues • '+format(v.likes)+' j\'aime';document.getElementById('sideLike').innerText=format(v.likes)||'0';document.getElementById('sideSave').innerText=v.saved?'Enregistré ✓':'Enregistrer';let av=document.getElementById('playerAvatar');let ph=getChanPhoto(v.c);if(ph){av.innerHTML=`<img src="${ph}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;}else{av.innerText=v.c.substring(0,2).toUpperCase();}let p=document.getElementById('player');if(v.type==='direct' && v.src){p.innerHTML=`<video src="${v.src}" controls autoplay playsinline></video>`;}else if(v.yt && v.yt.includes('@')){p.innerHTML=`<div style="color:#fff;text-align:center;padding:60px 20px"><h2>@${v.c}</h2><p style="margin:12px 0">Va voir sur YouTube:</p><a href="https://youtube.com/@${v.c}" target="_blank" style="background:red;color:#fff;padding:12px 20px;border-radius:20px;text-decoration:none;font-weight:900">▶️ Ouvrir youtube.com/@${v.c}</a></div>`;}else{let id=getId(v.yt);p.innerHTML=`<iframe src="https://www.youtube.com/embed/${id}?autoplay=1" allow="autoplay; fullscreen" allowfullscreen></iframe>`;}document.getElementById('modal').style.display='block';}
-function fermer(){document.getElementById('modal').style.display='none';document.getElementById('player').innerHTML='';}
-function saboner(){if(current===null)return;let ch=videos[current].c;let key='abo_'+ch;data[key]=!data[key];localStorage.setItem('freddyVData',JSON.stringify(data));document.getElementById('subBtn').innerText=data[key]?'Abonné ✓':"S'abonner";}
-function partager(){if(current===null)return;let link=getChaineLink(videos[current].c);if(navigator.share){navigator.share({title:videos[current].t,url:link});}else{navigator.clipboard.writeText(link);alert('🔗 Lien copié!\n'+link);}}
-function telecharger(){if(current===null)return;if(videos[current].type==='direct'){let a=document.createElement('a');a.href=videos[current].src;a.download=videos[current].t+'.mp4';a.click();}else{window.open(videos[current].yt.replace('embed/','watch?v='),'_blank');}}
-function aimer(){if(current===null)return;if(data['like_'+current]){videos[current].likes--;data['like_'+current]=false;}else{videos[current].likes++;data['like_'+current]=true;}localStorage.setItem('freddyVData',JSON.stringify(data));render();}
-function enregistrer(){if(current===null)return;let key='save_'+current;data[key]=!data[key];videos[current].saved=data[key]?1:0;localStorage.setItem('freddyVData',JSON.stringify(data));render();}
-function commenter(){alert('💬 Commente sur YouTube!');}
-function openPay(){document.getElementById('payModal').style.display='flex';}
-function closePay(){document.getElementById('payModal').style.display='none';}
-function envoyerPay(){let n=document.getElementById('payNom').value.trim();let c=document.getElementById('payChaine').value.trim();let w=document.getElementById('payWhat').value.trim();if(!n||!c||!w){alert('Remplis tout');return;}alert('🙏 Merci '+n+'!');closePay();window.open(`https://wa.me/243820479539?text=Salut Makola! Je veux devenir créateur payé:%0ANom:${n}%0AChaîne:${c}`,'_blank');}
-loadFromSupabase();checkChaineFromUrl();updateNotifBadge();
-</script></body></html>
+
+async function charger(){
+  let { data, error } = await supabaseClient.from("videos").select("*").order("created_at", {ascending:false});
+  if(error){ document.getElementById("liste").innerHTML = "Erreur : " + error.message; return; }
+  if(!data || data.length===0){ document.getElementById("liste").innerHTML="Pas encore de vidéo. Sois le premier !"; return; }
+  let html = "";
+  data.forEach(v=>{
+    let embed = v.embed_url || v.video_url || v.youtube_url || v.link;
+    html += `<div class="video-card">
+      <iframe src="${embed}" allowfullscreen></iframe>
+      <h3>${v.title || "Sans titre"}</h3>
+      <p>${v.channel || "FREDDY-V"}</p>
+      <button class="delete-btn" onclick="supprimerVideo('${v.id}')">🗑️ Supprimer (Patron seulement)</button>
+    </div>`;
+  });
+  document.getElementById("liste").innerHTML = html;
+}
+charger();
+</script>
+</body>
+</html>
