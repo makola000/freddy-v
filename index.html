@@ -58,6 +58,12 @@ input{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:none;font-si
 .close{float:right;font-size:24px;cursor:pointer}
 .tab-btn{background:#333;color:white;border:none;padding:10px 15px;border-radius:20px;margin-right:8px;cursor:pointer}
 .tab-btn.active{background:#ff0000}
+.chaine-row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 0 8px}
+.sub-btn{background:#ff0000;color:white;border:none;padding:9px 16px;border-radius:20px;font-weight:900;cursor:pointer;font-size:14px;white-space:nowrap}
+.sub-btn.abonne{background:#333;color:#ccc}
+.section-title{background:#000;border-left:5px solid #ff0000;padding:12px 15px;border-radius:10px;margin:22px 0 15px;font-size:20px;font-weight:900}
+.section-title span{color:#ffcc00}
+.duree-badge{background:#ffcc00;color:#000;font-size:12px;font-weight:900;padding:3px 8px;border-radius:10px;margin-left:6px}
 </style>
 </head>
 <body>
@@ -85,7 +91,7 @@ input{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:none;font-si
   </div>
   <div style="margin-bottom:12px">
     <button class="tab-btn active" id="tabToutes" onclick="montrerTab('toutes')">Toutes</button>
-    <button class="tab-btn" id="tabShorts" onclick="montrerTab('shorts')">📱 Shorts Verticaux</button>
+    <button class="tab-btn" id="tabShorts" onclick="montrerTab('shorts')">📱 Shorts - Moins de 3 min</button>
     <button class="tab-btn" id="tabEnregistrees" onclick="montrerTab('enregistrees')">🔖 Enregistrées</button>
   </div>
   <div class="card" id="publier">
@@ -96,7 +102,6 @@ input{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:none;font-si
     <button class="btn-pub" onclick="publier()">PUBLIER MAINTENANT</button>
     <p id="msg" style="text-align:center"></p>
   </div>
-  <h2>🔥 Vidéos populaires</h2>
   <div id="liste">Chargement...</div>
 </div>
 <div class="modal" id="modalChaine"><div class="modal-box"><span class="close" onclick="fermerModal('modalChaine')">✖</span><h2>+ Créer ma chaîne</h2><input id="nomChaine" placeholder="Nom de ta chaîne"><input id="descChaine" placeholder="Description"><button class="btn-pub" onclick="creerChaine()">CRÉER MA CHAÎNE</button><p id="chaineMsg"></p></div></div>
@@ -107,11 +112,41 @@ const SUPABASE_URL = "https://ugffxavzyxczchxmfscq.supabase.co";
 const SUPABASE_KEY = "sb_publishable_DgJKD1dhv8EsU5qmZ-6D3Q_67CtnLh6";
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 let toutesVideos = [];
+let durees = {}; // youtubeId -> secondes
 let onglet = "toutes";
 let langue = "FR";
-function estShort(v){ let u=(v.youtube_url||"")+" "+(v.video_url||"")+" "+(v.embed_url||""); return u.includes("shorts"); }
-function youtubeToEmbed(url){ let id=""; if(url.includes("youtu.be/")) id=url.split("youtu.be/")[1].split("?")[0]; else if(url.includes("v=")) id=url.split("v=")[1].split("&")[0]; else if(url.includes("shorts/")) id=url.split("shorts/")[1].split("?")[0]; else if(url.includes("embed/")) id=url.split("embed/")[1].split("?")[0]; return "https://www.youtube.com/embed/"+id; }
-function youtubeId(url){ if(!url) return ""; if(url.includes("youtu.be/")) return url.split("youtu.be/")[1].split("?")[0]; if(url.includes("v=")) return url.split("v=")[1].split("&")[0]; if(url.includes("shorts/")) return url.split("shorts/")[1].split("?")[0]; return ""; }
+function youtubeId(url){ if(!url) return ""; if(url.includes("youtu.be/")) return url.split("youtu.be/")[1].split("?")[0].split("&")[0]; if(url.includes("v=")) return url.split("v=")[1].split("&")[0]; if(url.includes("shorts/")) return url.split("shorts/")[1].split("?")[0].split("&")[0]; return ""; }
+function youtubeToEmbed(url){ return "https://www.youtube.com/embed/"+youtubeId(url); }
+function parseISO8601(d){ if(!d) return 0; let m=d.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/); if(!m) return 0; return (parseInt(m[1]||0)*3600)+(parseInt(m[2]||0)*60)+parseInt(m[3]||0); }
+function formatDuree(sec){ if(!sec) return ""; let m=Math.floor(sec/60), s=sec%60; return m+":"+(s<10?"0"+s:s); }
+// NOUVELLE REGLE : > 3 min (180 sec) = Populaire, sinon Short
+function estShort(v){
+  let yid=youtubeId(v.youtube_url||v.video_url||"");
+  // Si on connait la durée, on utilise la règle des 3 minutes
+  if(durees[yid]!==undefined){
+    return durees[yid] <= 180;
+  }
+  // En attendant la durée, fallback : si lien contient "shorts" = Short, sinon Populaire
+  let u=(v.youtube_url||"")+" "+(v.video_url||"")+" "+(v.embed_url||"");
+  return u.includes("shorts");
+}
+async function chargerDurees(){
+  let ids = toutesVideos.map(v=>youtubeId(v.youtube_url||v.video_url||"")).filter(Boolean);
+  ids = [...new Set(ids)];
+  // On demande les durées par petits paquets
+  for(let i=0;i<ids.length;i+=10){
+    let batch=ids.slice(i,i+10).join(",");
+    try{
+      let res=await fetch("https://yt.lemnoslife.com/noKey/videos?part=contentDetails&id="+batch);
+      let json=await res.json();
+      (json.items||[]).forEach(it=>{
+        let sec=parseISO8601(it.contentDetails?.duration);
+        durees[it.id]=sec;
+      });
+    }catch(e){}
+  }
+  filtrer();
+}
 function ouvrirModal(id){ document.getElementById(id).style.display="block"; }
 function fermerModal(id){ document.getElementById(id).style.display="none"; }
 function changerLangue(){ if(langue==="FR"){langue="EN";document.getElementById("btnLang").innerText="EN";} else {langue="FR";document.getElementById("btnLang").innerText="FR";} }
@@ -168,23 +203,35 @@ function partagerVideo(titre){ let lien="https://freddy-v-o82q.onrender.com - Re
 function telechargerVideo(v){ let yid=youtubeId(v.youtube_url||v.video_url||""); window.open("https://www.youtube.com/watch?v="+yid,"_blank"); alert("Sur YouTube, clique sur les 3 points > Télécharger"); }
 function remixerVideo(v){ let nouveau=prompt("Nouveau titre pour ton Remix ?","REMIX - "+v.title); if(!nouveau) return; let chaine=localStorage.getItem("ma_chaine")||"FREDDY-V"; supabaseClient.from("videos").insert([{title:nouveau,channel:chaine,youtube_url:v.youtube_url,video_url:v.video_url,embed_url:v.embed_url,link:v.link,views:0,likes:0}]).then(({error})=>{ if(error) alert("Erreur : "+error.message); else {alert("Remix publié ! 🎬"); charger();} }); }
 function enregistrerVideo(id,btn){ let deja=localStorage.getItem("save_"+id)==="1"; if(deja){localStorage.removeItem("save_"+id); btn.innerText="🔖 Enregistrer";} else {localStorage.setItem("save_"+id,"1"); btn.innerText="✅ Enregistrée"; alert("Vidéo enregistrée 🔖");} filtrer(); }
-function afficher(data){
-  if(!data||data.length===0){ document.getElementById("liste").innerHTML="Aucune vidéo."; return; }
-  let html="";
-  data.forEach(v=>{
+function cleanChaine(n){ return (n||"FREDDY-V").toLowerCase().replace(/[^a-z0-9]/g,"_"); }
+function estAbonneChaine(chaine){ return localStorage.getItem("abonne_chaine_"+cleanChaine(chaine))==="1"; }
+function abonnerChaine(chaine, btn){
+  let key="abonne_chaine_"+cleanChaine(chaine);
+  let deja=localStorage.getItem(key)==="1";
+  if(deja){ localStorage.removeItem(key); } else { localStorage.setItem(key,"1"); }
+  document.querySelectorAll("[data-chaine='"+cleanChaine(chaine)+"']").forEach(b=>{
+    if(localStorage.getItem(key)==="1"){ b.innerText="ABONNÉ ✓"; b.classList.add("abonne"); } else { b.innerText="S'ABONNER"; b.classList.remove("abonne"); }
+  });
+}
+function carteVideo(v){
     let short=estShort(v);
     let vues=v.views||0; let likes=v.likes||0; let gains=Math.floor(vues*0.5);
     let yid=youtubeId(v.youtube_url||v.video_url||"");
     let thumb="https://i.ytimg.com/vi/"+yid+"/hqdefault.jpg";
     let dejaSave=localStorage.getItem("save_"+v.id)==="1"?"✅ Enregistrée":"🔖 Enregistrer";
     let dejaLike=localStorage.getItem("like_"+v.id)==="1"?"❤️ "+likes:"🤍 "+likes;
-    html+=`<div class="video-card">
+    let chaineNom=v.channel||"FREDDY-V";
+    let chaineKey=cleanChaine(chaineNom);
+    let txtAbonne=estAbonneChaine(chaineNom)?"ABONNÉ ✓":"S'ABONNER";
+    let clsAbonne=estAbonneChaine(chaineNom)?" sub-btn abonne":" sub-btn";
+    let dureeTxt=durees[yid]?`<span class="duree-badge">⏱️ ${formatDuree(durees[yid])}</span>`:"";
+    return `<div class="video-card">
       <div class="video-wrap ${short?'vertical':''}" id="wrap_${v.id}" onclick='jouerEnGrand(${JSON.stringify(v).replace(/'/g,"")})'>
         <img src="${thumb}" onerror="this.src='https://via.placeholder.com/640x360?text=FREDDY-V'">
         <span class="play-big">▶️</span>
       </div>
-      <h3>${short?'📱 SHORT • ':''}${v.title||"Sans titre"}</h3>
-      <p>${v.channel||"FREDDY-V"}</p>
+      <h3>${short?'📱 SHORT • ':''}${v.title||"Sans titre"} ${dureeTxt}</h3>
+      <div class="chaine-row"><p style="margin:0">${chaineNom}</p><button class="${clsAbonne}" data-chaine="${chaineKey}" onclick="event.stopPropagation();abonnerChaine('${chaineNom.replace(/'/g,"")} ',this)">${txtAbonne}</button></div>
       <div class="stats"><span id="vues_${v.id}">👁️ ${vues} vues réelles</span> <span>💰 ${gains} FC</span></div>
       <div style="font-size:13px">Clique sur ▶️ = ça compte +1 vue et ça joue EN GRAND</div>
       <div class="actions">
@@ -197,7 +244,31 @@ function afficher(data){
       </div>
       <button class="del-btn" onclick="supprimerVideo('${v.id}')">🗑️ Supprimer (Patron seulement)</button>
     </div>`;
-  });
+}
+function afficher(data){
+  if(!data||data.length===0){ document.getElementById("liste").innerHTML="Aucune vidéo."; return; }
+  if(onglet!=="toutes"){
+    let html="";
+    data.forEach(v=>{ html+=carteVideo(v); });
+    document.getElementById("liste").innerHTML=html;
+    return;
+  }
+  let populaires = data.filter(v=>!estShort(v)).slice(0,4);
+  let shorts = data.filter(v=>estShort(v));
+  let restePopulaires = data.filter(v=>!estShort(v)).slice(4);
+  let html="";
+  if(populaires.length>0){
+    html+=`<div class="section-title">🔥 VIDÉOS POPULAIRES <span>• Plus de 3 minutes</span></div>`;
+    populaires.forEach(v=>{ html+=carteVideo(v); });
+  }
+  if(shorts.length>0){
+    html+=`<div class="section-title">📱 SHORTS <span>• Moins de 3 minutes</span></div>`;
+    shorts.forEach(v=>{ html+=carteVideo(v); });
+  }
+  if(restePopulaires.length>0){
+    html+=`<div class="section-title">▶️ AUTRES VIDÉOS POPULAIRES</div>`;
+    restePopulaires.forEach(v=>{ html+=carteVideo(v); });
+  }
   document.getElementById("liste").innerHTML=html;
 }
 async function publier(){
@@ -219,6 +290,7 @@ async function charger(){
   document.getElementById("notifCount").innerText=toutesVideos.length;
   majPopulation();
   filtrer();
+  chargerDurees();
 }
 afficherMaChaine();
 charger();
