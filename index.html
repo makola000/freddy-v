@@ -56,6 +56,7 @@ input{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:none;font-si
 .remix-btn{background:#800080}
 .save-btn{background:#ff8800}
 .del-btn{background:#111;border:1px solid #555;color:white;padding:11px;border-radius:8px;width:100%;cursor:pointer;font-weight:bold;margin-top:8px}
+.next-btn{background:#0080ff;color:white;padding:11px;border-radius:8px;width:100%;cursor:pointer;font-weight:bold;margin-top:8px;border:none;font-size:16px}
 .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:99;padding:20px;overflow:auto}
 .modal-box{background:#1e1e1e;padding:20px;border-radius:15px;max-width:450px;margin:40px auto}
 .close{float:right;font-size:24px;cursor:pointer}
@@ -109,7 +110,6 @@ input{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:none;font-si
     <p id="msg" style="text-align:center"></p>
   </div>
   <div id="liste">Chargement...</div>
-  <p id="debugInfo" style="text-align:center;color:#888;font-size:12px"></p>
 </div>
 <div style="background:#000;padding:25px 15px;text-align:center;margin-top:20px;border-top:2px solid #ff0000">
   <h3 style="color:white;margin:0 0 10px">À PROPOS DE FREDDY-V MONDIAL</h3>
@@ -149,7 +149,6 @@ let onglet = "toutes";
 let langue = "FR";
 let abonnesMap = {};
 let mesAbos = new Set();
-let chargementFini = false;
 function getDeviceId(){ let id=localStorage.getItem("freddy_device_id"); if(!id){ id="dev_"+Date.now()+"_"+Math.floor(Math.random()*999999); localStorage.setItem("freddy_device_id",id); } return id; }
 function youtubeId(url){ if(!url) return ""; if(url.includes("youtu.be/")) return url.split("youtu.be/")[1].split("?")[0].split("&")[0]; if(url.includes("v=")) return url.split("v=")[1].split("&")[0]; if(url.includes("shorts/")) return url.split("shorts/")[1].split("?")[0].split("&")[0]; return ""; }
 function parseISO8601(d){ if(!d) return 0; let m=d.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/); if(!m) return 0; return (parseInt(m[1]||0)*3600)+(parseInt(m[2]||0)*60)+parseInt(m[3]||0); }
@@ -173,14 +172,12 @@ async function chargerDurees(){
     for(let i=0;i<ids.length;i+=10){
       let batch=ids.slice(i,i+10).join(",");
       try{
-        let controller = new AbortController();
-        setTimeout(()=>controller.abort(), 4000);
-        let res=await fetch("https://yt.lemnoslife.com/noKey/videos?part=contentDetails&id="+batch, {signal: controller.signal});
+        let res=await fetch("https://yt.lemnoslife.com/noKey/videos?part=contentDetails&id="+batch);
         let json=await res.json();
         (json.items||[]).forEach(it=>{ durees[it.id]=parseISO8601(it.contentDetails?.duration); });
       }catch(e){}
     }
-    if(chargementFini) filtrer();
+    filtrer();
   }catch(e){}
 }
 function ouvrirModal(id){ document.getElementById(id).style.display="block"; }
@@ -192,7 +189,7 @@ function demandePaye(){ let nom=document.getElementById("nomPaye").value,ch=docu
 function partagerChaine(){ let ch=localStorage.getItem("ma_chaine")||"freddyvmondial"; let lien="https://freddy-v-o82q.onrender.com - Chaîne "+ch; if(navigator.share) navigator.share({title:"FREDDY-V Mondial",text:lien,url:"https://freddy-v-o82q.onrender.com"}); else {navigator.clipboard.writeText(lien); alert("Lien copié !");} }
 function ouvrirNotif(){ let html=""; if(toutesVideos.length===0) html="Pas de notification."; else toutesVideos.slice(0,5).forEach(v=>{ html+=`<p>🔥 Nouvelle vidéo : <b>${v.title}</b> par ${v.channel}</p><hr>`; }); document.getElementById("notifList").innerHTML=html; document.getElementById("notifCount").innerText="0"; ouvrirModal('modalNotif'); }
 function montrerTab(t){ onglet=t; document.getElementById("tabToutes").classList.toggle("active",t==="toutes"); document.getElementById("tabShorts").classList.toggle("active",t==="shorts"); document.getElementById("tabEnregistrees").classList.toggle("active",t==="enregistrees"); filtrer(); }
-function filtrer(){ try{ let mot=(document.getElementById("recherche")?.value||"").toLowerCase(); let f=toutesVideos.filter(v=>(v.title||"").toLowerCase().includes(mot)||(v.channel||"").toLowerCase().includes(mot)); if(onglet==="shorts") f=f.filter(v=>estShort(v)); if(onglet==="enregistrees") f=f.filter(v=>localStorage.getItem("save_"+v.id)==="1"); afficher(f); }catch(e){ document.getElementById("liste").innerHTML="Erreur affichage: "+e.message; } }
+function filtrer(){ let mot=(document.getElementById("recherche")?.value||"").toLowerCase(); let f=toutesVideos.filter(v=>(v.title||"").toLowerCase().includes(mot)||(v.channel||"").toLowerCase().includes(mot)); if(onglet==="shorts") f=f.filter(v=>estShort(v)); if(onglet==="enregistrees") f=f.filter(v=>localStorage.getItem("save_"+v.id)==="1"); afficher(f); }
 async function compterVue(v){
   let id=v.id;
   if(localStorage.getItem("vu_"+id)==="1"){ return; }
@@ -261,7 +258,7 @@ async function chargerAbonnes(){
       abonnesMap[k]=(abonnesMap[k]||0)+1;
       if(row.device_id===myId) mesAbos.add(k);
     });
-    if(chargementFini) filtrer();
+    filtrer();
   }catch(e){}
 }
 async function abonnerChaine(chaine, btn){
@@ -288,6 +285,25 @@ async function abonnerChaine(chaine, btn){
   document.querySelectorAll("[data-count-chaine='"+key+"']").forEach(el=>{
     el.innerText="👥 "+(abonnesMap[key]||0)+" abonnés";
   });
+}
+// BOUTON SUIVANT + SUPPRIMER SUR CHAQUE VIDEO
+function suivantVideo(idActuelle){
+  let idx = toutesVideos.findIndex(v=>v.id===idActuelle);
+  if(idx===-1) return;
+  let suivante = toutesVideos[idx+1] || toutesVideos[0];
+  if(!suivante) return;
+  let el = document.getElementById("wrap_"+suivante.id);
+  if(el){
+    el.scrollIntoView({behavior:'smooth', block:'center'});
+    setTimeout(()=>{ jouerEnGrand(suivante); }, 600);
+  }
+}
+async function supprimerVideo(id){
+  if(!confirm("Supprimer cette vidéo ?")) return;
+  let {error}=await supabaseClient.from("videos").delete().eq("id",id);
+  if(error){ alert("Erreur : "+error.message); return; }
+  alert("Vidéo supprimée");
+  charger();
 }
 function carteVideo(v){
     let yid=youtubeId(v.youtube_url||v.video_url||"");
@@ -324,11 +340,11 @@ function carteVideo(v){
         <button class="save-btn" onclick="enregistrerVideo('${v.id}', this)">${localStorage.getItem("save_"+v.id)==="1" ? "✅ Enregistrée" : "🔖 Enregistrer"}</button>
         <button class="dl-btn" onclick="window.open('https://wa.me/243983356734?text='+encodeURIComponent('Bonjour Freddy-V, je veux signaler la vidéo: ' + (v.title||'')) )">⚠️ Signaler</button>
       </div>
-      ${localStorage.getItem("ma_chaine")===ch ? `<button class="del-btn" onclick="supprimerVideo('${v.id}')">🗑️ Supprimer ma vidéo</button>` : ''}
+      <button class="next-btn" onclick="suivantVideo('${v.id}')">➡️ SUIVANT</button>
+      <button class="del-btn" onclick="supprimerVideo('${v.id}')">🗑️ SUPPRIMER</button>
     </div>`;
 }
 function afficher(liste){
-  chargementFini = true;
   if(!liste || liste.length===0){ document.getElementById("liste").innerHTML="<p style='text-align:center'>Aucune vidéo pour le moment. Sois le premier à publier !</p>"; return; }
   let html="";
   let parChaine={};
@@ -340,24 +356,15 @@ function afficher(liste){
   document.getElementById("liste").innerHTML=html;
 }
 async function charger(){
-  document.getElementById("liste").innerHTML="Chargement...";
-  document.getElementById("debugInfo").innerText="Connexion à Supabase...";
-  setTimeout(()=>{
-    if(!chargementFini){
-      document.getElementById("liste").innerHTML="<p style='text-align:center'>Toujours en chargement... Recharge la page en navigation privée avec ?v=999</p>";
-    }
-  }, 6000);
   try{
     let {data,error}=await supabaseClient.from("videos").select("*").order("created_at",{ascending:false});
-    if(error){ chargementFini=true; document.getElementById("liste").innerHTML="<p style='text-align:center;color:#ffcc00'>Erreur Supabase : "+error.message+"</p>"; document.getElementById("debugInfo").innerText="Erreur: "+error.message; return; }
+    if(error){ document.getElementById("liste").innerHTML="<p style='text-align:center'>Erreur : "+error.message+"</p>"; return; }
     toutesVideos=data||[];
     document.getElementById("notifCount").innerText = toutesVideos.length>9 ? "9+" : toutesVideos.length;
-    document.getElementById("debugInfo").innerText="Connecté ! "+toutesVideos.length+" vidéo(s) trouvée(s)";
     majPopulation();
     filtrer();
     setTimeout(()=>{ chargerDurees(); chargerAbonnes(); }, 500);
   }catch(e){
-    chargementFini=true;
     document.getElementById("liste").innerHTML="<p style='text-align:center'>Erreur réseau : "+e.message+"</p>";
   }
 }
@@ -384,16 +391,10 @@ async function publier(){
   document.getElementById("youtube_url").value="";
   charger();
 }
-async function supprimerVideo(id){
-  if(!confirm("Supprimer cette vidéo ?")) return;
-  let {error}=await supabaseClient.from("videos").delete().eq("id",id);
-  if(error){ alert("Erreur : "+error.message); return; }
-  charger();
-}
 afficherMaChaine();
 charger();
 </script>
-<!-- ===== AJOUT : PUBLIER DEPUIS TELEPHONE - 0 à 120 MINUTES MAX = 2H - SANS BOUCLE ===== -->
+<!-- ===== AJOUT SEULEMENT : PUBLIER DEPUIS TELEPHONE 0 à 120 MIN ===== -->
 <script>
 window.addEventListener('load', function(){
   let inputYT = document.getElementById('youtube_url');
@@ -407,7 +408,7 @@ window.addEventListener('load', function(){
     </div>
     <div id="zonePhoneAjout" style="display:none">
       <input type="file" id="vFile" accept="video/*" style="background:#fff;color:#000">
-      <p style="font-size:13px;color:#ffcc00;margin:0">Choisis la vidéo dans ton téléphone. <b>De 0 minute à 120 minutes maximum = 2h max.</b> Si plus de 2h, ça refuse.</p>
+      <p style="font-size:13px;color:#ffcc00;margin:0">Choisis la vidéo dans ton téléphone. <b>De 0 minute à 120 minutes maximum = 2h max.</b></p>
       <p id="dureeVideoInfo" style="font-size:13px;color:#fff;margin:4px 0 0"></p>
       <div id="uploadProgress" style="display:none;background:#333;height:10px;border-radius:10px;overflow:hidden;margin-top:8px"><div id="uploadBar" style="height:100%;width:0%;background:#ff0000"></div></div>
       <p id="uploadMsg" style="font-size:13px;color:#fff"></p>
@@ -424,15 +425,13 @@ window.addEventListener('load', function(){
       let min = Math.floor(sec/60);
       let s = Math.floor(sec%60);
       if(sec > 7200){
-        info.innerText = "❌ Trop longue : " + min + " min " + s + " sec. Maximum = 120 minutes (2h). Choisis une vidéo plus courte.";
+        info.innerText = "❌ Trop longue : " + min + " min " + s + " sec. Maximum = 120 minutes (2h).";
         info.style.color = "#ff4444";
       } else {
         info.innerText = "✅ Durée : " + min + " min " + s + " sec / 120 min max. C'est bon, tu peux publier.";
         info.style.color = "#00ff88";
       }
-    }catch(e){
-      info.innerText = "Impossible de lire la durée, on va vérifier au moment de publier.";
-    }
+    }catch(e){ info.innerText = "On va vérifier au moment de publier."; }
   });
 });
 let modePublier = 'yt';
@@ -452,10 +451,7 @@ function getDureeVideo(file){
     let url = URL.createObjectURL(file);
     let vid = document.createElement('video');
     vid.preload = 'metadata';
-    vid.onloadedmetadata = function(){
-      URL.revokeObjectURL(url);
-      resolve(vid.duration);
-    };
+    vid.onloadedmetadata = function(){ URL.revokeObjectURL(url); resolve(vid.duration); };
     vid.onerror = function(){ URL.revokeObjectURL(url); reject(new Error('video illisible')); };
     vid.src = url;
   });
@@ -469,9 +465,7 @@ async function uploadVersSupabase(file){
 }
 let publierAncien = publier;
 async function publier(){
-  if(modePublier !== 'phone'){
-    return publierAncien();
-  }
+  if(modePublier !== 'phone'){ return publierAncien(); }
   let titre = document.getElementById("titre").value.trim();
   let chaine = document.getElementById("chaine").value.trim() || localStorage.getItem("ma_chaine") || "freddyvmondial";
   if(!titre){ alert("Mets le titre !"); return; }
@@ -480,15 +474,15 @@ async function publier(){
   if(f.size > 50*1024*1024){ alert("Vidéo trop grosse. Max 50 Mo."); return; }
   document.getElementById("msg").innerText = "Vérification de la durée (max 2h)...";
   let dureeSec = 0;
-  try{ dureeSec = await getDureeVideo(f); }catch(e){ alert("On n'arrive pas à lire cette vidéo. Essaie une autre vidéo."); return; }
-  if(!dureeSec || dureeSec <= 0){ alert("Vidéo vide ou illisible. Choisis une autre vidéo."); return; }
+  try{ dureeSec = await getDureeVideo(f); }catch(e){ alert("On n'arrive pas à lire cette vidéo."); return; }
+  if(!dureeSec || dureeSec <= 0){ alert("Vidéo vide ou illisible."); return; }
   if(dureeSec > 7200){
     let minTrop = Math.floor(dureeSec/60);
-    alert("❌ Vidéo trop longue : " + minTrop + " minutes. Maximum autorisé = 120 minutes (2h). Coupe ta vidéo et republie.");
+    alert("❌ Vidéo trop longue : " + minTrop + " minutes. Maximum = 120 minutes (2h).");
     document.getElementById("msg").innerText = "❌ Trop longue : " + minTrop + " min. Max 120 min (2h).";
     return;
   }
-  document.getElementById("msg").innerText = "✅ Durée OK : " + Math.floor(dureeSec/60) + " min / 120 min max. Envoi en cours, ne quitte pas...";
+  document.getElementById("msg").innerText = "✅ Durée OK : " + Math.floor(dureeSec/60) + " min / 120 min max. Envoi en cours...";
   let prog = document.getElementById("uploadProgress");
   let bar = document.getElementById("uploadBar");
   if(prog) prog.style.display="block";
@@ -508,11 +502,9 @@ async function publier(){
     likes: 0
   }]);
   if(error){ alert("Erreur : "+error.message); return; }
-  document.getElementById("msg").innerText="✅ Publié depuis ton téléphone ! Durée : " + Math.floor(dureeSec/60) + " min.";
+  document.getElementById("msg").innerText="✅ Publié depuis ton téléphone !";
   document.getElementById("titre").value="";
   document.getElementById("vFile").value="";
-  let info = document.getElementById("dureeVideoInfo");
-  if(info) info.innerText = "";
   charger();
 }
 </script>
