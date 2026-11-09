@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FREDDY-V Mondial</title>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6553183721717606" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box}
@@ -121,17 +122,14 @@ function partagerChaine(){ let ch=localStorage.getItem("ma_chaine")||"freddyvmon
 function ouvrirNotif(){ let html=""; if(toutesVideos.length===0) html="Pas de notification."; else toutesVideos.slice(0,5).forEach(v=>{ html+=`<p>🔥 Nouvelle vidéo : <b>${v.title}</b> par ${v.channel}</p><hr>`; }); document.getElementById("notifList").innerHTML=html; document.getElementById("notifCount").innerText="0"; ouvrirModal('modalNotif'); }
 function montrerTab(t){ onglet=t; document.getElementById("tabToutes").classList.toggle("active",t==="toutes"); document.getElementById("tabShorts").classList.toggle("active",t==="shorts"); document.getElementById("tabEnregistrees").classList.toggle("active",t==="enregistrees"); filtrer(); }
 function filtrer(){ let mot=document.getElementById("recherche").value.toLowerCase(); let f=toutesVideos.filter(v=>(v.title||"").toLowerCase().includes(mot)||(v.channel||"").toLowerCase().includes(mot)); if(onglet==="shorts") f=f.filter(v=>estShort(v)); if(onglet==="enregistrees") f=f.filter(v=>localStorage.getItem("save_"+v.id)==="1"); afficher(f); }
-
 async function compterVue(v){
   let id=v.id;
   if(localStorage.getItem("vu_"+id)==="1"){ return; }
   localStorage.setItem("vu_"+id,"1");
   let nouvelleValeur = (v.views||0)+1;
-  // Mise à jour dans Supabase - c'est ça qui fait monter pour tout le monde
   let { error } = await supabaseClient.from("videos").update({views: nouvelleValeur}).eq("id", id);
   if(error){ alert("Supabase bloque encore : "+error.message+" - Va faire l'ÉTAPE 1"); return; }
   v.views = nouvelleValeur;
-  // Mets à jour l'affichage sans recharger
   let el = document.getElementById("vues_"+id);
   if(el) el.innerText = "👁️ " + nouvelleValeur + " vues réelles";
   majPopulation();
