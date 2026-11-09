@@ -154,6 +154,11 @@ function getDeviceId(){ let id=localStorage.getItem("freddy_device_id"); if(!id)
 function youtubeId(url){ if(!url) return ""; if(url.includes("youtu.be/")) return url.split("youtu.be/")[1].split("?")[0].split("&")[0]; if(url.includes("v=")) return url.split("v=")[1].split("&")[0]; if(url.includes("shorts/")) return url.split("shorts/")[1].split("?")[0].split("&")[0]; return ""; }
 function parseISO8601(d){ if(!d) return 0; let m=d.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/); if(!m) return 0; return (parseInt(m[1]||0)*3600)+(parseInt(m[2]||0)*60)+parseInt(m[3]||0); }
 function formatDuree(sec){ if(!sec) return ""; let m=Math.floor(sec/60), s=sec%60; return m+":"+(s<10?"0"+s:s); }
+function isSupabaseVideo2(v){
+  if(!v) return false;
+  let u = (v.video_url||"") + (v.youtube_url||"") + (v.embed_url||"");
+  return u.includes('supabase.co/storage') || u.includes('/storage/v1/object');
+}
 function estShort(v){
   let yid=youtubeId(v.youtube_url||v.video_url||"");
   if(durees[yid]!==undefined){ return durees[yid] <= 180; }
@@ -208,14 +213,24 @@ function majPopulation(){
 function jouerEnGrand(v){
   compterVue(v);
   let wrap=document.getElementById("wrap_"+v.id);
-  let embed=v.embed_url||v.video_url||v.youtube_url;
   wrap.classList.add("grand");
+  if(isSupabaseVideo2(v)){
+    let src = v.video_url || v.embed_url;
+    wrap.innerHTML = `<video src="${src}" controls autoplay playsinline style="width:100%;height:100%"></video><button onclick="event.stopPropagation();fermerGrand('${v.id}')" style="position:absolute;top:10px;right:10px;background:#ff0000;color:white;border:none;padding:10px 15px;border-radius:50%;font-size:20px;z-index:1000">✖</button>`;
+    return;
+  }
+  let embed=v.embed_url||v.video_url||v.youtube_url;
   wrap.innerHTML=`<iframe src="${embed}?autoplay=1" allow="autoplay; fullscreen" allowfullscreen></iframe><button onclick="event.stopPropagation();fermerGrand('${v.id}')" style="position:absolute;top:10px;right:10px;background:#ff0000;color:white;border:none;padding:10px 15px;border-radius:50%;font-size:20px;z-index:1000">✖</button>`;
 }
 function fermerGrand(id){
   let v=toutesVideos.find(x=>x.id===id);
   let wrap=document.getElementById("wrap_"+id);
   wrap.classList.remove("grand");
+  if(v && isSupabaseVideo2(v)){
+    let src = v.video_url || v.embed_url;
+    wrap.innerHTML = `<video src="${src}" preload="metadata" muted style="width:100%;height:220px"></video><span class="play-big">▶️</span>`;
+    return;
+  }
   let yid=youtubeId(v.youtube_url||v.video_url||"");
   let thumb="https://i.ytimg.com/vi/"+yid+"/hqdefault.jpg";
   wrap.innerHTML=`<img src="${thumb}"><span class="play-big">▶️</span>`;
@@ -275,7 +290,6 @@ async function abonnerChaine(chaine, btn){
   });
 }
 function carteVideo(v){
-    try{
     let yid=youtubeId(v.youtube_url||v.video_url||"");
     let vertical = ( (v.youtube_url||"").includes("shorts") || durees[yid]!==undefined && durees[yid]<=180 );
     let thumb = "https://i.ytimg.com/vi/"+yid+"/hqdefault.jpg";
@@ -287,9 +301,16 @@ function carteVideo(v){
     let btnTxt = estAbo ? "ABONNÉ ✓" : "S'ABONNER";
     let btnCls = estAbo ? "sub-btn abonne" : "sub-btn";
     let dureeTxt = durees[yid] ? formatDuree(durees[yid]) : "";
+    let mediaHtml = "";
+    if(isSupabaseVideo2(v)){
+      let src = v.video_url || v.embed_url;
+      mediaHtml = `<video src="${src}" preload="metadata" muted style="width:100%;height:220px;display:block;background:#000"></video><span class="play-big">▶️</span>`;
+    } else {
+      mediaHtml = `<img src="${thumb}"><span class="play-big">▶️</span>`;
+    }
     return `<div class="video-card">
       <div class="chaine-row"><div class="chaine-info"><p class="chaine-nom">📺 ${ch}</p><p class="chaine-count" data-count-chaine="${ck}">👥 ${nbAbo} abonnés</p></div><button class="${btnCls}" data-chaine="${ck}" onclick="abonnerChaine('${ch.replace(/'/g,"\\'")}', this)">${btnTxt}</button></div>
-      <div class="video-wrap ${vertical?'vertical':''}" id="wrap_${v.id}" onclick='jouerEnGrand(${vObj})'><img src="${thumb}"><span class="play-big">▶️</span></div>
+      <div class="video-wrap ${vertical?'vertical':''}" id="wrap_${v.id}" onclick='jouerEnGrand(${vObj})'>${mediaHtml}</div>
       <h3>${v.title} ${dureeTxt ? `<span class="duree-badge">⏱️ ${dureeTxt}</span>` : ''}</h3>
       <p>${ch} • ${v.created_at ? new Date(v.created_at).toLocaleDateString('fr-FR') : ''}</p>
       <div class="stats" id="vues_${v.id}">👁️ ${v.views||0} vues réelles</div>
@@ -305,7 +326,6 @@ function carteVideo(v){
       </div>
       ${localStorage.getItem("ma_chaine")===ch ? `<button class="del-btn" onclick="supprimerVideo('${v.id}')">🗑️ Supprimer ma vidéo</button>` : ''}
     </div>`;
-    }catch(e){ return "<p>Erreur vidéo: "+e.message+"</p>"; }
 }
 function afficher(liste){
   chargementFini = true;
@@ -322,16 +342,14 @@ function afficher(liste){
 async function charger(){
   document.getElementById("liste").innerHTML="Chargement...";
   document.getElementById("debugInfo").innerText="Connexion à Supabase...";
-  // Sécurité : si après 6 secondes toujours bloqué, on force l'affichage
   setTimeout(()=>{
     if(!chargementFini){
-      document.getElementById("liste").innerHTML="<p style='text-align:center'>Toujours en chargement... Recharge la page en navigation privée avec ?v=999<br>Si ça continue, envoie-moi une photo de ce message.</p>";
-      document.getElementById("debugInfo").innerText="Chargement trop long - vérifie ta connexion / GitHub";
+      document.getElementById("liste").innerHTML="<p style='text-align:center'>Toujours en chargement... Recharge la page en navigation privée avec ?v=999</p>";
     }
   }, 6000);
   try{
     let {data,error}=await supabaseClient.from("videos").select("*").order("created_at",{ascending:false});
-    if(error){ chargementFini=true; document.getElementById("liste").innerHTML="<p style='text-align:center;color:#ffcc00'>Erreur Supabase : "+error.message+"<br>Va dans Supabase > SQL et refais les politiques.</p>"; document.getElementById("debugInfo").innerText="Erreur: "+error.message; return; }
+    if(error){ chargementFini=true; document.getElementById("liste").innerHTML="<p style='text-align:center;color:#ffcc00'>Erreur Supabase : "+error.message+"</p>"; document.getElementById("debugInfo").innerText="Erreur: "+error.message; return; }
     toutesVideos=data||[];
     document.getElementById("notifCount").innerText = toutesVideos.length>9 ? "9+" : toutesVideos.length;
     document.getElementById("debugInfo").innerText="Connecté ! "+toutesVideos.length+" vidéo(s) trouvée(s)";
@@ -375,7 +393,7 @@ async function supprimerVideo(id){
 afficherMaChaine();
 charger();
 </script>
-<!-- ===== AJOUT : PUBLIER DEPUIS TELEPHONE - 0 à 120 MINUTES MAX = 2H ===== -->
+<!-- ===== AJOUT : PUBLIER DEPUIS TELEPHONE - 0 à 120 MINUTES MAX = 2H - SANS BOUCLE ===== -->
 <script>
 window.addEventListener('load', function(){
   let inputYT = document.getElementById('youtube_url');
@@ -428,10 +446,6 @@ function choisirMode(m){
   let b2 = document.getElementById('btnPhone');
   if(b1) b1.style.background = m==='yt' ? '#ff0000' : '#333';
   if(b2) b2.style.background = m==='phone' ? '#ff0000' : '#333';
-}
-function isSupabaseVideo2(v){
-  let u = (v.video_url||"") + (v.youtube_url||"") + (v.embed_url||"");
-  return u.includes('supabase.co/storage') || u.includes('/storage/v1/object');
 }
 function getDureeVideo(file){
   return new Promise((resolve, reject)=>{
@@ -500,38 +514,6 @@ async function publier(){
   let info = document.getElementById("dureeVideoInfo");
   if(info) info.innerText = "";
   charger();
-}
-let jouerEnGrandAncien = jouerEnGrand;
-function jouerEnGrand(v){
-  if(!isSupabaseVideo2(v)){
-    return jouerEnGrandAncien(v);
-  }
-  compterVue(v);
-  let wrap = document.getElementById("wrap_"+v.id);
-  wrap.classList.add("grand");
-  let src = v.video_url || v.embed_url;
-  wrap.innerHTML = `<video src="${src}" controls autoplay playsinline style="width:100%;height:100%"></video><button onclick="event.stopPropagation();fermerGrand('${v.id}')" style="position:absolute;top:10px;right:10px;background:#ff0000;color:white;border:none;padding:10px 15px;border-radius:50%;font-size:20px;z-index:1000">✖</button>`;
-}
-let fermerGrandAncien = fermerGrand;
-function fermerGrand(id){
-  let v = toutesVideos.find(x=>x.id===id);
-  if(v && isSupabaseVideo2(v)){
-    let wrap = document.getElementById("wrap_"+id);
-    wrap.classList.remove("grand");
-    let src = v.video_url || v.embed_url;
-    wrap.innerHTML = `<video src="${src}" preload="metadata" muted style="width:100%;height:220px"></video><span class="play-big">▶️</span>`;
-    return;
-  }
-  return fermerGrandAncien(id);
-}
-let carteVideoAncien = carteVideo;
-function carteVideo(v){
-  let html = carteVideoAncien(v);
-  if(isSupabaseVideo2(v)){
-    let src = v.video_url || v.embed_url;
-    html = html.replace(/<img src="https:\/\/i\.ytimg\.com[^>]*>/, `<video src="${src}" preload="metadata" muted style="width:100%;height:220px;display:block;background:#000"></video>`);
-  }
-  return html;
 }
 </script>
 <!-- ===== FIN AJOUT ===== -->
