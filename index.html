@@ -185,7 +185,29 @@ function fermerModal(id){ document.getElementById(id).style.display="none"; }
 function changerLangue(){ if(langue==="FR"){langue="EN";document.getElementById("btnLang").innerText="EN";} else {langue="FR";document.getElementById("btnLang").innerText="FR";} }
 function afficherMaChaine(){ let c=localStorage.getItem("ma_chaine"); if(c){ document.getElementById("maChaineInfo").innerText="✅ Ta chaîne : "+c; document.getElementById("chaine").value=c; } }
 function creerChaine(){ let nom=document.getElementById("nomChaine").value; if(!nom){alert("Mets le nom !");return;} localStorage.setItem("ma_chaine",nom); afficherMaChaine(); alert("Chaîne "+nom+" créée 🎉"); fermerModal('modalChaine'); }
-function demandePaye(){ let nom=document.getElementById("nomPaye").value,ch=document.getElementById("chainePaye").value,tel=document.getElementById("telPaye").value; if(!nom||!ch||!tel){alert("Remplis tout !");return;} localStorage.setItem("createur_paye_"+ch,JSON.stringify({nom,tel})); alert("Demande envoyée !"); fermerModal('modalPaye'); }
+// ===== SEUL CHANGEMENT : DEMANDE AUTOMATIQUE = OKAY + IL PUBLIE TOUT DE SUITE =====
+function demandePaye(){
+  let nom=document.getElementById("nomPaye").value.trim();
+  let ch=document.getElementById("chainePaye").value.trim();
+  let tel=document.getElementById("telPaye").value.trim();
+  if(!nom||!ch||!tel){ alert("Remplis tout ! Nom, chaîne, WhatsApp"); return; }
+  // Sauvegarde automatique
+  localStorage.setItem("ma_chaine", ch);
+  localStorage.setItem("createur_paye_"+ch, JSON.stringify({nom:nom, tel:tel, date:new Date().toISOString()}));
+  localStorage.setItem("createur_approuve_"+ch, "1");
+  localStorage.setItem("createur_approuve_nom", nom);
+  document.getElementById("payeMsg").innerText = "✅ OKAY ! Demande acceptée !";
+  document.getElementById("payeMsg").style.color = "#00ff88";
+  afficherMaChaine();
+  fermerModal('modalPaye');
+  alert("✅ OKAY !\n\nFélicitations "+nom+" !\nTa demande est acceptée automatiquement.\nTu es maintenant Créateur Payé pour la chaîne : "+ch+"\n\n1 vue = 1 personne\n1000 vues = 500 FC\n\nTu peux commencer à publier MAINTENANT !");
+  // Il commence à publier tout de suite : on l'amène à Publier
+  setTimeout(()=>{
+    document.getElementById('publier').scrollIntoView({behavior:'smooth'});
+    let t = document.getElementById("titre");
+    if(t) t.focus();
+  }, 500);
+}
 function partagerChaine(){ let ch=localStorage.getItem("ma_chaine")||"freddyvmondial"; let lien="https://freddy-v-o82q.onrender.com - Chaîne "+ch; if(navigator.share) navigator.share({title:"FREDDY-V Mondial",text:lien,url:"https://freddy-v-o82q.onrender.com"}); else {navigator.clipboard.writeText(lien); alert("Lien copié !");} }
 function ouvrirNotif(){ let html=""; if(toutesVideos.length===0) html="Pas de notification."; else toutesVideos.slice(0,5).forEach(v=>{ html+=`<p>🔥 Nouvelle vidéo : <b>${v.title}</b> par ${v.channel}</p><hr>`; }); document.getElementById("notifList").innerHTML=html; document.getElementById("notifCount").innerText="0"; ouvrirModal('modalNotif'); }
 function montrerTab(t){ onglet=t; document.getElementById("tabToutes").classList.toggle("active",t==="toutes"); document.getElementById("tabShorts").classList.toggle("active",t==="shorts"); document.getElementById("tabEnregistrees").classList.toggle("active",t==="enregistrees"); filtrer(); }
@@ -286,7 +308,6 @@ async function abonnerChaine(chaine, btn){
     el.innerText="👥 "+(abonnesMap[key]||0)+" abonnés";
   });
 }
-// BOUTON SUIVANT + SUPPRIMER SUR CHAQUE VIDEO
 function suivantVideo(idActuelle){
   let idx = toutesVideos.findIndex(v=>v.id===idActuelle);
   if(idx===-1) return;
