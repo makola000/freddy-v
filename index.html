@@ -107,9 +107,39 @@ input{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:none;font-si
   </div>
   <div id="liste">Chargement...</div>
 </div>
+
+<!-- ======== TEXTE POUR GOOGLE - NE PAS ENLEVER ======== -->
+<div style="background:#000;padding:25px 15px;text-align:center;margin-top:20px;border-top:2px solid #ff0000">
+  <h3 style="color:white;margin:0 0 10px">À PROPOS DE FREDDY-V MONDIAL</h3>
+  <p style="color:#ccc;font-size:14px;line-height:1.6;max-width:700px;margin:0 auto">
+    FREDDY-V Mondial est un site web créé par <b style="color:white">Makola Kibwe</b> à Masisi, Nord-Kivu, en République Démocratique du Congo.
+    C'est une plateforme où tout le monde peut publier sa vidéo, créer sa chaîne, partager ses talents, sa foi et ses histoires.
+    Notre devise : "Tout le monde publie, tout le monde crée sa chaîne. Jésus revient."
+  </p>
+  <h3 style="color:white;margin:20px 0 10px">CONTACT</h3>
+  <p style="color:#ccc;font-size:14px;line-height:1.6">
+    Pour toute question, contactez-nous :<br>
+    Créateur : Makola Kibwe<br>
+    Site : https://freddy-v-o82q.onrender.com<br>
+    YouTube : @freddyvmondial
+  </p>
+  <h3 style="color:white;margin:20px 0 10px">POLITIQUE DE CONFIDENTIALITÉ</h3>
+  <p style="color:#ccc;font-size:13px;line-height:1.6;max-width:700px;margin:0 auto;text-align:left">
+    Sur FREDDY-V Mondial, nous respectons votre vie privée.<br><br>
+    1. Nous ne collectons pas votre nom, votre mot de passe ou vos informations personnelles sans votre accord.<br>
+    2. Nous utilisons des cookies pour compter les vues, les abonnés et améliorer le site.<br>
+    3. Nous utilisons Google AdSense pour afficher des publicités. Google peut utiliser des cookies pour vous montrer des publicités adaptées à vos intérêts. Vous pouvez désactiver les publicités personnalisées dans les paramètres de votre compte Google.<br>
+    4. Les vidéos publiées sur le site appartiennent à leurs créateurs. Si une vidéo ne vous appartient pas, ne la publiez pas.<br>
+    5. En utilisant ce site, vous acceptez cette politique.
+  </p>
+  <p style="color:#888;font-size:12px;margin-top:20px">© 2026 FREDDY-V Mondial - Par Makola Kibwe - Tous droits réservés.</p>
+</div>
+<!-- ======== FIN TEXTE GOOGLE ======== -->
+
 <div class="modal" id="modalChaine"><div class="modal-box"><span class="close" onclick="fermerModal('modalChaine')">✖</span><h2>+ Créer ma chaîne</h2><input id="nomChaine" placeholder="Nom de ta chaîne"><input id="descChaine" placeholder="Description"><button class="btn-pub" onclick="creerChaine()">CRÉER MA CHAÎNE</button><p id="chaineMsg"></p></div></div>
 <div class="modal" id="modalPaye"><div class="modal-box"><span class="close" onclick="fermerModal('modalPaye')">✖</span><h2>💰 Devenir créateur payé</h2><p>1 vue réelle = 1 personne. 1000 vues = 500 FC.</p><input id="nomPaye" placeholder="Ton nom complet"><input id="chainePaye" placeholder="Nom de ta chaîne"><input id="telPaye" placeholder="Ton WhatsApp"><button class="btn-pub" onclick="demandePaye()">ENVOYER MA DEMANDE</button><p id="payeMsg"></p></div></div>
 <div class="modal" id="modalNotif"><div class="modal-box"><span class="close" onclick="fermerModal('modalNotif')">✖</span><h2>🔔 Notifications</h2><div id="notifList"></div></div></div>
+
 <script>
 const SUPABASE_URL = "https://ugffxavzyxczchxmfscq.supabase.co";
 const SUPABASE_KEY = "sb_publishable_DgJKD1dhv8EsU5qmZ-6D3Q_67CtnLh6";
@@ -118,11 +148,10 @@ let toutesVideos = [];
 let durees = {};
 let onglet = "toutes";
 let langue = "FR";
-let abonnesMap = {}; // chaine_clean -> nombre
-let mesAbos = new Set(); // chaines ou moi je suis abonné
+let abonnesMap = {};
+let mesAbos = new Set();
 function getDeviceId(){ let id=localStorage.getItem("freddy_device_id"); if(!id){ id="dev_"+Date.now()+"_"+Math.floor(Math.random()*999999); localStorage.setItem("freddy_device_id",id); } return id; }
 function youtubeId(url){ if(!url) return ""; if(url.includes("youtu.be/")) return url.split("youtu.be/")[1].split("?")[0].split("&")[0]; if(url.includes("v=")) return url.split("v=")[1].split("&")[0]; if(url.includes("shorts/")) return url.split("shorts/")[1].split("?")[0].split("&")[0]; return ""; }
-function youtubeToEmbed(url){ return "https://www.youtube.com/embed/"+youtubeId(url); }
 function parseISO8601(d){ if(!d) return 0; let m=d.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/); if(!m) return 0; return (parseInt(m[1]||0)*3600)+(parseInt(m[2]||0)*60)+parseInt(m[3]||0); }
 function formatDuree(sec){ if(!sec) return ""; let m=Math.floor(sec/60), s=sec%60; return m+":"+(s<10?"0"+s:s); }
 function estShort(v){
@@ -200,7 +229,6 @@ function partagerVideo(titre){ let lien="https://freddy-v-o82q.onrender.com - Re
 function telechargerVideo(v){ let yid=youtubeId(v.youtube_url||v.video_url||""); window.open("https://www.youtube.com/watch?v="+yid,"_blank"); alert("Sur YouTube, clique sur les 3 points > Télécharger"); }
 function remixerVideo(v){ let nouveau=prompt("Nouveau titre pour ton Remix ?","REMIX - "+v.title); if(!nouveau) return; let chaine=localStorage.getItem("ma_chaine")||"FREDDY-V"; supabaseClient.from("videos").insert([{title:nouveau,channel:chaine,youtube_url:v.youtube_url,video_url:v.video_url,embed_url:v.embed_url,link:v.link,views:0,likes:0}]).then(({error})=>{ if(error) alert("Erreur : "+error.message); else {alert("Remix publié ! 🎬"); charger();} }); }
 function enregistrerVideo(id,btn){ let deja=localStorage.getItem("save_"+id)==="1"; if(deja){localStorage.removeItem("save_"+id); btn.innerText="🔖 Enregistrer";} else {localStorage.setItem("save_"+id,"1"); btn.innerText="✅ Enregistrée"; alert("Vidéo enregistrée 🔖");} filtrer(); }
-// ===== ABONNES GLOBAL POUR TOUT LE MONDE =====
 function cleanChaine(n){ return (n||"FREDDY-V").trim().toLowerCase().replace(/[^a-z0-9]/g,"_"); }
 function estAbonneChaine(chaine){ return mesAbos.has(cleanChaine(chaine)); }
 async function chargerAbonnes(){
@@ -232,7 +260,6 @@ async function abonnerChaine(chaine, btn){
     abonnesMap[key]=(abonnesMap[key]||0)+1;
     alert("Merci ! Tu t'es abonné à "+chaine+" ❤️");
   }
-  // Met à jour tous les boutons + compteurs de cette chaîne
   document.querySelectorAll("[data-chaine='"+key+"']").forEach(b=>{
     if(mesAbos.has(key)){ b.innerText="ABONNÉ ✓"; b.classList.add("abonne"); } else { b.innerText="S'ABONNER"; b.classList.remove("abonne"); }
     b.disabled=false;
@@ -269,58 +296,45 @@ function carteVideo(v){
         <button class="dl-btn" onclick="event.stopPropagation();telechargerVideo(${JSON.stringify(v).replace(/'/g,"")})">⬇️ Télécharger</button>
         <button class="remix-btn" onclick="event.stopPropagation();remixerVideo(${JSON.stringify(v).replace(/'/g,"")})">🎬 Remix</button>
         <button class="save-btn" onclick="event.stopPropagation();enregistrerVideo('${v.id}',this)">${dejaSave}</button>
-        <button class="dl-btn" onclick="event.stopPropagation();jouerEnGrand(${JSON.stringify(v).replace(/'/g,"")})">⛶ Plein écran</button>
+        <button class="dl-btn" onclick="event.stopPropagation();partagerVideo('${(v.title||"").replace(/'/g,"")}')">💬 Commenter</button>
       </div>
-      <button class="del-btn" onclick="supprimerVideo('${v.id}')">🗑️ Supprimer (Patron seulement)</button>
+      <button class="del-btn" onclick="supprimerVideo('${v.id}')">🗑️ Supprimer ma vidéo</button>
     </div>`;
 }
-function afficher(data){
-  if(!data||data.length===0){ document.getElementById("liste").innerHTML="Aucune vidéo."; return; }
-  if(onglet!=="toutes"){
-    let html="";
-    data.forEach(v=>{ html+=carteVideo(v); });
-    document.getElementById("liste").innerHTML=html;
-    return;
-  }
-  let populaires = data.filter(v=>!estShort(v)).slice(0,4);
-  let shorts = data.filter(v=>estShort(v));
-  let restePopulaires = data.filter(v=>!estShort(v)).slice(4);
-  let html="";
-  if(populaires.length>0){
-    html+=`<div class="section-title">🔥 VIDÉOS POPULAIRES <span>• Plus de 3 minutes</span></div>`;
-    populaires.forEach(v=>{ html+=carteVideo(v); });
-  }
-  if(shorts.length>0){
-    html+=`<div class="section-title">📱 SHORTS <span>• Moins de 3 minutes</span></div>`;
-    shorts.forEach(v=>{ html+=carteVideo(v); });
-  }
-  if(restePopulaires.length>0){
-    html+=`<div class="section-title">▶️ AUTRES VIDÉOS POPULAIRES</div>`;
-    restePopulaires.forEach(v=>{ html+=carteVideo(v); });
-  }
-  document.getElementById("liste").innerHTML=html;
+function afficher(liste){
+  if(!liste || liste.length===0){ document.getElementById("liste").innerHTML="<p style='text-align:center'>Aucune vidéo. Publie la première !</p>"; majPopulation(); return; }
+  document.getElementById("liste").innerHTML = liste.map(carteVideo).join("");
+  majPopulation();
 }
 async function publier(){
-  let titre=document.getElementById("titre").value; let chaine=document.getElementById("chaine").value; let youtube_url=document.getElementById("youtube_url").value;
-  if(!titre||!youtube_url){alert("Mets le titre et le lien !");return;}
-  let {error}=await supabaseClient.from("videos").insert([{title:titre,channel:chaine||"FREDDY-V",youtube_url:youtube_url,video_url:youtube_url,embed_url:youtubeToEmbed(youtube_url),link:youtube_url,views:0,likes:0}]);
-  if(error) alert("Erreur : "+error.message); else {alert("Vidéo publiée ! 🎉"); document.getElementById("titre").value=""; document.getElementById("youtube_url").value=""; charger();}
+  let titre=document.getElementById("titre").value.trim();
+  let chaine=document.getElementById("chaine").value.trim() || localStorage.getItem("ma_chaine") || "FREDDY-V";
+  let url=document.getElementById("youtube_url").value.trim();
+  if(!titre || !url){ document.getElementById("msg").innerText="Mets le titre + le lien !"; return; }
+  let yid=youtubeId(url);
+  if(!yid){ document.getElementById("msg").innerText="Lien YouTube invalide"; return; }
+  let embed="https://www.youtube.com/embed/"+yid;
+  document.getElementById("msg").innerText="Publication...";
+  let {error}=await supabaseClient.from("videos").insert([{title:titre,channel:chaine,youtube_url:url,video_url:url,embed_url:embed,link:url,views:0,likes:0}]);
+  if(error){ document.getElementById("msg").innerText="Erreur : "+error.message; return; }
+  document.getElementById("msg").innerText="Publié ! 🎉";
+  document.getElementById("titre").value=""; document.getElementById("youtube_url").value="";
+  charger();
 }
 async function supprimerVideo(id){
-  let code=prompt("Code patron ?"); if(code!=="FREDDY123"){alert("Tu n'es pas le patron !");return;}
-  if(!confirm("Tu veux vraiment supprimer ?")) return;
+  if(!confirm("Supprimer cette vidéo ?")) return;
   let {error}=await supabaseClient.from("videos").delete().eq("id",id);
-  if(error) alert("Erreur : "+error.message); else {alert("Vidéo supprimée !"); charger();}
+  if(error){ alert(error.message); return; }
+  charger();
 }
 async function charger(){
   let {data,error}=await supabaseClient.from("videos").select("*").order("created_at",{ascending:false});
-  if(error){document.getElementById("liste").innerHTML="Erreur : "+error.message;return;}
+  if(error){ document.getElementById("liste").innerHTML="Erreur : "+error.message; return; }
   toutesVideos=data||[];
-  document.getElementById("notifCount").innerText=toutesVideos.length;
-  majPopulation();
-  filtrer();
+  document.getElementById("notifCount").innerText=toutesVideos.length>0?toutesVideos.length:"0";
+  await chargerAbonnes();
   chargerDurees();
-  chargerAbonnes();
+  filtrer();
 }
 afficherMaChaine();
 charger();
