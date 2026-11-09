@@ -36,11 +36,14 @@ input{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:none;font-si
 .video-wrap{position:relative;background:#000;border-radius:10px;overflow:hidden;cursor:pointer}
 .video-wrap img{width:100%;display:block}
 .video-wrap iframe{width:100%;height:220px;border:none;display:block}
+.video-wrap video{width:100%;height:220px;display:block;background:#000}
 .video-wrap.vertical{max-width:300px;margin:auto}
 .video-wrap.vertical img{height:520px;object-fit:cover}
 .video-wrap.vertical iframe{height:520px}
+.video-wrap.vertical video{height:520px}
 .video-wrap.grand{position:fixed;top:0;left:0;width:100%;height:100%;z-index:999;border-radius:0;max-width:100% !important}
 .video-wrap.grand iframe{height:100%}
+.video-wrap.grand video{height:100%}
 .play-big{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:70px;pointer-events:none;text-shadow:0 0 15px #000;background:#ff8800;border-radius:15px;padding:5px 15px}
 .video-card h3{margin:10px 0 5px;font-size:19px}
 .video-card p{color:#aaa;margin:0 0 8px}
@@ -107,8 +110,6 @@ input{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:none;font-si
   </div>
   <div id="liste">Chargement...</div>
 </div>
-
-<!-- ======== TEXTE POUR GOOGLE - NE PAS ENLEVER ======== -->
 <div style="background:#000;padding:25px 15px;text-align:center;margin-top:20px;border-top:2px solid #ff0000">
   <h3 style="color:white;margin:0 0 10px">À PROPOS DE FREDDY-V MONDIAL</h3>
   <p style="color:#ccc;font-size:14px;line-height:1.6;max-width:700px;margin:0 auto">
@@ -134,12 +135,9 @@ input{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:none;font-si
   </p>
   <p style="color:#888;font-size:12px;margin-top:20px">© 2026 FREDDY-V Mondial - Par Makola Kibwe - Tous droits réservés.</p>
 </div>
-<!-- ======== FIN TEXTE GOOGLE ======== -->
-
 <div class="modal" id="modalChaine"><div class="modal-box"><span class="close" onclick="fermerModal('modalChaine')">✖</span><h2>+ Créer ma chaîne</h2><input id="nomChaine" placeholder="Nom de ta chaîne"><input id="descChaine" placeholder="Description"><button class="btn-pub" onclick="creerChaine()">CRÉER MA CHAÎNE</button><p id="chaineMsg"></p></div></div>
 <div class="modal" id="modalPaye"><div class="modal-box"><span class="close" onclick="fermerModal('modalPaye')">✖</span><h2>💰 Devenir créateur payé</h2><p>1 vue réelle = 1 personne. 1000 vues = 500 FC.</p><input id="nomPaye" placeholder="Ton nom complet"><input id="chainePaye" placeholder="Nom de ta chaîne"><input id="telPaye" placeholder="Ton WhatsApp"><button class="btn-pub" onclick="demandePaye()">ENVOYER MA DEMANDE</button><p id="payeMsg"></p></div></div>
 <div class="modal" id="modalNotif"><div class="modal-box"><span class="close" onclick="fermerModal('modalNotif')">✖</span><h2>🔔 Notifications</h2><div id="notifList"></div></div></div>
-
 <script>
 const SUPABASE_URL = "https://ugffxavzyxczchxmfscq.supabase.co";
 const SUPABASE_KEY = "sb_publishable_DgJKD1dhv8EsU5qmZ-6D3Q_67CtnLh6";
@@ -269,75 +267,252 @@ async function abonnerChaine(chaine, btn){
   });
 }
 function carteVideo(v){
-    let short=estShort(v);
-    let vues=v.views||0; let likes=v.likes||0; let gains=Math.floor(vues*0.5);
     let yid=youtubeId(v.youtube_url||v.video_url||"");
-    let thumb="https://i.ytimg.com/vi/"+yid+"/hqdefault.jpg";
-    let dejaSave=localStorage.getItem("save_"+v.id)==="1"?"✅ Enregistrée":"🔖 Enregistrer";
-    let dejaLike=localStorage.getItem("like_"+v.id)==="1"?"❤️ "+likes:"🤍 "+likes;
-    let chaineNom=(v.channel||"FREDDY-V").trim();
-    let chaineKey=cleanChaine(chaineNom);
-    let nbAbonnes=abonnesMap[chaineKey]||0;
-    let txtAbonne=estAbonneChaine(chaineNom)?"ABONNÉ ✓":"S'ABONNER";
-    let clsAbonne=estAbonneChaine(chaineNom)?" sub-btn abonne":" sub-btn";
-    let dureeTxt=durees[yid]?`<span class="duree-badge">⏱️ ${formatDuree(durees[yid])}</span>`:"";
+    let vertical = ( (v.youtube_url||"").includes("shorts") || durees[yid]!==undefined && durees[yid]<=180 );
+    let thumb = "https://i.ytimg.com/vi/"+yid+"/hqdefault.jpg";
+    let vObj = JSON.stringify(v).replace(/"/g, '&quot;');
+    let ch = v.channel || "FREDDY-V";
+    let ck = cleanChaine(ch);
+    let nbAbo = abonnesMap[ck] || 0;
+    let estAbo = mesAbos.has(ck);
+    let btnTxt = estAbo ? "ABONNÉ ✓" : "S'ABONNER";
+    let btnCls = estAbo ? "sub-btn abonne" : "sub-btn";
+    let dureeTxt = durees[yid] ? formatDuree(durees[yid]) : "";
     return `<div class="video-card">
-      <div class="video-wrap ${short?'vertical':''}" id="wrap_${v.id}" onclick='jouerEnGrand(${JSON.stringify(v).replace(/'/g,"")})'>
-        <img src="${thumb}" onerror="this.src='https://via.placeholder.com/640x360?text=FREDDY-V'">
-        <span class="play-big">▶️</span>
-      </div>
-      <h3>${short?'📱 SHORT • ':''}${v.title||"Sans titre"} ${dureeTxt}</h3>
-      <div class="chaine-row"><div class="chaine-info"><p class="chaine-nom">${chaineNom}</p><p class="chaine-count" data-count-chaine="${chaineKey}">👥 ${nbAbonnes} abonnés</p></div><button class="${clsAbonne}" data-chaine="${chaineKey}" onclick="event.stopPropagation();abonnerChaine('${chaineNom.replace(/'/g,"")}',this)">${txtAbonne}</button></div>
-      <div class="stats"><span id="vues_${v.id}">👁️ ${vues} vues réelles</span> <span>💰 ${gains} FC</span></div>
-      <div style="font-size:13px">Clique sur ▶️ = ça compte +1 vue et ça joue EN GRAND</div>
+      <div class="chaine-row"><div class="chaine-info"><p class="chaine-nom">📺 ${ch}</p><p class="chaine-count" data-count-chaine="${ck}">👥 ${nbAbo} abonnés</p></div><button class="${btnCls}" data-chaine="${ck}" onclick="abonnerChaine('${ch.replace(/'/g,"\\'")}', this)">${btnTxt}</button></div>
+      <div class="video-wrap ${vertical?'vertical':''}" id="wrap_${v.id}" onclick='jouerEnGrand(${vObj})'><img src="${thumb}"><span class="play-big">▶️</span></div>
+      <h3>${v.title} ${dureeTxt ? `<span class="duree-badge">⏱️ ${dureeTxt}</span>` : ''}</h3>
+      <p>${ch} • ${v.created_at ? new Date(v.created_at).toLocaleDateString('fr-FR') : ''}</p>
+      <div class="stats" id="vues_${v.id}">👁️ ${v.views||0} vues réelles</div>
       <div class="actions">
-        <button class="like-btn" onclick="event.stopPropagation();aimer(${JSON.stringify(v).replace(/'/g,"")},this)">${dejaLike}</button>
-        <button class="share-btn" onclick="event.stopPropagation();partagerVideo('${(v.title||"").replace(/'/g,"")}')">🔗 Partager</button>
-        <button class="dl-btn" onclick="event.stopPropagation();telechargerVideo(${JSON.stringify(v).replace(/'/g,"")})">⬇️ Télécharger</button>
-        <button class="remix-btn" onclick="event.stopPropagation();remixerVideo(${JSON.stringify(v).replace(/'/g,"")})">🎬 Remix</button>
-        <button class="save-btn" onclick="event.stopPropagation();enregistrerVideo('${v.id}',this)">${dejaSave}</button>
-        <button class="dl-btn" onclick="event.stopPropagation();partagerVideo('${(v.title||"").replace(/'/g,"")}')">💬 Commenter</button>
+        <button class="like-btn" onclick='aimer(${vObj}, this)'>❤️ ${v.likes||0}</button>
+        <button class="share-btn" onclick="partagerVideo('${(v.title||'').replace(/'/g,"\\'")}')">🔗 Partager</button>
+        <button class="dl-btn" onclick='telechargerVideo(${vObj})'>⬇️ Télécharger</button>
       </div>
-      <button class="del-btn" onclick="supprimerVideo('${v.id}')">🗑️ Supprimer ma vidéo</button>
+      <div class="actions">
+        <button class="remix-btn" onclick='remixerVideo(${vObj})'>🎬 Remix</button>
+        <button class="save-btn" onclick="enregistrerVideo('${v.id}', this)">${localStorage.getItem("save_"+v.id)==="1" ? "✅ Enregistrée" : "🔖 Enregistrer"}</button>
+        <button class="dl-btn" onclick="window.open('https://wa.me/243983356734?text='+encodeURIComponent('Bonjour Freddy-V, je veux signaler la vidéo: ' + (v.title||'')) )">⚠️ Signaler</button>
+      </div>
+      ${localStorage.getItem("ma_chaine")===ch ? `<button class="del-btn" onclick="supprimerVideo('${v.id}')">🗑️ Supprimer ma vidéo</button>` : ''}
     </div>`;
 }
 function afficher(liste){
-  if(!liste || liste.length===0){ document.getElementById("liste").innerHTML="<p style='text-align:center'>Aucune vidéo. Publie la première !</p>"; majPopulation(); return; }
-  document.getElementById("liste").innerHTML = liste.map(carteVideo).join("");
+  if(liste.length===0){ document.getElementById("liste").innerHTML="<p style='text-align:center'>Aucune vidéo.</p>"; return; }
+  let html="";
+  let parChaine={};
+  liste.forEach(v=>{ let ch=v.channel||"FREDDY-V"; if(!parChaine[ch]) parChaine[ch]=[]; parChaine[ch].push(v); });
+  Object.keys(parChaine).forEach(ch=>{
+    html+=`<div class="section-title">📺 CHAÎNE : <span>${ch}</span></div>`;
+    parChaine[ch].forEach(v=>{ html+=carteVideo(v); });
+  });
+  document.getElementById("liste").innerHTML=html;
+}
+async function charger(){
+  let {data,error}=await supabaseClient.from("videos").select("*").order("created_at",{ascending:false});
+  if(error){ document.getElementById("liste").innerText="Erreur : "+error.message; return; }
+  toutesVideos=data||[];
+  document.getElementById("notifCount").innerText = toutesVideos.length>9 ? "9+" : toutesVideos.length;
   majPopulation();
+  filtrer();
+  chargerDurees();
+  chargerAbonnes();
 }
 async function publier(){
   let titre=document.getElementById("titre").value.trim();
-  let chaine=document.getElementById("chaine").value.trim() || localStorage.getItem("ma_chaine") || "FREDDY-V";
+  let chaine=document.getElementById("chaine").value.trim() || localStorage.getItem("ma_chaine") || "freddyvmondial";
+  if(!titre){ alert("Mets le titre !"); return; }
   let url=document.getElementById("youtube_url").value.trim();
-  if(!titre || !url){ document.getElementById("msg").innerText="Mets le titre + le lien !"; return; }
-  let yid=youtubeId(url);
-  if(!yid){ document.getElementById("msg").innerText="Lien YouTube invalide"; return; }
-  let embed="https://www.youtube.com/embed/"+yid;
-  document.getElementById("msg").innerText="Publication...";
-  let {error}=await supabaseClient.from("videos").insert([{title:titre,channel:chaine,youtube_url:url,video_url:url,embed_url:embed,link:url,views:0,likes:0}]);
-  if(error){ document.getElementById("msg").innerText="Erreur : "+error.message; return; }
-  document.getElementById("msg").innerText="Publié ! 🎉";
-  document.getElementById("titre").value=""; document.getElementById("youtube_url").value="";
+  if(!url){ alert("Mets le lien YouTube !"); return; }
+  document.getElementById("msg").innerText="Publication en cours...";
+  let { error } = await supabaseClient.from("videos").insert([{
+    title: titre,
+    channel: chaine,
+    youtube_url: url,
+    video_url: url,
+    embed_url: url,
+    link: url,
+    views: 0,
+    likes: 0
+  }]);
+  if(error){ alert("Erreur : "+error.message); return; }
+  document.getElementById("msg").innerText="✅ Publié !";
+  document.getElementById("titre").value="";
+  document.getElementById("youtube_url").value="";
   charger();
 }
 async function supprimerVideo(id){
   if(!confirm("Supprimer cette vidéo ?")) return;
   let {error}=await supabaseClient.from("videos").delete().eq("id",id);
-  if(error){ alert(error.message); return; }
+  if(error){ alert("Erreur : "+error.message); return; }
   charger();
-}
-async function charger(){
-  let {data,error}=await supabaseClient.from("videos").select("*").order("created_at",{ascending:false});
-  if(error){ document.getElementById("liste").innerHTML="Erreur : "+error.message; return; }
-  toutesVideos=data||[];
-  document.getElementById("notifCount").innerText=toutesVideos.length>0?toutesVideos.length:"0";
-  await chargerAbonnes();
-  chargerDurees();
-  filtrer();
 }
 afficherMaChaine();
 charger();
 </script>
+<!-- ===== AJOUT : PUBLIER DEPUIS TELEPHONE - 0 à 120 MINUTES MAX = 2H ===== -->
+<script>
+window.addEventListener('load', function(){
+  let inputYT = document.getElementById('youtube_url');
+  if(!inputYT) return;
+  if(document.getElementById('zonePhoneAjout')) return;
+  let div = document.createElement('div');
+  div.innerHTML = `
+    <div style="display:flex;gap:8px;margin-bottom:6px">
+      <button type="button" id="btnYT" onclick="choisirMode('yt')" style="flex:1;padding:11px;background:#ff0000;color:#fff;border:none;border-radius:10px;font-weight:900;cursor:pointer">🔗 Lien YouTube</button>
+      <button type="button" id="btnPhone" onclick="choisirMode('phone')" style="flex:1;padding:11px;background:#333;color:#fff;border:none;border-radius:10px;font-weight:900;cursor:pointer">📱 Depuis mon téléphone</button>
+    </div>
+    <div id="zonePhoneAjout" style="display:none">
+      <input type="file" id="vFile" accept="video/*" style="background:#fff;color:#000">
+      <p style="font-size:13px;color:#ffcc00;margin:0">Choisis la vidéo dans ton téléphone. <b>De 0 minute à 120 minutes maximum = 2h max.</b> Si plus de 2h, ça refuse.</p>
+      <p id="dureeVideoInfo" style="font-size:13px;color:#fff;margin:4px 0 0"></p>
+      <div id="uploadProgress" style="display:none;background:#333;height:10px;border-radius:10px;overflow:hidden;margin-top:8px"><div id="uploadBar" style="height:100%;width:0%;background:#ff0000"></div></div>
+      <p id="uploadMsg" style="font-size:13px;color:#fff"></p>
+    </div>
+  `;
+  inputYT.parentNode.insertBefore(div, inputYT);
+  // Quand on choisit le fichier, on affiche sa durée tout de suite
+  document.getElementById('vFile').addEventListener('change', async function(){
+    let f = this.files[0];
+    if(!f) return;
+    let info = document.getElementById('dureeVideoInfo');
+    info.innerText = "Vérification de la durée...";
+    try{
+      let sec = await getDureeVideo(f);
+      let min = Math.floor(sec/60);
+      let s = Math.floor(sec%60);
+      if(sec > 7200){
+        info.innerText = "❌ Trop longue : " + min + " min " + s + " sec. Maximum = 120 minutes (2h). Choisis une vidéo plus courte.";
+        info.style.color = "#ff4444";
+      } else {
+        info.innerText = "✅ Durée : " + min + " min " + s + " sec / 120 min max. C'est bon, tu peux publier.";
+        info.style.color = "#00ff88";
+      }
+    }catch(e){
+      info.innerText = "Impossible de lire la durée, on va vérifier au moment de publier.";
+    }
+  });
+});
+let modePublier = 'yt';
+function choisirMode(m){
+  modePublier = m;
+  let yt = document.getElementById('youtube_url');
+  let zone = document.getElementById('zonePhoneAjout');
+  if(yt) yt.style.display = m==='yt' ? 'block' : 'none';
+  if(zone) zone.style.display = m==='phone' ? 'block' : 'none';
+  let b1 = document.getElementById('btnYT');
+  let b2 = document.getElementById('btnPhone');
+  if(b1) b1.style.background = m==='yt' ? '#ff0000' : '#333';
+  if(b2) b2.style.background = m==='phone' ? '#ff0000' : '#333';
+}
+function isSupabaseVideo2(v){
+  let u = (v.video_url||"") + (v.youtube_url||"") + (v.embed_url||"");
+  return u.includes('supabase.co/storage') || u.includes('/storage/v1/object');
+}
+// NOUVEAU : Lire la durée d'une vidéo du téléphone, de 0 à 120 min max
+function getDureeVideo(file){
+  return new Promise((resolve, reject)=>{
+    let url = URL.createObjectURL(file);
+    let vid = document.createElement('video');
+    vid.preload = 'metadata';
+    vid.onloadedmetadata = function(){
+      URL.revokeObjectURL(url);
+      resolve(vid.duration);
+    };
+    vid.onerror = function(){ URL.revokeObjectURL(url); reject(new Error('video illisible')); };
+    vid.src = url;
+  });
+}
+async function uploadVersSupabase(file){
+  let nom = Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+  let res = await supabaseClient.storage.from('videos').upload(nom, file, {upsert:true});
+  if(res.error) throw res.error;
+  let pub = supabaseClient.storage.from('videos').getPublicUrl(nom);
+  return pub.data.publicUrl;
+}
+let publierAncien = publier;
+async function publier(){
+  if(modePublier !== 'phone'){
+    return publierAncien();
+  }
+  let titre = document.getElementById("titre").value.trim();
+  let chaine = document.getElementById("chaine").value.trim() || localStorage.getItem("ma_chaine") || "freddyvmondial";
+  if(!titre){ alert("Mets le titre !"); return; }
+  let f = document.getElementById("vFile")?.files[0];
+  if(!f){ alert("Choisis d’abord une vidéo dans ton téléphone"); return; }
+  if(f.size > 50*1024*1024){ alert("Vidéo trop grosse. Max 50 Mo."); return; }
+  // VÉRIFICATION DURÉE : 0 à 120 MINUTES MAX = 7200 SECONDES = 2H
+  document.getElementById("msg").innerText = "Vérification de la durée (max 2h)...";
+  let dureeSec = 0;
+  try{ dureeSec = await getDureeVideo(f); }catch(e){ alert("On n'arrive pas à lire cette vidéo. Essaie une autre vidéo."); return; }
+  if(!dureeSec || dureeSec <= 0){ alert("Vidéo vide ou illisible. Choisis une autre vidéo."); return; }
+  if(dureeSec > 7200){
+    let minTrop = Math.floor(dureeSec/60);
+    alert("❌ Vidéo trop longue : " + minTrop + " minutes. Maximum autorisé = 120 minutes (2h). Coupe ta vidéo et republie.");
+    document.getElementById("msg").innerText = "❌ Trop longue : " + minTrop + " min. Max 120 min (2h).";
+    return;
+  }
+  // Si c'est bon, on upload
+  document.getElementById("msg").innerText = "✅ Durée OK : " + Math.floor(dureeSec/60) + " min / 120 min max. Envoi en cours, ne quitte pas...";
+  let prog = document.getElementById("uploadProgress");
+  let bar = document.getElementById("uploadBar");
+  if(prog) prog.style.display="block";
+  if(bar) bar.style.width="50%";
+  let urlFinal;
+  try{ urlFinal = await uploadVersSupabase(f); }
+  catch(e){ alert("Erreur upload: "+e.message); return; }
+  if(bar) bar.style.width="100%";
+  let { error } = await supabaseClient.from("videos").insert([{
+    title: titre,
+    channel: chaine,
+    youtube_url: "",
+    video_url: urlFinal,
+    embed_url: urlFinal,
+    link: urlFinal,
+    views: 0,
+    likes: 0
+  }]);
+  if(error){ alert("Erreur : "+error.message); return; }
+  document.getElementById("msg").innerText="✅ Publié depuis ton téléphone ! Durée : " + Math.floor(dureeSec/60) + " min.";
+  document.getElementById("titre").value="";
+  document.getElementById("vFile").value="";
+  let info = document.getElementById("dureeVideoInfo");
+  if(info) info.innerText = "";
+  charger();
+}
+let jouerEnGrandAncien = jouerEnGrand;
+function jouerEnGrand(v){
+  if(!isSupabaseVideo2(v)){
+    return jouerEnGrandAncien(v);
+  }
+  compterVue(v);
+  let wrap = document.getElementById("wrap_"+v.id);
+  wrap.classList.add("grand");
+  let src = v.video_url || v.embed_url;
+  wrap.innerHTML = `<video src="${src}" controls autoplay playsinline style="width:100%;height:100%"></video><button onclick="event.stopPropagation();fermerGrand('${v.id}')" style="position:absolute;top:10px;right:10px;background:#ff0000;color:white;border:none;padding:10px 15px;border-radius:50%;font-size:20px;z-index:1000">✖</button>`;
+}
+let fermerGrandAncien = fermerGrand;
+function fermerGrand(id){
+  let v = toutesVideos.find(x=>x.id===id);
+  if(v && isSupabaseVideo2(v)){
+    let wrap = document.getElementById("wrap_"+id);
+    wrap.classList.remove("grand");
+    let src = v.video_url || v.embed_url;
+    wrap.innerHTML = `<video src="${src}" preload="metadata" muted style="width:100%;height:220px"></video><span class="play-big">▶️</span>`;
+    return;
+  }
+  return fermerGrandAncien(id);
+}
+let carteVideoAncien = carteVideo;
+function carteVideo(v){
+  let html = carteVideoAncien(v);
+  if(isSupabaseVideo2(v)){
+    let src = v.video_url || v.embed_url;
+    html = html.replace(/<img src="https:\/\/i\.ytimg\.com[^>]*>/, `<video src="${src}" preload="metadata" muted style="width:100%;height:220px;display:block;background:#000"></video>`);
+  }
+  return html;
+}
+</script>
+<!-- ===== FIN AJOUT ===== -->
 </body>
 </html>
