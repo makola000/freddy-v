@@ -95,6 +95,7 @@ input{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:none;font-si
     <div class="big" id="popTotal">👥 0</div>
     <div class="small">POPULATION FREDDY-V • VUES RÉELLES • CHAQUE PERSONNE = 1 VUE</div>
     <div class="small" id="gainsTotal">💰 Total gains créateurs : 0 FC</div>
+    <div class="small" id="visiteursJour">👥 Visiteurs aujourd'hui : 0 | Hier : 0 | Total : 0</div>
   </div>
   <div style="margin-bottom:12px">
     <button class="tab-btn active" id="tabToutes" onclick="montrerTab('toutes')">Toutes</button>
@@ -185,13 +186,11 @@ function fermerModal(id){ document.getElementById(id).style.display="none"; }
 function changerLangue(){ if(langue==="FR"){langue="EN";document.getElementById("btnLang").innerText="EN";} else {langue="FR";document.getElementById("btnLang").innerText="FR";} }
 function afficherMaChaine(){ let c=localStorage.getItem("ma_chaine"); if(c){ document.getElementById("maChaineInfo").innerText="✅ Ta chaîne : "+c; document.getElementById("chaine").value=c; } }
 function creerChaine(){ let nom=document.getElementById("nomChaine").value; if(!nom){alert("Mets le nom !");return;} localStorage.setItem("ma_chaine",nom); afficherMaChaine(); alert("Chaîne "+nom+" créée 🎉"); fermerModal('modalChaine'); }
-// ===== SEUL CHANGEMENT : DEMANDE AUTOMATIQUE = OKAY + IL PUBLIE TOUT DE SUITE =====
 function demandePaye(){
   let nom=document.getElementById("nomPaye").value.trim();
   let ch=document.getElementById("chainePaye").value.trim();
   let tel=document.getElementById("telPaye").value.trim();
   if(!nom||!ch||!tel){ alert("Remplis tout ! Nom, chaîne, WhatsApp"); return; }
-  // Sauvegarde automatique
   localStorage.setItem("ma_chaine", ch);
   localStorage.setItem("createur_paye_"+ch, JSON.stringify({nom:nom, tel:tel, date:new Date().toISOString()}));
   localStorage.setItem("createur_approuve_"+ch, "1");
@@ -201,7 +200,6 @@ function demandePaye(){
   afficherMaChaine();
   fermerModal('modalPaye');
   alert("✅ OKAY !\n\nFélicitations "+nom+" !\nTa demande est acceptée automatiquement.\nTu es maintenant Créateur Payé pour la chaîne : "+ch+"\n\n1 vue = 1 personne\n1000 vues = 500 FC\n\nTu peux commencer à publier MAINTENANT !");
-  // Il commence à publier tout de suite : on l'amène à Publier
   setTimeout(()=>{
     document.getElementById('publier').scrollIntoView({behavior:'smooth'});
     let t = document.getElementById("titre");
@@ -228,6 +226,31 @@ function majPopulation(){
   let total=0; toutesVideos.forEach(v=>{ total+=(v.views||0); });
   document.getElementById("popTotal").innerText="👥 "+total.toLocaleString()+" vues réelles";
   document.getElementById("gainsTotal").innerText="💰 Total gains créateurs : "+Math.floor(total*0.5).toLocaleString()+" FC • 1000 vues = 500 FC";
+}
+// ===== COMPTEUR VISITEURS PAR JOUR =====
+async function enregistrerVisite(){
+  try{
+    let aujourdhui = new Date().toISOString().slice(0,10);
+    let deja = localStorage.getItem("visite_date");
+    if(deja !== aujourdhui){
+      localStorage.setItem("visite_date", aujourdhui);
+      await supabaseClient.from("visites").insert([{device_id: getDeviceId(), date_visite: aujourdhui}]);
+    }
+    compterVisites();
+  }catch(e){ compterVisites(); }
+}
+async function compterVisites(){
+  try{
+    let aujourdhui = new Date().toISOString().slice(0,10);
+    let hierDate = new Date(Date.now() - 24*60*60*1000).toISOString().slice(0,10);
+    let totalJour = await supabaseClient.from("visites").select("id", {count:'exact', head:true}).eq("date_visite", aujourdhui);
+    let totalHier = await supabaseClient.from("visites").select("id", {count:'exact', head:true}).eq("date_visite", hierDate);
+    let totalAll = await supabaseClient.from("visites").select("id", {count:'exact', head:true});
+    let el = document.getElementById("visiteursJour");
+    if(el){
+      el.innerText = "👥 Visiteurs aujourd'hui : " + (totalJour.count||0) + " | Hier : " + (totalHier.count||0) + " | Total : " + (totalAll.count||0);
+    }
+  }catch(e){}
 }
 function jouerEnGrand(v){
   compterVue(v);
@@ -414,6 +437,7 @@ async function publier(){
 }
 afficherMaChaine();
 charger();
+enregistrerVisite();
 </script>
 <!-- ===== AJOUT SEULEMENT : PUBLIER DEPUIS TELEPHONE 0 à 120 MIN ===== -->
 <script>
