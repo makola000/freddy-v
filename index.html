@@ -35,8 +35,8 @@ input,select{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:none;
 .btn-phone{background:#008000;color:white;border:none;padding:14px;border-radius:8px;font-weight:900;cursor:pointer;width:100%;font-size:17px;margin-top:8px}
 .video-card{background:#1e1e1e;padding:12px;border-radius:12px;margin-bottom:22px}
 .video-wrap{position:relative;background:#000;border-radius:10px;overflow:hidden;cursor:pointer}
-.video-wrap img{width:100%;display:block}
-.video-wrap iframe{width:100%;height:220px;border:none;display:block}
+.video-wrap img{width:100%;display:block;background:#000}
+.video-wrap iframe{width:100%;height:220px;border:none;display:block;background:#000}
 .video-wrap video{width:100%;height:220px;display:block;background:#000}
 .video-wrap.grand{position:fixed;top:0;left:0;width:100%;height:100%;z-index:999;border-radius:0;max-width:100% !important}
 .video-wrap.grand iframe{height:100%}
@@ -51,7 +51,7 @@ input,select{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:none;
 .section-title span{color:#ffcc00}
 .shorts-row{display:flex;gap:10px;overflow-x:auto;padding:5px 0 15px}
 .shorts-card{min-width:160px;width:160px;background:#1e1e1e;border-radius:12px;overflow:hidden;cursor:pointer;flex-shrink:0}
-.shorts-card img{width:100%;height:220px;object-fit:cover;display:block}
+.shorts-card img{width:100%;height:220px;object-fit:cover;display:block;background:#000}
 .shorts-card video{width:100%;height:220px;object-fit:cover;display:block;background:#000}
 .shorts-card p{font-size:13px;padding:8px;margin:0;color:white}
 .comment-item{background:#1e1e1e;padding:8px 10px;border-radius:8px;margin-top:6px;font-size:14px}
@@ -71,7 +71,7 @@ input,select{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:none;
 .yt-comments-preview b{font-size:15px}
 .yt-comments-preview p{font-size:14px;margin:8px 0 0;color:#222}
 .yt-next{display:flex;gap:10px;margin:12px 0;cursor:pointer}
-.yt-next img{width:150px;height:90px;object-fit:cover;border-radius:10px;flex-shrink:0}
+.yt-next img{width:150px;height:90px;object-fit:cover;border-radius:10px;flex-shrink:0;background:#000}
 .yt-next video{width:150px;height:90px;object-fit:cover;border-radius:10px;flex-shrink:0;background:#000}
 .yt-next-info{flex:1}
 .yt-next-info b{font-size:14px;line-height:1.3;display:block}
@@ -80,17 +80,17 @@ input,select{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:none;
 .upload-box{background:#000;border:2px dashed #ffcc00;border-radius:12px;padding:14px;margin:12px 0}
 .progress-bar{background:#333;height:18px;border-radius:10px;overflow:hidden;margin:8px 0;display:none}
 .progress-fill{background:#00ff88;height:100%;width:0%;text-align:center;font-size:12px;font-weight:900;color:#000;line-height:18px}
-.tiktok-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:1000;display:none;flex-direction:column}
-.tiktok-feed{flex:1;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none}
+.tiktok-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:#000 !important;z-index:1000;display:none;flex-direction:column}
+.tiktok-feed{flex:1;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;background:#000}
 .tiktok-feed::-webkit-scrollbar{display:none}
-.tiktok-item{width:100%;height:100%;scroll-snap-align:start;position:relative;background:#000;overflow:hidden;flex-shrink:0}
-.tiktok-item iframe{width:100%;height:100%;border:none}
-.tiktok-item video{width:100%;height:100%;object-fit:cover}
+.tiktok-item{width:100%;height:100%;scroll-snap-align:start;position:relative;background:#000 !important;overflow:hidden;flex-shrink:0}
+.tiktok-item iframe{width:100%;height:100%;border:none;background:#000;display:block}
+.tiktok-item video{width:100%;height:100%;object-fit:cover;background:#000}
 .tiktok-side{position:absolute;right:10px;bottom:130px;display:flex;flex-direction:column;gap:12px;z-index:5}
 .tiktok-btn{width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:white;font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-direction:column}
 .tiktok-btn span{font-size:11px;font-weight:900;margin-top:2px}
 .tiktok-btn.liked{background:#ff0000}
-.tiktok-bottom{position:absolute;left:12px;right:70px;bottom:22px;z-index:5;color:white}
+.tiktok-bottom{position:absolute;left:12px;right:70px;bottom:22px;z-index:5;color:white;text-shadow:0 0 8px #000}
 .tiktok-close{position:fixed;top:12px;left:12px;background:#ff0000;color:white;border:none;width:40px;height:40px;border-radius:50%;font-size:20px;cursor:pointer;z-index:1010}
 .tiktok-count{position:fixed;top:16px;right:12px;background:rgba(0,0,0,0.6);color:white;padding:8px 12px;border-radius:20px;font-size:13px;font-weight:900;z-index:1010}
 .tiktok-hint{position:fixed;bottom:10px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.6);color:white;padding:6px 12px;border-radius:20px;font-size:12px;z-index:1010;white-space:nowrap}
@@ -99,7 +99,7 @@ input,select{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:none;
 .comments-drawer{position:fixed;bottom:0;left:0;width:100%;max-height:75%;background:#1e1e1e;border-radius:20px 20px 0 0;z-index:1100;display:none;padding:16px;overflow:auto}
 .tiktok-auto{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.6);color:white;padding:8px 12px;border-radius:20px;font-size:12px;font-weight:900;z-index:1010;cursor:pointer}
 .tik-sound-float{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#ff0000;color:white;border:none;padding:12px 20px;border-radius:25px;font-weight:900;font-size:15px;cursor:pointer;z-index:1011;display:none}
-.tik-replay{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.7);color:white;border:2px solid white;padding:14px 22px;border-radius:25px;font-weight:900;font-size:16px;cursor:pointer;z-index:4;display:none}
+.tik-tap{position:absolute;top:0;left:0;width:100%;height:100%;z-index:3;background:transparent;cursor:pointer}
 </style>
 </head>
 <body>
@@ -169,7 +169,7 @@ input,select{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:none;
     <div style="text-align:center;font-weight:900;margin:10px 0">--- OU ---</div>
     <h3 style="margin:0 0 5px">🔗 2. Avec un lien YouTube</h3>
     <input id="youtube_url" placeholder="Lien YouTube, Shorts aussi">
-    <p style="font-size:13px;color:#ffcc00;margin:0">Lien /shorts/ → SHORTS. Lien watch?v= → NORMALE. Colle le lien complet depuis YouTube → Partager → Copier le lien.</p>
+    <p style="font-size:13px;color:#ffcc00;margin:0">IMPORTANT : Va sur YouTube → sur ton Short → Partager → Copier le lien. Colle CE lien-là. Ne colle pas le lien de ta chaîne.</p>
     <button class="btn-pub" onclick="publier()">PUBLIER AVEC LIEN YOUTUBE</button>
     <p id="msg" style="text-align:center"></p>
   </div>
@@ -222,22 +222,21 @@ function getDeviceId(){ let id=localStorage.getItem("freddy_device_id"); if(!id)
 function youtubeId(url){
   if(!url) return "";
   url=String(url).trim();
-  let m=url.match(/(?:youtube\.com\/(?:watch\?.*v=|shorts\/|embed\/|v\/|live\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
-  if(m) return m[1];
+  // On enlève les espaces et on prend l'ID après /shorts/ ou v= ou youtu.be/
+  let m=url.match(/shorts\/([A-Za-z0-9_-]{11})/); if(m) return m[1];
   let m2=url.match(/[?&]v=([A-Za-z0-9_-]{11})/); if(m2) return m2[1];
-  let m3=url.match(/shorts\/([A-Za-z0-9_-]{11})/); if(m3) return m3[1];
-  let m4=url.match(/youtu\.be\/([A-Za-z0-9_-]{11})/); if(m4) return m4[1];
+  let m3=url.match(/youtu\.be\/([A-Za-z0-9_-]{11})/); if(m3) return m3[1];
+  let m4=url.match(/embed\/([A-Za-z0-9_-]{11})/); if(m4) return m4[1];
   return "";
 }
 function getThumb(url){ let id=youtubeId(url); if(!id) return ""; return "https://i.ytimg.com/vi/"+id+"/hqdefault.jpg"; }
 function getThumbFallback(id){ return "https://i.ytimg.com/vi/"+id+"/mqdefault.jpg"; }
-// SIMPLE COMME LES VIDÉOS NORMALES : pas de API, pas de nocookie, juste youtube.com/embed
+// COMME TIKTOK : iframe YouTube simple, claire, plein écran. Pas de nocookie, pas de API.
 function getEmbed(url){ let id=youtubeId(url); if(!id) return ""; return "https://www.youtube.com/embed/"+id+"?autoplay=1&mute=1&rel=0&playsinline=1"; }
 function getEmbedShort(url, avecSon){
   let id=youtubeId(url); if(!id) return "";
-  // Si l'utilisateur a déjà tapé pour le son, on met mute=0, sinon mute=1 pour être sûr que ça joue
   let mute = (avecSon && sonDejaDebloque) ? 0 : 1;
-  return "https://www.youtube.com/embed/"+id+"?autoplay=1&mute="+mute+"&rel=0&playsinline=1&controls=0";
+  return "https://www.youtube.com/embed/"+id+"?autoplay=1&mute="+mute+"&rel=0&playsinline=1&controls=0&modestbranding=1";
 }
 function parseISO8601(d){ if(!d) return 0; let m=d.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/); if(!m) return 0; return (parseInt(m[1]||0)*3600)+(parseInt(m[2]||0)*60)+parseInt(m[3]||0); }
 function formatDuree(sec){ if(!sec) return ""; let m=Math.floor(sec/60), s=sec%60; return m+":"+(s<10?"0"+s:s); }
@@ -317,8 +316,8 @@ function fermerGrand(id){ let wrap=document.getElementById("wrap_"+id); if(!wrap
 function renderApercu(wrap,v){
   if(isPhoneVideo(v)){ wrap.innerHTML=`<video src="${getVideoSrc(v)}" controls playsinline preload="metadata" onplay="stopAllVideosExcept('${v.id}')" style="width:100%;height:100%"></video>`; return; }
   let yid=youtubeId(v.youtube_url||v.video_url||""); let thumb=getThumb(v.youtube_url||v.video_url||"");
-  if(yid){ wrap.innerHTML=`<img src="${thumb}" onerror="this.onerror=null;this.src='${getThumbFallback(yid)}'" alt="">`; }
-  else { wrap.innerHTML=`<div style="padding:40px;text-align:center">Vidéo non disponible</div>`; }
+  if(yid){ wrap.innerHTML=`<img src="${thumb}" onerror="this.onerror=null;this.src='${getThumbFallback(yid)}'" alt="" style="background:#000">`; }
+  else { wrap.innerHTML=`<div style="padding:20px;text-align:center;background:#000;color:#ffcc00;font-size:13px">Lien YouTube invalide<br><small>Va sur YouTube → Partager → Copier le lien<br>et republie ce Short</small></div>`; }
 }
 function jouerEnGrand(v){
   let video=typeof v==='object'?toutesVideos.find(x=>x.id==v.id)||v:toutesVideos.find(x=>x.id==v); if(!video) return; compterVue(video); stopAllVideosExcept(video.id); let wrap=document.getElementById("wrap_"+video.id); if(!wrap) return; wrap.classList.add("grand");
@@ -336,7 +335,6 @@ async function envoyerCommentaire(videoId){ let nomEl=document.getElementById("c
 function ouvrirDrawer(id){ drawerVideoId=String(id); document.getElementById("commentsDrawer").style.display="block"; document.getElementById("drawerMsg").innerText=""; let nomSauve=localStorage.getItem("dernier_nom")||localStorage.getItem("ma_chaine")||""; if(nomSauve) document.getElementById("drawerNom").value=nomSauve; chargerCommentaires(id, "drawerList"); }
 function fermerDrawer(){ document.getElementById("commentsDrawer").style.display="none"; }
 async function envoyerCommentaireDrawer(){ let nom=(document.getElementById("drawerNom").value||"").trim()||localStorage.getItem("ma_chaine")||"Visiteur"; let txt=(document.getElementById("drawerTxt").value||"").trim(); if(!txt){ document.getElementById("drawerMsg").innerText="Écris un commentaire d'abord !"; return; } document.getElementById("drawerMsg").innerText="Envoi..."; await envoyerCommentaireGeneral(drawerVideoId, nom, txt); localStorage.setItem("dernier_nom", nom); document.getElementById("drawerTxt").value=""; document.getElementById("drawerMsg").innerText="✅ Commentaire envoyé !"; showToast("✅ Commentaire envoyé !"); await chargerCommentaires(drawerVideoId, "drawerList"); let comEl=document.getElementById("com_list_"+drawerVideoId); if(comEl) await chargerCommentaires(drawerVideoId, "com_list_"+drawerVideoId); }
-// ===== DÉFILEMENT AUTO SIMPLE, SANS API YOUTUBE QUI BLOQUE =====
 function toggleAutoTiktok(){
   autoTiktok = !autoTiktok;
   let b=document.getElementById("tiktokAutoBtn");
@@ -356,10 +354,7 @@ function planifierSuivant(){
   if(autoTimer) clearTimeout(autoTimer);
   if(!autoTiktok) return;
   let v=tiktokShorts[tiktokIndex];
-  // Téléphone : on attend onended, pas besoin de timer. YouTube : 50 secondes puis suivant.
-  if(v && !isPhoneVideo(v)){
-    autoTimer=setTimeout(()=>{ nextTiktok(); }, 50000);
-  }
+  if(v && !isPhoneVideo(v)){ autoTimer=setTimeout(()=>{ nextTiktok(); }, 50000); }
 }
 function activerSonTikTok(){
   sonDejaDebloque = true;
@@ -367,7 +362,6 @@ function activerSonTikTok(){
   let sf=document.getElementById("tikSoundFloat"); if(sf) sf.style.display="none";
   let v=tiktokShorts[tiktokIndex];
   if(v && !isPhoneVideo(v)){
-    // On recharge l'iframe avec le son
     let holder=document.getElementById("tik_holder_"+v.id);
     if(holder) holder.innerHTML=`<iframe src="${getEmbedShort(v.youtube_url||v.video_url||"", true)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
   }
@@ -390,6 +384,7 @@ function toggleTiktokSound(){
   let sf=document.getElementById("tikSoundFloat"); if(sf) sf.style.display="block";
   showToast("🔇 Son coupé - Tape pour remettre le son");
 }
+// CORRIGÉ : on ne détruit plus l'iframe YouTube. Toutes les vidéos restent chargées, claires comme TikTok.
 function ouvrirTiktok(id){
   tiktokShorts = toutesVideos.filter(v=>estShort(v));
   if(tiktokShorts.length===0) tiktokShorts=[toutesVideos.find(x=>x.id==id)].filter(Boolean);
@@ -402,19 +397,14 @@ function ouvrirTiktok(id){
   feed.innerHTML = tiktokShorts.map((v,idx)=>{
     let liked=localStorage.getItem("like_"+v.id)==="1"; let saved=localStorage.getItem("save_"+v.id)==="1"; let abonne=localStorage.getItem("sub_"+(v.channel||""))==="1";
     let yid=youtubeId(v.youtube_url||v.video_url||"");
-    let thumb=yid?getThumb(v.youtube_url||v.video_url||""):"";
     let playerHtml="";
     if(isPhoneVideo(v)){
       playerHtml=`<video id="tik_video_${v.id}" src="${getVideoSrc(v)}" playsinline preload="auto" autoplay onplay="stopAllVideosExcept('${v.id}')" onended="nextTiktok()" onclick="this.paused?this.play():this.pause()" style="width:100%;height:100%"></video>`;
     } else if(yid){
-      if(idx===tiktokIndex || idx===tiktokIndex+1){
-        // Iframe SIMPLE, comme les vidéos normales qui jouent bien
-        playerHtml=`<div id="tik_holder_${v.id}" style="width:100%;height:100%;background:#000" onclick="activerSonTikTok()"><iframe src="${getEmbedShort(v.youtube_url||v.video_url||"", false)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div><button class="tik-replay" id="replay_${v.id}" onclick="chargerShortYoutube('${v.id}')">▶️ Tape pour jouer</button>`;
-      } else {
-        playerHtml=`<div id="tik_holder_${v.id}" style="width:100%;height:100%;position:relative;background:#000;cursor:pointer" onclick="chargerShortYoutube('${v.id}')"><img src="${thumb}" onerror="this.onerror=null;this.src='${getThumbFallback(yid)}'" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover"></div>`;
-      }
+      // TOUS les Shorts YouTube ont leur vraie iframe, jamais une photo cassée
+      playerHtml=`<div id="tik_holder_${v.id}" style="width:100%;height:100%;background:#000" onclick="activerSonTikTok()"><iframe src="${getEmbedShort(v.youtube_url||v.video_url||"", false)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`;
     } else {
-      playerHtml=`<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:white;text-align:center;padding:20px">Lien YouTube non reconnu<br><small>Colle le lien complet depuis YouTube → Partager → Copier le lien</small></div>`;
+      playerHtml=`<div style="width:100%;height:100%;background:#000;display:flex;align-items:center;justify-content:center;color:white;text-align:center;padding:20px">Lien YouTube invalide<br><br><small style="color:#ffcc00">Va sur YouTube → ton Short → Partager → Copier le lien<br>Supprime ce Short et republie-le avec le bon lien</small><br><br><small style="color:#aaa">Lien enregistré : ${escapeHtml(v.youtube_url||v.video_url||"")}</small></div>`;
     }
     return `<div class="tiktok-item" data-id="${v.id}" ondblclick="doubleTapLikeFeed('${v.id}')">
       ${playerHtml}
@@ -437,7 +427,6 @@ function ouvrirTiktok(id){
     onTiktokScroll(true);
   },200);
   document.getElementById("tiktokCount").innerText=(tiktokIndex+1)+" / "+tiktokShorts.length;
-  // On montre le bouton son pour YouTube, car le navigateur bloque le son au début
   let cur=tiktokShorts[tiktokIndex];
   let sf=document.getElementById("tikSoundFloat");
   if(sf) sf.style.display = (cur && !isPhoneVideo(cur) && !sonDejaDebloque) ? "block" : "none";
@@ -451,7 +440,6 @@ function chargerShortYoutube(id){
   let holder=document.getElementById("tik_holder_"+id);
   if(!holder) return;
   holder.innerHTML=`<iframe src="${getEmbedShort(v.youtube_url||v.video_url||"", true)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
-  let rb=document.getElementById("replay_"+id); if(rb) rb.style.display="none";
 }
 function onTiktokScroll(firstLoad){
   let feed=document.getElementById("tiktokFeed"); if(!feed) return;
@@ -461,28 +449,14 @@ function onTiktokScroll(firstLoad){
   let changed = idx!==tiktokIndex;
   tiktokIndex=idx;
   let v=tiktokShorts[idx]; if(v){ currentTiktokId=v.id; currentPlayingId=v.id; if(changed||firstLoad) compterVue(v); document.getElementById("tiktokCount").innerText=(idx+1)+" / "+tiktokShorts.length; }
-  // Pour YouTube, on montre le bouton son, pour téléphone on le cache
   let sf=document.getElementById("tikSoundFloat");
   if(sf) sf.style.display = (v && !isPhoneVideo(v) && !sonDejaDebloque) ? "block" : "none";
   planifierSuivant();
+  // On ne détruit plus les iframes YouTube. On pause seulement les vidéos téléphone.
   tiktokShorts.forEach((sv,i)=>{
     if(isPhoneVideo(sv)){
       let vid=document.getElementById("tik_video_"+sv.id);
       if(vid){ vid.muted=tiktokMuted; if(i===tiktokIndex){ vid.play().catch(()=>{}); } else { vid.pause(); } }
-      return;
-    }
-    let holder=document.getElementById("tik_holder_"+sv.id);
-    if(!holder) return;
-    if(i===tiktokIndex || i===tiktokIndex+1){
-      if(!holder.querySelector("iframe")){
-        holder.innerHTML=`<iframe src="${getEmbedShort(sv.youtube_url||sv.video_url||"", false)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
-      }
-    } else {
-      if(holder.querySelector("iframe")){
-        let yid=youtubeId(sv.youtube_url||sv.video_url||"");
-        let thumb=getThumb(sv.youtube_url||sv.video_url||"");
-        holder.innerHTML=`<img src="${thumb}" onerror="this.onerror=null;this.src='${getThumbFallback(yid)}'" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover">`;
-      }
     }
   });
 }
@@ -507,8 +481,8 @@ function htmlShortsRow(shorts){
     let abonne=localStorage.getItem("sub_"+(v.channel||""))==="1"; let saved=localStorage.getItem("save_"+v.id)==="1"; let liked=localStorage.getItem("like_"+v.id)==="1";
     let apercu="";
     if(isPhoneVideo(v)){ apercu=`<video src="${getVideoSrc(v)}" preload="metadata" muted playsinline></video>`; }
-    else if(yid){ apercu=`<img src="${thumb}" onerror="this.onerror=null;this.src='${getThumbFallback(yid)}'" alt="">`; }
-    else { apercu=`<div style="height:220px;background:#333;display:flex;align-items:center;justify-content:center;color:white;text-align:center;padding:10px">Lien invalide<br><small>Colle le lien complet YouTube</small></div>`; }
+    else if(yid){ apercu=`<img src="${thumb}" onerror="this.onerror=null;this.src='${getThumbFallback(yid)}'" alt="" style="background:#000">`; }
+    else { apercu=`<div style="height:220px;background:#000;display:flex;align-items:center;justify-content:center;color:#ffcc00;text-align:center;padding:10px;font-size:12px">Lien invalide<br>Partager → Copier le lien<br>sur YouTube</div>`; }
     html+=`<div class="shorts-card">
       <div class="video-wrap" style="border-radius:0" onclick="ouvrirTiktok('${v.id}')">
         ${apercu}
@@ -532,8 +506,8 @@ function htmlVideoNormale(v, idx, normales){
   let nextThumb=nextVideo?getThumb(nextVideo.youtube_url||nextVideo.video_url||""):""; let nextYid=nextVideo?youtubeId(nextVideo.youtube_url||nextVideo.video_url||""):""; let nextDur=nextVideo&&durees[nextYid]?formatDuree(durees[nextYid]):"";
   let apercuNormal="";
   if(isPhoneVideo(v)){ apercuNormal=`<video src="${getVideoSrc(v)}" preload="metadata" playsinline controls onplay="stopAllVideosExcept('${v.id}')" style="width:100%;height:220px"></video>`; }
-  else if(yid){ apercuNormal=`<img src="${thumb}" onerror="this.onerror=null;this.src='${getThumbFallback(yid)}'" alt="">`; }
-  else { apercuNormal=`<div style="height:220px;background:#333;display:flex;align-items:center;justify-content:center;color:white">Lien invalide</div>`; }
+  else if(yid){ apercuNormal=`<img src="${thumb}" onerror="this.onerror=null;this.src='${getThumbFallback(yid)}'" alt="" style="background:#000">`; }
+  else { apercuNormal=`<div style="height:220px;background:#000;display:flex;align-items:center;justify-content:center;color:#ffcc00;text-align:center;padding:10px;font-size:12px">Lien invalide<br>Partager → Copier le lien</div>`; }
   let nomSauve=localStorage.getItem("dernier_nom")||localStorage.getItem("ma_chaine")||"";
   return `<div class="video-card">
     <div class="video-wrap" id="wrap_${v.id}" onclick="jouerVideo('${v.id}')">
@@ -555,7 +529,7 @@ function htmlVideoNormale(v, idx, normales){
     <div style="display:flex;gap:8px;overflow-x:auto"><button class="yt-icon-btn" style="flex:1" onclick="jouerVideo('${v.id}')">▶️ Jouer en grand</button><button class="yt-icon-btn" style="flex:1" onclick="ouvrirDrawer('${v.id}')">💬 Tous les commentaires</button></div>
     <div style="background:#2a2a2a;padding:12px;border-radius:10px;margin-top:12px"><b style="font-size:15px">💬 Commentaires</b><div id="com_list_${v.id}" style="margin:8px 0">Chargement...</div><input id="com_nom_${v.id}" placeholder="Ton nom" value="${escapeHtml(nomSauve)}"><input id="com_txt_${v.id}" placeholder="Écris ton commentaire..."><button class="btn-pub" onclick="envoyerCommentaire('${v.id}')">💬 ENVOYER MON COMMENTAIRE</button></div>
     <button class="del-btn" onclick="supprimerVideo('${v.id}')">🗑️ Supprimer cette vidéo</button>
-    ${nextVideo&&nextVideo.id!==v.id?`<div class="yt-next" onclick="jouerVideo('${nextVideo.id}')"><div style="position:relative">${isPhoneVideo(nextVideo)?`<video src="${getVideoSrc(nextVideo)}" preload="metadata"></video>`:`<img src="${nextThumb}" onerror="this.onerror=null;this.src='${getThumbFallback(nextYid)}'">`}<span class="duree-next">🎵 ${nextDur||"20:31"}</span></div><div class="yt-next-info"><b>${escapeHtml(nextVideo.title||"")}</b><span>${escapeHtml(nextVideo.channel||"")} &nbsp; ▷${formatVues(nextVideo.views||0)} &nbsp; il y a 1 a</span></div><span style="font-size:20px">...</span></div>`:""}
+    ${nextVideo&&nextVideo.id!==v.id?`<div class="yt-next" onclick="jouerVideo('${nextVideo.id}')"><div style="position:relative">${isPhoneVideo(nextVideo)?`<video src="${getVideoSrc(nextVideo)}" preload="metadata"></video>`:`<img src="${nextThumb}" onerror="this.onerror=null;this.src='${getThumbFallback(nextYid)}'" style="background:#000">`}<span class="duree-next">🎵 ${nextDur||"20:31"}</span></div><div class="yt-next-info"><b>${escapeHtml(nextVideo.title||"")}</b><span>${escapeHtml(nextVideo.channel||"")} &nbsp; ▷${formatVues(nextVideo.views||0)} &nbsp; il y a 1 a</span></div><span style="font-size:20px">...</span></div>`:""}
   </div>`;
 }
 function afficher(liste){
@@ -592,7 +566,7 @@ function afficher(liste){
 async function publier(){
   let titre=document.getElementById("titre").value.trim(); let chaine=document.getElementById("chaine").value.trim(); let categorie=document.getElementById("categorie").value; let youtube_url=document.getElementById("youtube_url").value.trim(); let msg=document.getElementById("msg");
   if(!titre||!chaine||!youtube_url){ msg.innerText="Remplis tout ! Titre, chaîne, lien"; msg.style.color="#ffcc00"; return; }
-  if(!youtubeId(youtube_url)){ msg.innerText="Lien YouTube non reconnu. Va sur YouTube, clique Partager, Copier le lien, et colle-le ici. Le lien doit ressembler à : https://youtube.com/shorts/XXXX"; msg.style.color="#ffcc00"; return; }
+  if(!youtubeId(youtube_url)){ msg.innerText="Lien NON reconnu ! Va sur YouTube → ton Short → Partager → Copier le lien. Le lien doit contenir /shorts/ + 11 lettres. Exemple : https://youtube.com/shorts/AbC123XyZ12"; msg.style.color="#ff6666"; return; }
   if(categorie==="Tout") categorie="Musique";
   let type = youtube_url.toLowerCase().includes("/shorts/") ? "SHORTS" : "NORMALE";
   msg.innerText="Publication en "+type+"..."; msg.style.color="white";
