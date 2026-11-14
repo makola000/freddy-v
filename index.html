@@ -6,6 +6,7 @@
 <title>FREDDY-V Mondial</title>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6553183721717606" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://www.youtube.com/iframe_api"></script>
 <style>
 *{box-sizing:border-box}
 body{font-family:Arial,sans-serif;background:#0f0f0f;color:white;margin:0;padding:0}
@@ -97,6 +98,7 @@ input,select{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:none;
 .big-heart{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);font-size:110px;z-index:6;pointer-events:none;transition:transform 0.25s}
 .big-heart.show{transform:translate(-50%,-50%) scale(1.3)}
 .comments-drawer{position:fixed;bottom:0;left:0;width:100%;max-height:75%;background:#1e1e1e;border-radius:20px 20px 0 0;z-index:1100;display:none;padding:16px;overflow:auto}
+.tiktok-auto{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.6);color:white;padding:8px 12px;border-radius:20px;font-size:12px;font-weight:900;z-index:1010;cursor:pointer}
 </style>
 </head>
 <body>
@@ -182,6 +184,7 @@ input,select{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:none;
 <div class="modal" id="modalNotif"><div class="modal-box"><span class="close" onclick="fermerModal('modalNotif')">✖</span><h2>🔔 Notifications</h2><div id="notifList"></div></div></div>
 <div class="tiktok-overlay" id="tiktokOverlay">
   <button class="tiktok-close" onclick="fermerTiktok()">✖</button>
+  <div class="tiktok-auto" id="tiktokAutoBtn" onclick="toggleAutoTiktok()">▶️ Défilement auto : ON</div>
   <div class="tiktok-count" id="tiktokCount">1 / 1</div>
   <div class="tiktok-feed" id="tiktokFeed" onscroll="onTiktokScroll()"></div>
   <div class="tiktok-hint">👆 Glisse vers le haut pour voir le Short suivant • vers le bas pour revenir</div>
@@ -207,15 +210,21 @@ let currentTiktokId = null;
 let drawerVideoId = null;
 let tiktokShorts = [];
 let tiktokIndex = 0;
+// SON ACTIVÉ PAR DÉFAUT pour téléphone + YouTube
 let tiktokMuted = false;
 let currentPlayingId = null;
+let autoTiktok = true;
+let ytPlayers = {};
+let ytApiReady = false;
+function onYouTubeIframeAPIReady(){ ytApiReady = true; }
 function showToast(msg){ let t=document.getElementById("toast"); t.innerText=msg; t.style.display="block"; setTimeout(()=>{ t.style.display="none"; },3000); }
 function getDeviceId(){ let id=localStorage.getItem("freddy_device_id"); if(!id){ id="dev_"+Date.now()+"_"+Math.floor(Math.random()*999999); localStorage.setItem("freddy_device_id",id); } return id; }
 function youtubeId(url){ if(!url) return ""; url=String(url).trim(); let m=url.match(/(?:youtube\.com\/(?:watch\?.*v=|shorts\/|embed\/|v\/|live\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/); if(m) return m[1]; let m2=url.match(/[?&]v=([A-Za-z0-9_-]{11})/); if(m2) return m2[1]; let m3=url.match(/shorts\/([A-Za-z0-9_-]{11})/); if(m3) return m3[1]; let m4=url.match(/youtu\.be\/([A-Za-z0-9_-]{11})/); if(m4) return m4[1]; return ""; }
 function getThumb(url){ let id=youtubeId(url); if(!id) return ""; return "https://i.ytimg.com/vi/"+id+"/hqdefault.jpg"; }
 function getThumbFallback(id){ return "https://i.ytimg.com/vi/"+id+"/mqdefault.jpg"; }
 function getEmbed(url){ let id=youtubeId(url); if(!id) return ""; return "https://www.youtube.com/embed/"+id+"?autoplay=1&mute=0&rel=0&modestbranding=1&playsinline=1"; }
-function getEmbedShort(url){ let id=youtubeId(url); if(!id) return ""; return "https://www.youtube.com/embed/"+id+"?autoplay=1&mute=0&rel=0&modestbranding=1&playsinline=1&loop=1&playlist="+id; }
+// SON ACTIVÉ : mute=0 + enablejsapi=1 pour détecter la fin et défiler tout seul
+function getEmbedShort(url){ let id=youtubeId(url); if(!id) return ""; return "https://www.youtube.com/embed/"+id+"?autoplay=1&mute=0&rel=0&modestbranding=1&playsinline=1&loop=0&playlist="+id+"&enablejsapi=1&controls=0"; }
 function parseISO8601(d){ if(!d) return 0; let m=d.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/); if(!m) return 0; return (parseInt(m[1]||0)*3600)+(parseInt(m[2]||0)*60)+parseInt(m[3]||0); }
 function formatDuree(sec){ if(!sec) return ""; let m=Math.floor(sec/60), s=sec%60; return m+":"+(s<10?"0"+s:s); }
 function formatVues(n){ if(n>=1000) return (n/1000).toFixed(1).replace(".0","")+" k"; return n||0; }
@@ -247,7 +256,7 @@ function stopAllVideosExcept(keepId){
     fermerTiktokSansFiltrer();
   }
 }
-function fermerTiktokSansFiltrer(){ document.getElementById("tiktokOverlay").style.display="none"; document.getElementById("tiktokFeed").innerHTML=""; currentTiktokId=null; }
+function fermerTiktokSansFiltrer(){ document.getElementById("tiktokOverlay").style.display="none"; document.getElementById("tiktokFeed").innerHTML=""; currentTiktokId=null; ytPlayers={}; }
 function majCountSave(){ let n=0; let s=0; toutesVideos.forEach(v=>{ if(localStorage.getItem("save_"+v.id)==="1") n++; if(estShort(v)) s++; }); let el=document.getElementById("countSave"); if(el) el.innerText=n; let el2=document.getElementById("countShorts"); if(el2) el2.innerText=s; }
 async function chargerDurees(){ try{ let ids=toutesVideos.map(v=>youtubeId(v.youtube_url||v.video_url||"")).filter(Boolean); ids=[...new Set(ids)]; if(ids.length===0) return; for(let i=0;i<ids.length;i+=10){ let batch=ids.slice(i,i+10).join(","); try{ let res=await fetch("https://yt.lemnoslife.com/noKey/videos?part=contentDetails&id="+batch); let json=await res.json(); (json.items||[]).forEach(it=>{ durees[it.id]=parseISO8601(it.contentDetails?.duration); }); }catch(e){} } filtrer(); }catch(e){} }
 function ouvrirModal(id){ document.getElementById(id).style.display="block"; }
@@ -290,7 +299,6 @@ async function publierDepuisTelephone(){
   }catch(e){ msg.innerText="Erreur : "+e.message; msg.style.color="#ff6666"; }
 }
 function fermerGrand(id){ let wrap=document.getElementById("wrap_"+id); if(!wrap) return; wrap.classList.remove("grand"); let v=toutesVideos.find(x=>x.id==id); if(v) renderApercu(wrap,v); currentPlayingId=null; }
-// SANS BOUTON ORANGE : comme YouTube / TikTok, juste la photo, clic = joue
 function renderApercu(wrap,v){
   if(isPhoneVideo(v)){ wrap.innerHTML=`<video src="${getVideoSrc(v)}" controls playsinline preload="metadata" onplay="stopAllVideosExcept('${v.id}')" style="width:100%;height:100%"></video>`; return; }
   let yid=youtubeId(v.youtube_url||v.video_url||""); let thumb=getThumb(v.youtube_url||v.video_url||"");
@@ -313,11 +321,45 @@ async function envoyerCommentaire(videoId){ let nomEl=document.getElementById("c
 function ouvrirDrawer(id){ drawerVideoId=String(id); document.getElementById("commentsDrawer").style.display="block"; document.getElementById("drawerMsg").innerText=""; let nomSauve=localStorage.getItem("dernier_nom")||localStorage.getItem("ma_chaine")||""; if(nomSauve) document.getElementById("drawerNom").value=nomSauve; chargerCommentaires(id, "drawerList"); }
 function fermerDrawer(){ document.getElementById("commentsDrawer").style.display="none"; }
 async function envoyerCommentaireDrawer(){ let nom=(document.getElementById("drawerNom").value||"").trim()||localStorage.getItem("ma_chaine")||"Visiteur"; let txt=(document.getElementById("drawerTxt").value||"").trim(); if(!txt){ document.getElementById("drawerMsg").innerText="Écris un commentaire d'abord !"; return; } document.getElementById("drawerMsg").innerText="Envoi..."; await envoyerCommentaireGeneral(drawerVideoId, nom, txt); localStorage.setItem("dernier_nom", nom); document.getElementById("drawerTxt").value=""; document.getElementById("drawerMsg").innerText="✅ Commentaire envoyé !"; showToast("✅ Commentaire envoyé !"); await chargerCommentaires(drawerVideoId, "drawerList"); let comEl=document.getElementById("com_list_"+drawerVideoId); if(comEl) await chargerCommentaires(drawerVideoId, "com_list_"+drawerVideoId); }
+// ===== DÉFILEMENT AUTO COMME TIKTOK + SON ACTIVÉ PAR DÉFAUT =====
+function toggleAutoTiktok(){
+  autoTiktok = !autoTiktok;
+  let b=document.getElementById("tiktokAutoBtn");
+  if(b) b.innerText = autoTiktok ? "▶️ Défilement auto : ON" : "⏸️ Défilement auto : OFF";
+  showToast(autoTiktok ? "▶️ Défilement auto activé" : "⏸️ Défilement auto coupé");
+}
+function nextTiktok(){
+  if(!autoTiktok) return;
+  if(tiktokIndex >= tiktokShorts.length - 1){
+    // Dernier Short : on revient au premier, comme TikTok en boucle
+    tiktokIndex = 0;
+  } else {
+    tiktokIndex++;
+  }
+  let feed=document.getElementById("tiktokFeed");
+  let items=feed.querySelectorAll(".tiktok-item");
+  if(items[tiktokIndex]) items[tiktokIndex].scrollIntoView({behavior:"smooth"});
+}
+function setupYTPlayer(iframeId, videoDbId){
+  // On attend que l'API YouTube soit prête, puis on écoute la fin de la vidéo
+  let tries=0;
+  let timer=setInterval(()=>{
+    tries++;
+    if(window.YT && window.YT.Player){ clearInterval(timer); try{
+      let p = new YT.Player(iframeId, { events: { onStateChange: function(e){
+        // 0 = ENDED
+        if(e.data===0){ nextTiktok(); }
+      }}});
+      ytPlayers[videoDbId]=p;
+    }catch(e){} }
+    if(tries>30) clearInterval(timer);
+  },300);
+}
 function toggleTiktokSound(){
   tiktokMuted=!tiktokMuted;
   let v=tiktokShorts[tiktokIndex];
   if(v && isPhoneVideo(v)){ let vid=document.getElementById("tik_video_"+v.id); if(vid) vid.muted=tiktokMuted; }
-  if(v && !isPhoneVideo(v)){ let holder=document.getElementById("tik_holder_"+v.id); if(holder){ let emb = tiktokMuted ? getEmbedShort(v.youtube_url||v.video_url||"").replace("mute=0","mute=1") : getEmbedShort(v.youtube_url||v.video_url||""); holder.innerHTML=`<iframe src="${emb}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`; } }
+  if(v && !isPhoneVideo(v)){ let holder=document.getElementById("tik_holder_"+v.id); if(holder){ let emb = tiktokMuted ? getEmbedShort(v.youtube_url||v.video_url||"").replace("mute=0","mute=1") : getEmbedShort(v.youtube_url||v.video_url||""); holder.innerHTML=`<iframe id="yt_iframe_${v.id}" src="${emb}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`; setupYTPlayer("yt_iframe_"+v.id, v.id); } }
   showToast(tiktokMuted?"🔇 Son coupé":"🔊 Son activé");
 }
 function ouvrirTiktok(id){
@@ -326,7 +368,9 @@ function ouvrirTiktok(id){
   tiktokIndex = tiktokShorts.findIndex(v=>v.id==id);
   if(tiktokIndex<0) tiktokIndex=0;
   stopAllVideosExcept(id);
+  ytPlayers={};
   let overlay=document.getElementById("tiktokOverlay"); overlay.style.display="flex";
+  let autoBtn=document.getElementById("tiktokAutoBtn"); if(autoBtn) autoBtn.innerText = autoTiktok ? "▶️ Défilement auto : ON" : "⏸️ Défilement auto : OFF";
   let feed=document.getElementById("tiktokFeed");
   feed.innerHTML = tiktokShorts.map((v,idx)=>{
     let liked=localStorage.getItem("like_"+v.id)==="1"; let saved=localStorage.getItem("save_"+v.id)==="1"; let abonne=localStorage.getItem("sub_"+(v.channel||""))==="1";
@@ -334,10 +378,11 @@ function ouvrirTiktok(id){
     let thumb=yid?getThumb(v.youtube_url||v.video_url||""):"";
     let playerHtml="";
     if(isPhoneVideo(v)){
-      playerHtml=`<video id="tik_video_${v.id}" src="${getVideoSrc(v)}" playsinline loop preload="auto" autoplay onplay="stopAllVideosExcept('${v.id}')" onclick="this.paused?this.play():this.pause()" style="width:100%;height:100%"></video>`;
+      // SON ACTIVÉ par défaut : pas de muted, onended = passe au suivant tout seul
+      playerHtml=`<video id="tik_video_${v.id}" src="${getVideoSrc(v)}" playsinline loop preload="auto" autoplay onplay="stopAllVideosExcept('${v.id}')" onended="nextTiktok()" onclick="this.paused?this.play():this.pause()" style="width:100%;height:100%"></video>`;
     } else if(yid){
       if(idx===tiktokIndex || idx===tiktokIndex+1){
-        playerHtml=`<div id="tik_holder_${v.id}" style="width:100%;height:100%;background:#000"><iframe src="${getEmbedShort(v.youtube_url||v.video_url||"")}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`;
+        playerHtml=`<div id="tik_holder_${v.id}" style="width:100%;height:100%;background:#000"><iframe id="yt_iframe_${v.id}" src="${getEmbedShort(v.youtube_url||v.video_url||"")}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`;
       } else {
         playerHtml=`<div id="tik_holder_${v.id}" style="width:100%;height:100%;position:relative;background:#000"><img src="${thumb}" onerror="this.onerror=null;this.src='${getThumbFallback(yid)}'" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover"></div>`;
       }
@@ -354,12 +399,21 @@ function ouvrirTiktok(id){
         <div class="tiktok-btn" onclick="partagerVideo('${v.id}')">➡️<span>Part.</span></div>
         <div class="tiktok-btn ${saved?"liked":""}" onclick="toggleSaveFeed('${v.id}')">🔖<span>${saved?"Oui":"Save"}</span></div>
         <div class="tiktok-btn" onclick="supprimerVideoFeed('${v.id}')">🗑️<span>Supp.</span></div>
-        <div class="tiktok-btn" onclick="toggleTiktokSound()">🔊<span>Son</span></div>
+        <div class="tiktok-btn" onclick="toggleTiktokSound()">${tiktokMuted?"🔇":"🔊"}<span>Son</span></div>
       </div>
-      <div class="tiktok-bottom"><b>@${escapeHtml((v.channel||"").replace(/ /g,""))}</b> ${abonne?"<span style='background:#333;padding:3px 8px;border-radius:12px;font-size:11px'>✅ Abonné</span>":""}<p>${escapeHtml(v.title||"")}</p><p style="color:#ffcc00;font-size:13px">👁️ ${v.views||0} vues • ${v.categorie||""} • ${isPhoneVideo(v)?"📱 Téléphone":"▶️ YouTube"} • ${idx+1} / ${tiktokShorts.length}</p></div>
+      <div class="tiktok-bottom"><b>@${escapeHtml((v.channel||"").replace(/ /g,""))}</b> ${abonne?"<span style='background:#333;padding:3px 8px;border-radius:12px;font-size:11px'>✅ Abonné</span>":""}<p>${escapeHtml(v.title||"")}</p><p style="color:#ffcc00;font-size:13px">👁️ ${v.views||0} vues • ${v.categorie||""} • ${isPhoneVideo(v)?"📱 Téléphone":"▶️ YouTube"} • 🔊 Son activé • ${idx+1} / ${tiktokShorts.length}</p></div>
     </div>`;
   }).join("");
-  setTimeout(()=>{ let items=feed.querySelectorAll(".tiktok-item"); if(items[tiktokIndex]) items[tiktokIndex].scrollIntoView(); onTiktokScroll(true); },120);
+  setTimeout(()=>{
+    let items=feed.querySelectorAll(".tiktok-item");
+    if(items[tiktokIndex]) items[tiktokIndex].scrollIntoView();
+    // On branche le détecteur de fin pour le Short YouTube actuel
+    let cur=tiktokShorts[tiktokIndex];
+    if(cur && !isPhoneVideo(cur)){ setupYTPlayer("yt_iframe_"+cur.id, cur.id); }
+    let nxt=tiktokShorts[tiktokIndex+1];
+    if(nxt && !isPhoneVideo(nxt)){ setupYTPlayer("yt_iframe_"+nxt.id, nxt.id); }
+    onTiktokScroll(true);
+  },200);
   document.getElementById("tiktokCount").innerText=(tiktokIndex+1)+" / "+tiktokShorts.length;
 }
 function onTiktokScroll(firstLoad){
@@ -373,14 +427,15 @@ function onTiktokScroll(firstLoad){
   tiktokShorts.forEach((sv,i)=>{
     if(isPhoneVideo(sv)){
       let vid=document.getElementById("tik_video_"+sv.id);
-      if(vid){ vid.muted=tiktokMuted; if(i===tiktokIndex){ vid.play().catch(()=>{}); } else { vid.pause(); } }
+      if(vid){ vid.muted=tiktokMuted; if(i===tiktokIndex){ vid.play().catch(()=>{ vid.muted=true; vid.play().catch(()=>{}); }); } else { vid.pause(); } }
       return;
     }
     let holder=document.getElementById("tik_holder_"+sv.id);
     if(!holder) return;
     if(i===tiktokIndex || i===tiktokIndex+1){
       if(!holder.querySelector("iframe")){
-        holder.innerHTML=`<iframe src="${getEmbedShort(sv.youtube_url||sv.video_url||"")}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+        holder.innerHTML=`<iframe id="yt_iframe_${sv.id}" src="${getEmbedShort(sv.youtube_url||sv.video_url||"")}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+        setupYTPlayer("yt_iframe_"+sv.id, sv.id);
       }
     } else {
       if(holder.querySelector("iframe")){
@@ -391,7 +446,7 @@ function onTiktokScroll(firstLoad){
     }
   });
 }
-function fermerTiktok(){ document.getElementById("tiktokOverlay").style.display="none"; document.getElementById("tiktokFeed").innerHTML=""; currentTiktokId=null; currentPlayingId=null; filtrer(); }
+function fermerTiktok(){ document.getElementById("tiktokOverlay").style.display="none"; document.getElementById("tiktokFeed").innerHTML=""; currentTiktokId=null; currentPlayingId=null; ytPlayers={}; filtrer(); }
 function tiktokLikeFeed(id){ let wasLiked=localStorage.getItem("like_"+id)==="1"; toggleLike(id); let h=document.getElementById("heart_"+id); if(h && !wasLiked){ h.classList.add("show"); setTimeout(()=>h.classList.remove("show"),600); } let v=toutesVideos.find(x=>x.id==id); let btns=document.querySelectorAll(`[data-id="${id}"] .tiktok-btn`); if(v && btns[0]){ btns[0].classList.toggle("liked", !wasLiked); let sp=btns[0].querySelector("span"); if(sp) sp.innerText=v.likes||0; } }
 function toggleSaveFeed(id){ toggleSave(id); }
 function toggleSubFeed(id,chaine){ toggleSub(id,chaine); }
