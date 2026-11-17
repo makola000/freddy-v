@@ -13,9 +13,8 @@ body{font-family:Arial,sans-serif;background:#0f0f0f;color:white;margin:0;paddin
 .logo span{color:#ff0000}
 .search{background:white;border-radius:30px;padding:8px 12px;display:flex;align-items:center;flex:1;max-width:240px}
 .search input{border:none;outline:none;width:100%;font-size:16px}
-.bell{font-size:28px;cursor:pointer;position:relative}
-.notif-count{position:absolute;top:-5px;right:-5px;background:#ff0000;color:white;font-size:11px;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold}
-.fr{background:#ff0000;border:2px solid white;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;cursor:pointer}
+.bell{font-size:28px}
+.fr{background:#ff0000;border:2px solid white;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px}
 .hero{background:linear-gradient(180deg,#ff0000 0%,#8b0000 60%,#000 100%);padding:20px 15px 25px}
 .hero h2{font-size:24px;margin:0}
 .hero p{font-size:19px;font-style:italic;margin:8px 0;line-height:1.3}
@@ -29,70 +28,33 @@ body{font-family:Arial,sans-serif;background:#0f0f0f;color:white;margin:0;paddin
 .pop-box .big{font-size:38px;font-weight:900;line-height:1}
 .pop-box .small{font-size:15px;font-weight:bold}
 .chaine-box{background:#1e1e1e;border:1px solid #333;padding:14px;border-radius:12px;margin-bottom:15px}
-.chaine-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #333;cursor:pointer}
-.chaine-row:last-child{border-bottom:none}
-.chaine-rank{width:32px;height:32px;border-radius:50%;background:#ff0000;color:white;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;flex-shrink:0}
 .card{background:#1e1e1e;padding:15px;border-radius:12px;margin-bottom:15px}
-input,select{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:none;font-size:16px}
+input,select,textarea{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:none;font-size:16px;font-family:Arial}
+textarea{height:70px}
 .btn-pub{background:#ff0000;color:white;border:none;padding:13px;border-radius:8px;font-weight:bold;cursor:pointer;width:100%;font-size:17px}
+.btn-shorts{background:#ff8800;color:#fff;border:none;padding:13px;border-radius:8px;font-weight:900;cursor:pointer;width:100%;font-size:17px}
+.btn-normale{background:#008000;color:#fff;border:none;padding:13px;border-radius:8px;font-weight:900;cursor:pointer;width:100%;font-size:17px}
 .video-card{background:#1e1e1e;padding:12px;border-radius:12px;margin-bottom:22px}
-.video-wrap{position:relative;background:#000;border-radius:10px;overflow:hidden;cursor:pointer}
-.video-wrap img{width:100%;display:block;background:#000}
-.video-wrap iframe{width:100%;height:220px;border:none;display:block;background:#000}
-.del-btn{background:#111;border:1px solid #555;color:white;padding:11px;border-radius:8px;width:100%;cursor:pointer;font-weight:bold;margin-top:8px}
-.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:99;padding:20px;overflow:auto}
-.modal-box{background:#1e1e1e;padding:20px;border-radius:15px;max-width:450px;margin:40px auto}
-.close{float:right;font-size:24px;cursor:pointer}
-.tab-btn{background:#333;color:white;border:none;padding:10px 15px;border-radius:20px;margin-right:8px;cursor:pointer;white-space:nowrap}
-.tab-btn.active{background:#ff0000}
+.video-card iframe{width:100%;height:220px;border:none;display:block;background:#000;border-radius:10px}
+.yt-title{font-size:19px;font-weight:900;margin:10px 0 4px;line-height:1.3}
+.yt-meta{font-size:14px;color:#ccc;margin:0 0 10px}
+.yt-meta b{color:white}
 .section-title{background:#000;border-left:5px solid #ff0000;padding:12px 15px;border-radius:10px;margin:22px 0 15px;font-size:20px;font-weight:900}
 .section-title span{color:#ffcc00}
 .shorts-row{display:flex;gap:10px;overflow-x:auto;padding:5px 0 15px}
 .shorts-card{min-width:160px;width:160px;background:#1e1e1e;border-radius:12px;overflow:hidden;cursor:pointer;flex-shrink:0}
 .shorts-card img{width:100%;height:220px;object-fit:cover;display:block;background:#000}
+.shorts-card iframe{width:100%;height:220px;border:none;display:block;background:#000}
 .shorts-card p{font-size:13px;padding:8px;margin:0;color:white}
-.comment-item{background:#1e1e1e;padding:8px 10px;border-radius:8px;margin-top:6px;font-size:14px}
-.comment-item b{color:#ffcc00}
+.tab-btn{background:#333;color:white;border:none;padding:10px 15px;border-radius:20px;margin-right:8px;cursor:pointer;white-space:nowrap}
+.tab-btn.active{background:#ff0000}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#fff;color:#000;padding:12px 20px;border-radius:25px;font-weight:900;z-index:9999;display:none;max-width:90%;text-align:center}
-.yt-title{font-size:19px;font-weight:900;margin:10px 0 4px;line-height:1.3}
-.yt-meta{font-size:14px;color:#ccc;margin:0 0 10px;line-height:1.4}
-.yt-meta b{color:white}
-.yt-row{display:flex;align-items:center;gap:10px;margin:10px 0;overflow-x:auto;padding-bottom:4px}
-.yt-avatar{width:40px;height:40px;min-width:40px;border-radius:50%;background:#ff0000;color:white;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;overflow:hidden}
-.yt-sub{background:#000;color:white;border:1px solid #555;padding:10px 16px;border-radius:20px;font-weight:900;cursor:pointer;font-size:14px;white-space:nowrap}
-.yt-icon-btn{background:#2a2a2a;color:white;border:none;min-width:44px;height:40px;padding:0 12px;border-radius:20px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;white-space:nowrap}
-.yt-icon-btn.active{background:#fff;color:#000}
-.yt-icon-btn.saved{background:#ff8800;color:#fff}
-.yt-comments-preview{background:#e8e8e8;color:#000;border-radius:12px;padding:12px 14px;margin:12px 0;cursor:pointer}
-.yt-comments-preview b{font-size:15px}
-.yt-comments-preview p{font-size:14px;margin:8px 0 0;color:#222}
-.yt-next{display:flex;gap:10px;margin:12px 0;cursor:pointer}
-.yt-next img{width:150px;height:90px;object-fit:cover;border-radius:10px;flex-shrink:0;background:#000}
-.yt-next-info{flex:1}
-.yt-next-info b{font-size:14px;line-height:1.3;display:block}
-.yt-next-info span{font-size:12px;color:#aaa}
-.duree-next{position:absolute;bottom:6px;right:6px;background:rgba(0,0,0,0.8);color:white;font-size:11px;font-weight:900;padding:2px 6px;border-radius:6px}
-.tiktok-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:#000 !important;z-index:1000;display:none;flex-direction:column}
-.tiktok-feed{flex:1;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;background:#000}
-.tiktok-item{width:100%;height:100%;scroll-snap-align:start;position:relative;background:#000 !important;overflow:hidden;flex-shrink:0}
-.tiktok-item iframe{width:100%;height:100%;border:none;background:#000;display:block}
-.tiktok-side{position:absolute;right:10px;bottom:130px;display:flex;flex-direction:column;gap:12px;z-index:5}
-.tiktok-btn{width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:white;font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-direction:column}
-.tiktok-btn span{font-size:11px;font-weight:900;margin-top:2px}
-.tiktok-btn.liked{background:#ff0000}
-.tiktok-bottom{position:absolute;left:12px;right:70px;bottom:22px;z-index:5;color:white;text-shadow:0 0 8px #000}
-.tiktok-close{position:fixed;top:12px;left:12px;background:#ff0000;color:white;border:none;width:40px;height:40px;border-radius:50%;font-size:20px;cursor:pointer;z-index:1010}
-.tiktok-count{position:fixed;top:16px;right:12px;background:rgba(0,0,0,0.6);color:white;padding:8px 12px;border-radius:20px;font-size:13px;font-weight:900;z-index:1010}
-.tiktok-hint{position:fixed;bottom:10px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.6);color:white;padding:6px 12px;border-radius:20px;font-size:12px;z-index:1010;white-space:nowrap}
-.big-heart{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);font-size:110px;z-index:6;pointer-events:none;transition:transform 0.25s}
-.big-heart.show{transform:translate(-50%,-50%) scale(1.3)}
-.comments-drawer{position:fixed;bottom:0;left:0;width:100%;max-height:75%;background:#1e1e1e;border-radius:20px 20px 0 0;z-index:1100;display:none;padding:16px;overflow:auto}
-.vue-video{background:#000;border:1px solid #ffcc00;border-radius:10px;padding:10px 12px;margin:10px 0;font-size:14px;line-height:1.5}
-.vue-video b{color:#ffcc00}
-.vue-auto{background:#003300;border:1px solid #00ff88;border-radius:10px;padding:8px 12px;margin:8px 0;font-size:12px;color:#00ff88;font-weight:900;text-align:center}
-.date-badge{background:rgba(0,0,0,0.6);color:#ffcc00;font-size:12px;font-weight:900;padding:4px 8px;border-radius:10px;display:inline-block;margin-top:4px}
-.chaine-stats{background:#2a2a2a;border-radius:10px;padding:10px 12px;margin:10px 0;font-size:13px;line-height:1.5}
-.chaine-stats b{color:#ffcc00}
+.del-btn{background:#111;border:1px solid #555;color:white;padding:11px;border-radius:8px;width:100%;cursor:pointer;font-weight:bold;margin-top:8px}
+.badge-shorts{background:#ff8800;color:#fff;font-size:11px;font-weight:900;padding:4px 8px;border-radius:10px}
+.badge-normale{background:#008000;color:#fff;font-size:11px;font-weight:900;padding:4px 8px;border-radius:10px}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:99;padding:20px;overflow:auto}
+.modal-box{background:#1e1e1e;padding:20px;border-radius:15px;max-width:450px;margin:40px auto}
+.close{float:right;font-size:24px;cursor:pointer}
 </style>
 </head>
 <body>
@@ -100,8 +62,8 @@ input,select{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:none;
 <div class="topbar">
   <div class="logo">FREDDY-<br>V <span>Mondial</span></div>
   <div class="search">🔍 <input id="recherche" placeholder="Rechercher..." oninput="filtrer()"></div>
-  <div class="bell" onclick="ouvrirNotif()">🔔<span class="notif-count" id="notifCount">0</span></div>
-  <div class="fr" id="btnLang" onclick="changerLangue()">FR</div>
+  <div class="bell">🔔</div>
+  <div class="fr">FR</div>
 </div>
 <div class="hero">
   <h2>...peut publier ici.</h2>
@@ -110,28 +72,62 @@ input,select{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:none;
   <button class="btn btn-white" onclick="document.getElementById('publier').scrollIntoView({behavior:'smooth'})">+ Publier une vidéo</button>
   <button class="btn btn-black" onclick="ouvrirModal('modalChaine')">+ Créer ma chaîne</button>
   <button class="btn btn-yellow" onclick="ouvrirModal('modalPaye')">💰 Devenir créateur payé</button>
-  <button class="btn btn-black" onclick="partagerChaine()">🔗 Partager ma chaîne</button>
-  <p id="maChaineInfo" style="text-align:center;font-weight:bold;color:#ffcc00"></p>
-  <div id="maChaineStats" style="text-align:center;font-weight:bold;color:white;background:rgba(0,0,0,0.4);padding:10px;border-radius:10px;margin-top:10px;display:none"></div>
+  <p style="text-align:center;font-weight:bold;color:#ffcc00">✅ 100% YOUTUBE - SANS SUPABASE - PLUS JAMAIS FERMÉ</p>
 </div>
+
 <div class="container">
   <div class="pop-box">
-    <div class="big" id="popTotal">👥 0</div>
-    <div class="small">POPULATION FREDDY-V • VUES RÉELLES • CHAQUE PERSONNE = 1 VUE PAR JOUR PAR VIDÉO</div>
-    <div class="small" id="gainsTotal">💰 Total gains créateurs : 0 FC</div>
-    <div class="small" id="visiteursJour">👥 Visiteurs aujourd'hui : 0 | Hier : 0 | Total : 0</div>
+    <div class="big" id="popTotal">👥 0 vues</div>
+    <div class="small">POPULATION FREDDY-V • SHORTS + VIDÉOS NORMALES SÉPARÉS</div>
+    <div class="small" id="statsShortsNormales">📱 Shorts : 0 | 🎬 Normales : 0</div>
   </div>
-  <div class="vue-auto">👁️ VUES AUTOMATIQUES COMME YOUTUBE / TIKTOK — Reste 5 secondes sur la vidéo = +1 vue. Reviens demain = +1 vue encore. Chaque vidéo garde ses vues.</div>
-  <div class="chaine-box" id="classementChaines">
-    <h3 style="margin:0 0 5px">🏆 Classement des chaînes — Chaque vidéo garde ses propres vues</h3>
-    <p style="font-size:13px;color:#aaa;margin:0 0 10px">Chaque vidéo garde ses vues sur elle-même. Les vues de la chaîne = juste la somme.</p>
-    <div id="listeChaines">Chargement...</div>
+
+  <!-- ========== SECTION PUBLICATION ========== -->
+  <div class="card" id="publier">
+    <h2>📤 Publier une vidéo</h2>
+    <p style="color:#ffcc00;font-size:14px;font-weight:bold">⚠️ Choisis bien : Shorts OU Normale. Ne mélange pas.</p>
+
+    <!-- BOUTON 1 : SHORTS -->
+    <div style="background:#2a1500;border:2px solid #ff8800;border-radius:12px;padding:14px;margin:12px 0">
+      <h3 style="margin:0;color:#ff8800">📱 1. PUBLIER UN SHORTS</h3>
+      <p style="font-size:13px;color:#ccc;margin:6px 0">Verticale, courte, moins de 1 minute. Lien avec <b>/shorts/</b></p>
+      <input id="titreShorts" placeholder="Titre du Shorts - ex: Makola danse à Masisi">
+      <input id="chaineShorts" placeholder="Nom de ta chaîne">
+      <input id="urlShorts" placeholder="Colle ici le lien Shorts YouTube">
+      <textarea id="descShorts" placeholder="Décris ton Shorts en 2 phrases pour Google AdSense... Ex: Ici à Masisi, on danse pour Jésus..."></textarea>
+      <button class="btn-shorts" onclick="publierShorts()">📱 PUBLIER MON SHORTS</button>
+      <p id="msgShorts" style="text-align:center;color:#ffcc00"></p>
+    </div>
+
+    <div style="text-align:center;font-weight:900;margin:10px 0">--- OU ---</div>
+
+    <!-- BOUTON 2 : NORMALE -->
+    <div style="background:#002a00;border:2px solid #00ff88;border-radius:12px;padding:14px;margin:12px 0">
+      <h3 style="margin:0;color:#00ff88">🎬 2. PUBLIER UNE VIDÉO NORMALE</h3>
+      <p style="font-size:13px;color:#ccc;margin:6px 0">Horizontale, longue, chanson / actualité / foi. Lien avec <b>/watch?v=</b></p>
+      <input id="titreNormale" placeholder="Titre de la vidéo normale - ex: Makola chante pour Jésus">
+      <input id="chaineNormale" placeholder="Nom de ta chaîne">
+      <select id="categorieNormale">
+        <option value="Tout">Choisir catégorie</option>
+        <option value="Musique">🎵 Musique</option>
+        <option value="Actualité">📰 Actualité</option>
+        <option value="Comédie">😂 Comédie</option>
+        <option value="Sport">⚽ Sport</option>
+        <option value="Foi">🙏 Foi</option>
+      </select>
+      <input id="urlNormale" placeholder="Colle ici le lien YouTube normal">
+      <textarea id="descNormale" placeholder="Décris ta vidéo en 3-4 phrases pour Google AdSense... Ex: Dans cette vidéo, je vous montre..."></textarea>
+      <button class="btn-normale" onclick="publierNormale()">🎬 PUBLIER MA VIDÉO NORMALE</button>
+      <p id="msgNormale" style="text-align:center;color:#00ff88"></p>
+    </div>
   </div>
-  <div style="margin-bottom:12px">
-    <button class="tab-btn active" id="tabToutes" onclick="montrerTab('toutes')">Toutes</button>
-    <button class="tab-btn" id="tabShorts" onclick="montrerTab('shorts')">📱 Shorts (<span id="countShorts">0</span>)</button>
-    <button class="tab-btn" id="tabEnregistrees" onclick="montrerTab('enregistrees')">🔖 Enregistrées (<span id="countSave">0</span>)</button>
-  </div>
+
+  <!-- ========== SHORTS EN HAUT ========== -->
+  <div class="section-title">📱 SHORTS <span id="countShorts">(0)</span> — Glisse à gauche</div>
+  <div class="shorts-row" id="listeShorts"><p style="padding:10px">Pas encore de Shorts. Publie ton premier Shorts en haut.</p></div>
+
+  <!-- ========== VIDEOS NORMALES EN BAS ========== -->
+  <div class="section-title">🎬 VIDÉOS NORMALES <span id="countNormales">(0)</span> — Les longues, pour AdSense</div>
   <div style="margin-bottom:12px;overflow-x:auto;white-space:nowrap;padding-bottom:5px">
     <button class="tab-btn active" onclick="filtrerCategorie('Tout',this)">Tout</button>
     <button class="tab-btn" onclick="filtrerCategorie('Musique',this)">🎵 Musique</button>
@@ -140,66 +136,23 @@ input,select{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:none;
     <button class="tab-btn" onclick="filtrerCategorie('Sport',this)">⚽ Sport</button>
     <button class="tab-btn" onclick="filtrerCategorie('Foi',this)">🙏 Foi</button>
   </div>
-  <div class="card" id="publier">
-    <h2>📤 Publier une vidéo</h2>
-    <p style="color:#00ff88;font-weight:900;font-size:14px">✅ 100% YOUTUBE - SANS SERVEUR - PLUS JAMAIS FERMÉ</p>
-    <input id="titre" placeholder="Titre de la vidéo">
-    <input id="chaine" placeholder="Nom de ta chaîne">
-    <select id="categorie">
-      <option value="Tout">Choisir catégorie</option>
-      <option value="Musique">🎵 Musique</option>
-      <option value="Actualité">📰 Actualité</option>
-      <option value="Comédie">😂 Comédie</option>
-      <option value="Sport">⚽ Sport</option>
-      <option value="Foi">🙏 Foi</option>
-    </select>
-    <h3 style="margin:10px 0 5px">🔗 Avec un lien YouTube</h3>
-    <input id="youtube_url" placeholder="Lien YouTube, Shorts aussi">
-    <p style="font-size:13px;color:#ffcc00;margin:0">Va sur YouTube → ton Short → Partager → Copier le lien. Colle CE lien-là. Ne colle pas le lien de ta chaîne.</p>
-    <button class="btn-pub" onclick="publier()">PUBLIER AVEC LIEN YOUTUBE</button>
-    <p id="msg" style="text-align:center"></p>
-  </div>
-  <div id="liste">Chargement...</div>
+  <div id="listeNormales">Chargement...</div>
 </div>
+
 <div style="background:#000;padding:25px 15px;text-align:center;margin-top:20px;border-top:2px solid #ff0000">
   <h3 style="color:white;margin:0 0 10px">À PROPOS DE FREDDY-V MONDIAL</h3>
   <p style="color:#ccc;font-size:14px;line-height:1.6;max-width:700px;margin:0 auto">FREDDY-V Mondial est un site web créé par <b style="color:white">Makola Kibwe</b> à Masisi, Nord-Kivu, en République Démocratique du Congo. Notre devise : "Tout le monde publie, tout le monde crée sa chaîne. Jésus revient."</p>
   <p style="color:#888;font-size:12px;margin-top:20px">© 2026 FREDDY-V Mondial - Par Makola Kibwe - Tous droits réservés.</p>
 </div>
+
 <div class="modal" id="modalChaine"><div class="modal-box"><span class="close" onclick="fermerModal('modalChaine')">✖</span><h2>+ Créer ma chaîne</h2><input id="nomChaine" placeholder="Nom de ta chaîne"><input id="descChaine" placeholder="Description"><button class="btn-pub" onclick="creerChaine()">CRÉER MA CHAÎNE</button><p id="chaineMsg"></p></div></div>
 <div class="modal" id="modalPaye"><div class="modal-box"><span class="close" onclick="fermerModal('modalPaye')">✖</span><h2>💰 Devenir créateur payé</h2><p>1 vue réelle = 1 personne. 1000 vues = 500 FC.</p><input id="nomPaye" placeholder="Ton nom complet"><input id="chainePaye" placeholder="Nom de ta chaîne"><input id="telPaye" placeholder="Ton WhatsApp"><button class="btn-pub" onclick="demandePaye()">ENVOYER MA DEMANDE</button><p id="payeMsg"></p></div></div>
-<div class="modal" id="modalNotif"><div class="modal-box"><span class="close" onclick="fermerModal('modalNotif')">✖</span><h2>🔔 Notifications</h2><div id="notifList"></div></div></div>
-<div class="tiktok-overlay" id="tiktokOverlay">
-  <button class="tiktok-close" onclick="fermerTiktok()">✖</button>
-  <div class="tiktok-count" id="tiktokCount">1 / 1</div>
-  <div class="tiktok-feed" id="tiktokFeed"></div>
-  <div class="tiktok-hint">👆 Glisse vers le haut pour voir le Short suivant</div>
-</div>
-<div class="comments-drawer" id="commentsDrawer">
-  <div style="display:flex;justify-content:space-between;align-items:center"><b id="drawerTitle">💬 Commentaires</b><button onclick="fermerDrawer()" style="background:#ff0000;color:white;border:none;padding:8px 12px;border-radius:50%;cursor:pointer">✖</button></div>
-  <div id="drawerList" style="margin:12px 0;min-height:60px">Chargement...</div>
-  <input id="drawerNom" placeholder="Ton nom (ex: Makola)">
-  <input id="drawerTxt" placeholder="Écris ton commentaire...">
-  <button class="btn-pub" onclick="envoyerCommentaireDrawer()">💬 ENVOYER MON COMMENTAIRE</button>
-  <p id="drawerMsg" style="text-align:center;font-size:13px;color:#ffcc00"></p>
-</div>
+
 <script>
-let toutesVideos = JSON.parse(localStorage.getItem('freddyv_videos')||'[]');
-let chaines = JSON.parse(localStorage.getItem('freddyv_chaines')||'[]');
-let onglet="toutes", categorieChoisie="Tout", langue="FR";
-let currentTiktokId=null, drawerVideoId=null, tiktokShorts=[], tiktokIndex=0;
-let likes = JSON.parse(localStorage.getItem('freddyv_likes')||'{}');
-let saves = JSON.parse(localStorage.getItem('freddyv_saves')||'[]');
-let vues = JSON.parse(localStorage.getItem('freddyv_vues')||'{}');
-let commentaires = JSON.parse(localStorage.getItem('freddyv_comments')||'{}');
-function saveAll(){
-  localStorage.setItem('freddyv_videos',JSON.stringify(toutesVideos));
-  localStorage.setItem('freddyv_chaines',JSON.stringify(chaines));
-  localStorage.setItem('freddyv_likes',JSON.stringify(likes));
-  localStorage.setItem('freddyv_saves',JSON.stringify(saves));
-  localStorage.setItem('freddyv_vues',JSON.stringify(vues));
-  localStorage.setItem('freddyv_comments',JSON.stringify(commentaires));
-}
+let toutesVideos = JSON.parse(localStorage.getItem('freddyv_videos_v2')||'[]');
+let categorieChoisie='Tout';
+let rechercheTxt='';
+function save(){localStorage.setItem('freddyv_videos_v2',JSON.stringify(toutesVideos))}
 function showToast(t){let e=document.getElementById('toast');e.textContent=t;e.style.display='block';setTimeout(()=>e.style.display='none',3000)}
 function getYoutubeId(url){
   if(!url) return null;
@@ -209,169 +162,103 @@ function getYoutubeId(url){
 function getThumb(id){return 'https://i.ytimg.com/vi/'+id+'/hqdefault.jpg'}
 function ouvrirModal(id){document.getElementById(id).style.display='block'}
 function fermerModal(id){document.getElementById(id).style.display='none'}
-function changerLangue(){langue=langue==='FR'?'EN':'FR';document.getElementById('btnLang').textContent=langue;showToast('Langue: '+langue)}
-function ouvrirNotif(){ouvrirModal('modalNotif');document.getElementById('notifList').innerHTML='<p>Aucune nouvelle notification.</p>';document.getElementById('notifCount').textContent='0'}
-function partagerChaine(){navigator.clipboard.writeText(location.href);showToast('Lien chaîne copié !')}
 function creerChaine(){
   let n=document.getElementById('nomChaine').value.trim();
-  let d=document.getElementById('descChaine').value.trim();
-  if(!n){showToast('Mets le nom de ta chaîne');return}
-  chaines.push({nom:n,desc:d});
-  localStorage.setItem('freddyv_chaines',JSON.stringify(chaines));
-  document.getElementById('maChaineInfo').textContent='✅ Ta chaîne : '+n;
-  document.getElementById('chaine').value=n;
+  if(!n){showToast('Mets le nom');return}
+  document.getElementById('chaineShorts').value=n;
+  document.getElementById('chaineNormale').value=n;
   document.getElementById('chaineMsg').textContent='✅ Chaîne créée : '+n;
-  fermerModal('modalChaine');afficher();afficherChaines();
+  fermerModal('modalChaine');showToast('Chaîne créée : '+n);
 }
-function demandePaye(){
-  let n=document.getElementById('nomPaye').value.trim();
-  if(!n){showToast('Mets ton nom');return}
-  document.getElementById('payeMsg').textContent='✅ Demande envoyée ! On va te contacter sur WhatsApp.';
-  showToast('Demande envoyée !');
+function demandePaye(){document.getElementById('payeMsg').textContent='✅ Demande envoyée !';showToast('Demande envoyée !')}
+
+// --- PUBLIER SHORTS ---
+function publierShorts(){
+  let titre=document.getElementById('titreShorts').value.trim();
+  let chaine=document.getElementById('chaineShorts').value.trim()||'FREDDY-V';
+  let url=document.getElementById('urlShorts').value.trim();
+  let desc=document.getElementById('descShorts').value.trim();
+  if(!titre){showToast('Mets le titre du Shorts');return}
+  if(!url){showToast('Mets le lien Shorts');return}
+  let id=getYoutubeId(url);
+  if(!id){showToast('Lien pas bon');return}
+  if(!url.includes('/shorts/') && !confirm('Attention : ce lien ne ressemble pas à un Shorts (pas de /shorts/). Publier quand même comme Shorts ?'))return;
+  let v={id:'s'+Date.now(),type:'short',titre,chaine,categorie:'Shorts',youtube_id:id,desc,date:new Date().toLocaleDateString('fr-FR')};
+  toutesVideos.unshift(v);save();
+  document.getElementById('titreShorts').value='';document.getElementById('urlShorts').value='';document.getElementById('descShorts').value='';
+  document.getElementById('msgShorts').textContent='✅ Shorts publié !';
+  afficher();showToast('✅ Shorts publié !');
 }
-function publier(){
-  let titre=document.getElementById('titre').value.trim();
-  let chaine=document.getElementById('chaine').value.trim()||'FREDDY-V';
-  let cat=document.getElementById('categorie').value;
-  let url=document.getElementById('youtube_url').value.trim();
-  if(!titre){showToast('Mets un titre');return}
+
+// --- PUBLIER NORMALE ---
+function publierNormale(){
+  let titre=document.getElementById('titreNormale').value.trim();
+  let chaine=document.getElementById('chaineNormale').value.trim()||'FREDDY-V';
+  let cat=document.getElementById('categorieNormale').value;
+  let url=document.getElementById('urlNormale').value.trim();
+  let desc=document.getElementById('descNormale').value.trim();
+  if(!titre){showToast('Mets le titre');return}
   if(!url){showToast('Mets le lien YouTube');return}
   let id=getYoutubeId(url);
-  if(!id){showToast('Lien YouTube pas bon. Copie le lien Partager de YouTube');return}
-  let isShort=url.includes('/shorts/');
-  let v={id:'v'+Date.now(),titre,chaine,categorie:cat,youtube_id:id,isShort:isShort,date:new Date().toLocaleDateString('fr-FR'),vues:0};
-  toutesVideos.unshift(v);
-  saveAll();
-  document.getElementById('titre').value='';document.getElementById('youtube_url').value='';
-  document.getElementById('msg').textContent='✅ Publié !';
-  afficher();afficherChaines();showToast('✅ Vidéo publiée !');
+  if(!id){showToast('Lien pas bon');return}
+  if(url.includes('/shorts/')){showToast('⚠️ Ça c’est un Shorts ! Mets-le dans le bouton Shorts en haut, pas ici.');return}
+  let v={id:'n'+Date.now(),type:'normale',titre,chaine,categorie:cat,youtube_id:id,desc,date:new Date().toLocaleDateString('fr-FR')};
+  toutesVideos.unshift(v);save();
+  document.getElementById('titreNormale').value='';document.getElementById('urlNormale').value='';document.getElementById('descNormale').value='';
+  document.getElementById('msgNormale').textContent='✅ Vidéo normale publiée !';
+  afficher();showToast('✅ Vidéo normale publiée !');
 }
+
 function supprimerVideo(id){
-  if(!confirm('Supprimer cette vidéo ?'))return;
-  toutesVideos=toutesVideos.filter(v=>v.id!==id);
-  saveAll();afficher();afficherChaines();
+  if(!confirm('Supprimer ?'))return;
+  toutesVideos=toutesVideos.filter(v=>v.id!==id);save();afficher();
 }
-function liker(id,btn){
-  likes[id]=(likes[id]||0)+1;saveAll();
-  btn.textContent='❤️ '+likes[id];btn.classList.add('active');
-}
-function sauvegarder(id,btn){
-  if(saves.includes(id)){saves=saves.filter(x=>x!==id);btn.textContent='🔖 Enregistrer';btn.classList.remove('saved')}
-  else{saves.push(id);btn.textContent='✅ Enregistré';btn.classList.add('saved')}
-  saveAll();afficher();
-}
-function ajouterVue(id){
-  let today=new Date().toDateString();
-  let key=id+'_'+today;
-  if(!vues[key]){vues[key]=1;saveAll();afficherChaines();}
-}
-function filtrer(){afficher(document.getElementById('recherche').value.toLowerCase())}
+function filtrer(){rechercheTxt=document.getElementById('recherche').value.toLowerCase();afficher()}
 function filtrerCategorie(cat,btn){
   categorieChoisie=cat;
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   if(btn)btn.classList.add('active');
   afficher();
 }
-function montrerTab(t){
-  onglet=t;
-  document.getElementById('tabToutes').classList.toggle('active',t==='toutes');
-  document.getElementById('tabShorts').classList.toggle('active',t==='shorts');
-  document.getElementById('tabEnregistrees').classList.toggle('active',t==='enregistrees');
-  afficher();
-}
-function afficherChaines(){
-  let el=document.getElementById('listeChaines');
-  let map={};
-  toutesVideos.forEach(v=>{
-    if(!map[v.chaine])map[v.chaine]={nom:v.chaine,vues:0,nb:0};
-    let vcount=Object.keys(vues).filter(k=>k.startsWith(v.id+'_')).length;
-    map[v.chaine].vues+=vcount;map[v.chaine].nb++;
-  });
-  let arr=Object.values(map).sort((a,b)=>b.vues-a.vues);
-  if(arr.length===0){el.innerHTML='Pas encore de chaîne. Crée ta chaîne et publie !';return}
-  el.innerHTML=arr.map((c,i)=>`<div class="chaine-row" onclick="document.getElementById('recherche').value='${c.nom}';filtrer()"><div class="chaine-rank">${i+1}</div><div style="flex:1"><b>${c.nom}</b><div style="font-size:12px;color:#aaa">${c.nb} vidéo(s) • ${c.vues} vues</div></div><div style="color:#ffcc00;font-weight:900">${c.vues} vues</div></div>`).join('');
-  let total=Object.keys(vues).length;
-  document.getElementById('popTotal').textContent='👥 '+total;
-  document.getElementById('gainsTotal').textContent='💰 Total gains créateurs : '+(total*0.5)+' FC';
-}
-function afficher(q=''){
-  let liste=document.getElementById('liste');
-  let vids=toutesVideos.filter(v=>{
-    if(q && !(v.titre+v.chaine).toLowerCase().includes(q))return false;
+function afficher(){
+  let shorts=toutesVideos.filter(v=>v.type==='short');
+  let normales=toutesVideos.filter(v=>v.type==='normale');
+  // Stats
+  document.getElementById('statsShortsNormales').textContent='📱 Shorts : '+shorts.length+' | 🎬 Normales : '+normales.length;
+  document.getElementById('countShorts').textContent='('+shorts.length+')';
+  document.getElementById('countNormales').textContent='('+normales.length+')';
+  document.getElementById('popTotal').textContent='👥 '+toutesVideos.length+' vidéos';
+  // Shorts
+  let elS=document.getElementById('listeShorts');
+  let shortsFiltres=shorts.filter(v=>(v.titre+v.chaine).toLowerCase().includes(rechercheTxt));
+  if(shortsFiltres.length===0){elS.innerHTML='<p style="padding:10px">Pas encore de Shorts. Publie ton premier Shorts en haut.</p>'}
+  else{
+    elS.innerHTML=shortsFiltres.map(v=>`<div class="shorts-card" onclick="window.open('https://youtu.be/${v.youtube_id}','_blank')">
+      <img src="${getThumb(v.youtube_id)}">
+      <p><span class="badge-shorts">📱 SHORTS</span><br><b>${v.titre}</b><br><span style="color:#aaa">${v.chaine} • ${v.date}</span><br>${v.desc?'<span style="color:#ccc">'+v.desc.substring(0,60)+'</span>':''}</p>
+      <button class="del-btn" onclick="event.stopPropagation();supprimerVideo('${v.id}')">🗑️ Supprimer</button>
+    </div>`).join('');
+  }
+  // Normales
+  let elN=document.getElementById('listeNormales');
+  let normFiltres=normales.filter(v=>{
+    if(rechercheTxt && !(v.titre+v.chaine).toLowerCase().includes(rechercheTxt))return false;
     if(categorieChoisie!=='Tout' && v.categorie!==categorieChoisie)return false;
-    if(onglet==='shorts' && !v.isShort)return false;
-    if(onglet==='enregistrees' && !saves.includes(v.id))return false;
     return true;
   });
-  document.getElementById('countShorts').textContent=toutesVideos.filter(v=>v.isShort).length;
-  document.getElementById('countSave').textContent=saves.length;
-  if(vids.length===0){
-    liste.innerHTML='<div class="card" style="text-align:center"><h3>Pas encore de vidéo ici</h3><p>Publie ta première vidéo avec un lien YouTube en haut.<br>100% YouTube, sans serveur, plus jamais fermé.</p></div>';
-    return;
-  }
-  liste.innerHTML=vids.map(v=>{
-    let likeCount=likes[v.id]||0;
-    let coms=commentaires[v.id]||[];
-    let vcount=Object.keys(vues).filter(k=>k.startsWith(v.id+'_')).length;
-    return `<div class="video-card">
-      <div class="video-wrap" onclick="ajouterVue('${v.id}');this.querySelector('iframe').src='https://www.youtube.com/embed/${v.youtube_id}?autoplay=1'">
-        <img src="${getThumb(v.youtube_id)}" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-        <iframe src="https://www.youtube.com/embed/${v.youtube_id}" allowfullscreen style="display:none"></iframe>
-      </div>
-      <div class="yt-title">${v.titre}</div>
-      <p class="yt-meta">Par <b>${v.chaine}</b> • ${v.categorie} • ${v.date} • <span class="date-badge">👁️ ${vcount} vues</span></p>
-      <div class="vue-video">👁️ <b>${vcount} vues</b> • Reste 5 sec = +1 vue • Reviens demain = +1 vue</div>
-      <div class="yt-row">
-        <div class="yt-avatar">${v.chaine.charAt(0).toUpperCase()}</div>
-        <b style="flex:1">${v.chaine}</b>
-        <button class="yt-icon-btn ${likeCount?'active':''}" onclick="liker('${v.id}',this)">❤️ ${likeCount||'J’aime'}</button>
-        <button class="yt-icon-btn ${saves.includes(v.id)?'saved':''}" onclick="sauvegarder('${v.id}',this)">${saves.includes(v.id)?'✅ Enregistré':'🔖 Enregistrer'}</button>
-        <button class="yt-icon-btn" onclick="ouvrirTiktok('${v.id}')">📱 Shorts</button>
-      </div>
-      <div class="yt-comments-preview" onclick="ouvrirDrawer('${v.id}','${v.titre.replace(/'/g,"")}')"><b>💬 Commentaires (${coms.length})</b><p>${coms.length?coms[coms.length-1].nom+': '+coms[coms.length-1].txt:'Sois le premier à commenter...'}</p></div>
-      <button class="yt-icon-btn" style="width:100%;justify-content:center" onclick="navigator.clipboard.writeText('https://youtu.be/${v.youtube_id}');showToast('Lien copié !')">🔗 Partager cette vidéo</button>
+  if(normFiltres.length===0){elN.innerHTML='<div class="card" style="text-align:center"><h3>Pas encore de vidéo normale ici</h3><p>Publie ta première vidéo normale avec le bouton vert en haut.<br>C’est les vidéos normales qui font gagner AdSense, parce que les gens restent longtemps.</p></div>'}
+  else{
+    elN.innerHTML=normFiltres.map(v=>`<div class="video-card">
+      <iframe src="https://www.youtube.com/embed/${v.youtube_id}" allowfullscreen></iframe>
+      <div class="yt-title">${v.titre} <span class="badge-normale">🎬 NORMALE</span></div>
+      <p class="yt-meta">Par <b>${v.chaine}</b> • ${v.categorie} • ${v.date}</p>
+      ${v.desc?'<p style="color:#ddd;font-size:15px;line-height:1.5;background:#000;padding:10px;border-radius:8px">'+v.desc+'</p>':''}
+      <button class="btn-pub" onclick="navigator.clipboard.writeText('https://youtu.be/${v.youtube_id}');showToast('Lien copié !')">🔗 Partager cette vidéo</button>
       <button class="del-btn" onclick="supprimerVideo('${v.id}')">🗑️ Supprimer ma vidéo</button>
-    </div>`;
-  }).join('');
+    </div>`).join('');
+  }
 }
-function ouvrirDrawer(id,titre){
-  drawerVideoId=id;
-  document.getElementById('drawerTitle').textContent='💬 '+titre;
-  document.getElementById('commentsDrawer').style.display='block';
-  afficherCommentaires();
-}
-function fermerDrawer(){document.getElementById('commentsDrawer').style.display='none'}
-function afficherCommentaires(){
-  let list=document.getElementById('drawerList');
-  let coms=commentaires[drawerVideoId]||[];
-  if(coms.length===0){list.innerHTML='Pas encore de commentaire.';return}
-  list.innerHTML=coms.map(c=>`<div class="comment-item"><b>${c.nom}</b> : ${c.txt}</div>`).join('');
-}
-function envoyerCommentaireDrawer(){
-  let nom=document.getElementById('drawerNom').value.trim()||'Anonyme';
-  let txt=document.getElementById('drawerTxt').value.trim();
-  if(!txt){showToast('Écris un commentaire');return}
-  if(!commentaires[drawerVideoId])commentaires[drawerVideoId]=[];
-  commentaires[drawerVideoId].push({nom,txt});
-  saveAll();document.getElementById('drawerTxt').value='';
-  afficherCommentaires();afficher();showToast('Commentaire envoyé !');
-}
-function ouvrirTiktok(id){
-  let shorts=toutesVideos.filter(v=>v.isShort);
-  if(shorts.length===0){showToast('Pas de Shorts. Publie un Short YouTube.');return}
-  tiktokShorts=shorts;
-  tiktokIndex=shorts.findIndex(v=>v.id===id);
-  if(tiktokIndex<0)tiktokIndex=0;
-  document.getElementById('tiktokOverlay').style.display='flex';
-  renderTiktok();
-}
-function renderTiktok(){
-  let feed=document.getElementById('tiktokFeed');
-  feed.innerHTML=tiktokShorts.map((v,i)=>`<div class="tiktok-item"><iframe src="https://www.youtube.com/embed/${v.youtube_id}?autoplay=${i===tiktokIndex?1:0}"></iframe><div class="tiktok-side"><div class="tiktok-btn" onclick="liker('${v.id}',this)">❤️<span>${likes[v.id]||0}</span></div><div class="tiktok-btn" onclick="ouvrirDrawer('${v.id}','${v.titre.replace(/'/g,"")}')">💬</div></div><div class="tiktok-bottom"><b>@${v.chaine}</b><p>${v.titre}</p></div><div class="big-heart" id="heart-${v.id}">❤️</div></div>`).join('');
-  document.getElementById('tiktokCount').textContent=(tiktokIndex+1)+' / '+tiktokShorts.length;
-}
-function fermerTiktok(){document.getElementById('tiktokOverlay').style.display='none'}
-afficher();afficherChaines();
+afficher();
 </script>
 </body>
 </html>
