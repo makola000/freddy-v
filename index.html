@@ -76,18 +76,21 @@ textarea{height:70px}
 </div>
 
 <div class="container">
+  <!-- MORCEAU 2 : SECTION AUTOMATIQUE -->
+  <div class="section-title">🤖 VIDÉOS AUTOMATIQUES <span>— YouTube / TikTok</span></div>
+  <p style="font-size:14px;color:#ffcc00">Tu as créé ta chaîne avec ton @ ? Publie sur YouTube, ça apparaît ici tout seul avec le même titre.</p>
+  <div id="listeAuto"><p style="padding:10px">Chargement automatique de @freddyvmondial...</p></div>
+  <div id="listeChainesAuto" style="margin-bottom:15px"></div>
+
   <div class="pop-box">
     <div class="big" id="popTotal">👥 0 vues</div>
     <div class="small">POPULATION FREDDY-V • SHORTS + VIDÉOS NORMALES SÉPARÉS</div>
     <div class="small" id="statsShortsNormales">📱 Shorts : 0 | 🎬 Normales : 0</div>
   </div>
 
-  <!-- ========== SECTION PUBLICATION ========== -->
   <div class="card" id="publier">
     <h2>📤 Publier une vidéo</h2>
     <p style="color:#ffcc00;font-size:14px;font-weight:bold">⚠️ Choisis bien : Shorts OU Normale. Ne mélange pas.</p>
-
-    <!-- BOUTON 1 : SHORTS -->
     <div style="background:#2a1500;border:2px solid #ff8800;border-radius:12px;padding:14px;margin:12px 0">
       <h3 style="margin:0;color:#ff8800">📱 1. PUBLIER UN SHORTS</h3>
       <p style="font-size:13px;color:#ccc;margin:6px 0">Verticale, courte, moins de 1 minute. Lien avec <b>/shorts/</b></p>
@@ -98,10 +101,7 @@ textarea{height:70px}
       <button class="btn-shorts" onclick="publierShorts()">📱 PUBLIER MON SHORTS</button>
       <p id="msgShorts" style="text-align:center;color:#ffcc00"></p>
     </div>
-
     <div style="text-align:center;font-weight:900;margin:10px 0">--- OU ---</div>
-
-    <!-- BOUTON 2 : NORMALE -->
     <div style="background:#002a00;border:2px solid #00ff88;border-radius:12px;padding:14px;margin:12px 0">
       <h3 style="margin:0;color:#00ff88">🎬 2. PUBLIER UNE VIDÉO NORMALE</h3>
       <p style="font-size:13px;color:#ccc;margin:6px 0">Horizontale, longue, chanson / actualité / foi. Lien avec <b>/watch?v=</b></p>
@@ -122,11 +122,9 @@ textarea{height:70px}
     </div>
   </div>
 
-  <!-- ========== SHORTS EN HAUT ========== -->
   <div class="section-title">📱 SHORTS <span id="countShorts">(0)</span> — Glisse à gauche</div>
   <div class="shorts-row" id="listeShorts"><p style="padding:10px">Pas encore de Shorts. Publie ton premier Shorts en haut.</p></div>
 
-  <!-- ========== VIDEOS NORMALES EN BAS ========== -->
   <div class="section-title">🎬 VIDÉOS NORMALES <span id="countNormales">(0)</span> — Les longues, pour AdSense</div>
   <div style="margin-bottom:12px;overflow-x:auto;white-space:nowrap;padding-bottom:5px">
     <button class="tab-btn active" onclick="filtrerCategorie('Tout',this)">Tout</button>
@@ -145,7 +143,8 @@ textarea{height:70px}
   <p style="color:#888;font-size:12px;margin-top:20px">© 2026 FREDDY-V Mondial - Par Makola Kibwe - Tous droits réservés.</p>
 </div>
 
-<div class="modal" id="modalChaine"><div class="modal-box"><span class="close" onclick="fermerModal('modalChaine')">✖</span><h2>+ Créer ma chaîne</h2><input id="nomChaine" placeholder="Nom de ta chaîne"><input id="descChaine" placeholder="Description"><button class="btn-pub" onclick="creerChaine()">CRÉER MA CHAÎNE</button><p id="chaineMsg"></p></div></div>
+<!-- MORCEAU 1 : POP-UP AVEC @YOUTUBE ET @TIKTOK -->
+<div class="modal" id="modalChaine"><div class="modal-box"><span class="close" onclick="fermerModal('modalChaine')">✖</span><h2>+ Créer ma chaîne</h2><input id="nomChaine" placeholder="Nom de ta chaîne"><input id="descChaine" placeholder="Description"><input id="youtubeChaine" placeholder="@YouTube - Ex: @freddyvmondial"><input id="tiktokChaine" placeholder="@TikTok - Ex: @makola"><button class="btn-pub" onclick="creerChaine()">CRÉER MA CHAÎNE</button><p id="chaineMsg"></p><p style="font-size:12px;color:#ccc">Tu mets ton @ une seule fois. Après, tu publies sur YouTube ou TikTok, et ça apparaît tout seul sur FREDDY-V avec le même titre.</p></div></div>
 <div class="modal" id="modalPaye"><div class="modal-box"><span class="close" onclick="fermerModal('modalPaye')">✖</span><h2>💰 Devenir créateur payé</h2><p>1 vue réelle = 1 personne. 1000 vues = 500 FC.</p><input id="nomPaye" placeholder="Ton nom complet"><input id="chainePaye" placeholder="Nom de ta chaîne"><input id="telPaye" placeholder="Ton WhatsApp"><button class="btn-pub" onclick="demandePaye()">ENVOYER MA DEMANDE</button><p id="payeMsg"></p></div></div>
 
 <script>
@@ -164,15 +163,53 @@ function ouvrirModal(id){document.getElementById(id).style.display='block'}
 function fermerModal(id){document.getElementById(id).style.display='none'}
 function creerChaine(){
   let n=document.getElementById('nomChaine').value.trim();
+  let d=document.getElementById('descChaine').value.trim();
+  let yt=document.getElementById('youtubeChaine').value.trim();
+  let tk=document.getElementById('tiktokChaine').value.trim();
   if(!n){showToast('Mets le nom');return}
+  if(!yt && !tk){showToast('Mets ton @YouTube ou @TikTok');return}
   document.getElementById('chaineShorts').value=n;
   document.getElementById('chaineNormale').value=n;
+  let chaines=JSON.parse(localStorage.getItem('freddyv_chaines')||'[]');
+  chaines.push({nom:n,desc:d,youtube:yt,tiktok:tk});
+  localStorage.setItem('freddyv_chaines',JSON.stringify(chaines));
   document.getElementById('chaineMsg').textContent='✅ Chaîne créée : '+n;
-  fermerModal('modalChaine');showToast('Chaîne créée : '+n);
+  fermerModal('modalChaine');showToast('Chaîne créée : '+n+' - Publie, ça va apparaître tout seul !');
+  chargerAuto();
 }
 function demandePaye(){document.getElementById('payeMsg').textContent='✅ Demande envoyée !';showToast('Demande envoyée !')}
 
-// --- PUBLIER SHORTS ---
+// MORCEAU 3 : CERVEAU AUTOMATIQUE
+async function chargerAuto(){
+  let chainesSaved=JSON.parse(localStorage.getItem('freddyv_chaines')||'[]');
+  let toutesChaines=[{nom:'FREDDY-V Mondial',desc:'Chaîne officielle',youtube:'@freddyvmondial',tiktok:''}, ...chainesSaved];
+  let liste=document.getElementById('listeChainesAuto');
+  if(liste) liste.innerHTML=toutesChaines.map(c=>`<div class="chaine-box"><b>${c.nom}</b> - ${c.desc||''}<br><small>▶ ${c.youtube||'-'} | 🎵 ${c.tiktok||'-'}</small>${c.tiktok?` <a style="color:#ffcc00" href="https://www.tiktok.com/${c.tiktok}" target="_blank">Voir TikTok</a>`:''}</div>`).join('');
+  let box=document.getElementById('listeAuto');
+  box.innerHTML='<p>Chargement automatique...</p>';
+  let html='';
+  for(let c of toutesChaines){
+    if(!c.youtube) continue;
+    let handle=c.youtube.replace('@','').trim();
+    try{
+      let r1=await fetch('https://yt.lemnoslife.com/channels?handle=@'+handle);
+      let j1=await r1.json();
+      let channelId=j1.items[0].id;
+      let r2=await fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.youtube.com/feeds/videos.xml?channel_id='+channelId);
+      let j2=await r2.json();
+      j2.items.slice(0,3).forEach(v=>{
+        let vid=v.link.split('v=')[1];
+        html+=`<div class="video-card"><iframe src="https://www.youtube.com/embed/${vid}" allowfullscreen></iframe><div class="yt-title">${v.title}</div><p class="yt-meta">Par <b>${c.nom}</b> • ${c.youtube} • Automatique</p></div>`;
+      });
+    }catch(e){
+      html+=`<p>Chaîne ${c.nom} (${c.youtube}) - <a style="color:#ffcc00" href="https://www.youtube.com/${c.youtube}" target="_blank">Voir sur YouTube</a></p>`;
+    }
+  }
+  if(!html) html='<p>Pas encore de vidéo automatique.</p>';
+  box.innerHTML=html;
+}
+chargerAuto();
+
 function publierShorts(){
   let titre=document.getElementById('titreShorts').value.trim();
   let chaine=document.getElementById('chaineShorts').value.trim()||'FREDDY-V';
@@ -189,8 +226,6 @@ function publierShorts(){
   document.getElementById('msgShorts').textContent='✅ Shorts publié !';
   afficher();showToast('✅ Shorts publié !');
 }
-
-// --- PUBLIER NORMALE ---
 function publierNormale(){
   let titre=document.getElementById('titreNormale').value.trim();
   let chaine=document.getElementById('chaineNormale').value.trim()||'FREDDY-V';
@@ -208,7 +243,6 @@ function publierNormale(){
   document.getElementById('msgNormale').textContent='✅ Vidéo normale publiée !';
   afficher();showToast('✅ Vidéo normale publiée !');
 }
-
 function supprimerVideo(id){
   if(!confirm('Supprimer ?'))return;
   toutesVideos=toutesVideos.filter(v=>v.id!==id);save();afficher();
@@ -223,12 +257,10 @@ function filtrerCategorie(cat,btn){
 function afficher(){
   let shorts=toutesVideos.filter(v=>v.type==='short');
   let normales=toutesVideos.filter(v=>v.type==='normale');
-  // Stats
   document.getElementById('statsShortsNormales').textContent='📱 Shorts : '+shorts.length+' | 🎬 Normales : '+normales.length;
   document.getElementById('countShorts').textContent='('+shorts.length+')';
   document.getElementById('countNormales').textContent='('+normales.length+')';
   document.getElementById('popTotal').textContent='👥 '+toutesVideos.length+' vidéos';
-  // Shorts
   let elS=document.getElementById('listeShorts');
   let shortsFiltres=shorts.filter(v=>(v.titre+v.chaine).toLowerCase().includes(rechercheTxt));
   if(shortsFiltres.length===0){elS.innerHTML='<p style="padding:10px">Pas encore de Shorts. Publie ton premier Shorts en haut.</p>'}
@@ -239,7 +271,6 @@ function afficher(){
       <button class="del-btn" onclick="event.stopPropagation();supprimerVideo('${v.id}')">🗑️ Supprimer</button>
     </div>`).join('');
   }
-  // Normales
   let elN=document.getElementById('listeNormales');
   let normFiltres=normales.filter(v=>{
     if(rechercheTxt && !(v.titre+v.chaine).toLowerCase().includes(rechercheTxt))return false;
