@@ -43,7 +43,6 @@ textarea{height:70px}
 .section-title span{color:#ffcc00}
 .shorts-row{display:flex;gap:10px;overflow-x:auto;padding:5px 0 15px}
 .shorts-card{min-width:180px;width:180px;background:#1e1e1e;border-radius:12px;overflow:hidden;flex-shrink:0}
-.shorts-card img{width:100%;height:220px;object-fit:cover;display:block;background:#000}
 .shorts-card iframe{width:100%;height:300px;border:none;display:block;background:#000}
 .shorts-card p{font-size:13px;padding:8px;margin:0;color:white}
 .tab-btn{background:#333;color:white;border:none;padding:10px 15px;border-radius:20px;margin-right:8px;cursor:pointer;white-space:nowrap}
@@ -55,20 +54,14 @@ textarea{height:70px}
 .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:99;padding:20px;overflow:auto}
 .modal-box{background:#1e1e1e;padding:20px;border-radius:15px;max-width:450px;margin:40px auto}
 .close{float:right;font-size:24px;cursor:pointer}
-/* NOUVEAU : VUES / ABONNE / COMMENTAIRES */
 .sub-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#000;padding:10px;border-radius:10px;margin:10px 0}
-.sub-info{font-size:14px;line-height:1.3}
-.sub-info b{font-size:16px}
 .sub-btn{background:#ff0000;color:white;border:none;padding:10px 18px;border-radius:20px;font-weight:900;cursor:pointer;white-space:nowrap}
-.sub-btn.subbed{background:#333;color:#fff}
+.sub-btn.subbed{background:#333}
 .views-line{font-size:14px;color:#ffcc00;font-weight:bold;margin:6px 0}
 .comment-box{background:#000;padding:12px;border-radius:10px;margin-top:12px}
-.comment-box h4{margin:0 0 8px}
 .comment-item{background:#1e1e1e;padding:10px;border-radius:8px;margin:8px 0;font-size:14px;line-height:1.4}
 .comment-item b{color:#ffcc00}
-.comment-item small{color:#999}
 .like-btn{background:#222;color:white;border:1px solid #444;padding:8px 12px;border-radius:20px;cursor:pointer;margin-right:6px;font-weight:bold}
-.like-btn.active{background:#ff0000;border-color:#ff0000}
 </style>
 </head>
 <body>
@@ -87,7 +80,7 @@ textarea{height:70px}
   <button class="btn btn-black" onclick="document.getElementById('publier').scrollIntoView({behavior:'smooth'})">+ Publier une vidéo</button>
   <button class="btn btn-black" onclick="ouvrirModal('modalChaine')">+ Créer ma chaîne</button>
   <button class="btn btn-yellow" onclick="ouvrirModal('modalPaye')">💰 Devenir créateur payé</button>
-  <p style="text-align:center;font-weight:bold;color:#ffcc00">✅ 100% YOUTUBE - VUES RÉELLES - 1 PERSONNE = 1 VUE / JOUR</p>
+  <p style="text-align:center;font-weight:bold;color:#ffcc00">✅ 100% PARTAGÉ - TOUT LE MONDE VOIT LA MÊME CHOSE</p>
 </div>
 
 <div class="container">
@@ -97,7 +90,7 @@ textarea{height:70px}
   <div id="listeChainesAuto" style="margin-bottom:15px"></div>
 
   <div class="pop-box">
-    <div class="big" id="popTotal">👥 0 vues</div>
+    <div class="big" id="popTotal">👥 0 vidéos</div>
     <div class="small">POPULATION FREDDY-V • SHORTS + VIDÉOS NORMALES SÉPARÉS</div>
     <div class="small" id="statsShortsNormales">📱 Shorts : 0 | 🎬 Normales : 0</div>
     <div class="small" id="statsVuesTotales">👁️ Total vues réelles : 0</div>
@@ -105,21 +98,19 @@ textarea{height:70px}
 
   <div class="card" id="publier">
     <h2>📤 Publier une vidéo</h2>
-    <p style="color:#ffcc00;font-size:14px;font-weight:bold">⚠️ Choisis bien : Shorts OU Normale. Ne mélange pas.</p>
+    <p style="color:#ffcc00;font-size:14px;font-weight:bold">⚠️ Choisis bien : Shorts OU Normale. Tout le monde verra ta vidéo.</p>
     <div style="background:#2a1500;border:2px solid #ff8800;border-radius:12px;padding:14px;margin:12px 0">
       <h3 style="margin:0;color:#ff8800">📱 1. PUBLIER UN SHORTS</h3>
-      <p style="font-size:13px;color:#ccc;margin:6px 0">Verticale, courte, moins de 1 minute. Lien avec <b>/shorts/</b></p>
       <input id="titreShorts" placeholder="Titre du Shorts - ex: Makola danse à Masisi">
       <input id="chaineShorts" placeholder="Nom de ta chaîne">
       <input id="urlShorts" placeholder="Colle ici le lien Shorts YouTube">
-      <textarea id="descShorts" placeholder="Décris ton Shorts en 2 phrases pour Google AdSense... Ex: Ici à Masisi, on danse pour Jésus..."></textarea>
+      <textarea id="descShorts" placeholder="Décris ton Shorts en 2 phrases pour Google AdSense..."></textarea>
       <button class="btn-shorts" onclick="publierShorts()">📱 PUBLIER MON SHORTS</button>
       <p id="msgShorts" style="text-align:center;color:#ffcc00"></p>
     </div>
     <div style="text-align:center;font-weight:900;margin:10px 0">--- OU ---</div>
     <div style="background:#002a00;border:2px solid #00ff88;border-radius:12px;padding:14px;margin:12px 0">
       <h3 style="margin:0;color:#00ff88">🎬 2. PUBLIER UNE VIDÉO NORMALE</h3>
-      <p style="font-size:13px;color:#ccc;margin:6px 0">Horizontale, longue, chanson / actualité / foi. Lien avec <b>/watch?v=</b></p>
       <input id="titreNormale" placeholder="Titre de la vidéo normale - ex: Makola chante pour Jésus">
       <input id="chaineNormale" placeholder="Nom de ta chaîne">
       <select id="categorieNormale">
@@ -131,14 +122,14 @@ textarea{height:70px}
         <option value="Foi">🙏 Foi</option>
       </select>
       <input id="urlNormale" placeholder="Colle ici le lien YouTube normal">
-      <textarea id="descNormale" placeholder="Décris ta vidéo en 3-4 phrases pour Google AdSense... Ex: Dans cette vidéo, je vous montre..."></textarea>
+      <textarea id="descNormale" placeholder="Décris ta vidéo en 3-4 phrases pour Google AdSense..."></textarea>
       <button class="btn-normale" onclick="publierNormale()">🎬 PUBLIER MA VIDÉO NORMALE</button>
       <p id="msgNormale" style="text-align:center;color:#00ff88"></p>
     </div>
   </div>
 
   <div class="section-title">📱 SHORTS <span id="countShorts">(0)</span> — Glisse à gauche</div>
-  <div class="shorts-row" id="listeShorts"><p style="padding:10px">Pas encore de Shorts. Publie ton premier Shorts en haut.</p></div>
+  <div class="shorts-row" id="listeShorts"><p style="padding:10px">Chargement depuis Google...</p></div>
 
   <div class="section-title">🎬 VIDÉOS NORMALES <span id="countNormales">(0)</span> — Les longues, pour AdSense</div>
   <div style="margin-bottom:12px;overflow-x:auto;white-space:nowrap;padding-bottom:5px">
@@ -149,7 +140,7 @@ textarea{height:70px}
     <button class="tab-btn" onclick="filtrerCategorie('Sport',this)">⚽ Sport</button>
     <button class="tab-btn" onclick="filtrerCategorie('Foi',this)">🙏 Foi</button>
   </div>
-  <div id="listeNormales">Chargement...</div>
+  <div id="listeNormales">Chargement depuis Google...</div>
 </div>
 
 <div style="background:#000;padding:25px 15px;text-align:center;margin-top:20px;border-top:2px solid #ff0000">
@@ -158,22 +149,19 @@ textarea{height:70px}
   <p style="color:#888;font-size:12px;margin-top:20px">© 2026 FREDDY-V Mondial - Par Makola Kibwe - Tous droits réservés.</p>
 </div>
 
-<div class="modal" id="modalChaine"><div class="modal-box"><span class="close" onclick="fermerModal('modalChaine')">✖</span><h2>+ Créer ma chaîne</h2><input id="nomChaine" placeholder="Nom de ta chaîne"><input id="descChaine" placeholder="Description"><input id="youtubeChaine" placeholder="@YouTube - Ex: @freddyvmondial"><input id="tiktokChaine" placeholder="@TikTok - Ex: @makola"><button class="btn-pub" onclick="creerChaine()">CRÉER MA CHAÎNE</button><p id="chaineMsg"></p><p style="font-size:12px;color:#ccc">Tu mets ton @ une seule fois. Après, tu publies sur YouTube ou TikTok, et ça apparaît tout seul sur FREDDY-V avec le même titre.</p></div></div>
+<div class="modal" id="modalChaine"><div class="modal-box"><span class="close" onclick="fermerModal('modalChaine')">✖</span><h2>+ Créer ma chaîne</h2><input id="nomChaine" placeholder="Nom de ta chaîne"><input id="descChaine" placeholder="Description"><input id="youtubeChaine" placeholder="@YouTube - Ex: @freddyvmondial"><input id="tiktokChaine" placeholder="@TikTok - Ex: @makola"><button class="btn-pub" onclick="creerChaine()">CRÉER MA CHAÎNE</button><p id="chaineMsg"></p></div></div>
 <div class="modal" id="modalPaye"><div class="modal-box"><span class="close" onclick="fermerModal('modalPaye')">✖</span><h2>💰 Devenir créateur payé</h2><p>1 vue réelle = 1 personne. 1000 vues = 500 FC.</p><input id="nomPaye" placeholder="Ton nom complet"><input id="chainePaye" placeholder="Nom de ta chaîne"><input id="telPaye" placeholder="Ton WhatsApp"><button class="btn-pub" onclick="demandePaye()">ENVOYER MA DEMANDE</button><p id="payeMsg"></p></div></div>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbzTl660BHh72Tn0bSElSclU_tkZIhK396T1F58SxrTYx0tV1PYXXNTazZvoaEnU45Em9Q/exec";
-let toutesVideos = JSON.parse(localStorage.getItem('freddyv_videos_v2')||'[]');
+const API_URL = "https://script.google.com/macros/s/AKfycbyddBS7REsCdbBXTBfyQYGaMbTL9af38ruTW2ocg0jTCBqfAyk-FV7dvyhrxz49gSzgDA/exec";
+let toutesVideos = [];
+let toutesVues = {};
+let totalAbonnes = 0;
+let tousCommentaires = {};
 let categorieChoisie='Tout';
 let rechercheTxt='';
-function save(){localStorage.setItem('freddyv_videos_v2',JSON.stringify(toutesVideos))}
 function showToast(t){let e=document.getElementById('toast');e.textContent=t;e.style.display='block';setTimeout(()=>e.style.display='none',3000)}
-function getYoutubeId(url){
-  if(!url) return null;
-  let m=url.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/|live\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
-  return m?m[1]:null;
-}
-function getThumb(id){return 'https://i.ytimg.com/vi/'+id+'/hqdefault.jpg'}
+function getYoutubeId(url){ if(!url) return null; let m=url.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/|live\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/); return m?m[1]:null; }
 function ouvrirModal(id){document.getElementById(id).style.display='block'}
 function fermerModal(id){document.getElementById(id).style.display='none'}
 function creerChaine(){
@@ -189,7 +177,7 @@ function creerChaine(){
   chaines.push({nom:n,desc:d,youtube:yt,tiktok:tk});
   localStorage.setItem('freddyv_chaines',JSON.stringify(chaines));
   document.getElementById('chaineMsg').textContent='✅ Chaîne créée : '+n;
-  fermerModal('modalChaine');showToast('Chaîne créée : '+n+' - Publie, ça va apparaître tout seul !');
+  fermerModal('modalChaine');showToast('Chaîne créée : '+n);
   chargerAuto();
 }
 function demandePaye(){document.getElementById('payeMsg').textContent='✅ Demande envoyée !';showToast('Demande envoyée !')}
@@ -197,7 +185,7 @@ async function chargerAuto(){
   let chainesSaved=JSON.parse(localStorage.getItem('freddyv_chaines')||'[]');
   let toutesChaines=[{nom:'FREDDY-V Mondial',desc:'Chaîne officielle',youtube:'@freddyvmondial',tiktok:''}, ...chainesSaved];
   let liste=document.getElementById('listeChainesAuto');
-  if(liste) liste.innerHTML=toutesChaines.map(c=>`<div class="chaine-box"><b>${c.nom}</b> - ${c.desc||''}<br><small>▶ ${c.youtube||'-'} | 🎵 ${c.tiktok||'-'}</small>${c.tiktok?` <a style="color:#ffcc00" href="https://www.tiktok.com/${c.tiktok}" target="_blank">Voir TikTok</a>`:''}</div>`).join('');
+  if(liste) liste.innerHTML=toutesChaines.map(c=>`<div class="chaine-box"><b>${c.nom}</b> - ${c.desc||''}<br><small>▶ ${c.youtube||'-'} | 🎵 ${c.tiktok||'-'}</small></div>`).join('');
   let box=document.getElementById('listeAuto');
   box.innerHTML='<p>Chargement automatique...</p>';
   let html='';
@@ -214,98 +202,95 @@ async function chargerAuto(){
         let vid=v.link.split('v=')[1];
         html+=`<div class="video-card"><iframe src="https://www.youtube.com/embed/${vid}" allowfullscreen></iframe><div class="yt-title">${v.title}</div><p class="yt-meta">Par <b>${c.nom}</b> • ${c.youtube} • Automatique</p></div>`;
       });
-    }catch(e){
-      html+=`<p>Chaîne ${c.nom} (${c.youtube}) - <a style="color:#ffcc00" href="https://www.youtube.com/${c.youtube}" target="_blank">Voir sur YouTube</a></p>`;
-    }
+    }catch(e){ html+=`<p>Chaîne ${c.nom} (${c.youtube}) - <a style="color:#ffcc00" href="https://www.youtube.com/${c.youtube}" target="_blank">Voir sur YouTube</a></p>`; }
   }
   if(!html) html='<p>Pas encore de vidéo automatique.</p>';
   box.innerHTML=html;
 }
 chargerAuto();
-
-// ===== NOUVEAU : VUES REELLES 1/JOUR =====
-function todayStr(){return new Date().toISOString().slice(0,10)}
-function getVues(videoId){
-  let all=JSON.parse(localStorage.getItem('freddyv_vues')||'{}');
-  return all[videoId]||0;
+// ===== CHARGER DEPUIS GOOGLE - POUR TOUT LE MONDE =====
+async function chargerDepuisGoogle(){
+  try{
+    let r = await fetch(API_URL);
+    let j = await r.json();
+    toutesVideos = j.videos || [];
+    toutesVues = j.vues || {};
+    totalAbonnes = j.abonnes || 0;
+    // Commentaires : on les regroupe par videoId
+    tousCommentaires = {};
+    // Le Apps Script renvoie les commentaires en objet, on les convertit
+    if(j.commentaires){
+      // Si c'est déjà un tableau par video, on garde
+      if(Array.isArray(j.commentaires)){
+        j.commentaires.forEach(c=>{ if(!tousCommentaires[c.videoId]) tousCommentaires[c.videoId]=[]; tousCommentaires[c.videoId].push(c); });
+      } else {
+        // Si format objet, on essaie de parser
+        tousCommentaires = j.commentaires;
+      }
+    }
+    majBoutonAbonne();
+    afficher();
+  }catch(e){
+    document.getElementById('listeShorts').innerHTML='<p style="padding:10px">Erreur de connexion à Google. Vérifie que le déploiement est sur "Tout le monde".</p>';
+    document.getElementById('listeNormales').innerHTML='<p>Erreur de connexion à Google.</p>';
+  }
 }
+async function envoyerVersGoogle(data){
+  try{ await fetch(API_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(data)}); }catch(e){}
+}
+function todayStr(){return new Date().toISOString().slice(0,10)}
+function getVues(id){ return parseInt(toutesVues[id]||0) }
 function compterVue(videoId){
   let key='freddyv_vu_'+videoId+'_'+todayStr();
-  if(localStorage.getItem(key)) return; // déjà vu aujourd'hui = pas de +1
+  if(localStorage.getItem(key)) return;
   localStorage.setItem(key,'1');
-  let all=JSON.parse(localStorage.getItem('freddyv_vues')||'{}');
-  all[videoId]=(all[videoId]||0)+1;
-  localStorage.setItem('freddyv_vues',JSON.stringify(all));
-  // Essaie aussi d'envoyer à Google Sheet (si ton Apps Script le gère, sinon ça ne bloque pas)
-  try{ fetch(API_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'vue',videoId:videoId,date:todayStr()})}); }catch(e){}
+  toutesVues[videoId]=(toutesVues[videoId]||0)+1;
+  envoyerVersGoogle({action:'vue',videoId:videoId});
   afficher();
 }
-function totalVues(){
-  let all=JSON.parse(localStorage.getItem('freddyv_vues')||'{}');
-  return Object.values(all).reduce((a,b)=>a+b,0);
-}
-// ===== NOUVEAU : ABONNES =====
-function getAbonnes(){return parseInt(localStorage.getItem('freddyv_abonnes')||'0')}
+function totalVues(){ return Object.values(toutesVues).reduce((a,b)=>a+parseInt(b||0),0) }
 function estAbonne(){return localStorage.getItem('freddyv_je_suis_abonne')==='1'}
 function majBoutonAbonne(){
   let btn=document.getElementById('globalSubBtn');
   let txt=document.getElementById('globalSubsText');
-  if(txt) txt.textContent='👥 '+getAbonnes()+' abonnés';
+  if(txt) txt.textContent='👥 '+totalAbonnes+' abonnés';
   if(btn){
-    if(estAbonne()){btn.textContent='✓ ABONNÉ';btn.classList.add('subbed');btn.style.background='#333'}
-    else{btn.textContent="🔴 S'ABONNER à FREDDY-V";btn.classList.remove('subbed');btn.style.background='white';btn.style.color='#ff0000'}
+    if(estAbonne()){btn.textContent='✓ ABONNÉ';btn.style.background='#333';btn.style.color='white'}
+    else{btn.textContent="🔴 S'ABONNER à FREDDY-V";btn.style.background='white';btn.style.color='#ff0000'}
   }
 }
 function toggleAbonneGlobal(){
-  if(estAbonne()){
-    localStorage.setItem('freddyv_je_suis_abonne','0');
-    localStorage.setItem('freddyv_abonnes',String(Math.max(0,getAbonnes()-1)));
-    showToast('Tu t’es désabonné');
-  }else{
-    localStorage.setItem('freddyv_je_suis_abonne','1');
-    localStorage.setItem('freddyv_abonnes',String(getAbonnes()+1));
-    showToast('✅ Merci ! Tu es abonné à FREDDY-V !');
-  }
-  try{ fetch(API_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'abonne',abonne:estAbonne()})}); }catch(e){}
+  if(estAbonne()){ localStorage.setItem('freddyv_je_suis_abonne','0'); totalAbonnes=Math.max(0,totalAbonnes-1); showToast('Tu t’es désabonné'); }
+  else{ localStorage.setItem('freddyv_je_suis_abonne','1'); totalAbonnes=totalAbonnes+1; showToast('✅ Merci ! Tu es abonné à FREDDY-V !'); envoyerVersGoogle({action:'abonne',abonne:true,telephone:'anonyme'}); }
   majBoutonAbonne(); afficher();
 }
-// ===== NOUVEAU : LIKES =====
-function getLikes(videoId){let all=JSON.parse(localStorage.getItem('freddyv_likes')||'{}');return all[videoId]||0}
-function toggleLike(videoId,btn){
-  let liked=JSON.parse(localStorage.getItem('freddyv_liked')||'{}');
-  let all=JSON.parse(localStorage.getItem('freddyv_likes')||'{}');
-  if(liked[videoId]){liked[videoId]=0; all[videoId]=Math.max(0,(all[videoId]||1)-1);}
-  else{liked[videoId]=1; all[videoId]=(all[videoId]||0)+1;}
-  localStorage.setItem('freddyv_liked',JSON.stringify(liked));
-  localStorage.setItem('freddyv_likes',JSON.stringify(all));
-  afficher();
+function getLikes(id){ let all=JSON.parse(localStorage.getItem('freddyv_likes')||'{}'); return all[id]||0 }
+function toggleLike(id){ let liked=JSON.parse(localStorage.getItem('freddyv_liked')||'{}'); let all=JSON.parse(localStorage.getItem('freddyv_likes')||'{}'); if(liked[id]){liked[id]=0; all[id]=Math.max(0,(all[id]||1)-1);} else{liked[id]=1; all[id]=(all[id]||0)+1;} localStorage.setItem('freddyv_liked',JSON.stringify(liked)); localStorage.setItem('freddyv_likes',JSON.stringify(all)); afficher(); }
+function getCommentaires(id){
+  let list = tousCommentaires[id]||[];
+  // Si format objet bizarre, convertir
+  if(!Array.isArray(list)) return [];
+  return list;
 }
-// ===== NOUVEAU : COMMENTAIRES =====
-function getCommentaires(videoId){let all=JSON.parse(localStorage.getItem('freddyv_comments')||'{}');return all[videoId]||[]}
-function envoyerCommentaire(videoId){
+async function envoyerCommentaire(videoId){
   let nom=document.getElementById('cNom_'+videoId).value.trim();
   let txt=document.getElementById('cTxt_'+videoId).value.trim();
   if(!nom){showToast('Mets ton nom');return}
   if(!txt){showToast('Écris ton commentaire');return}
-  let all=JSON.parse(localStorage.getItem('freddyv_comments')||'{}');
-  if(!all[videoId]) all[videoId]=[];
-  all[videoId].push({nom:nom,txt:txt,date:new Date().toLocaleDateString('fr-FR')});
-  localStorage.setItem('freddyv_comments',JSON.stringify(all));
-  try{ fetch(API_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'commentaire',videoId:videoId,nom:nom,commentaire:txt})}); }catch(e){}
+  await envoyerVersGoogle({action:'commentaire',videoId:videoId,nom:nom,commentaire:txt});
+  showToast('✅ Commentaire envoyé ! Il va apparaître pour tout le monde.');
   document.getElementById('cTxt_'+videoId).value='';
-  showToast('✅ Commentaire envoyé !');
-  afficher();
+  setTimeout(chargerDepuisGoogle,1000);
 }
 function renderCommentaires(videoId){
   let list=getCommentaires(videoId);
   let html='<div class="comment-box"><h4>💬 Commentaires ('+list.length+')</h4>';
   if(list.length===0) html+='<p style="color:#999;font-size:13px">Pas encore de commentaire. Sois le premier !</p>';
-  else html+=list.slice().reverse().map(c=>`<div class="comment-item"><b>${c.nom}</b> <small>• ${c.date}</small><br>${c.txt}</div>`).join('');
+  else html+=list.slice().reverse().map(c=>`<div class="comment-item"><b>${c.nom||c[1]||'Anonyme'}</b> <small>• ${c.date||c[3]||''}</small><br>${c.commentaire||c[2]||c.txt||''}</div>`).join('');
   html+=`<input id="cNom_${videoId}" placeholder="Ton nom"><textarea id="cTxt_${videoId}" placeholder="Écris ton commentaire ici..." style="height:50px"></textarea><button class="btn-pub" onclick="envoyerCommentaire('${videoId}')">💬 Envoyer mon commentaire</button></div>`;
   return html;
 }
-
-function publierShorts(){
+async function publierShorts(){
   let titre=document.getElementById('titreShorts').value.trim();
   let chaine=document.getElementById('chaineShorts').value.trim()||'FREDDY-V';
   let url=document.getElementById('urlShorts').value.trim();
@@ -314,14 +299,15 @@ function publierShorts(){
   if(!url){showToast('Mets le lien Shorts');return}
   let id=getYoutubeId(url);
   if(!id){showToast('Lien pas bon');return}
-  if(!url.includes('/shorts/') && !confirm('Attention : ce lien ne ressemble pas à un Shorts (pas de /shorts/). Publier quand même comme Shorts ?'))return;
   let v={id:'s'+Date.now(),type:'short',titre,chaine,categorie:'Shorts',youtube_id:id,desc,date:new Date().toLocaleDateString('fr-FR')};
-  toutesVideos.unshift(v);save();
+  document.getElementById('msgShorts').textContent='⏳ Envoi vers Google...';
+  await envoyerVersGoogle({action:'publier',...v});
   document.getElementById('titreShorts').value='';document.getElementById('urlShorts').value='';document.getElementById('descShorts').value='';
-  document.getElementById('msgShorts').textContent='✅ Shorts publié !';
-  afficher();showToast('✅ Shorts publié !');
+  document.getElementById('msgShorts').textContent='✅ Shorts publié ! Tout le monde va le voir !';
+  showToast('✅ Shorts publié pour tout le monde !');
+  setTimeout(chargerDepuisGoogle,1000);
 }
-function publierNormale(){
+async function publierNormale(){
   let titre=document.getElementById('titreNormale').value.trim();
   let chaine=document.getElementById('chaineNormale').value.trim()||'FREDDY-V';
   let cat=document.getElementById('categorieNormale').value;
@@ -331,24 +317,23 @@ function publierNormale(){
   if(!url){showToast('Mets le lien YouTube');return}
   let id=getYoutubeId(url);
   if(!id){showToast('Lien pas bon');return}
-  if(url.includes('/shorts/')){showToast('⚠️ Ça c’est un Shorts ! Mets-le dans le bouton Shorts en haut, pas ici.');return}
+  if(url.includes('/shorts/')){showToast('⚠️ Ça c’est un Shorts ! Mets-le dans le bouton Shorts en haut.');return}
   let v={id:'n'+Date.now(),type:'normale',titre,chaine,categorie:cat,youtube_id:id,desc,date:new Date().toLocaleDateString('fr-FR')};
-  toutesVideos.unshift(v);save();
+  document.getElementById('msgNormale').textContent='⏳ Envoi vers Google...';
+  await envoyerVersGoogle({action:'publier',...v});
   document.getElementById('titreNormale').value='';document.getElementById('urlNormale').value='';document.getElementById('descNormale').value='';
-  document.getElementById('msgNormale').textContent='✅ Vidéo normale publiée !';
-  afficher();showToast('✅ Vidéo normale publiée !');
+  document.getElementById('msgNormale').textContent='✅ Vidéo normale publiée ! Tout le monde va la voir !';
+  showToast('✅ Vidéo normale publiée pour tout le monde !');
+  setTimeout(chargerDepuisGoogle,1000);
 }
-function supprimerVideo(id){
+async function supprimerVideo(id){
   if(!confirm('Supprimer ?'))return;
-  toutesVideos=toutesVideos.filter(v=>v.id!==id);save();afficher();
+  await envoyerVersGoogle({action:'supprimer',id:id});
+  showToast('Supprimée');
+  setTimeout(chargerDepuisGoogle,1000);
 }
 function filtrer(){rechercheTxt=document.getElementById('recherche').value.toLowerCase();afficher()}
-function filtrerCategorie(cat,btn){
-  categorieChoisie=cat;
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  if(btn)btn.classList.add('active');
-  afficher();
-}
+function filtrerCategorie(cat,btn){ categorieChoisie=cat; document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); if(btn)btn.classList.add('active'); afficher(); }
 function afficher(){
   majBoutonAbonne();
   let shorts=toutesVideos.filter(v=>v.type==='short');
@@ -357,14 +342,13 @@ function afficher(){
   document.getElementById('countShorts').textContent='('+shorts.length+')';
   document.getElementById('countNormales').textContent='('+normales.length+')';
   document.getElementById('popTotal').textContent='👥 '+toutesVideos.length+' vidéos';
-  let tv=document.getElementById('statsVuesTotales');
-  if(tv) tv.textContent='👁️ Total vues réelles : '+totalVues()+' | 👥 Abonnés : '+getAbonnes();
+  let tv=document.getElementById('statsVuesTotales'); if(tv) tv.textContent='👁️ Total vues réelles : '+totalVues()+' | 👥 Abonnés : '+totalAbonnes;
   let elS=document.getElementById('listeShorts');
   let shortsFiltres=shorts.filter(v=>(v.titre+v.chaine).toLowerCase().includes(rechercheTxt));
   if(shortsFiltres.length===0){elS.innerHTML='<p style="padding:10px">Pas encore de Shorts. Publie ton premier Shorts en haut.</p>'}
   else{
     elS.innerHTML=shortsFiltres.map(v=>`<div class="shorts-card">
-      <iframe src="https://www.youtube.com/embed/${v.youtube_id}" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" onload="compterVue('${v.id}')"></iframe>
+      <iframe src="https://www.youtube.com/embed/${v.youtube_id}" allowfullscreen onload="compterVue('${v.id}')"></iframe>
       <p><span class="badge-shorts">📱 SHORTS</span><br><b>${v.titre}</b><br><span style="color:#aaa">${v.chaine} • ${v.date}</span><br><span style="color:#ffcc00;font-weight:bold">👁️ ${getVues(v.id)} vues • ❤️ ${getLikes(v.id)}</span><br>${v.desc?'<span style="color:#ccc">'+v.desc.substring(0,60)+'</span>':''}</p>
       <button class="like-btn" style="width:100%;margin:5px 0" onclick="compterVue('${v.id}');toggleLike('${v.id}')">❤️ J'aime</button>
       <button class="del-btn" onclick="supprimerVideo('${v.id}')">🗑️ Supprimer</button>
@@ -376,14 +360,14 @@ function afficher(){
     if(categorieChoisie!=='Tout' && v.categorie!==categorieChoisie)return false;
     return true;
   });
-  if(normFiltres.length===0){elN.innerHTML='<div class="card" style="text-align:center"><h3>Pas encore de vidéo normale ici</h3><p>Publie ta première vidéo normale avec le bouton vert en haut.<br>C’est les vidéos normales qui font gagner AdSense, parce que les gens restent longtemps.</p></div>'}
+  if(normFiltres.length===0){elN.innerHTML='<div class="card" style="text-align:center"><h3>Pas encore de vidéo normale ici</h3><p>Publie ta première vidéo normale avec le bouton vert en haut.</p></div>'}
   else{
     elN.innerHTML=normFiltres.map(v=>`<div class="video-card">
       <iframe src="https://www.youtube.com/embed/${v.youtube_id}" allowfullscreen onload="compterVue('${v.id}')"></iframe>
       <div class="yt-title">${v.titre} <span class="badge-normale">🎬 NORMALE</span></div>
       <p class="yt-meta">Par <b>${v.chaine}</b> • ${v.categorie} • ${v.date}</p>
       <div class="views-line">👁️ ${getVues(v.id)} vues réelles • ❤️ ${getLikes(v.id)} j'aime • 💬 ${getCommentaires(v.id).length} commentaires</div>
-      <div class="sub-bar"><div class="sub-info"><b>${v.chaine}</b><br>👥 ${getAbonnes()} abonnés</div><button class="sub-btn ${estAbonne()?'subbed':''}" onclick="toggleAbonneGlobal()">${estAbonne()?'✓ ABONNÉ':"🔴 S'ABONNER"}</button></div>
+      <div class="sub-bar"><div><b>${v.chaine}</b><br>👥 ${totalAbonnes} abonnés</div><button class="sub-btn ${estAbonne()?'subbed':''}" onclick="toggleAbonneGlobal()">${estAbonne()?'✓ ABONNÉ':"🔴 S'ABONNER"}</button></div>
       ${v.desc?'<p style="color:#ddd;font-size:15px;line-height:1.5;background:#000;padding:10px;border-radius:8px">'+v.desc+'</p>':''}
       <button class="like-btn" onclick="compterVue('${v.id}');toggleLike('${v.id}')">❤️ J'aime (${getLikes(v.id)})</button>
       <button class="btn-pub" style="margin-top:10px" onclick="navigator.clipboard.writeText('https://youtu.be/${v.youtube_id}');showToast('Lien copié !')">🔗 Partager cette vidéo</button>
@@ -392,8 +376,7 @@ function afficher(){
     </div>`).join('');
   }
 }
-afficher();
-majBoutonAbonne();
+chargerDepuisGoogle();
 </script>
 </body>
 </html>
