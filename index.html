@@ -153,7 +153,7 @@ textarea{height:70px}
 <div class="modal" id="modalPaye"><div class="modal-box"><span class="close" onclick="fermerModal('modalPaye')">✖</span><h2>💰 Devenir créateur payé</h2><p>1 vue réelle = 1 personne. 1000 vues = 500 FC.</p><input id="nomPaye" placeholder="Ton nom complet"><input id="chainePaye" placeholder="Nom de ta chaîne"><input id="telPaye" placeholder="Ton WhatsApp"><button class="btn-pub" onclick="demandePaye()">ENVOYER MA DEMANDE</button><p id="payeMsg"></p></div></div>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbyddBS7REsCdbBXTBfyQYGaMbTL9af38ruTW2ocg0jTCBqfAyk-FV7dvyhrxz49gSzgDA/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwfMHPcYYTJXgvcaQuBfvrZh0kGOIMlc80Pp59Mg8UHbWv69YI_a1nMm4k3WtzHdezF8w/exec";
 let toutesVideos = [];
 let toutesVues = {};
 let totalAbonnes = 0;
@@ -208,7 +208,6 @@ async function chargerAuto(){
   box.innerHTML=html;
 }
 chargerAuto();
-// ===== CHARGER DEPUIS GOOGLE - POUR TOUT LE MONDE =====
 async function chargerDepuisGoogle(){
   try{
     let r = await fetch(API_URL);
@@ -216,15 +215,11 @@ async function chargerDepuisGoogle(){
     toutesVideos = j.videos || [];
     toutesVues = j.vues || {};
     totalAbonnes = j.abonnes || 0;
-    // Commentaires : on les regroupe par videoId
     tousCommentaires = {};
-    // Le Apps Script renvoie les commentaires en objet, on les convertit
     if(j.commentaires){
-      // Si c'est déjà un tableau par video, on garde
       if(Array.isArray(j.commentaires)){
         j.commentaires.forEach(c=>{ if(!tousCommentaires[c.videoId]) tousCommentaires[c.videoId]=[]; tousCommentaires[c.videoId].push(c); });
       } else {
-        // Si format objet, on essaie de parser
         tousCommentaires = j.commentaires;
       }
     }
@@ -268,7 +263,6 @@ function getLikes(id){ let all=JSON.parse(localStorage.getItem('freddyv_likes')|
 function toggleLike(id){ let liked=JSON.parse(localStorage.getItem('freddyv_liked')||'{}'); let all=JSON.parse(localStorage.getItem('freddyv_likes')||'{}'); if(liked[id]){liked[id]=0; all[id]=Math.max(0,(all[id]||1)-1);} else{liked[id]=1; all[id]=(all[id]||0)+1;} localStorage.setItem('freddyv_liked',JSON.stringify(liked)); localStorage.setItem('freddyv_likes',JSON.stringify(all)); afficher(); }
 function getCommentaires(id){
   let list = tousCommentaires[id]||[];
-  // Si format objet bizarre, convertir
   if(!Array.isArray(list)) return [];
   return list;
 }
