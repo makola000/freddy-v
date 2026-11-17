@@ -42,9 +42,9 @@ textarea{height:70px}
 .section-title{background:#000;border-left:5px solid #ff0000;padding:12px 15px;border-radius:10px;margin:22px 0 15px;font-size:20px;font-weight:900}
 .section-title span{color:#ffcc00}
 .shorts-row{display:flex;gap:10px;overflow-x:auto;padding:5px 0 15px}
-.shorts-card{min-width:160px;width:160px;background:#1e1e1e;border-radius:12px;overflow:hidden;cursor:pointer;flex-shrink:0}
+.shorts-card{min-width:180px;width:180px;background:#1e1e1e;border-radius:12px;overflow:hidden;flex-shrink:0}
 .shorts-card img{width:100%;height:220px;object-fit:cover;display:block;background:#000}
-.shorts-card iframe{width:100%;height:220px;border:none;display:block;background:#000}
+.shorts-card iframe{width:100%;height:300px;border:none;display:block;background:#000}
 .shorts-card p{font-size:13px;padding:8px;margin:0;color:white}
 .tab-btn{background:#333;color:white;border:none;padding:10px 15px;border-radius:20px;margin-right:8px;cursor:pointer;white-space:nowrap}
 .tab-btn.active{background:#ff0000}
@@ -76,7 +76,6 @@ textarea{height:70px}
 </div>
 
 <div class="container">
-  <!-- MORCEAU 2 : SECTION AUTOMATIQUE -->
   <div class="section-title">🤖 VIDÉOS AUTOMATIQUES <span>— YouTube / TikTok</span></div>
   <p style="font-size:14px;color:#ffcc00">Tu as créé ta chaîne avec ton @ ? Publie sur YouTube, ça apparaît ici tout seul avec le même titre.</p>
   <div id="listeAuto"><p style="padding:10px">Chargement automatique de @freddyvmondial...</p></div>
@@ -143,7 +142,6 @@ textarea{height:70px}
   <p style="color:#888;font-size:12px;margin-top:20px">© 2026 FREDDY-V Mondial - Par Makola Kibwe - Tous droits réservés.</p>
 </div>
 
-<!-- MORCEAU 1 : POP-UP AVEC @YOUTUBE ET @TIKTOK -->
 <div class="modal" id="modalChaine"><div class="modal-box"><span class="close" onclick="fermerModal('modalChaine')">✖</span><h2>+ Créer ma chaîne</h2><input id="nomChaine" placeholder="Nom de ta chaîne"><input id="descChaine" placeholder="Description"><input id="youtubeChaine" placeholder="@YouTube - Ex: @freddyvmondial"><input id="tiktokChaine" placeholder="@TikTok - Ex: @makola"><button class="btn-pub" onclick="creerChaine()">CRÉER MA CHAÎNE</button><p id="chaineMsg"></p><p style="font-size:12px;color:#ccc">Tu mets ton @ une seule fois. Après, tu publies sur YouTube ou TikTok, et ça apparaît tout seul sur FREDDY-V avec le même titre.</p></div></div>
 <div class="modal" id="modalPaye"><div class="modal-box"><span class="close" onclick="fermerModal('modalPaye')">✖</span><h2>💰 Devenir créateur payé</h2><p>1 vue réelle = 1 personne. 1000 vues = 500 FC.</p><input id="nomPaye" placeholder="Ton nom complet"><input id="chainePaye" placeholder="Nom de ta chaîne"><input id="telPaye" placeholder="Ton WhatsApp"><button class="btn-pub" onclick="demandePaye()">ENVOYER MA DEMANDE</button><p id="payeMsg"></p></div></div>
 
@@ -178,8 +176,6 @@ function creerChaine(){
   chargerAuto();
 }
 function demandePaye(){document.getElementById('payeMsg').textContent='✅ Demande envoyée !';showToast('Demande envoyée !')}
-
-// MORCEAU 3 : CERVEAU AUTOMATIQUE
 async function chargerAuto(){
   let chainesSaved=JSON.parse(localStorage.getItem('freddyv_chaines')||'[]');
   let toutesChaines=[{nom:'FREDDY-V Mondial',desc:'Chaîne officielle',youtube:'@freddyvmondial',tiktok:''}, ...chainesSaved];
@@ -209,7 +205,6 @@ async function chargerAuto(){
   box.innerHTML=html;
 }
 chargerAuto();
-
 function publierShorts(){
   let titre=document.getElementById('titreShorts').value.trim();
   let chaine=document.getElementById('chaineShorts').value.trim()||'FREDDY-V';
@@ -265,10 +260,10 @@ function afficher(){
   let shortsFiltres=shorts.filter(v=>(v.titre+v.chaine).toLowerCase().includes(rechercheTxt));
   if(shortsFiltres.length===0){elS.innerHTML='<p style="padding:10px">Pas encore de Shorts. Publie ton premier Shorts en haut.</p>'}
   else{
-    elS.innerHTML=shortsFiltres.map(v=>`<div class="shorts-card" onclick="window.open('https://youtu.be/${v.youtube_id}','_blank')">
-      <img src="${getThumb(v.youtube_id)}">
+    elS.innerHTML=shortsFiltres.map(v=>`<div class="shorts-card">
+      <iframe src="https://www.youtube.com/embed/${v.youtube_id}" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
       <p><span class="badge-shorts">📱 SHORTS</span><br><b>${v.titre}</b><br><span style="color:#aaa">${v.chaine} • ${v.date}</span><br>${v.desc?'<span style="color:#ccc">'+v.desc.substring(0,60)+'</span>':''}</p>
-      <button class="del-btn" onclick="event.stopPropagation();supprimerVideo('${v.id}')">🗑️ Supprimer</button>
+      <button class="del-btn" onclick="supprimerVideo('${v.id}')">🗑️ Supprimer</button>
     </div>`).join('');
   }
   let elN=document.getElementById('listeNormales');
