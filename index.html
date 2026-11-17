@@ -55,6 +55,20 @@ textarea{height:70px}
 .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:99;padding:20px;overflow:auto}
 .modal-box{background:#1e1e1e;padding:20px;border-radius:15px;max-width:450px;margin:40px auto}
 .close{float:right;font-size:24px;cursor:pointer}
+/* NOUVEAU : VUES / ABONNE / COMMENTAIRES */
+.sub-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#000;padding:10px;border-radius:10px;margin:10px 0}
+.sub-info{font-size:14px;line-height:1.3}
+.sub-info b{font-size:16px}
+.sub-btn{background:#ff0000;color:white;border:none;padding:10px 18px;border-radius:20px;font-weight:900;cursor:pointer;white-space:nowrap}
+.sub-btn.subbed{background:#333;color:#fff}
+.views-line{font-size:14px;color:#ffcc00;font-weight:bold;margin:6px 0}
+.comment-box{background:#000;padding:12px;border-radius:10px;margin-top:12px}
+.comment-box h4{margin:0 0 8px}
+.comment-item{background:#1e1e1e;padding:10px;border-radius:8px;margin:8px 0;font-size:14px;line-height:1.4}
+.comment-item b{color:#ffcc00}
+.comment-item small{color:#999}
+.like-btn{background:#222;color:white;border:1px solid #444;padding:8px 12px;border-radius:20px;cursor:pointer;margin-right:6px;font-weight:bold}
+.like-btn.active{background:#ff0000;border-color:#ff0000}
 </style>
 </head>
 <body>
@@ -68,11 +82,12 @@ textarea{height:70px}
 <div class="hero">
   <h2>...peut publier ici.</h2>
   <p>Tout le monde publie, tout le monde crée sa chaîne<br>Par Makola Kibwe — Jésus revient</p>
-  <div class="yt-box">▶️ YouTube officiel:<br><b>@freddyvmondial</b><br>🔗 youtube.com/@freddyvmondial</div>
-  <button class="btn btn-white" onclick="document.getElementById('publier').scrollIntoView({behavior:'smooth'})">+ Publier une vidéo</button>
+  <div class="yt-box">▶️ YouTube officiel:<br><b>@freddyvmondial</b><br>🔗 youtube.com/@freddyvmondial<br><span id="globalSubsText">👥 0 abonnés</span></div>
+  <button id="globalSubBtn" class="btn btn-white" onclick="toggleAbonneGlobal()">🔴 S'ABONNER à FREDDY-V</button>
+  <button class="btn btn-black" onclick="document.getElementById('publier').scrollIntoView({behavior:'smooth'})">+ Publier une vidéo</button>
   <button class="btn btn-black" onclick="ouvrirModal('modalChaine')">+ Créer ma chaîne</button>
   <button class="btn btn-yellow" onclick="ouvrirModal('modalPaye')">💰 Devenir créateur payé</button>
-  <p style="text-align:center;font-weight:bold;color:#ffcc00">✅ 100% YOUTUBE - SANS SUPABASE - PLUS JAMAIS FERMÉ</p>
+  <p style="text-align:center;font-weight:bold;color:#ffcc00">✅ 100% YOUTUBE - VUES RÉELLES - 1 PERSONNE = 1 VUE / JOUR</p>
 </div>
 
 <div class="container">
@@ -85,6 +100,7 @@ textarea{height:70px}
     <div class="big" id="popTotal">👥 0 vues</div>
     <div class="small">POPULATION FREDDY-V • SHORTS + VIDÉOS NORMALES SÉPARÉS</div>
     <div class="small" id="statsShortsNormales">📱 Shorts : 0 | 🎬 Normales : 0</div>
+    <div class="small" id="statsVuesTotales">👁️ Total vues réelles : 0</div>
   </div>
 
   <div class="card" id="publier">
@@ -146,6 +162,7 @@ textarea{height:70px}
 <div class="modal" id="modalPaye"><div class="modal-box"><span class="close" onclick="fermerModal('modalPaye')">✖</span><h2>💰 Devenir créateur payé</h2><p>1 vue réelle = 1 personne. 1000 vues = 500 FC.</p><input id="nomPaye" placeholder="Ton nom complet"><input id="chainePaye" placeholder="Nom de ta chaîne"><input id="telPaye" placeholder="Ton WhatsApp"><button class="btn-pub" onclick="demandePaye()">ENVOYER MA DEMANDE</button><p id="payeMsg"></p></div></div>
 
 <script>
+const API_URL = "https://script.google.com/macros/s/AKfycbzTl660BHh72Tn0bSElSclU_tkZIhK396T1F58SxrTYx0tV1PYXXNTazZvoaEnU45Em9Q/exec";
 let toutesVideos = JSON.parse(localStorage.getItem('freddyv_videos_v2')||'[]');
 let categorieChoisie='Tout';
 let rechercheTxt='';
@@ -205,6 +222,89 @@ async function chargerAuto(){
   box.innerHTML=html;
 }
 chargerAuto();
+
+// ===== NOUVEAU : VUES REELLES 1/JOUR =====
+function todayStr(){return new Date().toISOString().slice(0,10)}
+function getVues(videoId){
+  let all=JSON.parse(localStorage.getItem('freddyv_vues')||'{}');
+  return all[videoId]||0;
+}
+function compterVue(videoId){
+  let key='freddyv_vu_'+videoId+'_'+todayStr();
+  if(localStorage.getItem(key)) return; // déjà vu aujourd'hui = pas de +1
+  localStorage.setItem(key,'1');
+  let all=JSON.parse(localStorage.getItem('freddyv_vues')||'{}');
+  all[videoId]=(all[videoId]||0)+1;
+  localStorage.setItem('freddyv_vues',JSON.stringify(all));
+  // Essaie aussi d'envoyer à Google Sheet (si ton Apps Script le gère, sinon ça ne bloque pas)
+  try{ fetch(API_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'vue',videoId:videoId,date:todayStr()})}); }catch(e){}
+  afficher();
+}
+function totalVues(){
+  let all=JSON.parse(localStorage.getItem('freddyv_vues')||'{}');
+  return Object.values(all).reduce((a,b)=>a+b,0);
+}
+// ===== NOUVEAU : ABONNES =====
+function getAbonnes(){return parseInt(localStorage.getItem('freddyv_abonnes')||'0')}
+function estAbonne(){return localStorage.getItem('freddyv_je_suis_abonne')==='1'}
+function majBoutonAbonne(){
+  let btn=document.getElementById('globalSubBtn');
+  let txt=document.getElementById('globalSubsText');
+  if(txt) txt.textContent='👥 '+getAbonnes()+' abonnés';
+  if(btn){
+    if(estAbonne()){btn.textContent='✓ ABONNÉ';btn.classList.add('subbed');btn.style.background='#333'}
+    else{btn.textContent="🔴 S'ABONNER à FREDDY-V";btn.classList.remove('subbed');btn.style.background='white';btn.style.color='#ff0000'}
+  }
+}
+function toggleAbonneGlobal(){
+  if(estAbonne()){
+    localStorage.setItem('freddyv_je_suis_abonne','0');
+    localStorage.setItem('freddyv_abonnes',String(Math.max(0,getAbonnes()-1)));
+    showToast('Tu t’es désabonné');
+  }else{
+    localStorage.setItem('freddyv_je_suis_abonne','1');
+    localStorage.setItem('freddyv_abonnes',String(getAbonnes()+1));
+    showToast('✅ Merci ! Tu es abonné à FREDDY-V !');
+  }
+  try{ fetch(API_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'abonne',abonne:estAbonne()})}); }catch(e){}
+  majBoutonAbonne(); afficher();
+}
+// ===== NOUVEAU : LIKES =====
+function getLikes(videoId){let all=JSON.parse(localStorage.getItem('freddyv_likes')||'{}');return all[videoId]||0}
+function toggleLike(videoId,btn){
+  let liked=JSON.parse(localStorage.getItem('freddyv_liked')||'{}');
+  let all=JSON.parse(localStorage.getItem('freddyv_likes')||'{}');
+  if(liked[videoId]){liked[videoId]=0; all[videoId]=Math.max(0,(all[videoId]||1)-1);}
+  else{liked[videoId]=1; all[videoId]=(all[videoId]||0)+1;}
+  localStorage.setItem('freddyv_liked',JSON.stringify(liked));
+  localStorage.setItem('freddyv_likes',JSON.stringify(all));
+  afficher();
+}
+// ===== NOUVEAU : COMMENTAIRES =====
+function getCommentaires(videoId){let all=JSON.parse(localStorage.getItem('freddyv_comments')||'{}');return all[videoId]||[]}
+function envoyerCommentaire(videoId){
+  let nom=document.getElementById('cNom_'+videoId).value.trim();
+  let txt=document.getElementById('cTxt_'+videoId).value.trim();
+  if(!nom){showToast('Mets ton nom');return}
+  if(!txt){showToast('Écris ton commentaire');return}
+  let all=JSON.parse(localStorage.getItem('freddyv_comments')||'{}');
+  if(!all[videoId]) all[videoId]=[];
+  all[videoId].push({nom:nom,txt:txt,date:new Date().toLocaleDateString('fr-FR')});
+  localStorage.setItem('freddyv_comments',JSON.stringify(all));
+  try{ fetch(API_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'commentaire',videoId:videoId,nom:nom,commentaire:txt})}); }catch(e){}
+  document.getElementById('cTxt_'+videoId).value='';
+  showToast('✅ Commentaire envoyé !');
+  afficher();
+}
+function renderCommentaires(videoId){
+  let list=getCommentaires(videoId);
+  let html='<div class="comment-box"><h4>💬 Commentaires ('+list.length+')</h4>';
+  if(list.length===0) html+='<p style="color:#999;font-size:13px">Pas encore de commentaire. Sois le premier !</p>';
+  else html+=list.slice().reverse().map(c=>`<div class="comment-item"><b>${c.nom}</b> <small>• ${c.date}</small><br>${c.txt}</div>`).join('');
+  html+=`<input id="cNom_${videoId}" placeholder="Ton nom"><textarea id="cTxt_${videoId}" placeholder="Écris ton commentaire ici..." style="height:50px"></textarea><button class="btn-pub" onclick="envoyerCommentaire('${videoId}')">💬 Envoyer mon commentaire</button></div>`;
+  return html;
+}
+
 function publierShorts(){
   let titre=document.getElementById('titreShorts').value.trim();
   let chaine=document.getElementById('chaineShorts').value.trim()||'FREDDY-V';
@@ -250,19 +350,23 @@ function filtrerCategorie(cat,btn){
   afficher();
 }
 function afficher(){
+  majBoutonAbonne();
   let shorts=toutesVideos.filter(v=>v.type==='short');
   let normales=toutesVideos.filter(v=>v.type==='normale');
   document.getElementById('statsShortsNormales').textContent='📱 Shorts : '+shorts.length+' | 🎬 Normales : '+normales.length;
   document.getElementById('countShorts').textContent='('+shorts.length+')';
   document.getElementById('countNormales').textContent='('+normales.length+')';
   document.getElementById('popTotal').textContent='👥 '+toutesVideos.length+' vidéos';
+  let tv=document.getElementById('statsVuesTotales');
+  if(tv) tv.textContent='👁️ Total vues réelles : '+totalVues()+' | 👥 Abonnés : '+getAbonnes();
   let elS=document.getElementById('listeShorts');
   let shortsFiltres=shorts.filter(v=>(v.titre+v.chaine).toLowerCase().includes(rechercheTxt));
   if(shortsFiltres.length===0){elS.innerHTML='<p style="padding:10px">Pas encore de Shorts. Publie ton premier Shorts en haut.</p>'}
   else{
     elS.innerHTML=shortsFiltres.map(v=>`<div class="shorts-card">
-      <iframe src="https://www.youtube.com/embed/${v.youtube_id}" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
-      <p><span class="badge-shorts">📱 SHORTS</span><br><b>${v.titre}</b><br><span style="color:#aaa">${v.chaine} • ${v.date}</span><br>${v.desc?'<span style="color:#ccc">'+v.desc.substring(0,60)+'</span>':''}</p>
+      <iframe src="https://www.youtube.com/embed/${v.youtube_id}" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" onload="compterVue('${v.id}')"></iframe>
+      <p><span class="badge-shorts">📱 SHORTS</span><br><b>${v.titre}</b><br><span style="color:#aaa">${v.chaine} • ${v.date}</span><br><span style="color:#ffcc00;font-weight:bold">👁️ ${getVues(v.id)} vues • ❤️ ${getLikes(v.id)}</span><br>${v.desc?'<span style="color:#ccc">'+v.desc.substring(0,60)+'</span>':''}</p>
+      <button class="like-btn" style="width:100%;margin:5px 0" onclick="compterVue('${v.id}');toggleLike('${v.id}')">❤️ J'aime</button>
       <button class="del-btn" onclick="supprimerVideo('${v.id}')">🗑️ Supprimer</button>
     </div>`).join('');
   }
@@ -275,16 +379,21 @@ function afficher(){
   if(normFiltres.length===0){elN.innerHTML='<div class="card" style="text-align:center"><h3>Pas encore de vidéo normale ici</h3><p>Publie ta première vidéo normale avec le bouton vert en haut.<br>C’est les vidéos normales qui font gagner AdSense, parce que les gens restent longtemps.</p></div>'}
   else{
     elN.innerHTML=normFiltres.map(v=>`<div class="video-card">
-      <iframe src="https://www.youtube.com/embed/${v.youtube_id}" allowfullscreen></iframe>
+      <iframe src="https://www.youtube.com/embed/${v.youtube_id}" allowfullscreen onload="compterVue('${v.id}')"></iframe>
       <div class="yt-title">${v.titre} <span class="badge-normale">🎬 NORMALE</span></div>
       <p class="yt-meta">Par <b>${v.chaine}</b> • ${v.categorie} • ${v.date}</p>
+      <div class="views-line">👁️ ${getVues(v.id)} vues réelles • ❤️ ${getLikes(v.id)} j'aime • 💬 ${getCommentaires(v.id).length} commentaires</div>
+      <div class="sub-bar"><div class="sub-info"><b>${v.chaine}</b><br>👥 ${getAbonnes()} abonnés</div><button class="sub-btn ${estAbonne()?'subbed':''}" onclick="toggleAbonneGlobal()">${estAbonne()?'✓ ABONNÉ':"🔴 S'ABONNER"}</button></div>
       ${v.desc?'<p style="color:#ddd;font-size:15px;line-height:1.5;background:#000;padding:10px;border-radius:8px">'+v.desc+'</p>':''}
-      <button class="btn-pub" onclick="navigator.clipboard.writeText('https://youtu.be/${v.youtube_id}');showToast('Lien copié !')">🔗 Partager cette vidéo</button>
+      <button class="like-btn" onclick="compterVue('${v.id}');toggleLike('${v.id}')">❤️ J'aime (${getLikes(v.id)})</button>
+      <button class="btn-pub" style="margin-top:10px" onclick="navigator.clipboard.writeText('https://youtu.be/${v.youtube_id}');showToast('Lien copié !')">🔗 Partager cette vidéo</button>
+      ${renderCommentaires(v.id)}
       <button class="del-btn" onclick="supprimerVideo('${v.id}')">🗑️ Supprimer ma vidéo</button>
     </div>`).join('');
   }
 }
 afficher();
+majBoutonAbonne();
 </script>
 </body>
 </html>
