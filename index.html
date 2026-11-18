@@ -62,7 +62,6 @@ textarea{height:70px}
 .comment-item{background:#1e1e1e;padding:10px;border-radius:8px;margin:8px 0;font-size:14px;line-height:1.4}
 .comment-item b{color:#ffcc00}
 .like-btn{background:#222;color:white;border:1px solid #444;padding:8px 12px;border-radius:20px;cursor:pointer;margin-right:6px;font-weight:bold}
-/* MODE TIKTOK PLEIN ECRAN */
 .tiktok-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:9999}
 .tiktok-feed{width:100%;height:100%;overflow-y:auto;scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch}
 .tiktok-item{width:100%;height:100%;scroll-snap-align:start;position:relative;background:#000;display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -209,7 +208,7 @@ async function chargerAuto(){
       let j2=await r2.json();
       j2.items.slice(0,3).forEach(v=>{
         let vid=v.link.split('v=')[1];
-        html+=`<div class="video-card"><iframe src="https://www.youtube-nocookie.com/embed/${vid}?rel=0&modestbranding=1" allowfullscreen></iframe><div class="yt-title">${v.title}</div><p class="yt-meta">Par <b>${c.nom}</b> • ${c.youtube} • Automatique</p></div>`;
+        html+=`<div class="video-card"><iframe src="https://www.youtube.com/embed/${vid}?rel=0" allowfullscreen></iframe><div class="yt-title">${v.title}</div><p class="yt-meta">Par <b>${c.nom}</b> • ${c.youtube} • Automatique</p></div>`;
       });
     }catch(e){ html+=`<p>Chaîne ${c.nom} (${c.youtube}) - <a style="color:#ffcc00" href="https://www.youtube.com/${c.youtube}" target="_blank">Voir sur YouTube</a></p>`; }
   }
@@ -240,7 +239,6 @@ async function chargerDepuisGoogle(){
 async function envoyerVersGoogle(data){
   try{ await fetch(API_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(data)}); }catch(e){}
 }
-function todayStr(){return new Date().toISOString().slice(0,10)}
 function getVues(id){ return parseInt(toutesVues[id]||0) }
 let vuesEnCours = {};
 let vuesDejaCompte = {};
@@ -343,9 +341,7 @@ function carteNormale(v){
   let cat=v.categorie||v[6]||'Tout';
   let vues=getVues(id);
   return `<div class="video-card" data-video-id="${id}">
-  <div style="position:relative;width:100%;height:220px;background:#000;border-radius:10px;overflow:hidden">
-  <iframe src="https://www.youtube-nocookie.com/embed/${id}?rel=0&modestbranding=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-  </div>
+  <iframe src="https://www.youtube.com/embed/${id}?rel=0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
   <div class="yt-title">${titre}</div><p class="yt-meta">Par <b>${chaine}</b> • ${cat}</p>
   <div class="views-line">👁️ ${vues} vues réelles • ❤️ ${getLikes(id)} likes</div>
   <div><button class="like-btn" onclick="toggleLike('${id}')">❤️ J'aime (${getLikes(id)})</button><button class="like-btn" onclick="compterVue('${id}')">👁️ J'ai regardé</button></div>
@@ -356,7 +352,7 @@ function carteShorts(v,i){
   let titre=v.titre||v[1]||'Sans titre';
   let chaine=v.chaine||v[2]||'FREDDY-V';
   return `<div class="shorts-card" data-video-id="${id}" onclick="ouvrirTikTok(${i})">
-  <iframe src="https://www.youtube-nocookie.com/embed/${id}?rel=0&modestbranding=1&mute=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" loading="lazy"></iframe>
+  <iframe src="https://www.youtube.com/embed/${id}?rel=0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" loading="lazy"></iframe>
   <p><b>${titre}</b><br><small>${chaine} • 👁️ ${getVues(id)} vues • ▶️ Appuie pour voir</small></p></div>`;
 }
 function ouvrirTikTok(startIndex){
@@ -366,7 +362,7 @@ function ouvrirTikTok(startIndex){
     let titre=v.titre||v[1]||'Sans titre';
     let chaine=v.chaine||v[2]||'FREDDY-V';
     return `<div class="tiktok-item">
-      <iframe src="https://www.youtube-nocookie.com/embed/${id}?rel=0&autoplay=${i===startIndex?1:0}&mute=1&loop=1&playlist=${id}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <iframe src="https://www.youtube.com/embed/${id}?rel=0&autoplay=${i===startIndex?1:0}&playsinline=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
       <div class="tiktok-info"><b>@${chaine}</b><br>${titre}<br><small>👁️ ${getVues(id)} vues réelles</small></div>
       <div class="tiktok-actions">
         <div class="tiktok-act" onclick="toggleLike('${id}')">❤️</div>
