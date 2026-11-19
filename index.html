@@ -3,440 +3,235 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FREDDY-V Mondial</title>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6553183721717606" crossorigin="anonymous"></script>
+<title>FREDDY-V Mondial - Facile</title>
 <style>
-*{box-sizing:border-box}
-body{font-family:Arial,sans-serif;background:#0f0f0f;color:white;margin:0;padding:0}
+*{box-sizing:border-box} body{font-family:Arial,sans-serif;background:#0f0f0f;color:#fff;margin:0;padding:0}
 .topbar{background:#000;padding:15px;display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;z-index:10}
-.logo{font-weight:900;font-size:28px;line-height:1;text-transform:uppercase}
-.logo span{color:#ff0000}
-.search{background:white;border-radius:30px;padding:8px 12px;display:flex;align-items:center;flex:1;max-width:240px}
+.logo{font-weight:900;font-size:26px;line-height:1;text-transform:uppercase}.logo span{color:#ff0000}
+.search{background:#fff;border-radius:30px;padding:8px 12px;display:flex;align-items:center;flex:1;max-width:260px}
 .search input{border:none;outline:none;width:100%;font-size:16px}
-.bell{font-size:28px}
-.fr{background:#ff0000;border:2px solid white;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px}
-.hero{background:linear-gradient(180deg,#ff0000 0%,#8b0000 60%,#000 100%);padding:20px 15px 25px}
-.hero h2{font-size:24px;margin:0}
-.hero p{font-size:19px;font-style:italic;margin:8px 0;line-height:1.3}
-.yt-box{background:rgba(0,0,0,0.35);padding:12px;border-radius:14px;margin:15px 0;font-size:18px;line-height:1.4}
+.hero{background:linear-gradient(180deg,#ff0000 0%,#8b0000 60%,#000 100%);padding:20px 15px 25px;text-align:center}
+.hero h2{font-size:24px;margin:0}.hero p{font-size:18px;font-style:italic;margin:8px 0}
 .btn{display:block;width:100%;padding:15px;border:none;border-radius:12px;font-size:19px;font-weight:900;cursor:pointer;margin-bottom:12px}
-.btn-white{background:white;color:#ff0000}
-.btn-black{background:#000;color:white;border:1px solid #333}
-.btn-yellow{background:#ffcc00;color:#000}
+.btn-white{background:#fff;color:#ff0000}.btn-black{background:#000;color:#fff;border:1px solid #333}
 .container{max-width:900px;margin:auto;padding:15px}
 .pop-box{background:linear-gradient(90deg,#ff0000,#ffcc00);color:#000;padding:18px;border-radius:15px;text-align:center;margin-bottom:15px}
-.pop-box .big{font-size:38px;font-weight:900;line-height:1}
-.pop-box .small{font-size:15px;font-weight:bold}
-.chaine-box{background:#1e1e1e;border:1px solid #333;padding:14px;border-radius:12px;margin-bottom:15px}
+.pop-box .big{font-size:32px;font-weight:900}.pop-box .small{font-size:14px;font-weight:bold}
 .card{background:#1e1e1e;padding:15px;border-radius:12px;margin-bottom:15px}
-input,select,textarea{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:none;font-size:16px;font-family:Arial}
-textarea{height:70px}
-.btn-pub{background:#ff0000;color:white;border:none;padding:13px;border-radius:8px;font-weight:bold;cursor:pointer;width:100%;font-size:17px}
-.btn-shorts{background:#ff8800;color:#fff;border:none;padding:13px;border-radius:8px;font-weight:900;cursor:pointer;width:100%;font-size:17px}
-.btn-normale{background:#008000;color:#fff;border:none;padding:13px;border-radius:8px;font-weight:900;cursor:pointer;width:100%;font-size:17px}
-.video-card{background:#1e1e1e;padding:12px;border-radius:12px;margin-bottom:22px}
-.video-card iframe{width:100%;height:220px;border:none;display:block;background:#000;border-radius:10px}
-.yt-title{font-size:19px;font-weight:900;margin:10px 0 4px;line-height:1.3}
+input,textarea{width:100%;padding:13px;margin:8px 0;border-radius:8px;border:none;font-size:16px}
+.btn-pub{background:#ff0000;color:#fff;border:none;padding:14px;border-radius:8px;font-weight:900;cursor:pointer;width:100%;font-size:18px}
+.video-card{background:#1e1e1e;padding:12px;border-radius:12px;margin-bottom:22px;overflow:hidden}
+.thumb-box{position:relative;cursor:pointer;border-radius:10px;overflow:hidden;background:#000}
+.thumb-box img{width:100%;height:220px;object-fit:cover;display:block}
+.play-big{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:70px;text-shadow:0 0 20px #000}
+.video-card iframe{width:100%;height:220px;border:none;display:none;background:#000;border-radius:10px}
+.video-card iframe.tiktok-frame{height:500px}
+.yt-title{font-size:19px;font-weight:900;margin:10px 0 4px}
 .yt-meta{font-size:14px;color:#ccc;margin:0 0 10px}
-.yt-meta b{color:white}
+.watch-btn{display:block;text-align:center;background:#fff;color:#000;padding:11px;border-radius:8px;text-decoration:none;font-weight:900;margin-top:8px}
+.watch-btn-yellow{background:#ffcc00}
 .section-title{background:#000;border-left:5px solid #ff0000;padding:12px 15px;border-radius:10px;margin:22px 0 15px;font-size:20px;font-weight:900}
-.section-title span{color:#ffcc00}
-.shorts-row{display:flex;gap:10px;overflow-x:auto;padding:5px 0 15px}
-.shorts-card{min-width:180px;width:180px;background:#1e1e1e;border-radius:12px;overflow:hidden;flex-shrink:0;cursor:pointer}
-.shorts-card iframe{width:100%;height:300px;border:none;display:block;background:#000;pointer-events:none}
-.shorts-card p{font-size:13px;padding:8px;margin:0;color:white}
-.tab-btn{background:#333;color:white;border:none;padding:10px 15px;border-radius:20px;margin-right:8px;cursor:pointer;white-space:nowrap}
-.tab-btn.active{background:#ff0000}
+.badge{background:#ff8800;color:#fff;font-size:11px;font-weight:900;padding:4px 8px;border-radius:10px}
+.badge-yt{background:#ff0000}.badge-tk{background:#000;border:1px solid #fff}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#fff;color:#000;padding:12px 20px;border-radius:25px;font-weight:900;z-index:9999;display:none;max-width:90%;text-align:center}
-.del-btn{background:#111;border:1px solid #555;color:white;padding:11px;border-radius:8px;width:100%;cursor:pointer;font-weight:bold;margin-top:8px}
-.badge-shorts{background:#ff8800;color:#fff;font-size:11px;font-weight:900;padding:4px 8px;border-radius:10px}
-.badge-normale{background:#008000;color:#fff;font-size:11px;font-weight:900;padding:4px 8px;border-radius:10px}
-.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:99;padding:20px;overflow:auto}
-.modal-box{background:#1e1e1e;padding:20px;border-radius:15px;max-width:450px;margin:40px auto}
-.close{float:right;font-size:24px;cursor:pointer}
-.sub-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#000;padding:10px;border-radius:10px;margin:10px 0}
-.sub-btn{background:#ff0000;color:white;border:none;padding:10px 18px;border-radius:20px;font-weight:900;cursor:pointer;white-space:nowrap}
-.sub-btn.subbed{background:#333}
-.views-line{font-size:14px;color:#ffcc00;font-weight:bold;margin:6px 0}
-.comment-box{background:#000;padding:12px;border-radius:10px;margin-top:12px}
-.comment-item{background:#1e1e1e;padding:10px;border-radius:8px;margin:8px 0;font-size:14px;line-height:1.4}
-.comment-item b{color:#ffcc00}
-.like-btn{background:#222;color:white;border:1px solid #444;padding:8px 12px;border-radius:20px;cursor:pointer;margin-right:6px;font-weight:bold}
-.tiktok-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:9999}
-.tiktok-feed{width:100%;height:100%;overflow-y:auto;scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch}
-.tiktok-item{width:100%;height:100%;scroll-snap-align:start;position:relative;background:#000;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.tiktok-item iframe{width:100%;height:100%;border:none;background:#000}
-.tiktok-info{position:absolute;bottom:20px;left:12px;right:70px;color:white;z-index:2;text-shadow:0 2px 8px #000;pointer-events:none}
-.tiktok-actions{position:absolute;right:10px;bottom:90px;display:flex;flex-direction:column;gap:14px;z-index:2}
-.tiktok-act{background:rgba(255,255,255,0.2);border:1px solid #fff;width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;color:white}
-.tiktok-close{position:absolute;top:12px;right:12px;background:#ff0000;color:white;border:none;width:42px;height:42px;border-radius:50%;font-size:20px;z-index:3;cursor:pointer}
-.tiktok-hint{position:absolute;top:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.6);color:white;padding:6px 14px;border-radius:20px;font-size:13px;z-index:2;pointer-events:none}
 </style>
 </head>
 <body>
 <div class="toast" id="toast"></div>
 <div class="topbar">
   <div class="logo">FREDDY-<br>V <span>Mondial</span></div>
-  <div class="search">🔍 <input id="recherche" placeholder="Rechercher..." oninput="filtrer()"></div>
-  <div class="bell">🔔</div>
-  <div class="fr">FR</div>
+  <div class="search">🔍 <input id="recherche" placeholder="Rechercher..." oninput="afficher()"></div>
+  <div style="font-size:28px">🔔</div>
 </div>
 <div class="hero">
-  <h2>...peut publier ici.</h2>
-  <p>Tout le monde publie, tout le monde crée sa chaîne<br>Par Makola Kibwe — Jésus revient</p>
-  <div class="yt-box">▶️ YouTube officiel:<br><b>@freddyvmondial</b><br>🔗 youtube.com/@freddyvmondial<br><span id="globalSubsText">👥 0 abonnés</span></div>
-  <button id="globalSubBtn" class="btn btn-white" onclick="toggleAbonneGlobal()">🔴 S'ABONNER à FREDDY-V</button>
-  <button class="btn btn-black" onclick="document.getElementById('publier').scrollIntoView({behavior:'smooth'})">+ Publier une vidéo</button>
-  <button class="btn btn-black" onclick="ouvrirModal('modalChaine')">+ Créer ma chaîne</button>
-  <button class="btn btn-yellow" onclick="ouvrirModal('modalPaye')">💰 Devenir créateur payé</button>
-  <p style="text-align:center;font-weight:bold;color:#ffcc00">✅ 100% PARTAGÉ - TOUT LE MONDE VOIT LA MÊME CHOSE</p>
+  <h2>Tout le monde publie, tout le monde crée</h2>
+  <p>Par Makola Kibwe — Jésus revient</p>
+  <p style="font-style:normal;font-weight:bold;color:#ffcc00">✅ Colle juste ton lien, c'est tout. Pas besoin de connaître "intégration".</p>
+  <button class="btn btn-white" onclick="document.getElementById('publier').scrollIntoView({behavior:'smooth'})">+ Publier une vidéo</button>
 </div>
+
 <div class="container">
-  <div class="section-title">🤖 VIDÉOS AUTOMATIQUES <span>— YouTube / TikTok</span></div>
-  <p style="font-size:14px;color:#ffcc00">Tu as créé ta chaîne avec ton @ ? Publie sur YouTube, ça apparaît ici tout seul avec le même titre.</p>
-  <div id="listeAuto"><p style="padding:10px">Chargement automatique de @freddyvmondial...</p></div>
-  <div id="listeChainesAuto" style="margin-bottom:15px"></div>
-  <div class="pop-box">
-    <div class="big" id="popTotal">👥 0 vidéos</div>
-    <div class="small">POPULATION FREDDY-V • SHORTS + VIDÉOS NORMALES SÉPARÉS</div>
-    <div class="small" id="statsShortsNormales">📱 Shorts : 0 | 🎬 Normales : 0</div>
-    <div class="small" id="statsVuesTotales">👁️ Total vues réelles : 0</div>
-  </div>
+  <div class="pop-box"><div class="big" id="popTotal">👥 0 vidéos</div><div class="small">POPULATION FREDDY-V • YOUTUBE + TIKTOK • TOUT LE MONDE VOIT LA MÊME CHOSE</div></div>
+
+  <!-- ===== PUBLIER FACILE - 1 SEULE CASE ===== -->
   <div class="card" id="publier">
-    <h2>📤 Publier une vidéo</h2>
-    <p style="color:#ffcc00;font-size:14px;font-weight:bold">⚠️ Choisis bien : Shorts OU Normale. Tout le monde verra ta vidéo.</p>
-    <div style="background:#2a1500;border:2px solid #ff8800;border-radius:12px;padding:14px;margin:12px 0">
-      <h3 style="margin:0;color:#ff8800">📱 1. PUBLIER UN SHORTS</h3>
-      <input id="titreShorts" placeholder="Titre du Shorts - ex: Makola danse à Masisi">
-      <input id="chaineShorts" placeholder="Nom de ta chaîne">
-      <input id="urlShorts" placeholder="Colle ici le lien Shorts YouTube">
-      <textarea id="descShorts" placeholder="Décris ton Shorts en 2 phrases pour Google AdSense..."></textarea>
-      <button class="btn-shorts" onclick="publierShorts()">📱 PUBLIER MON SHORTS</button>
-      <p id="msgShorts" style="text-align:center;color:#ffcc00"></p>
-    </div>
-    <div style="text-align:center;font-weight:900;margin:10px 0">--- OU ---</div>
-    <div style="background:#002a00;border:2px solid #00ff88;border-radius:12px;padding:14px;margin:12px 0">
-      <h3 style="margin:0;color:#00ff88">🎬 2. PUBLIER UNE VIDÉO NORMALE</h3>
-      <input id="titreNormale" placeholder="Titre de la vidéo normale - ex: Makola chante pour Jésus">
-      <input id="chaineNormale" placeholder="Nom de ta chaîne">
-      <select id="categorieNormale">
-        <option value="Tout">Choisir catégorie</option>
-        <option value="Musique">🎵 Musique</option>
-        <option value="Actualité">📰 Actualité</option>
-        <option value="Comédie">😂 Comédie</option>
-        <option value="Sport">⚽ Sport</option>
-        <option value="Foi">🙏 Foi</option>
-      </select>
-      <input id="urlNormale" placeholder="Colle ici le lien YouTube normal">
-      <textarea id="descNormale" placeholder="Décris ta vidéo en 3-4 phrases pour Google AdSense..."></textarea>
-      <button class="btn-normale" onclick="publierNormale()">🎬 PUBLIER MA VIDÉO NORMALE</button>
-      <p id="msgNormale" style="text-align:center;color:#00ff88"></p>
-    </div>
+    <h2>📤 Publier une vidéo - FACILE</h2>
+    <p style="color:#ffcc00;font-weight:bold">Tu colles ton lien, tu publies. C'est tout.</p>
+    <input id="titre" placeholder="Titre : Ex: Goma aujourd'hui">
+    <input id="chaine" placeholder="Ton nom : Ex: Makola">
+    <input id="lienFacile" placeholder="Colle ton lien YouTube OU TikTok ici 👇" oninput="verifierLienFacile()">
+    <p id="msgFacile" style="color:#ffcc00;text-align:center">Colle ton lien pour voir la photo.</p>
+    <div id="previewFacile"></div>
+    <button class="btn-pub" id="btnFacile" onclick="publierFacile()" disabled>📤 PUBLIER SUR FREDDY-V</button>
+    <p style="font-size:13px;color:#aaa;text-align:center">Ex YouTube : https://youtu.be/u92Dx1TRI88<br>Ex TikTok : https://www.tiktok.com/@.../video/...</p>
   </div>
-  <div class="section-title">📱 SHORTS <span id="countShorts">(0)</span> — Glisse vers le haut comme TikTok</div>
-  <div id="listeShorts"><p style="padding:10px">Chargement depuis Google...</p></div>
-  <div class="section-title">🎬 VIDÉOS NORMALES <span id="countNormales">(0)</span> — Les longues, pour AdSense</div>
-  <div style="margin-bottom:12px;overflow-x:auto;white-space:nowrap;padding-bottom:5px">
-    <button class="tab-btn active" onclick="filtrerCategorie('Tout',this)">Tout</button>
-    <button class="tab-btn" onclick="filtrerCategorie('Musique',this)">🎵 Musique</button>
-    <button class="tab-btn" onclick="filtrerCategorie('Actualité',this)">📰 Actualité</button>
-    <button class="tab-btn" onclick="filtrerCategorie('Comédie',this)">😂 Comédie</button>
-    <button class="tab-btn" onclick="filtrerCategorie('Sport',this)">⚽ Sport</button>
-    <button class="tab-btn" onclick="filtrerCategorie('Foi',this)">🙏 Foi</button>
-  </div>
-  <div id="listeNormales">Chargement depuis Google...</div>
+
+  <div class="section-title">🤖 VIDÉOS AUTOMATIQUES - @freddyvmondial</div>
+  <p style="font-size:14px;color:#ffcc00">Tu publies sur YouTube @freddyvmondial, ça vient ici tout seul.</p>
+  <div id="listeAuto"><p>Chargement automatique...</p></div>
+
+  <div class="section-title">🎬 TOUTES LES VIDÉOS - YouTube + TikTok</div>
+  <div id="liste"><p>Chargement...</p></div>
 </div>
-<div style="background:#000;padding:25px 15px;text-align:center;margin-top:20px;border-top:2px solid #ff0000">
-  <h3 style="color:white;margin:0 0 10px">À PROPOS DE FREDDY-V MONDIAL</h3>
-  <p style="color:#ccc;font-size:14px;line-height:1.6;max-width:700px;margin:0 auto">FREDDY-V Mondial est un site web créé par <b style="color:white">Makola Kibwe</b> à Masisi, Nord-Kivu, en République Démocratique du Congo. Notre devise : "Tout le monde publie, tout le monde crée sa chaîne. Jésus revient."</p>
-  <p style="color:#888;font-size:12px;margin-top:20px">© 2026 FREDDY-V Mondial - Par Makola Kibwe - Tous droits réservés.</p>
+
+<div style="background:#000;padding:25px 15px;text-align:center;border-top:2px solid #ff0000">
+  <p style="color:#ccc;font-size:14px">FREDDY-V Mondial - Par <b style="color:#fff">Makola Kibwe</b> à Masisi, Nord-Kivu. Tout le monde publie, tout le monde crée sa chaîne. Jésus revient.</p>
+  <p style="color:#888;font-size:12px">© 2026 FREDDY-V Mondial</p>
 </div>
-<div class="modal" id="modalChaine"><div class="modal-box"><span class="close" onclick="fermerModal('modalChaine')">✖</span><h2>+ Créer ma chaîne</h2><input id="nomChaine" placeholder="Nom de ta chaîne"><input id="descChaine" placeholder="Description"><input id="youtubeChaine" placeholder="@YouTube - Ex: @freddyvmondial"><input id="tiktokChaine" placeholder="@TikTok - Ex: @makola"><button class="btn-pub" onclick="creerChaine()">CRÉER MA CHAÎNE</button><p id="chaineMsg"></p></div></div>
-<div class="modal" id="modalPaye"><div class="modal-box"><span class="close" onclick="fermerModal('modalPaye')">✖</span><h2>💰 Devenir créateur payé</h2><p>1 vue réelle = 1 personne. 1000 vues = 500 FC.</p><input id="nomPaye" placeholder="Ton nom complet"><input id="chainePaye" placeholder="Nom de ta chaîne"><input id="telPaye" placeholder="Ton WhatsApp"><button class="btn-pub" onclick="demandePaye()">ENVOYER MA DEMANDE</button><p id="payeMsg"></p></div></div>
-<div class="tiktok-overlay" id="tiktokOverlay">
-  <button class="tiktok-close" onclick="fermerTikTok()">✖</button>
-  <div class="tiktok-hint">👆 Glisse vers le haut pour voir le suivant</div>
-  <div class="tiktok-feed" id="tiktokFeed"></div>
-</div>
+
 <script>
+// ===== TON LIEN GOOGLE SHEETS - NE CHANGE RIEN D'AUTRE =====
 const API_URL = "https://script.google.com/macros/s/AKfycbykXDhUNkPGZe3gT63ks411QwhymzzHOfas7K8bGR7Qg1O3SFsk2Fwmh9GA6PN1d8DH9w/exec";
 let toutesVideos = [];
-let toutesVues = {};
-let totalAbonnes = 0;
-let tousCommentaires = {};
-let categorieChoisie='Tout';
-let rechercheTxt='';
-let shortsTikTokList = [];
+let videoIdActuel = "";
+let typeActuel = "";
+
 function showToast(t){let e=document.getElementById('toast');e.textContent=t;e.style.display='block';setTimeout(()=>e.style.display='none',3000)}
-function getYoutubeId(url){ if(!url) return null; let m=url.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/|live\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/); return m?m[1]:null; }
-function ouvrirModal(id){document.getElementById(id).style.display='block'}
-function fermerModal(id){document.getElementById(id).style.display='none'}
-function creerChaine(){
-  let n=document.getElementById('nomChaine').value.trim();
-  let d=document.getElementById('descChaine').value.trim();
-  let yt=document.getElementById('youtubeChaine').value.trim();
-  let tk=document.getElementById('tiktokChaine').value.trim();
-  if(!n){showToast('Mets le nom');return}
-  if(!yt && !tk){showToast('Mets ton @YouTube ou @TikTok');return}
-  document.getElementById('chaineShorts').value=n;
-  document.getElementById('chaineNormale').value=n;
-  let chaines=JSON.parse(localStorage.getItem('freddyv_chaines')||'[]');
-  chaines.push({nom:n,desc:d,youtube:yt,tiktok:tk});
-  localStorage.setItem('freddyv_chaines',JSON.stringify(chaines));
-  document.getElementById('chaineMsg').textContent='✅ Chaîne créée : '+n;
-  fermerModal('modalChaine');showToast('Chaîne créée : '+n);
-  chargerAuto();
+
+// ===== 1. TROUVER YOUTUBE OU TIKTOK DANS N'IMPORTE QUEL LIEN =====
+function getYoutubeId(url){
+  if(!url) return null;
+  url=url.trim();
+  // Enlève le ?is=... qui dérange
+  let m=url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|shorts\/|embed\/|live\/)|v=)([a-zA-Z0-9_-]{11})/);
+  return m?m[1]:null;
 }
-function demandePaye(){document.getElementById('payeMsg').textContent='✅ Demande envoyée !';showToast('Demande envoyée !')}
-async function chargerAuto(){
-  let chainesSaved=JSON.parse(localStorage.getItem('freddyv_chaines')||'[]');
-  let toutesChaines=[{nom:'FREDDY-V Mondial',desc:'Chaîne officielle',youtube:'@freddyvmondial',tiktok:''}, ...chainesSaved];
-  let liste=document.getElementById('listeChainesAuto');
-  if(liste) liste.innerHTML=toutesChaines.map(c=>`<div class="chaine-box"><b>${c.nom}</b> - ${c.desc||''}<br><small>▶ ${c.youtube||'-'} | 🎵 ${c.tiktok||'-'}</small></div>`).join('');
-  let box=document.getElementById('listeAuto');
-  box.innerHTML='<p>Chargement automatique...</p>';
-  let html='';
-  for(let c of toutesChaines){
-    if(!c.youtube) continue;
-    let handle=c.youtube.replace('@','').trim();
-    try{
-      let r1=await fetch('https://yt.lemnoslife.com/channels?handle=@'+handle);
-      let j1=await r1.json();
-      let channelId=j1.items[0].id;
-      let r2=await fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.youtube.com/feeds/videos.xml?channel_id='+channelId);
-      let j2=await r2.json();
-      j2.items.slice(0,3).forEach(v=>{
-        let vid=v.link.split('v=')[1];
-        html+=`<div class="video-card"><iframe src="https://www.youtube.com/embed/${vid}?rel=0" allowfullscreen></iframe><div class="yt-title">${v.title}</div><p class="yt-meta">Par <b>${c.nom}</b> • ${c.youtube} • Automatique</p></div>`;
-      });
-    }catch(e){ html+=`<p>Chaîne ${c.nom} (${c.youtube}) - <a style="color:#ffcc00" href="https://www.youtube.com/${c.youtube}" target="_blank">Voir sur YouTube</a></p>`; }
+function getTiktokId(url){
+  if(!url) return null;
+  let m=url.match(/video\/(\d+)/);
+  return m?m[1]:null;
+}
+function getType(url){
+  if(url.includes('tiktok.com')) return 'tiktok';
+  if(url.includes('youtu')) return 'youtube';
+  return null;
+}
+
+// ===== 2. QUAND ON COLLE LE LIEN - ON MONTRE LA PHOTO TOUT DE SUITE =====
+function verifierLienFacile(){
+  let lien=document.getElementById('lienFacile').value.trim();
+  let msg=document.getElementById('msgFacile');
+  let prev=document.getElementById('previewFacile');
+  let btn=document.getElementById('btnFacile');
+  let type=getType(lien);
+  if(!type){ msg.textContent="Colle un lien YouTube ou TikTok valide."; prev.innerHTML=""; btn.disabled=true; return; }
+  if(type==='youtube'){
+    let id=getYoutubeId(lien);
+    if(!id){ msg.textContent="Lien YouTube invalide."; prev.innerHTML=""; btn.disabled=true; return; }
+    videoIdActuel=id; typeActuel='youtube';
+    prev.innerHTML=`<img src="https://i.ytimg.com/vi/${id}/hqdefault.jpg" style="width:100%;border-radius:10px">`;
+    msg.innerHTML=`<span style="color:#00ff88">✅ Photo trouvée ! C'est YouTube. Tu peux publier.</span>`;
+    btn.disabled=false;
+  } else {
+    let id=getTiktokId(lien);
+    videoIdActuel=id; typeActuel='tiktok';
+    // TikTok n'a pas de photo simple, on montre un message
+    prev.innerHTML=`<div style="background:#000;padding:20px;border-radius:10px;text-align:center;font-size:40px">🎵 TikTok détecté !</div>`;
+    msg.innerHTML=`<span style="color:#00ff88">✅ Lien TikTok trouvé ! Tu peux publier.</span>`;
+    btn.disabled=false;
   }
-  if(!html) html='<p>Pas encore de vidéo automatique.</p>';
-  box.innerHTML=html;
 }
-chargerAuto();
+
+// ===== 3. PUBLIER - VERS GOOGLE SHEETS (LE CAHIER) =====
+async function publierFacile(){
+  let titre=document.getElementById('titre').value.trim();
+  let chaine=document.getElementById('chaine').value.trim();
+  let lien=document.getElementById('lienFacile').value.trim();
+  if(!titre||!chaine||!videoIdActuel){ alert("Remplis Titre, Nom et Lien"); return; }
+  let btn=document.getElementById('btnFacile'); btn.textContent="Publication..."; btn.disabled=true;
+  try{
+    await fetch(API_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'publier',type:typeActuel==='tiktok'?'TikTok':'Normale',titre,chaine,url:lien,lien,videoId:videoIdActuel,plateforme:typeActuel})});
+    showToast("✅ Publié ! Tout le monde va voir.");
+    document.getElementById('titre').value=""; document.getElementById('lienFacile').value=""; document.getElementById('previewFacile').innerHTML=""; document.getElementById('msgFacile').textContent="Colle ton lien pour voir la photo.";
+    setTimeout(chargerDepuisGoogle,1200);
+  }catch(e){ alert("Erreur, réessaie."); }
+  btn.textContent="📤 PUBLIER SUR FREDDY-V"; btn.disabled=false;
+}
+
+// ===== 4. AFFICHER - JAMAIS DE TABLEAU NOIR =====
+function creerCarte(v){
+  let lien=v.url||v.lien||"";
+  let type=v.plateforme|| (lien.includes('tiktok')?'tiktok':'youtube');
+  let id=v.videoId||getYoutubeId(lien)||getTiktokId(lien)||"";
+  let div=document.createElement("div"); div.className="video-card";
+  if(type==='tiktok'){
+    // TIKTOK : ça joue presque toujours dans le site
+    div.innerHTML=`
+      <div class="thumb-box" onclick="jouerTiktok(this,'${id}')">
+        <div style="background:#000;height:220px;display:flex;align-items:center;justify-content:center;font-size:60px">🎵</div>
+        <div class="play-big">▶️</div>
+      </div>
+      <iframe class="tiktok-frame" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+      <div class="yt-title">${v.titre||"Sans titre"} <span class="badge badge-tk">🎵 TikTok</span></div>
+      <p class="yt-meta">👤 ${v.chaine||""}</p>
+      <a class="watch-btn" href="${lien}" target="_blank">▶️ Regarder sur TikTok (marche toujours)</a>`;
+  } else {
+    // YOUTUBE : photo + play + bouton secours
+    let thumb=`https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+    div.innerHTML=`
+      <div class="thumb-box" onclick="jouerYoutube(this,'${id}')">
+        <img src="${thumb}" onerror="this.src='https://i.ytimg.com/vi/${id}/mqdefault.jpg'">
+        <div class="play-big">▶️</div>
+      </div>
+      <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <div class="yt-title">${v.titre||"Sans titre"} <span class="badge badge-yt">▶️ YouTube</span></div>
+      <p class="yt-meta">👤 ${v.chaine||""}</p>
+      <a class="watch-btn" href="https://www.youtube.com/watch?v=${id}" target="_blank">▶️ Regarder sur YouTube (marche toujours)</a>`;
+  }
+  return div;
+}
+function jouerYoutube(thumb,id){
+  let card=thumb.parentElement; let ifr=card.querySelector('iframe');
+  thumb.style.display="none"; ifr.style.display="block";
+  ifr.src="https://www.youtube-nocookie.com/embed/"+id+"?autoplay=1&rel=0";
+  // Si YouTube bloque, le bouton jaune apparaît après 4 secondes
+  setTimeout(()=>{
+    if(!card.querySelector('.secours')){
+      let b=document.createElement('a'); b.className="watch-btn watch-btn-yellow secours";
+      b.href="https://www.youtube.com/watch?v="+id; b.target="_blank";
+      b.textContent="⚠️ Si ça ne joue pas ici, clique ici - ça joue sur YouTube";
+      card.appendChild(b);
+    }
+  },4000);
+}
+function jouerTiktok(thumb,id){
+  let card=thumb.parentElement; let ifr=card.querySelector('iframe');
+  thumb.style.display="none"; ifr.style.display="block";
+  ifr.src="https://www.tiktok.com/embed/v2/"+id;
+}
+
+// ===== 5. CHARGER DEPUIS GOOGLE SHEETS =====
 async function chargerDepuisGoogle(){
   try{
-    let r = await fetch(API_URL);
-    let j = await r.json();
-    toutesVideos = j.videos || [];
-    toutesVues = j.vues || {};
-    totalAbonnes = j.abonnes || 0;
-    tousCommentaires = {};
-    if(j.commentaires){
-      if(Array.isArray(j.commentaires)){
-        j.commentaires.forEach(c=>{ if(!tousCommentaires[c.videoId]) tousCommentaires[c.videoId]=[]; tousCommentaires[c.videoId].push(c); });
-      } else { tousCommentaires = j.commentaires; }
-    }
-    majBoutonAbonne();
+    let r=await fetch(API_URL); let j=await r.json();
+    toutesVideos=j.videos||[];
     afficher();
-  }catch(e){
-    document.getElementById('listeShorts').innerHTML='<p style="padding:10px">Erreur de connexion à Google. Vérifie que le déploiement est sur "Tout le monde".</p>';
-    document.getElementById('listeNormales').innerHTML='<p>Erreur de connexion à Google.</p>';
-  }
-}
-async function envoyerVersGoogle(data){
-  try{ await fetch(API_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(data)}); }catch(e){}
-}
-function getVues(id){ return parseInt(toutesVues[id]||0) }
-let vuesEnCours = {};
-let vuesDejaCompte = {};
-// 1 PERSONNE = 1 VUE PAR JOUR - Comme TikTok / YouTube
-function aujourdhui(){
-  let d = new Date();
-  return d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
-}
-function dejaVuAujourdhui(videoId){
-  let vus = JSON.parse(localStorage.getItem('freddyv_vus_jour') || '{}');
-  return vus[videoId] === aujourdhui();
-}
-function marquerVuAujourdhui(videoId){
-  let vus = JSON.parse(localStorage.getItem('freddyv_vus_jour') || '{}');
-  vus[videoId] = aujourdhui();
-  localStorage.setItem('freddyv_vus_jour', JSON.stringify(vus));
-}
-function compterVueReelle(videoId){
-  if(!videoId) return;
-  // Si tu as DEJA vu cette video AUJOURD'HUI, on ne compte PLUS aujourd'hui
-  if(dejaVuAujourdhui(videoId)) return;
-  if(vuesEnCours[videoId]) return;
-  vuesEnCours[videoId]=true;
-  // On attend 3 secondes que tu regardes vraiment
-  setTimeout(()=>{
-    if(dejaVuAujourdhui(videoId)){ vuesEnCours[videoId]=false; return; }
-    marquerVuAujourdhui(videoId);
-    vuesDejaCompte[videoId]=true;
-    toutesVues[videoId]=(toutesVues[videoId]||0)+1;
-    envoyerVersGoogle({action:'vue',videoId:videoId});
-    vuesEnCours[videoId]=false;
-    afficher();
-  },3000);
-}
-function compterVue(videoId){ compterVueReelle(videoId); }
-function totalVues(){ return Object.values(toutesVues).reduce((a,b)=>a+parseInt(b||0),0) }
-function estAbonne(){return localStorage.getItem('freddyv_je_suis_abonne')==='1'}
-function majBoutonAbonne(){
-  let btn=document.getElementById('globalSubBtn');
-  let txt=document.getElementById('globalSubsText');
-  if(txt) txt.textContent='👥 '+totalAbonnes+' abonnés';
-  if(btn){
-    if(estAbonne()){btn.textContent='✓ ABONNÉ';btn.style.background='#333';btn.style.color='white'}
-    else{btn.textContent="🔴 S'ABONNER à FREDDY-V";btn.style.background='white';btn.style.color='#ff0000'}
-  }
-}
-function toggleAbonneGlobal(){
-  if(estAbonne()){ localStorage.setItem('freddyv_je_suis_abonne','0'); totalAbonnes=Math.max(0,totalAbonnes-1); showToast('Tu t’es désabonné'); }
-  else{ localStorage.setItem('freddyv_je_suis_abonne','1'); totalAbonnes=totalAbonnes+1; showToast('✅ Merci ! Tu es abonné à FREDDY-V !'); envoyerVersGoogle({action:'abonne',abonne:true,telephone:'anonyme'}); }
-  majBoutonAbonne(); afficher();
-}
-function getLikes(id){ let all=JSON.parse(localStorage.getItem('freddyv_likes')||'{}'); return all[id]||0 }
-function toggleLike(id){ let liked=JSON.parse(localStorage.getItem('freddyv_liked')||'{}'); let all=JSON.parse(localStorage.getItem('freddyv_likes')||'{}'); if(liked[id]){liked[id]=0; all[id]=Math.max(0,(all[id]||1)-1);} else{liked[id]=1; all[id]=(all[id]||0)+1;} localStorage.setItem('freddyv_liked',JSON.stringify(liked)); localStorage.setItem('freddyv_likes',JSON.stringify(all)); afficher(); }
-function getCommentaires(id){ let list = tousCommentaires[id]||[]; if(!Array.isArray(list)) return []; return list; }
-async function envoyerCommentaire(videoId){
-  let nom=document.getElementById('cNom_'+videoId).value.trim();
-  let txt=document.getElementById('cTxt_'+videoId).value.trim();
-  if(!nom){showToast('Mets ton nom');return}
-  if(!txt){showToast('Écris ton commentaire');return}
-  await envoyerVersGoogle({action:'commentaire',videoId:videoId,nom:nom,commentaire:txt});
-  showToast('✅ Commentaire envoyé ! Il va apparaître pour tout le monde.');
-  document.getElementById('cTxt_'+videoId).value='';
-  setTimeout(chargerDepuisGoogle,1000);
-}
-function renderCommentaires(videoId){
-  let list=getCommentaires(videoId);
-  let html='<div class="comment-box"><h4>💬 Commentaires ('+list.length+')</h4>';
-  if(list.length===0) html+='<p style="color:#999;font-size:13px">Pas encore de commentaire. Sois le premier !</p>';
-  else html+=list.slice().reverse().map(c=>`<div class="comment-item"><b>${c.nom||c[1]||'Anonyme'}</b> <small>• ${c.date||c[3]||''}</small><br>${c.commentaire||c[2]||c.txt||''}</div>`).join('');
-  html+=`<input id="cNom_${videoId}" placeholder="Ton nom"><textarea id="cTxt_${videoId}" placeholder="Écris ton commentaire ici..." style="height:50px"></textarea><button class="btn-pub" onclick="envoyerCommentaire('${videoId}')">💬 Envoyer mon commentaire</button></div>`;
-  return html;
-}
-async function publierShorts(){
-  let titre=document.getElementById('titreShorts').value.trim();
-  let chaine=document.getElementById('chaineShorts').value.trim()||'FREDDY-V';
-  let url=document.getElementById('urlShorts').value.trim();
-  let desc=document.getElementById('descShorts').value.trim();
-  if(!titre){showToast('Mets le titre du Shorts');return}
-  if(!url){showToast('Mets le lien Shorts');return}
-  let id=getYoutubeId(url); if(!id){showToast('Lien YouTube invalide');return}
-  document.getElementById('msgShorts').textContent='⏳ Envoi...';
-  await envoyerVersGoogle({action:'publier',type:'Shorts',titre:titre,chaine:chaine,url:url,videoId:id,description:desc,categorie:'Shorts'});
-  document.getElementById('msgShorts').textContent='✅ Shorts publié ! Il va apparaître pour tout le monde.';
-  showToast('✅ Shorts publié !');
-  document.getElementById('titreShorts').value=''; document.getElementById('urlShorts').value=''; document.getElementById('descShorts').value='';
-  setTimeout(chargerDepuisGoogle,1500);
-}
-async function publierNormale(){
-  let titre=document.getElementById('titreNormale').value.trim();
-  let chaine=document.getElementById('chaineNormale').value.trim()||'FREDDY-V';
-  let cat=document.getElementById('categorieNormale').value;
-  let url=document.getElementById('urlNormale').value.trim();
-  let desc=document.getElementById('descNormale').value.trim();
-  if(!titre){showToast('Mets le titre');return}
-  if(!url){showToast('Mets le lien');return}
-  let id=getYoutubeId(url); if(!id){showToast('Lien YouTube invalide');return}
-  document.getElementById('msgNormale').textContent='⏳ Envoi...';
-  await envoyerVersGoogle({action:'publier',type:'Normale',titre:titre,chaine:chaine,url:url,videoId:id,description:desc,categorie:cat});
-  document.getElementById('msgNormale').textContent='✅ Vidéo publiée !';
-  showToast('✅ Vidéo publiée !');
-  document.getElementById('titreNormale').value=''; document.getElementById('urlNormale').value=''; document.getElementById('descNormale').value='';
-  setTimeout(chargerDepuisGoogle,1500);
-}
-function filtrer(){ rechercheTxt=document.getElementById('recherche').value.toLowerCase(); afficher(); }
-function filtrerCategorie(cat,btn){ categorieChoisie=cat; document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); if(btn) btn.classList.add('active'); afficher(); }
-function filtrerVideos(list){
-  return list.filter(v=>{
-    let t=(v.titre||v[1]||'').toLowerCase();
-    let c=(v.chaine||v[2]||'').toLowerCase();
-    if(rechercheTxt && !t.includes(rechercheTxt) && !c.includes(rechercheTxt)) return false;
-    if(categorieChoisie!=='Tout' && (v.categorie||v[6]||'Tout')!==categorieChoisie && (v.type||'')!=='Shorts') return false;
-    return true;
-  });
-}
-// VIDEO JOUE DANS TON SITE - PAS DE LIEN YOUTUBE
-function carteNormale(v){
-  let id=v.videoId||v[0]||getYoutubeId(v.url||v[3]);
-  let titre=v.titre||v[1]||'Sans titre';
-  let chaine=v.chaine||v[2]||'FREDDY-V';
-  let cat=v.categorie||v[6]||'Tout';
-  let vues=getVues(id);
-  return `<div class="video-card" data-video-id="${id}">
-  <iframe src="https://www.youtube.com/embed/${id}?rel=0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="width:100%;height:220px;border:none;display:block;background:#000;border-radius:10px"></iframe>
-  <div class="yt-title">${titre}</div><p class="yt-meta">Par <b>${chaine}</b> • ${cat}</p>
-  <div class="views-line">👁️ ${vues} vues réelles • ❤️ ${getLikes(id)} likes</div>
-  <div><button class="like-btn" onclick="toggleLike('${id}')">❤️ J'aime (${getLikes(id)})</button><button class="like-btn" onclick="compterVue('${id}')">👁️ J'ai regardé</button></div>
-  ${renderCommentaires(id)}</div>`;
-}
-function carteShorts(v,i){
-  let id=v.videoId||v[0]||getYoutubeId(v.url||v[3]);
-  let titre=v.titre||v[1]||'Sans titre';
-  let chaine=v.chaine||v[2]||'FREDDY-V';
-  return `<div class="shorts-card" data-video-id="${id}" onclick="ouvrirTikTok(${i})">
-  <iframe src="https://www.youtube.com/embed/${id}?rel=0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" style="width:100%;height:300px;border:none;display:block;background:#000;pointer-events:none"></iframe>
-  <p><b>${titre}</b><br><small>${chaine} • 👁️ ${getVues(id)} vues • ▶️ Appuie pour voir en plein écran</small></p></div>`;
-}
-function ouvrirTikTok(startIndex){
-  let feed=document.getElementById('tiktokFeed');
-  feed.innerHTML=shortsTikTokList.map((v,i)=>{
-    let id=v.videoId||v[0]||getYoutubeId(v.url||v[3]);
-    let titre=v.titre||v[1]||'Sans titre';
-    let chaine=v.chaine||v[2]||'FREDDY-V';
-    return `<div class="tiktok-item">
-      <iframe src="https://www.youtube.com/embed/${id}?rel=0&autoplay=${i===startIndex?1:0}&playsinline=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="width:100%;height:100%;border:none;background:#000"></iframe>
-      <div class="tiktok-info" style="pointer-events:none"><b>@${chaine}</b><br>${titre}<br><small>👁️ ${getVues(id)} vues réelles</small></div>
-      <div class="tiktok-actions">
-        <div class="tiktok-act" onclick="toggleLike('${id}')">❤️</div>
-        <div class="tiktok-act" onclick="compterVue('${id}')">👁️</div>
-      </div>
-    </div>`;
-  }).join('');
-  document.getElementById('tiktokOverlay').style.display='block';
-  document.body.style.overflow='hidden';
-  setTimeout(()=>{ feed.children[startIndex]?.scrollIntoView(); },100);
-  compterVueReelle(shortsTikTokList[startIndex]?.videoId||shortsTikTokList[startIndex]?.[0]||'');
-  feed.onscroll=()=>{
-    let items=document.querySelectorAll('.tiktok-item');
-    items.forEach((item,idx)=>{
-      let rect=item.getBoundingClientRect();
-      if(rect.top>=-100 && rect.top<100){
-        let vv=shortsTikTokList[idx];
-        if(vv) compterVueReelle(vv.videoId||vv[0]);
-      }
-    });
-  };
-}
-function fermerTikTok(){
-  document.getElementById('tiktokOverlay').style.display='none';
-  document.getElementById('tiktokFeed').innerHTML='';
-  document.body.style.overflow='';
-}
-let observerVues = new IntersectionObserver((entries)=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting){
-      let id=e.target.getAttribute('data-video-id');
-      if(id) compterVueReelle(id);
-    }
-  });
-},{threshold:0.6});
-function activerCompteurVues(){
-  document.querySelectorAll('[data-video-id]').forEach(el=>{ observerVues.observe(el); });
+  }catch(e){ document.getElementById('liste').innerHTML="<p>Erreur connexion Google. Vérifie que le déploiement est sur 'Tout le monde'.</p>"; }
 }
 function afficher(){
-  let shorts=toutesVideos.filter(v=>(v.type||v[5]||'')==='Shorts');
-  let normales=toutesVideos.filter(v=>(v.type||v[5]||'')!=='Shorts');
-  let shortsF=filtrerVideos(shorts);
-  let normalesF=filtrerVideos(normales);
-  document.getElementById('popTotal').textContent='👥 '+toutesVideos.length+' vidéos';
-  document.getElementById('statsShortsNormales').textContent='📱 Shorts : '+shorts.length+' | 🎬 Normales : '+normales.length;
-  document.getElementById('statsVuesTotales').textContent='👁️ Total vues réelles : '+totalVues();
-  document.getElementById('countShorts').textContent='('+shortsF.length+')';
-  document.getElementById('countNormales').textContent='('+normalesF.length+')';
-  shortsTikTokList=shortsF;
-  document.getElementById('listeShorts').innerHTML=shortsF.length?'<div class="shorts-row">'+shortsF.map(carteShorts).join('')+'</div>':'<p style="padding:10px">Pas encore de Shorts. Publie le premier !</p>';
-  document.getElementById('listeNormales').innerHTML=normalesF.length?normalesF.map(carteNormale).join(''):'<p>Pas encore de vidéo normale. Publie la première !</p>';
-  setTimeout(activerCompteurVues,500);
+  let q=(document.getElementById('recherche').value||"").toLowerCase();
+  let list=toutesVideos.filter(v=>(v.titre+v.chaine).toLowerCase().includes(q));
+  document.getElementById('popTotal').textContent="👥 "+list.length+" vidéos";
+  let box=document.getElementById('liste'); box.innerHTML="";
+  if(!list.length){ box.innerHTML="<p style='text-align:center'>Aucune vidéo. Sois le premier ! Colle ton lien en haut.</p>"; return; }
+  list.slice().reverse().forEach(v=>box.appendChild(creerCarte(v)));
 }
-chargerDepuisGoogle();
-setInterval(chargerDepuisGoogle,30000);
+
+// ===== 6. AUTOMATIQUE - @freddyvmondial =====
+async function chargerAuto(){
+  let box=document.getElementById('listeAuto');
+  try{
+    let r1=await fetch('https://yt.lemnoslife.com/channels?handle=@freddyvmondial');
+    let j1=await r1.json(); let channelId=j1.items[0].id;
+    let r2=await fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.youtube.com/feeds/videos.xml?channel_id='+channelId);
+    let j2=await r2.json();
+    box.innerHTML=j2.items.slice(0,3).map(v=>{
+      let vid=v.link.split('v=')[1];
+      return `<div class="video-card"><div class="thumb-box" onclick="jouerYoutube(this,'${vid}')"><img src="https://i.ytimg.com/vi/${vid}/hqdefault.jpg"><div class="play-big">▶️</div></div><iframe allow="autoplay; encrypted-media" allowfullscreen></iframe><div class="yt-title">${v.title}</div><p class="yt-meta">Par <b>FREDDY-V Mondial</b> • Automatique</p><a class="watch-btn" href="https://www.youtube.com/watch?v=${vid}" target="_blank">▶️ Regarder sur YouTube</a></div>`;
+    }).join('');
+  }catch(e){ box.innerHTML=`<p>Chaîne automatique - <a style="color:#ffcc00" href="https://www.youtube.com/@freddyvmondial" target="_blank">Voir sur YouTube</a></p>`; }
+}
+chargerAuto(); chargerDepuisGoogle();
 </script>
 </body>
 </html>
