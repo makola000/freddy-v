@@ -96,14 +96,12 @@ input{width:100%;padding:13px;margin:8px 0;border-radius:8px;border:none;font-si
 </div>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbykXDhUNkPGZe3gT63ks411QwhymzzHOfas7K8bGR7Qg1O3SFsk2Fwmh9GA6PN1d8DH9w/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwrIUEdD9UYmm3z7t2hL-zFcs5ED_SE1V9SWmf6xQqt502nn_V5tnpfGhV2fIdXqdoQBg/exec";
 let toutesVideos = [];
 let videoIdActuel = "";
 let typeActuel = "youtube";
 let isShortActuel = false;
 function showToast(t){let e=document.getElementById('toast');e.textContent=t;e.style.display='block';setTimeout(()=>e.style.display='none',3000)}
-
-// ===== PREND JUSTE LE LIEN YOUTUBE, NETTOIE ?si= =====
 function getYoutubeId(url){
   if(!url) return null; url=url.trim();
   let m=url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|shorts\/|embed\/|live\/|v\/)|v=)([a-zA-Z0-9_-]{11})/);
@@ -130,7 +128,6 @@ function partager(id, titre, lien){ let url = lien.includes('http') ? lien : 'ht
 function telecharger(id, type, lien){ window.open(lien, '_blank'); showToast('⬇️ Pour télécharger, appuie sur Partager > Télécharger là-bas'); }
 function toggleComment(id){ let box=document.getElementById('cmt-'+id); if(box) box.style.display = box.style.display==='none' ? 'block' : 'none'; }
 function envoyerComment(id){ let inp=document.getElementById('cmt-in-'+id); let txt=inp.value.trim(); if(!txt) return; let list=document.getElementById('cmt-list-'+id); let div=document.createElement('div'); div.className='comment-item'; div.textContent='👤 Toi : '+txt; list.appendChild(div); inp.value=''; let old = JSON.parse(localStorage.getItem(getKey(id,'comments'))||'[]'); old.push(txt); localStorage.setItem(getKey(id,'comments'), JSON.stringify(old)); }
-
 function verifierLienFacile(){
   let lien=document.getElementById('lienFacile').value.trim();
   let msg=document.getElementById('msgFacile'); let prev=document.getElementById('previewFacile'); let btn=document.getElementById('btnFacile');
@@ -163,10 +160,6 @@ async function publierFacile(){
   }catch(e){ alert("Erreur, réessaie."); }
   btn.textContent="📤 PUBLIER SUR FREDDY-V"; btn.disabled=false;
 }
-
-// ===== LECTURE DANS LE SITE - C'EST ICI LE SECRET =====
-// Quand tu cliques sur ▶️, on cache la photo, on montre la vidéo DANS LA MÊME CARTE.
-// La vidéo ne sort jamais de FREDDY-V.
 function jouerShortDansSite(id, type){
   addView(id);
   let box = document.getElementById('shortbox-'+id);
@@ -190,7 +183,6 @@ function jouerNormalDansSite(thumbBox, id){
   ifr.style.display='block';
   ifr.src="https://www.youtube.com/embed/"+id+"?autoplay=1&rel=0";
 }
-
 function creerShort(v){
   let lienOriginal=v.url||v.lien||""; let type=v.plateforme|| (lienOriginal.includes('tiktok')?'tiktok':'youtube');
   let id=v.videoId||getYoutubeId(lienOriginal)||getTiktokId(lienOriginal)||"";
