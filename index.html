@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FREDDY-V Mondial - Facile</title>
+<title>FREDDY-V Mondial</title>
 <style>
 *{box-sizing:border-box} body{font-family:Arial,sans-serif;background:#0f0f0f;color:#fff;margin:0;padding:0}
 .topbar{background:#000;padding:15px;display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;z-index:10}
@@ -18,17 +18,16 @@
 .pop-box{background:linear-gradient(90deg,#ff0000,#ffcc00);color:#000;padding:18px;border-radius:15px;text-align:center;margin-bottom:15px}
 .pop-box .big{font-size:32px;font-weight:900}.pop-box .small{font-size:14px;font-weight:bold}
 .card{background:#1e1e1e;padding:15px;border-radius:12px;margin-bottom:15px}
-input,textarea{width:100%;padding:13px;margin:8px 0;border-radius:8px;border:none;font-size:16px}
+input{width:100%;padding:13px;margin:8px 0;border-radius:8px;border:none;font-size:16px}
 .btn-pub{background:#ff0000;color:#fff;border:none;padding:14px;border-radius:8px;font-weight:900;cursor:pointer;width:100%;font-size:18px}
 .section-title{background:#000;border-left:5px solid #ff0000;padding:12px 15px;border-radius:10px;margin:22px 0 15px;font-size:20px;font-weight:900}
-/* ===== SHORTS VERTICAL COMME TIKTOK ===== */
 .shorts-wrap{display:flex;gap:12px;overflow-x:auto;padding-bottom:10px;scroll-snap-type:x mandatory}
-.short-card{min-width:300px;max-width:300px;background:#000;border-radius:16px;overflow:hidden;scroll-snap-align:start;border:1px solid #333;position:relative;flex-shrink:0}
-.short-video{position:relative;height:480px;background:#000;cursor:pointer}
+.short-card{min-width:300px;max-width:300px;background:#000;border-radius:16px;overflow:hidden;scroll-snap-align:start;border:1px solid #333;flex-shrink:0}
+.short-video{position:relative;height:480px;background:#000;overflow:hidden}
 .short-video img{width:100%;height:100%;object-fit:cover;display:block}
-.short-video iframe{width:100%;height:100%;border:none;display:none;background:#000}
-.short-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:70px;text-shadow:0 0 20px #000}
-.short-actions{position:absolute;right:8px;bottom:100px;display:flex;flex-direction:column;gap:10px;z-index:5}
+.short-video iframe{width:100%;height:480px;border:none;background:#000;display:none}
+.short-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:80px;text-shadow:0 0 20px #000;cursor:pointer;z-index:3}
+.short-actions{position:absolute;right:8px;bottom:100px;display:flex;flex-direction:column;gap:10px;z-index:10}
 .act-btn{background:rgba(0,0,0,.65);border:1px solid #fff;color:#fff;width:48px;height:48px;border-radius:50%;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .act-count{font-size:11px;text-align:center;margin-top:-8px;color:#fff;text-shadow:0 0 5px #000}
 .short-info{padding:10px}
@@ -37,18 +36,16 @@ input,textarea{width:100%;padding:13px;margin:8px 0;border-radius:8px;border:non
 .short-bottom{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
 .mini-btn{flex:1;background:#fff;color:#000;border:none;padding:8px;border-radius:20px;font-weight:900;font-size:12px;cursor:pointer}
 .mini-btn-yellow{background:#ffcc00}
-/* ===== NORMAL HORIZONTAL ===== */
 .video-card{background:#1e1e1e;padding:12px;border-radius:12px;margin-bottom:22px;overflow:hidden}
 .thumb-box{position:relative;cursor:pointer;border-radius:10px;overflow:hidden;background:#000}
 .thumb-box img{width:100%;height:220px;object-fit:cover;display:block}
+.thumb-box iframe{width:100%;height:220px;border:none;background:#000;display:none}
 .play-big{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:70px;text-shadow:0 0 20px #000}
-.video-card iframe{width:100%;height:220px;border:none;display:none;background:#000;border-radius:10px}
 .yt-title{font-size:19px;font-weight:900;margin:10px 0 4px}
 .yt-meta{font-size:14px;color:#ccc;margin:0 0 10px}
 .watch-btn{display:block;text-align:center;background:#fff;color:#000;padding:11px;border-radius:8px;text-decoration:none;font-weight:900;margin-top:8px}
-.watch-btn-yellow{background:#ffcc00}
 .badge{font-size:11px;font-weight:900;padding:4px 8px;border-radius:10px;color:#fff}
-.badge-yt{background:#ff0000}.badge-tk{background:#000;border:1px solid #fff}.badge-short{background:#ff00aa}
+.badge-yt{background:#ff0000}.badge-short{background:#ff00aa}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#fff;color:#000;padding:12px 20px;border-radius:25px;font-weight:900;z-index:9999;display:none;max-width:90%;text-align:center}
 .comment-box{display:none;margin-top:10px;background:#000;padding:10px;border-radius:10px}
 .comment-item{background:#222;padding:8px;border-radius:8px;margin-bottom:6px;font-size:14px}
@@ -64,32 +61,32 @@ input,textarea{width:100%;padding:13px;margin:8px 0;border-radius:8px;border:non
 <div class="hero">
   <h2>Tout le monde publie, tout le monde crée</h2>
   <p>Par Makola Kibwe — Jésus revient</p>
-  <p style="font-style:normal;font-weight:bold;color:#ffcc00">✅ Colle juste ton lien, même avec ?si=, c'est tout. Le code nettoie tout seul.</p>
+  <p style="font-style:normal;font-weight:bold;color:#ffcc00">✅ Tu colles juste ton lien YouTube, la vidéo joue DANS FREDDY-V. Pas besoin d'aller sur YouTube.</p>
   <button class="btn btn-white" onclick="document.getElementById('publier').scrollIntoView({behavior:'smooth'})">+ Publier une vidéo</button>
 </div>
 
 <div class="container">
-  <div class="pop-box"><div class="big" id="popTotal">👥 0 vidéos</div><div class="small">POPULATION FREDDY-V • SHORTS VERTICAL + NORMAL • TOUT LE MONDE VOIT LA MÊME CHOSE</div></div>
+  <div class="pop-box"><div class="big" id="popTotal">👥 0 vidéos</div><div class="small">POPULATION FREDDY-V • TOUT SE LIT DANS FREDDY-V</div></div>
 
   <div class="card" id="publier">
-    <h2>📤 Publier une vidéo - FACILE</h2>
-    <p style="color:#ffcc00;font-weight:bold">Tu colles ton lien, tu publies. Le site sait tout seul si c'est Short ou Normal.</p>
+    <h2>📤 Publier une vidéo - TRÈS FACILE</h2>
+    <p style="color:#00ff88;font-weight:bold">1. Colle ton lien YouTube &nbsp; 2. Écris ton titre &nbsp; 3. Publie. Ça joue dans FREDDY-V.</p>
     <input id="titre" placeholder="Titre : Ex: Goma aujourd'hui">
     <input id="chaine" placeholder="Ton nom : Ex: Makola">
-    <input id="lienFacile" placeholder="Colle ton lien YouTube OU TikTok ici 👇" oninput="verifierLienFacile()">
+    <input id="lienFacile" placeholder="Colle ton lien YouTube ici 👇" oninput="verifierLienFacile()">
     <p id="msgFacile" style="color:#ffcc00;text-align:center">Colle ton lien pour voir la photo.</p>
     <div id="previewFacile"></div>
     <button class="btn-pub" id="btnFacile" onclick="publierFacile()" disabled>📤 PUBLIER SUR FREDDY-V</button>
-    <p style="font-size:13px;color:#aaa;text-align:center">Shorts = lien avec /shorts/ ou TikTok = vertical automatique<br>Normal = lien watch?v= = horizontal automatique</p>
+    <p style="font-size:13px;color:#aaa;text-align:center">Même avec ?si=, le code nettoie tout seul. Pas d'intégration à faire.</p>
   </div>
 
   <div class="section-title">🤖 VIDÉOS AUTOMATIQUES - @freddyvmondial</div>
   <div id="listeAuto"><p>Chargement automatique...</p></div>
 
-  <div class="section-title">📱 SHORTS - Vertical comme TikTok - Glisse 👉</div>
+  <div class="section-title">📱 SHORTS - Vertical - Joue dans FREDDY-V 👉</div>
   <div class="shorts-wrap" id="listeShorts"><p>Pas encore de Shorts. Sois le premier !</p></div>
 
-  <div class="section-title">🎬 VIDÉOS NORMALES - Horizontal</div>
+  <div class="section-title">🎬 VIDÉOS NORMALES - Joue dans FREDDY-V</div>
   <div id="liste"><p>Chargement...</p></div>
 </div>
 
@@ -102,12 +99,11 @@ input,textarea{width:100%;padding:13px;margin:8px 0;border-radius:8px;border:non
 const API_URL = "https://script.google.com/macros/s/AKfycbykXDhUNkPGZe3gT63ks411QwhymzzHOfas7K8bGR7Qg1O3SFsk2Fwmh9GA6PN1d8DH9w/exec";
 let toutesVideos = [];
 let videoIdActuel = "";
-let typeActuel = "";
+let typeActuel = "youtube";
 let isShortActuel = false;
-
 function showToast(t){let e=document.getElementById('toast');e.textContent=t;e.style.display='block';setTimeout(()=>e.style.display='none',3000)}
 
-// ===== NETTOYAGE ?si= =====
+// ===== PREND JUSTE LE LIEN YOUTUBE, NETTOIE ?si= =====
 function getYoutubeId(url){
   if(!url) return null; url=url.trim();
   let m=url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|shorts\/|embed\/|live\/|v\/)|v=)([a-zA-Z0-9_-]{11})/);
@@ -125,46 +121,16 @@ function isShortLink(url, typeCol){
   if(url.includes('tiktok.com')) return true;
   return false;
 }
-
-// ===== VUES / LIKE / ENREGISTRER - SAUVEGARDÉ DANS LE TÉLÉPHONE =====
 function getKey(id, kind){ return 'freddyv_'+kind+'_'+id; }
-function getViews(id){ let v=parseInt(localStorage.getItem(getKey(id,'views'))||'0'); return v; }
+function getViews(id){ return parseInt(localStorage.getItem(getKey(id,'views'))||'0'); }
 function addView(id){ let v=getViews(id)+1; localStorage.setItem(getKey(id,'views'), v); return v; }
-function toggleLike(id, btn){ let liked = localStorage.getItem(getKey(id,'like'))==='1'; if(liked){ localStorage.removeItem(getKey(id,'like')); btn.textContent='🤍'; } else { localStorage.setItem(getKey(id,'like'),'1'); btn.textContent='❤️'; showToast('❤️ Tu as aimé !'); } }
-function toggleSave(id, btn){ let saved = localStorage.getItem(getKey(id,'save'))==='1'; if(saved){ localStorage.removeItem(getKey(id,'save')); btn.textContent='🔖'; showToast('Enregistrement retiré'); } else { localStorage.setItem(getKey(id,'save'),'1'); btn.textContent='✅'; showToast('🔖 Enregistré ! Tu le retrouves ici.'); } }
-function partager(id, titre, lien){
-  let url = lien.includes('http') ? lien : 'https://www.youtube.com/watch?v='+id;
-  let text = 'Regarde sur FREDDY-V Mondial : '+titre;
-  if(navigator.share){ navigator.share({title:titre, text:text, url:url}); }
-  else { navigator.clipboard.writeText(url); showToast('🔗 Lien copié ! Envoie-le à tes amis.'); }
-}
-function telecharger(id, type){
-  // Téléchargement légal : on ouvre la page officielle YouTube / TikTok où l'utilisateur peut télécharger avec l'appli
-  // YouTube ne permet pas de télécharger une vidéo YouTube directement dans un autre site, sinon il bloque FREDDY-V.
-  // Donc on ouvre YouTube / TikTok, l'utilisateur appuie sur "Télécharger" là-bas.
-  if(type==='tiktok'){
-    window.open('https://www.tiktok.com/@x/video/'+id, '_blank');
-    showToast('⬇️ TikTok ouvert : appuie sur Partager > Enregistrer la vidéo');
-  } else {
-    window.open('https://www.youtube.com/watch?v='+id, '_blank');
-    showToast('⬇️ YouTube ouvert : appuie sur Partager > Télécharger');
-  }
-}
-function toggleComment(id){
-  let box=document.getElementById('cmt-'+id);
-  if(box) box.style.display = box.style.display==='none' ? 'block' : 'none';
-}
-function envoyerComment(id){
-  let inp=document.getElementById('cmt-in-'+id);
-  let txt=inp.value.trim(); if(!txt) return;
-  let list=document.getElementById('cmt-list-'+id);
-  let div=document.createElement('div'); div.className='comment-item'; div.textContent='👤 Toi : '+txt;
-  list.appendChild(div); inp.value='';
-  // Sauvegarde commentaire dans téléphone
-  let old = JSON.parse(localStorage.getItem(getKey(id,'comments'))||'[]'); old.push(txt); localStorage.setItem(getKey(id,'comments'), JSON.stringify(old));
-}
+function toggleLike(id, btn){ let l = localStorage.getItem(getKey(id,'like'))==='1'; if(l){ localStorage.removeItem(getKey(id,'like')); btn.textContent='🤍'; } else { localStorage.setItem(getKey(id,'like'),'1'); btn.textContent='❤️'; showToast('❤️ Tu as aimé !'); } }
+function toggleSave(id, btn){ let s = localStorage.getItem(getKey(id,'save'))==='1'; if(s){ localStorage.removeItem(getKey(id,'save')); btn.textContent='🔖'; } else { localStorage.setItem(getKey(id,'save'),'1'); btn.textContent='✅'; showToast('🔖 Enregistré !'); } }
+function partager(id, titre, lien){ let url = lien.includes('http') ? lien : 'https://www.youtube.com/watch?v='+id; if(navigator.share){ navigator.share({title:titre, text:'Regarde sur FREDDY-V Mondial : '+titre, url:url}); } else { navigator.clipboard.writeText(url); showToast('🔗 Lien copié !'); } }
+function telecharger(id, type, lien){ window.open(lien, '_blank'); showToast('⬇️ Pour télécharger, appuie sur Partager > Télécharger là-bas'); }
+function toggleComment(id){ let box=document.getElementById('cmt-'+id); if(box) box.style.display = box.style.display==='none' ? 'block' : 'none'; }
+function envoyerComment(id){ let inp=document.getElementById('cmt-in-'+id); let txt=inp.value.trim(); if(!txt) return; let list=document.getElementById('cmt-list-'+id); let div=document.createElement('div'); div.className='comment-item'; div.textContent='👤 Toi : '+txt; list.appendChild(div); inp.value=''; let old = JSON.parse(localStorage.getItem(getKey(id,'comments'))||'[]'); old.push(txt); localStorage.setItem(getKey(id,'comments'), JSON.stringify(old)); }
 
-// ===== VERIFIER LIEN =====
 function verifierLienFacile(){
   let lien=document.getElementById('lienFacile').value.trim();
   let msg=document.getElementById('msgFacile'); let prev=document.getElementById('previewFacile'); let btn=document.getElementById('btnFacile');
@@ -174,66 +140,91 @@ function verifierLienFacile(){
     let id=getYoutubeId(lien); if(!id){ msg.textContent="Lien YouTube invalide."; prev.innerHTML=""; btn.disabled=true; return; }
     videoIdActuel=id; typeActuel='youtube'; isShortActuel = lien.includes('/shorts/');
     prev.innerHTML=`<img src="https://i.ytimg.com/vi/${id}/hqdefault.jpg" onerror="this.src='https://i.ytimg.com/vi/${id}/mqdefault.jpg'" style="width:100%;border-radius:10px">`;
-    msg.innerHTML = isShortActuel ? `<span style="color:#ff00aa">✅ SHORT détecté ! Il sera VERTICAL comme TikTok. Tu peux publier.</span>` : `<span style="color:#00ff88">✅ Vidéo NORMALE détectée ! Elle sera HORIZONTALE. Tu peux publier.</span>`;
+    msg.innerHTML = isShortActuel ? `<span style="color:#ff00aa">✅ SHORT détecté ! Vertical. Il jouera dans FREDDY-V.</span>` : `<span style="color:#00ff88">✅ Vidéo NORMALE détectée ! Elle jouera dans FREDDY-V.</span>`;
     btn.disabled=false;
   } else {
     let id=getTiktokId(lien); videoIdActuel=id; typeActuel='tiktok'; isShortActuel=true;
     prev.innerHTML=`<div style="background:#000;padding:20px;border-radius:10px;text-align:center;font-size:40px">🎵 TikTok détecté ! Vertical !</div>`;
-    msg.innerHTML=`<span style="color:#ff00aa">✅ TikTok = SHORT VERTICAL. Tu peux publier.</span>`; btn.disabled=false;
+    msg.innerHTML=`<span style="color:#ff00aa">✅ TikTok = SHORT VERTICAL. Il jouera dans FREDDY-V.</span>`; btn.disabled=false;
   }
 }
-
-// ===== PUBLIER =====
 async function publierFacile(){
   let titre=document.getElementById('titre').value.trim(); let chaine=document.getElementById('chaine').value.trim(); let lien=document.getElementById('lienFacile').value.trim();
   if(!titre||!chaine||!videoIdActuel){ alert("Remplis Titre, Nom et Lien"); return; }
   let btn=document.getElementById('btnFacile'); btn.textContent="Publication..."; btn.disabled=true;
   let lienPropre = typeActuel==='tiktok' ? lien : getCleanYoutubeLink(videoIdActuel);
-  // On garde le /shorts/ dans le type pour séparer
   let typeEnvoi = isShortActuel ? 'Short' : 'Normale';
   if(typeActuel==='tiktok') typeEnvoi='TikTok';
   try{
     await fetch(API_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'publier',type:typeEnvoi,titre,chaine,url:lienPropre,lien:lienPropre,videoId:videoIdActuel,plateforme:typeActuel,isShort:isShortActuel})});
-    showToast("✅ Publié !");
+    showToast("✅ Publié ! Ça joue dans FREDDY-V.");
     document.getElementById('titre').value=""; document.getElementById('lienFacile').value=""; document.getElementById('previewFacile').innerHTML=""; document.getElementById('msgFacile').textContent="Colle ton lien pour voir la photo.";
     setTimeout(chargerDepuisGoogle,1200);
   }catch(e){ alert("Erreur, réessaie."); }
   btn.textContent="📤 PUBLIER SUR FREDDY-V"; btn.disabled=false;
 }
 
-// ===== CREER CARTE SHORT VERTICAL =====
+// ===== LECTURE DANS LE SITE - C'EST ICI LE SECRET =====
+// Quand tu cliques sur ▶️, on cache la photo, on montre la vidéo DANS LA MÊME CARTE.
+// La vidéo ne sort jamais de FREDDY-V.
+function jouerShortDansSite(id, type){
+  addView(id);
+  let box = document.getElementById('shortbox-'+id);
+  if(!box) return;
+  let thumb = box.querySelector('.short-thumb');
+  let playBtn = box.querySelector('.short-play');
+  let ifr = box.querySelector('iframe');
+  if(thumb) thumb.style.display='none';
+  if(playBtn) playBtn.style.display='none';
+  ifr.style.display='block';
+  if(type==='tiktok') ifr.src="https://www.tiktok.com/embed/v2/"+id+"?autoplay=1";
+  else ifr.src="https://www.youtube.com/embed/"+id+"?autoplay=1&rel=0";
+}
+function jouerNormalDansSite(thumbBox, id){
+  addView(id);
+  let thumbImg = thumbBox.querySelector('img');
+  let playBtn = thumbBox.querySelector('.play-big');
+  let ifr = thumbBox.querySelector('iframe');
+  if(thumbImg) thumbImg.style.display='none';
+  if(playBtn) playBtn.style.display='none';
+  ifr.style.display='block';
+  ifr.src="https://www.youtube.com/embed/"+id+"?autoplay=1&rel=0";
+}
+
 function creerShort(v){
   let lienOriginal=v.url||v.lien||""; let type=v.plateforme|| (lienOriginal.includes('tiktok')?'tiktok':'youtube');
   let id=v.videoId||getYoutubeId(lienOriginal)||getTiktokId(lienOriginal)||"";
   if(id && id.includes('?')) id=getYoutubeId(id)||id.split('?')[0];
   if(id && id.includes('&')) id=id.split('&')[0];
-  let views = getViews(id) + 125; // base pour que ça ne soit pas 0
+  let playUrl = type==='tiktok' ? lienOriginal : "https://www.youtube.com/watch?v="+id;
+  let views = getViews(id) + 125;
   let liked = localStorage.getItem(getKey(id,'like'))==='1';
   let saved = localStorage.getItem(getKey(id,'save'))==='1';
   let comments = JSON.parse(localStorage.getItem(getKey(id,'comments'))||'[]');
   let div=document.createElement('div'); div.className='short-card';
   let thumb = type==='tiktok' ? '' : `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
   div.innerHTML=`
-    <div class="short-video" onclick="jouerShort(this,'${id}','${type}')">
-      ${type==='tiktok' ? `<div style="width:100%;height:100%;background:#111;display:flex;align-items:center;justify-content:center;font-size:80px">🎵</div>` : `<img src="${thumb}" onerror="this.src='https://i.ytimg.com/vi/${id}/mqdefault.jpg'">`}
-      <div class="short-play">▶️</div>
+    <div class="short-video" id="shortbox-${id}">
+      ${type==='tiktok' ? `<div class="short-thumb" style="width:100%;height:100%;background:#111;display:flex;align-items:center;justify-content:center;font-size:80px">🎵</div>` : `<img class="short-thumb" src="${thumb}" onerror="this.src='https://i.ytimg.com/vi/${id}/mqdefault.jpg'">`}
+      <div class="short-play" onclick="jouerShortDansSite('${id}','${type}')">▶️</div>
+      <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
       <div class="short-actions" onclick="event.stopPropagation()">
         <button class="act-btn" onclick="toggleLike('${id}',this)">${liked?'❤️':'🤍'}</button>
         <button class="act-btn" onclick="toggleComment('${id}')">💬</button>
         <div class="act-count">${comments.length} com.</div>
-        <button class="act-btn" onclick="partager('${id}','${(v.titre||'').replace(/'/g,'')}','${lienOriginal}')">↗️</button>
+        <button class="act-btn" onclick="partager('${id}','${(v.titre||'').replace(/'/g,'')}','${playUrl}')">↗️</button>
         <button class="act-btn" onclick="toggleSave('${id}',this)">${saved?'✅':'🔖'}</button>
-        <button class="act-btn" onclick="telecharger('${id}','${type}')">⬇️</button>
+        <button class="act-btn" onclick="telecharger('${id}','${type}','${playUrl}')">⬇️</button>
       </div>
-      <div style="position:absolute;left:10px;bottom:10px;background:rgba(0,0,0,.7);padding:4px 8px;border-radius:20px;font-size:12px">👁️ ${views} vues</div>
+      <div style="position:absolute;left:10px;bottom:10px;background:rgba(0,0,0,.7);padding:4px 8px;border-radius:20px;font-size:12px;z-index:5">👁️ ${views} vues • Joue dans FREDDY-V</div>
     </div>
-    <iframe style="display:none"></iframe>
     <div class="short-info">
       <div class="short-title">${v.titre||'Sans titre'} <span class="badge badge-short">📱 SHORT</span></div>
       <div class="short-meta">👤 ${v.chaine||''} • 👁️ ${views} vues</div>
       <div class="short-bottom">
-        <button class="mini-btn" onclick="partager('${id}','${(v.titre||'').replace(/'/g,'')}','${lienOriginal}')">↗️ Partager</button>
-        <button class="mini-btn mini-btn-yellow" onclick="telecharger('${id}','${type}')">⬇️ Télécharger</button>
+        <button class="mini-btn" onclick="partager('${id}','${(v.titre||'').replace(/'/g,'')}','${playUrl}')">↗️ Partager</button>
+        <button class="mini-btn mini-btn-yellow" onclick="jouerShortDansSite('${id}','${type}')">▶️ Regarder ici</button>
+        <button class="mini-btn mini-btn-yellow" onclick="telecharger('${id}','${type}','${playUrl}')">⬇️ Télécharger</button>
       </div>
       <div class="comment-box" id="cmt-${id}">
         <div id="cmt-list-${id}">${comments.map(c=>`<div class="comment-item">👤 Toi : ${c}</div>`).join('')}</div>
@@ -243,52 +234,33 @@ function creerShort(v){
     </div>`;
   return div;
 }
-function jouerShort(thumb,id,type){
-  let card=thumb.parentElement; let ifr=card.querySelector('iframe'); let videoBox=thumb;
-  // On met la vue +1
-  addView(id);
-  videoBox.style.display='none'; ifr.style.display='block'; ifr.style.height='480px';
-  if(type==='tiktok') ifr.src="https://www.tiktok.com/embed/v2/"+id;
-  else ifr.src="https://www.youtube-nocookie.com/embed/"+id+"?autoplay=1&rel=0";
-}
-
-// ===== CREER CARTE NORMAL =====
 function creerCarte(v){
   let lienOriginal=v.url||v.lien||""; let type=v.plateforme|| (lienOriginal.includes('tiktok')?'tiktok':'youtube');
   let id=v.videoId||getYoutubeId(lienOriginal)||getTiktokId(lienOriginal)||"";
   if(id && id.includes('?')) id=getYoutubeId(id)||id.split('?')[0];
   if(id && id.includes('&')) id=id.split('&')[0];
+  let playUrl = type==='tiktok' ? lienOriginal : "https://www.youtube.com/watch?v="+id;
   let views=getViews(id)+125; let liked=localStorage.getItem(getKey(id,'like'))==='1'; let saved=localStorage.getItem(getKey(id,'save'))==='1';
   let comments=JSON.parse(localStorage.getItem(getKey(id,'comments'))||'[]');
   let div=document.createElement("div"); div.className="video-card";
   div.innerHTML=`
-    <div class="thumb-box" onclick="jouerYoutube(this,'${id}')">
+    <div class="thumb-box" onclick="jouerNormalDansSite(this,'${id}')">
       <img src="https://i.ytimg.com/vi/${id}/hqdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/${id}/mqdefault.jpg'">
       <div class="play-big">▶️</div>
+      <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
     </div>
-    <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-    <div class="yt-title">${v.titre||"Sans titre"} <span class="badge badge-yt">▶️ YouTube</span></div>
+    <div class="yt-title">${v.titre||"Sans titre"} <span class="badge badge-yt">▶️ YouTube - Joue ici</span></div>
     <p class="yt-meta">👤 ${v.chaine||""} • 👁️ ${views} vues • 💬 ${comments.length} commentaires</p>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
       <button class="mini-btn" onclick="toggleLike('${id}',this)">${liked?'❤️ Aimé':'🤍 J\'aime'}</button>
       <button class="mini-btn" onclick="toggleComment('${id}')">💬 Commentaire</button>
-      <button class="mini-btn" onclick="partager('${id}','${(v.titre||'').replace(/'/g,'')}','${lienOriginal}')">↗️ Partager</button>
+      <button class="mini-btn" onclick="partager('${id}','${(v.titre||'').replace(/'/g,'')}','${playUrl}')">↗️ Partager</button>
       <button class="mini-btn" onclick="toggleSave('${id}',this)">${saved?'✅ Enregistré':'🔖 Enregistrer'}</button>
-      <button class="mini-btn mini-btn-yellow" onclick="telecharger('${id}','${type}')">⬇️ Télécharger</button>
+      <button class="mini-btn mini-btn-yellow" onclick="telecharger('${id}','${type}','${playUrl}')">⬇️ Télécharger</button>
     </div>
-    <div class="comment-box" id="cmt-${id}"><div id="cmt-list-${id}">${comments.map(c=>`<div class="comment-item">👤 Toi : ${c}</div>`).join('')}</div><input id="cmt-in-${id}" placeholder="Écris ton commentaire..."><button class="mini-btn" onclick="envoyerComment('${id}')">Envoyer 💬</button></div>
-    <a class="watch-btn" href="https://www.youtube.com/watch?v=${id}" target="_blank">▶️ Regarder sur YouTube (marche toujours)</a>`;
+    <div class="comment-box" id="cmt-${id}"><div id="cmt-list-${id}">${comments.map(c=>`<div class="comment-item">👤 Toi : ${c}</div>`).join('')}</div><input id="cmt-in-${id}" placeholder="Écris ton commentaire..."><button class="mini-btn" onclick="envoyerComment('${id}')">Envoyer 💬</button></div>`;
   return div;
 }
-function jouerYoutube(thumb,id){
-  addView(id);
-  let card=thumb.parentElement; let ifr=card.querySelector('iframe');
-  thumb.style.display="none"; ifr.style.display="block";
-  ifr.src="https://www.youtube-nocookie.com/embed/"+id+"?autoplay=1&rel=0";
-  setTimeout(()=>{ if(!card.querySelector('.secours')){ let b=document.createElement('a'); b.className="watch-btn watch-btn-yellow secours"; b.href="https://www.youtube.com/watch?v="+id; b.target="_blank"; b.textContent="⚠️ Si ça ne joue pas ici, clique ici - ça joue sur YouTube"; card.appendChild(b); } },4000);
-}
-function jouerTiktok(thumb,id){ addView(id); let card=thumb.parentElement; let ifr=card.querySelector('iframe'); thumb.style.display="none"; ifr.style.display="block"; ifr.src="https://www.tiktok.com/embed/v2/"+id; }
-
 async function chargerDepuisGoogle(){
   try{ let r=await fetch(API_URL); let j=await r.json(); toutesVideos=j.videos||[]; afficher(); }
   catch(e){ document.getElementById('liste').innerHTML="<p>Erreur connexion Google. Vérifie que le déploiement est sur 'Tout le monde'.</p>"; }
@@ -315,7 +287,7 @@ async function chargerAuto(){
   try{
     let r1=await fetch('https://yt.lemnoslife.com/channels?handle=@freddyvmondial'); let j1=await r1.json(); let channelId=j1.items[0].id;
     let r2=await fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.youtube.com/feeds/videos.xml?channel_id='+channelId); let j2=await r2.json();
-    box.innerHTML=j2.items.slice(0,3).map(v=>{ let vid=getYoutubeId(v.link); return `<div class="video-card"><div class="thumb-box" onclick="jouerYoutube(this,'${vid}')"><img src="https://i.ytimg.com/vi/${vid}/hqdefault.jpg" onerror="this.src='https://i.ytimg.com/vi/${vid}/mqdefault.jpg'"><div class="play-big">▶️</div></div><iframe allow="autoplay; encrypted-media" allowfullscreen></iframe><div class="yt-title">${v.title}</div><p class="yt-meta">Par <b>FREDDY-V Mondial</b> • Automatique</p><a class="watch-btn" href="https://www.youtube.com/watch?v=${vid}" target="_blank">▶️ Regarder sur YouTube</a></div>`; }).join('');
+    box.innerHTML=j2.items.slice(0,3).map(v=>{ let vid=getYoutubeId(v.link); return `<div class="video-card"><div class="thumb-box" onclick="jouerNormalDansSite(this,'${vid}')"><img src="https://i.ytimg.com/vi/${vid}/hqdefault.jpg" onerror="this.src='https://i.ytimg.com/vi/${vid}/mqdefault.jpg'"><div class="play-big">▶️</div><iframe allow="autoplay; encrypted-media" allowfullscreen></iframe></div><div class="yt-title">${v.title}</div><p class="yt-meta">Par <b>FREDDY-V Mondial</b> • Automatique • Joue ici</p></div>`; }).join('');
   }catch(e){ box.innerHTML=`<p>Chaîne automatique - <a style="color:#ffcc00" href="https://www.youtube.com/@freddyvmondial" target="_blank">Voir sur YouTube</a></p>`; }
 }
 chargerAuto(); chargerDepuisGoogle();
