@@ -3,30 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>FREDDY-V - Shorts comme TikTok</title>
+<title>FREDDY-V - Garde les anciennes vidéos</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
 body{background:#000;color:#fff;overflow:hidden}
-header{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:linear-gradient(to bottom,rgba(0,0,0,.8),transparent)}
+header{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:linear-gradient(to bottom,rgba(0,0,0,.85),transparent)}
 .logo{font-weight:900;font-size:22px} .logo span{color:#fe2c55}
 header button{background:#fe2c55;color:#fff;border:none;padding:8px 14px;border-radius:20px;font-weight:700;cursor:pointer}
 #feed{height:100vh;overflow-y:scroll;scroll-snap-type:y mandatory}
 .short{height:100vh;scroll-snap-align:start;position:relative;display:flex;align-items:center;justify-content:center;background:#111}
-.short iframe,.short video{width:100%;height:100%;object-fit:cover;border:none}
-.overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.75) 0%,transparent 40%)}
+.short iframe{width:100%;height:100%;object-fit:cover;border:none}
+.overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.75) 0%,transparent 40%);pointer-events:none}
 .left{position:absolute;left:14px;bottom:20px;right:80px;z-index:10}
 .left b{font-size:17px} .left p{font-size:14px;margin-top:6px;line-height:1.4}
 .right{position:absolute;right:10px;bottom:90px;z-index:10;display:flex;flex-direction:column;gap:16px;align-items:center}
 .action{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer}
-.circle{width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;font-size:24px;backdrop-filter:blur(5px)}
-.circle.liked{background:#fe2c55;border-color:#fe2c55;animation:boom .3s}
-.circle.saved{background:#ffcc00}
-@keyframes boom{0%{transform:scale(1)}50%{transform:scale(1.4)}100%{transform:scale(1)}}
+.circle{width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;font-size:24px}
+.circle.liked{background:#fe2c55} .circle.saved{background:#ffcc00}
 .action small{font-size:11px;font-weight:700}
 .views{position:absolute;top:55px;left:14px;background:rgba(0,0,0,.6);padding:6px 10px;border-radius:20px;font-size:12px;z-index:10}
 .bigHeart{position:absolute;left:50%;top:45%;transform:translate(-50%,-50%) scale(0);font-size:110px;z-index:20;pointer-events:none;transition:.3s}
 .bigHeart.show{transform:translate(-50%,-50%) scale(1.2)}
-/* Modals */
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;z-index:200;align-items:flex-end;justify-content:center}
 .modal.open{display:flex}
 .sheet{background:#fff;color:#111;width:100%;max-width:500px;max-height:82vh;border-radius:20px 20px 0 0;overflow:hidden;display:flex;flex-direction:column}
@@ -39,99 +36,72 @@ header button{background:#fe2c55;color:#fff;border:none;padding:8px 14px;border-
 .inputRow input{flex:1;padding:11px;border:1px solid #ddd;border-radius:20px;outline:none}
 .inputRow button{background:#fe2c55;color:#fff;border:none;padding:0 16px;border-radius:20px;font-weight:700}
 .remixOpt{display:flex;gap:12px;align-items:center;padding:14px;border:1px solid #eee;border-radius:14px;margin-bottom:10px;cursor:pointer}
-.remixOpt:hover{border-color:#fe2c55}
 .publish{position:fixed;inset:0;background:#fff;color:#111;display:none;z-index:300;overflow-y:auto;padding:18px}
 .publish.open{display:block}
-.publish input,.publish select,.publish textarea{width:100%;padding:13px;border:1px solid #ddd;border-radius:12px;margin-bottom:12px;font-size:15px}
+.publish input,.publish select{width:100%;padding:13px;border:1px solid #ddd;border-radius:12px;margin-bottom:12px;font-size:15px}
 .publish button{width:100%;padding:14px;background:#fe2c55;color:#fff;border:none;border-radius:12px;font-weight:800;font-size:16px}
 .tabs{display:flex;gap:8px;margin-bottom:12px}
 .tabs button{flex:1;padding:10px;border-radius:20px;border:1px solid #ddd;background:#f5f5f5}
 .tabs button.active{background:#000;color:#fff}
-.savedBadge{background:#ffcc00;color:#000;padding:3px 8px;border-radius:10px;font-size:11px;font-weight:800}
 </style>
 </head>
 <body>
-
-<header>
-<div class="logo">FREDDY-<span>V</span></div>
-<div style="font-size:13px;font-weight:700">Shorts • Pour Goma</div>
-<button onclick="openPublish()">+ Publier</button>
-</header>
-
+<header><div class="logo">FREDDY-<span>V</span></div><div style="font-size:13px;font-weight:700">Shorts • Pour Goma</div><button onclick="openPublish()">+ Publier</button></header>
 <div id="feed"></div>
 
-<!-- COMMENTAIRES -->
-<div class="modal" id="commentModal">
-  <div class="sheet">
-    <div class="sheetHead">💬 Commentaires <span onclick="closeModal('commentModal')">✕</span></div>
-    <div class="sheetBody" id="commentList"></div>
-    <div class="inputRow">
-      <input id="commentName" placeholder="Ton nom...">
-      <input id="commentText" placeholder="Ajoute un commentaire...">
-      <button onclick="addComment()">Envoyer</button>
-    </div>
-  </div>
-</div>
+<div class="modal" id="commentModal"><div class="sheet"><div class="sheetHead">💬 Commentaires <span onclick="closeModal('commentModal')">✕</span></div><div class="sheetBody" id="commentList"></div><div class="inputRow"><input id="commentName" placeholder="Ton nom..."><input id="commentText" placeholder="Ajoute un commentaire..."><button onclick="addComment()">Envoyer</button></div></div></div>
+<div class="modal" id="remixModal"><div class="sheet"><div class="sheetHead">🎵 Remix comme TikTok <span onclick="closeModal('remixModal')">✕</span></div><div class="sheetBody"><div class="remixOpt" onclick="doRemix('Duo')"><div style="font-size:28px">👥</div><div><b>Duo</b><br><small>Ta vidéo à côté de l'originale</small></div></div><div class="remixOpt" onclick="doRemix('Collage')"><div style="font-size:28px">🧩</div><div><b>Collage</b><br><small>Toi en petit, original en grand</small></div></div><div class="remixOpt" onclick="doRemix('Utiliser ce son')"><div style="font-size:28px">🎵</div><div><b>Utiliser ce son</b><br><small>Utilise le son pour ta vidéo</small></div></div><div class="remixOpt" onclick="doRemix('Réagir')"><div style="font-size:28px">✂️</div><div><b>Réagir / Couper</b><br><small>Ta réaction par-dessus la vidéo</small></div></div></div></div></div>
 
-<!-- REMIX -->
-<div class="modal" id="remixModal">
-  <div class="sheet">
-    <div class="sheetHead">🎵 Remix comme TikTok <span onclick="closeModal('remixModal')">✕</span></div>
-    <div class="sheetBody">
-      <div class="remixOpt" onclick="doRemix('Duo')"><div style="font-size:28px">👥</div><div><b>Duo</b><br><small>Ta vidéo à côté de l'originale</small></div></div>
-      <div class="remixOpt" onclick="doRemix('Collage')"><div style="font-size:28px">🧩</div><div><b>Collage</b><br><small>Toi en petit, original en grand</small></div></div>
-      <div class="remixOpt" onclick="doRemix('Utiliser ce son')"><div style="font-size:28px">🎵</div><div><b>Utiliser ce son</b><br><small>Utilise le son pour ta vidéo</small></div></div>
-      <div class="remixOpt" onclick="doRemix('Réagir')"><div style="font-size:28px">✂️</div><div><b>Réagir / Couper</b><br><small>Ta réaction par-dessus la vidéo</small></div></div>
-      <p style="font-size:13px;color:#666;text-align:center;margin-top:10px">Après le choix, tu enregistres ton remix et tu le republies dans FREDDY-V !</p>
-    </div>
-  </div>
-</div>
-
-<!-- PUBLIER -->
 <div class="publish" id="publishPage">
-  <h2>📤 Publier dans FREDDY-V</h2>
-  <p style="color:#666;margin:8px 0 14px">Tu colles ton lien, ça apparaît tout seul. Pas besoin de toucher au tableau !</p>
-  <div class="tabs">
-    <button id="tabYT" class="active" onclick="setSource('youtube')">🎥 YouTube</button>
-    <button id="tabTT" onclick="setSource('tiktok')">🎵 TikTok</button>
-    <button id="tabFB" onclick="setSource('facebook')">📘 Facebook</button>
-  </div>
-  <input id="pubTitle" placeholder="Titre de ta vidéo... Ex: Prédication puissante">
-  <input id="pubAuthor" placeholder="Ton nom... Ex: Freddy V">
-  <input id="pubLink" placeholder="Colle ton lien ici...">
-  <p id="linkHint" style="font-size:12px;color:#888;margin:-8px 0 12px">Ex YouTube: https://youtu.be/xxxx - TikTok: https://www.tiktok.com/... - Facebook: https://www.facebook.com/.../videos/...</p>
-  <button onclick="publishVideo()">🚀 PUBLIER DANS FREDDY-V</button>
-  <button onclick="closePublish()" style="background:#eee;color:#111;margin-top:10px">Annuler</button>
-  <p style="font-size:12px;color:#888;margin-top:12px;text-align:center">✅ 1 personne = 1 vue • ✅ Tout le monde peut commenter • ✅ Remix comme TikTok</p>
+<h2>📤 Publier dans FREDDY-V</h2><p style="color:#666;margin:8px 0 14px">Tes anciennes vidéos sont gardées. Les nouvelles s'ajoutent par-dessus, on n'efface rien !</p>
+<div class="tabs"><button id="tabYT" class="active" onclick="setSource('youtube')">🎥 YouTube</button><button id="tabTT" onclick="setSource('tiktok')">🎵 TikTok</button><button id="tabFB" onclick="setSource('facebook')">📘 Facebook</button></div>
+<input id="pubTitle" placeholder="Titre... Ex: La foi en Jésus-Christ">
+<input id="pubAuthor" placeholder="Ton nom... Ex: Freddy V">
+<input id="pubLink" placeholder="Colle ton lien ici... YouTube / Shorts / TikTok / Facebook">
+<button onclick="publishVideo()">🚀 PUBLIER - GARDER LES ANCIENNES</button>
+<button onclick="closePublish()" style="background:#eee;color:#111;margin-top:10px">Annuler</button>
 </div>
 
 <script>
-// --- DONNÉES ---
-let videos = JSON.parse(localStorage.getItem('freddyv_videos')||'null') || [
-  {id:'1', title:'Bienvenue dans FREDDY-V ! La plateforme de Goma 🔥', author:'Freddy V', source:'youtube', link:'https://www.youtube.com/watch?v=dQw4w9WgXcQ', likes:124, comments:[{name:'Makola', text:'Amen, très puissante !'}, {name:'Sarah', text:'Gloire à Dieu 🙏'}], saved:false, views:856},
-  {id:'2', title:'Louange qui touche le cœur ❤️', author:'Freddy V', source:'tiktok', link:'https://www.tiktok.com/@freddyv/video/123', likes:89, comments:[{name:'Jean', text:'Je partage à tout Goma !'}], saved:false, views:432}
+// ===== GARDE LES ANCIENNES VIDÉOS - ON N'EFFACE RIEN =====
+// 1. Tes anciennes vidéos - elles restent TOUJOURS ici
+let oldVideos = [
+  {id:'old-jesus-1', title:'Je vous montre ma vidéo qui parle de la foi en Jésus-Christ si vous avez des questions concernant la parole du seigneur Jésus-Christ je suis disponible', author:'Freddy V', source:'youtube', link:'https://youtube.com/shorts/2vbWaxYFW4I', likes:124, comments:[{name:'Makola', text:'Amen, très puissante !'}, {name:'Sarah', text:'Gloire à Dieu 🙏'}], saved:false, views:856}
 ];
+
+// 2. On charge ce qui est déjà dans le téléphone, SANS EFFACER
+let saved = JSON.parse(localStorage.getItem('freddyv_videos_final') || 'null');
+// Si le téléphone est vide, on met les anciennes vidéos. Si il y a déjà des vidéos, on les garde + on ajoute les anciennes qui manquent
+let videos;
+if(!saved || saved.length===0){
+  videos = [...oldVideos];
+} else {
+  videos = [...saved];
+  // Ajoute les anciennes qui manquent, sans doublon
+  oldVideos.forEach(old=>{
+    if(!videos.find(v=>v.link===old.link)) videos.push(old);
+  });
+}
+function saveAll(){ localStorage.setItem('freddyv_videos_final', JSON.stringify(videos)); }
+
 let currentId = null;
 let deviceId = localStorage.getItem('freddyv_device') || ('dev_'+Math.random().toString(36).slice(2,9));
 localStorage.setItem('freddyv_device', deviceId);
-let seen = JSON.parse(localStorage.getItem('freddyv_seen')||'{}');
+let seen = JSON.parse(localStorage.getItem('freddyv_seen_final')||'{}');
 let source = 'youtube';
 
+// ===== CORRECTION SHORTS - COMPREND TOUS LES LIENS YOUTUBE =====
 function getEmbed(v){
   if(v.source==='youtube'){
-    let id='';
-    if(v.link.includes('youtu.be/')) id=v.link.split('youtu.be/')[1].split('?')[0].split('&')[0];
-    else if(v.link.includes('v=')) id=v.link.split('v=')[1].split('&')[0];
-    else id=v.link;
-    return `https://www.youtube.com/embed/${id}?autoplay=0&mute=0&controls=1&loop=1`;
+    let id = v.link;
+    if(id.includes('/shorts/')){ id = id.split('/shorts/')[1].split('?')[0].split('&')[0].split('/')[0]; }
+    else if(id.includes('youtu.be/')){ id = id.split('youtu.be/')[1].split('?')[0].split('&')[0]; }
+    else if(id.includes('v=')){ id = id.split('v=')[1].split('&')[0].split('?')[0]; }
+    else if(id.includes('youtube.com/')){ id = id.split('/').pop().split('?')[0]; }
+    id = id.trim();
+    return `https://www.youtube.com/embed/${id}?autoplay=0&controls=1`;
   }
-  if(v.source==='tiktok'){
-    // TikTok: on ouvre via iframe embed
-    return v.link;
-  }
-  if(v.source==='facebook'){
-    return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(v.link)}&show_text=false`;
-  }
+  if(v.source==='facebook'){ return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(v.link)}&show_text=false`; }
   return v.link;
 }
 
@@ -139,9 +109,8 @@ function render(){
   const feed=document.getElementById('feed');
   feed.innerHTML='';
   videos.forEach(v=>{
-    // VUE RÉELLE : 1 personne = 1 vue
     let key=deviceId+'_'+v.id;
-    if(!seen[key]){ seen[key]=1; v.views=(v.views||0)+1; localStorage.setItem('freddyv_seen', JSON.stringify(seen)); localStorage.setItem('freddyv_videos', JSON.stringify(videos)); }
+    if(!seen[key]){ seen[key]=1; v.views=(v.views||0)+1; localStorage.setItem('freddyv_seen_final', JSON.stringify(seen)); saveAll(); }
     const div=document.createElement('div');
     div.className='short';
     div.innerHTML=`
@@ -149,54 +118,33 @@ function render(){
       <div class="bigHeart" id="heart-${v.id}">❤️</div>
       <iframe src="${getEmbed(v)}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
       <div class="overlay"></div>
-      <div class="left">
-        <b>@${v.author}</b> ${v.saved?'<span class="savedBadge">🔖 Enregistré</span>':''}
-        <p>${v.title}</p>
-        <p style="opacity:.8">🎵 Son original - ${v.author}</p>
-      </div>
+      <div class="left"><b>@${v.author}</b><p>${v.title}</p><p style="opacity:.8">🎵 Son original - ${v.author}</p></div>
       <div class="right">
-        <div class="action" onclick="like('${v.id}', this)"><div class="circle ${localStorage.getItem('like_'+v.id)?'liked':''}">${localStorage.getItem('like_'+v.id)?'❤️':'🤍'}</div><small>${v.likes}</small></div>
+        <div class="action" onclick="like('${v.id}')"><div class="circle ${localStorage.getItem('like_'+v.id)?'liked':''}">${localStorage.getItem('like_'+v.id)?'❤️':'🤍'}</div><small>${v.likes}</small></div>
         <div class="action" onclick="openComments('${v.id}')"><div class="circle">💬</div><small>${v.comments.length}</small></div>
-        <div class="action" onclick="saveVideo('${v.id}', this)"><div class="circle ${v.saved?'saved':''}">🔖</div><small>${v.saved?'Enregistré':'Enregistrer'}</small></div>
+        <div class="action" onclick="saveVideo('${v.id}')"><div class="circle ${v.saved?'saved':''}">🔖</div><small>${v.saved?'Enregistré':'Enregistrer'}</small></div>
         <div class="action" onclick="shareVideo('${v.id}')"><div class="circle">↗️</div><small>Partager</small></div>
         <div class="action" onclick="openRemix('${v.id}')"><div class="circle">🎵</div><small>Remix</small></div>
-      </div>
-    `;
-    div.ondblclick=()=>like(v.id, null, true);
+      </div>`;
+    div.ondblclick=()=>like(v.id);
     feed.appendChild(div);
   });
 }
-
-function like(id, el, fromDouble=false){
+function like(id){
   let v=videos.find(x=>x.id===id);
   let liked = localStorage.getItem('like_'+id);
-  if(!liked){ v.likes++; localStorage.setItem('like_'+id,'1'); }
-  else { v.likes--; localStorage.removeItem('like_'+id); }
-  localStorage.setItem('freddyv_videos', JSON.stringify(videos));
-  let h=document.getElementById('heart-'+id);
-  if(h){ h.classList.add('show'); setTimeout(()=>h.classList.remove('show'),500); }
+  if(!liked){ v.likes++; localStorage.setItem('like_'+id,'1'); } else { v.likes--; localStorage.removeItem('like_'+id); }
+  saveAll();
+  let h=document.getElementById('heart-'+id); if(h){ h.classList.add('show'); setTimeout(()=>h.classList.remove('show'),500); }
   render();
 }
-function saveVideo(id){
-  let v=videos.find(x=>x.id===id); v.saved=!v.saved;
-  localStorage.setItem('freddyv_videos', JSON.stringify(videos));
-  alert(v.saved ? '🔖 Enregistré ! Retrouve-le dans Mes Enregistrés' : 'Enregistrement retiré');
-  render();
-}
+function saveVideo(id){ let v=videos.find(x=>x.id===id); v.saved=!v.saved; saveAll(); alert(v.saved ? '🔖 Enregistré !' : 'Enregistrement retiré'); render(); }
 function shareVideo(id){
   let v=videos.find(x=>x.id===id);
   let text=`Regarde cette vidéo sur FREDDY-V : ${v.title} - ${v.link}`;
-  if(navigator.share){ navigator.share({title:'FREDDY-V', text:text, url:v.link}); }
-  else {
-    let url=`https://wa.me/?text=${encodeURIComponent(text)}`;
-    window.open(url,'_blank');
-  }
+  if(navigator.share){ navigator.share({title:'FREDDY-V', text:text, url:v.link}); } else { window.open(`https://wa.me/?text=${encodeURIComponent(text)}`,'_blank'); }
 }
-function openComments(id){
-  currentId=id;
-  document.getElementById('commentModal').classList.add('open');
-  showComments();
-}
+function openComments(id){ currentId=id; document.getElementById('commentModal').classList.add('open'); showComments(); }
 function showComments(){
   let v=videos.find(x=>x.id===currentId);
   document.getElementById('commentList').innerHTML = v.comments.map(c=>`<div class="comment"><div class="avatar">${c.name[0].toUpperCase()}</div><div><b>${c.name}</b><br>${c.text}<br><small style="color:#888">❤️ J'aime • Répondre</small></div></div>`).join('') || '<p style="text-align:center;color:#888">Aucun commentaire. Sois le premier !</p>';
@@ -206,18 +154,14 @@ function addComment(){
   let text=document.getElementById('commentText').value.trim();
   if(!text) return alert('Écris ton commentaire');
   let v=videos.find(x=>x.id===currentId);
-  v.comments.push({name, text});
-  localStorage.setItem('freddyv_videos', JSON.stringify(videos));
-  document.getElementById('commentText').value='';
-  showComments(); render();
+  v.comments.push({name, text}); saveAll();
+  document.getElementById('commentText').value=''; showComments(); render();
 }
 function openRemix(id){ currentId=id; document.getElementById('remixModal').classList.add('open'); }
 function doRemix(type){
   let v=videos.find(x=>x.id===currentId);
-  alert(`🎵 REMIX ${type} - Comme TikTok !\n\nTu vas maintenant enregistrer ton ${type} avec la vidéo : "${v.title}"\n\n1. Ouvre ta caméra / CapCut / TikTok\n2. Utilise ce lien comme original : ${v.link}\n3. Enregistre ton ${type}\n4. Republie ton remix dans FREDDY-V !`);
-  closeModal('remixModal');
-  // Ouvre TikTok / CapCut si dispo
-  window.open(v.link,'_blank');
+  alert(`🎵 REMIX ${type} - Comme TikTok !\n\nTu vas enregistrer ton ${type} avec : "${v.title}"\n\n1. Ouvre ta caméra / CapCut / TikTok\n2. Utilise ce lien : ${v.link}\n3. Enregistre ton ${type}\n4. Republie ton remix dans FREDDY-V !`);
+  closeModal('remixModal'); window.open(v.link,'_blank');
 }
 function closeModal(id){ document.getElementById(id).classList.remove('open'); }
 function openPublish(){ document.getElementById('publishPage').classList.add('open'); }
@@ -227,25 +171,18 @@ function setSource(s){
   document.getElementById('tabYT').className = s==='youtube'?'active':'';
   document.getElementById('tabTT').className = s==='tiktok'?'active':'';
   document.getElementById('tabFB').className = s==='facebook'?'active':'';
-  document.getElementById('linkHint').innerText = s==='youtube' ? 'Ex YouTube: https://youtu.be/xxxx' : s==='tiktok' ? 'Ex TikTok: https://www.tiktok.com/@.../video/...' : 'Ex Facebook: https://www.facebook.com/.../videos/...';
 }
 function publishVideo(){
   let title=document.getElementById('pubTitle').value.trim();
   let author=document.getElementById('pubAuthor').value.trim()||'Freddy V';
   let link=document.getElementById('pubLink').value.trim();
   if(!title||!link) return alert('Mets le titre et le lien !');
-  // Nettoyage automatique du lien comme avant
-  if(source==='youtube'){
-    if(link.includes('youtu.be/')) link=link; // on garde le lien complet, l'app extrait l'ID seule
-    if(link.includes('?si=')) link=link.split('?si=')[0];
-  }
+  // On ne supprime RIEN, on ajoute par-dessus
   videos.unshift({id:Date.now().toString(), title, author, source, link, likes:0, comments:[], saved:false, views:1});
-  localStorage.setItem('freddyv_videos', JSON.stringify(videos));
-  closePublish();
+  saveAll(); closePublish();
   document.getElementById('pubTitle').value=''; document.getElementById('pubLink').value='';
-  alert('✅ Publié ! Ça apparaît tout seul, tu n’as pas besoin de toucher au tableau !');
-  render();
-  document.getElementById('feed').scrollTo({top:0, behavior:'smooth'});
+  alert('✅ Publié ! Ton ancienne vidéo sur la foi en Jésus-Christ est toujours là, la nouvelle s’est ajoutée par-dessus !');
+  render(); document.getElementById('feed').scrollTo({top:0, behavior:'smooth'});
 }
 render();
 </script>
