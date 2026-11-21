@@ -75,37 +75,29 @@ header button{background:#fe2c55;color:#fff;border:none;padding:8px 14px;border-
 </head>
 <body>
 <div id="loading"><div style="font-size:30px;font-weight:900">FREDDY-<span style="color:#fe2c55">V</span></div><div>Chargement...</div></div>
-
 <header>
 <div class="topRow"><div class="logo">FREDDY-<span>V</span></div><button onclick="openPublish()">+ Publier</button></div>
 <div class="searchBar"><span>🔍</span><input id="searchInput" placeholder="Rechercher titre, chaîne, sujet..." oninput="doSearch(this.value)"><button onclick="doSearch(document.getElementById('searchInput').value)">Rechercher</button></div>
 <div class="searchTags" id="searchTags"></div>
 </header>
-
 <div id="feed"></div>
-
 <div style="position:fixed;bottom:60px;left:0;right:0;text-align:center;background:rgba(0,0,0,.85);padding:6px;font-size:11px;z-index:150"><a onclick="alert('FREDDY-V est une plateforme créée par Freddy V à Kinshasa pour créer sa chaîne, publier ses vidéos et s\'abonner aux autres.')" style="color:#aaa;margin:0 6px;cursor:pointer">À Propos</a> • <a onclick="alert('Nous ne collectons pas tes données sensibles. Nous utilisons des cookies pour compter 1 personne = 1 vue et mémoriser tes likes et abonnements.')" style="color:#aaa;margin:0 6px;cursor:pointer">Confidentialité</a> • <a onclick="alert('Contact : Freddy V, Kinshasa - contact@freddy-v.com')" style="color:#aaa;margin:0 6px;cursor:pointer">Contact</a></div>
-
 <div id="tapSound" onclick="enableSound()">🔊 TOUCHE POUR ACTIVER LE SON</div>
-
 <div class="bottomNav">
 <div class="active" onclick="clearSearch();showFeed()">🏠<small>Accueil</small></div>
 <div onclick="clearSearch();showFeed()">⚡<small>Shorts</small></div>
 <div onclick="openPublish()" style="font-size:34px">➕</div>
 <div onclick="openProfile()">👤<small id="myChannelLabel">Moi</small></div>
 </div>
-
 <div class="modal" id="commentModal"><div class="sheet"><div class="sheetHead">💬 Commentaires <span onclick="closeModal('commentModal')">✕</span></div><div class="sheetBody" id="commentList"></div><div class="inputRow"><input id="commentName" placeholder="Ton nom"><input id="commentText" placeholder="Commentaire..."><button onclick="addComment()">Envoyer</button></div></div></div>
-
 <div class="publish" id="publishPage">
-<h2>📤 Publier dans FREDDY-V</h2><p style="color:#666;margin:8px 0 14px">Ta vidéo commence à <b>0 vues • 0 likes • 0 commentaires</b>. Chaque vraie personne qui regarde fait +1 et ça reste !</p>
+<h2>📤 Publier dans FREDDY-V</h2><p style="color:#666;margin:8px 0 14px">Ta vidéo commence à <b>0 vues • 0 likes • 0 commentaires</b> pour tout le monde. Chaque vraie personne qui regarde fait +1 !</p>
 <input id="pubTitle" placeholder="Titre de ta vidéo... Ex: La foi en Jésus-Christ">
 <textarea id="pubDesc" placeholder="Écris une petite description avec tes propres mots..."></textarea>
 <input id="pubAuthor" placeholder="Nom de ta chaîne..."><input id="pubLink" placeholder="Colle ton lien YouTube / TikTok / Facebook">
 <button onclick="publishVideo()" id="pubBtn">🚀 PUBLIER - COMMENCER À 0</button>
 <button onclick="closePublish()" style="background:#eee;color:#111;margin-top:10px">Annuler</button>
 </div>
-
 <div class="profile" id="profilePage">
 <h2>👤 Ma Chaîne FREDDY-V</h2>
 <div style="text-align:center;margin:16px 0"><div id="myAvatar" style="width:90px;height:90px;border-radius:50%;background:#fe2c55;color:#fff;display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:900;margin:0 auto">F</div><h3 id="myName" style="margin-top:10px">Freddy V</h3><p id="mySubs" style="color:#666">0 abonnés • 0 vidéos</p></div>
@@ -116,16 +108,14 @@ header button{background:#fe2c55;color:#fff;border:none;padding:8px 14px;border-
 <h3 style="margin:14px 0 10px">❤️ Mes Abonnements</h3><div id="mySubsList"></div>
 <button onclick="closeProfile()" style="background:#eee;color:#111;margin-top:14px">Retour</button>
 </div>
-
 <script>
-const API_URL="https://script.google.com/macros/s/AKfycbxKpxPjCsc_WCpXN-oXzVcp7FOlNqfq8-NV_roIh9RXYZDXhDRkZ4a3CzsyLyXmO7sQzA/exec";
+const API_URL="https://script.google.com/macros/s/AKfycbzrf2mRkCNMDT1_45TrkaC0Eu5WLWNZrI6C2E9Z07AKgYlcnd_ramCtC-vQ8-YaJHk0Cw/exec";
 let videos=[];let filtered=[];let currentId=null;let currentSearch='';
 let deviceId=localStorage.getItem('freddyv_device')||('dev_'+Math.random().toString(36).slice(2,9));localStorage.setItem('freddyv_device',deviceId);
 let seen=JSON.parse(localStorage.getItem('freddyv_seen_final_v2')||'{}');
 let myLikes=JSON.parse(localStorage.getItem('freddyv_my_likes')||'{}');
 let mySaved=JSON.parse(localStorage.getItem('freddyv_my_saved')||'{}');
 let mySubs=JSON.parse(localStorage.getItem('freddyv_subs')||'{}');
-// CORRECTION : On utilise le LIEN comme clé, pas l'id qui change. Comme ça ça reste même si tu quittes !
 let realCounts=JSON.parse(localStorage.getItem('freddyv_real_counts_v2')||'{}');
 let savedComments=JSON.parse(localStorage.getItem('freddyv_comments_v2')||'{}');
 function keyOf(v){return (v.link||v.id||'').trim();}
@@ -140,7 +130,20 @@ let observer=null;
 function fmt(n){if(n>=1000)return (n/1000).toFixed(1).replace('.0','')+' k';return n;}
 async function loadVideos(){
  try{const r=await fetch(API_URL);const d=await r.json();let list=Array.isArray(d)?d:(d.videos||d.data||d.rows||[]);
- videos=list.map((v,i)=>{let tmp={id:v.id||v.ID||('sheet-'+i),link:v.link||v.Link||v.url||''};let c=getCounts(tmp);let com=getSavedComments(tmp);if(v.comments&&Array.isArray(v.comments)&&v.comments.length&&com.length===0)com=v.comments;return{id:tmp.id,title:v.title||v.Title||'Vidéo FREDDY-V',desc:v.desc||v.Desc||'',author:v.author||v.Author||'Freddy V',source:(v.source||v.Source||'youtube').toLowerCase(),link:tmp.link,likes:c.likes,views:c.views,comments:com,saved:!!mySaved[keyOf(tmp)]}}).filter(v=>v.link);
+ videos=list.map((v,i)=>{
+   let tmp={id:v.id||v.ID||('sheet-'+i),link:v.link||v.Link||v.url||''};
+   let serverViews = Number(v.views)||0;
+   let serverLikes = Number(v.likes)||0;
+   let serverComments = Array.isArray(v.comments) ? v.comments : [];
+   let local = getCounts(tmp);
+   let localCom = getSavedComments(tmp);
+   let finalViews = serverViews>0 ? serverViews : local.views;
+   let finalLikes = serverLikes>0 ? serverLikes : local.likes;
+   let finalComments = serverComments.length>0 ? serverComments : localCom;
+   if(serverViews>0){ local.views=serverViews; }
+   if(serverLikes>0){ local.likes=serverLikes; }
+   if(serverComments.length>0){ savedComments[keyOf(tmp)]=serverComments; }
+   return{id:tmp.id,title:v.title||v.Title||'Vidéo FREDDY-V',desc:v.desc||v.Desc||'',author:v.author||v.Author||'Freddy V',source:(v.source||v.Source||'youtube').toLowerCase(),link:tmp.link,likes:finalLikes,views:finalViews,comments:finalComments,saved:!!mySaved[keyOf(tmp)]}}).filter(v=>v.link);
  let b=JSON.parse(localStorage.getItem('freddyv_local_backup')||'[]');b.forEach(x=>{if(!videos.find(v=>v.link===x.link)){let c=getCounts(x);x.views=c.views;x.likes=c.likes;x.comments=getSavedComments(x);videos.unshift(x);}});
  if(videos.length===0)videos=[{id:'old-1',title:'La séparation',desc:'Mon partage.',author:'Freddy V',source:'youtube',link:'https://youtube.com/shorts/2vbWaxYFW4I',likes:0,views:0,comments:[],saved:false}];
  saveCounts();saveAllComments();
