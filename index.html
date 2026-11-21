@@ -67,7 +67,6 @@ header button{background:#fe2c55;color:#fff;border:none;padding:8px 14px;border-
 </div>
 
 <script>
-// ===== TON LIEN AUTOMATIQUE - NE PAS CHANGER =====
 const API_URL = "https://script.google.com/macros/s/AKfycbwrIUEdD9UYmm3z7t2hL-zFcs5ED_SE1V9SWmf6xQqt502nn_V5tnpfGhV2fIdXqdoQBg/exec";
 
 let videos = [];
@@ -77,14 +76,11 @@ localStorage.setItem('freddyv_device', deviceId);
 let seen = JSON.parse(localStorage.getItem('freddyv_seen_final')||'{}');
 let source = 'youtube';
 
-// ===== CHARGER AUTOMATIQUEMENT DEPUIS GOOGLE SHEET =====
 async function loadVideos(){
   try{
     const res = await fetch(API_URL);
     const data = await res.json();
-    // Ton Apps Script peut renvoyer soit un tableau, soit {videos:[...]} soit {data:[...]}
     let list = Array.isArray(data) ? data : (data.videos || data.data || data.rows || []);
-    // Si ton script renvoie des objets avec d'autres noms, on les adapte
     videos = list.map((v,i)=>{
       return {
         id: v.id || v.ID || ('sheet-'+i),
@@ -98,31 +94,40 @@ async function loadVideos(){
         saved: false
       };
     }).filter(v=>v.link);
-    // Si le tableau est vide, on met ta vidéo de secours pour ne pas avoir un écran noir
     if(videos.length===0){
       videos = [{id:'old-jesus-1', title:'Je vous montre ma vidéo qui parle de la foi en Jésus-Christ si vous avez des questions concernant la parole du seigneur Jésus-Christ je suis disponible', author:'Freddy V', source:'youtube', link:'https://youtube.com/shorts/2vbWaxYFW4I', likes:124, comments:[{name:'Makola', text:'Amen, très puissante !'}], saved:false, views:857}];
     }
   }catch(e){
-    console.log('Erreur chargement Sheet, mode secours', e);
     videos = [{id:'old-jesus-1', title:'Je vous montre ma vidéo qui parle de la foi en Jésus-Christ si vous avez des questions concernant la parole du seigneur Jésus-Christ je suis disponible', author:'Freddy V', source:'youtube', link:'https://youtube.com/shorts/2vbWaxYFW4I', likes:124, comments:[{name:'Makola', text:'Amen, très puissante !'}], saved:false, views:857}];
   }
   document.getElementById('loading').style.display='none';
   render();
 }
 
-// ===== CORRECTION SHORTS =====
+// ===== CORRECTION COMPLETE : SHORT, SHORTS, YOUTUBE, YT = TOUS YOUTUBE =====
 function getEmbed(v){
-  if(v.source==='youtube'){
-    let id = v.link;
+  let s = (v.source||'').toLowerCase();
+  let link = (v.link||'').trim();
+  // Si le type est SHORT / SHORTS / YOUTUBE / YT OU si le lien contient youtube / youtu.be => c'est YouTube
+  if(s.includes('youtube') || s.includes('short') || s.includes('yt') || link.includes('youtube') || link.includes('youtu.be')){
+    let id = link;
     if(id.includes('/shorts/')){ id = id.split('/shorts/')[1].split('?')[0].split('&')[0].split('/')[0]; }
     else if(id.includes('youtu.be/')){ id = id.split('youtu.be/')[1].split('?')[0].split('&')[0]; }
     else if(id.includes('v=')){ id = id.split('v=')[1].split('&')[0].split('?')[0]; }
     else if(id.includes('youtube.com/')){ id = id.split('/').pop().split('?')[0]; }
+    else if(id.length===11){ /* déjà un ID seul */ }
+    else { id = id.split('/').pop().split('?')[0]; }
     id = id.trim();
-    return `https://www.youtube.com/embed/${id}?autoplay=0&controls=1`;
+    return `https://www.youtube.com/embed/${id}?autoplay=0&controls=1&rel=0`;
   }
-  if(v.source==='facebook'){ return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(v.link)}&show_text=false`; }
-  return v.link;
+  if(s.includes('facebook') || link.includes('facebook.com') || link.includes('fb.watch')){
+    return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(link)}&show_text=false`;
+  }
+  if(s.includes('tiktok') || link.includes('tiktok.com')){
+    return link;
+  }
+  // Par défaut, on essaie comme YouTube si ça ressemble à un ID
+  return link;
 }
 
 function render(){
@@ -175,7 +180,6 @@ function addComment(){
   let v=videos.find(x=>x.id===currentId);
   v.comments.push({name, text});
   document.getElementById('commentText').value=''; showComments(); render();
-  // On envoie aussi le commentaire au Sheet si ton script le gère
   fetch(API_URL, {method:'POST', mode:'no-cors', body: JSON.stringify({action:'comment', videoId: v.id, name, text})});
 }
 function openRemix(id){ currentId=id; document.getElementById('remixModal').classList.add('open'); }
@@ -193,15 +197,12 @@ function setSource(s){
   document.getElementById('tabTT').className = s==='tiktok'?'active':'';
   document.getElementById('tabFB').className = s==='facebook'?'active':'';
 }
-
-// ===== PUBLIER AUTOMATIQUEMENT POUR TOUT LE MONDE =====
 async function publishVideo(){
   let title=document.getElementById('pubTitle').value.trim();
   let author=document.getElementById('pubAuthor').value.trim()||'Freddy V';
   let link=document.getElementById('pubLink').value.trim();
   if(!title||!link) return alert('Mets le titre et le lien !');
   document.getElementById('pubBtn').innerText='⏳ Publication automatique...';
-  // On envoie au Google Sheet - AUTOMATIQUE
   try{
     await fetch(API_URL, {
       method:'POST',
@@ -210,14 +211,12 @@ async function publishVideo(){
       body: JSON.stringify({action:'add', title, author, link, source, likes:0, views:0})
     });
   }catch(e){ console.log(e); }
-  // On l'ajoute aussi tout de suite à l'écran pour ne pas attendre
   videos.unshift({id:Date.now().toString(), title, author, source, link, likes:0, comments:[], saved:false, views:1});
   closePublish();
   document.getElementById('pubTitle').value=''; document.getElementById('pubLink').value='';
   document.getElementById('pubBtn').innerText='🚀 PUBLIER AUTOMATIQUEMENT';
-  alert('✅ Publié AUTOMATIQUEMENT ! Tout le monde va voir ta vidéo, tu n’as plus besoin d’envoyer les liens à personne !');
+  alert('✅ Publié AUTOMATIQUEMENT ! Tout le monde va voir ta vidéo !');
   render(); document.getElementById('feed').scrollTo({top:0, behavior:'smooth'});
-  // On recharge depuis le Sheet après 2 secondes pour être sûr que tout le monde a la même chose
   setTimeout(loadVideos, 2000);
 }
 loadVideos();
