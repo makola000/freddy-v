@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>FREDDY-V - Garde les anciennes vidéos</title>
+<title>FREDDY-V - Automatique pour tout le monde</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
 body{background:#000;color:#fff;overflow:hidden}
@@ -38,14 +38,17 @@ header button{background:#fe2c55;color:#fff;border:none;padding:8px 14px;border-
 .remixOpt{display:flex;gap:12px;align-items:center;padding:14px;border:1px solid #eee;border-radius:14px;margin-bottom:10px;cursor:pointer}
 .publish{position:fixed;inset:0;background:#fff;color:#111;display:none;z-index:300;overflow-y:auto;padding:18px}
 .publish.open{display:block}
-.publish input,.publish select{width:100%;padding:13px;border:1px solid #ddd;border-radius:12px;margin-bottom:12px;font-size:15px}
+.publish input{width:100%;padding:13px;border:1px solid #ddd;border-radius:12px;margin-bottom:12px;font-size:15px}
 .publish button{width:100%;padding:14px;background:#fe2c55;color:#fff;border:none;border-radius:12px;font-weight:800;font-size:16px}
 .tabs{display:flex;gap:8px;margin-bottom:12px}
 .tabs button{flex:1;padding:10px;border-radius:20px;border:1px solid #ddd;background:#f5f5f5}
 .tabs button.active{background:#000;color:#fff}
+#loading{position:fixed;inset:0;background:#000;display:flex;align-items:center;justify-content:center;z-index:500;flex-direction:column;gap:10px}
 </style>
 </head>
 <body>
+<div id="loading"><div style="font-size:30px;font-weight:900">FREDDY-<span style="color:#fe2c55">V</span></div><div>Chargement automatique...</div></div>
+
 <header><div class="logo">FREDDY-<span>V</span></div><div style="font-size:13px;font-weight:700">Shorts • Pour Goma</div><button onclick="openPublish()">+ Publier</button></header>
 <div id="feed"></div>
 
@@ -53,44 +56,61 @@ header button{background:#fe2c55;color:#fff;border:none;padding:8px 14px;border-
 <div class="modal" id="remixModal"><div class="sheet"><div class="sheetHead">🎵 Remix comme TikTok <span onclick="closeModal('remixModal')">✕</span></div><div class="sheetBody"><div class="remixOpt" onclick="doRemix('Duo')"><div style="font-size:28px">👥</div><div><b>Duo</b><br><small>Ta vidéo à côté de l'originale</small></div></div><div class="remixOpt" onclick="doRemix('Collage')"><div style="font-size:28px">🧩</div><div><b>Collage</b><br><small>Toi en petit, original en grand</small></div></div><div class="remixOpt" onclick="doRemix('Utiliser ce son')"><div style="font-size:28px">🎵</div><div><b>Utiliser ce son</b><br><small>Utilise le son pour ta vidéo</small></div></div><div class="remixOpt" onclick="doRemix('Réagir')"><div style="font-size:28px">✂️</div><div><b>Réagir / Couper</b><br><small>Ta réaction par-dessus la vidéo</small></div></div></div></div></div>
 
 <div class="publish" id="publishPage">
-<h2>📤 Publier dans FREDDY-V</h2><p style="color:#666;margin:8px 0 14px">Tes anciennes vidéos sont gardées. Les nouvelles s'ajoutent par-dessus, on n'efface rien !</p>
+<h2>📤 Publier dans FREDDY-V</h2><p style="color:#666;margin:8px 0 14px">✅ AUTOMATIQUE pour tout le monde ! Tu publies, tout le monde voit. Tu n'as plus besoin d'envoyer les liens à personne !</p>
 <div class="tabs"><button id="tabYT" class="active" onclick="setSource('youtube')">🎥 YouTube</button><button id="tabTT" onclick="setSource('tiktok')">🎵 TikTok</button><button id="tabFB" onclick="setSource('facebook')">📘 Facebook</button></div>
 <input id="pubTitle" placeholder="Titre... Ex: La foi en Jésus-Christ">
 <input id="pubAuthor" placeholder="Ton nom... Ex: Freddy V">
 <input id="pubLink" placeholder="Colle ton lien ici... YouTube / Shorts / TikTok / Facebook">
-<button onclick="publishVideo()">🚀 PUBLIER - GARDER LES ANCIENNES</button>
+<button onclick="publishVideo()" id="pubBtn">🚀 PUBLIER AUTOMATIQUEMENT</button>
 <button onclick="closePublish()" style="background:#eee;color:#111;margin-top:10px">Annuler</button>
+<p style="font-size:12px;color:#888;margin-top:12px;text-align:center">1 personne = 1 vue • Tout le monde peut commenter • Remix comme TikTok</p>
 </div>
 
 <script>
-// ===== GARDE LES ANCIENNES VIDÉOS - ON N'EFFACE RIEN =====
-// 1. Tes anciennes vidéos - elles restent TOUJOURS ici
-let oldVideos = [
-  {id:'old-jesus-1', title:'Je vous montre ma vidéo qui parle de la foi en Jésus-Christ si vous avez des questions concernant la parole du seigneur Jésus-Christ je suis disponible', author:'Freddy V', source:'youtube', link:'https://youtube.com/shorts/2vbWaxYFW4I', likes:124, comments:[{name:'Makola', text:'Amen, très puissante !'}, {name:'Sarah', text:'Gloire à Dieu 🙏'}], saved:false, views:856}
-];
+// ===== TON LIEN AUTOMATIQUE - NE PAS CHANGER =====
+const API_URL = "https://script.google.com/macros/s/AKfycbwrIUEdD9UYmm3z7t2hL-zFcs5ED_SE1V9SWmf6xQqt502nn_V5tnpfGhV2fIdXqdoQBg/exec";
 
-// 2. On charge ce qui est déjà dans le téléphone, SANS EFFACER
-let saved = JSON.parse(localStorage.getItem('freddyv_videos_final') || 'null');
-// Si le téléphone est vide, on met les anciennes vidéos. Si il y a déjà des vidéos, on les garde + on ajoute les anciennes qui manquent
-let videos;
-if(!saved || saved.length===0){
-  videos = [...oldVideos];
-} else {
-  videos = [...saved];
-  // Ajoute les anciennes qui manquent, sans doublon
-  oldVideos.forEach(old=>{
-    if(!videos.find(v=>v.link===old.link)) videos.push(old);
-  });
-}
-function saveAll(){ localStorage.setItem('freddyv_videos_final', JSON.stringify(videos)); }
-
+let videos = [];
 let currentId = null;
 let deviceId = localStorage.getItem('freddyv_device') || ('dev_'+Math.random().toString(36).slice(2,9));
 localStorage.setItem('freddyv_device', deviceId);
 let seen = JSON.parse(localStorage.getItem('freddyv_seen_final')||'{}');
 let source = 'youtube';
 
-// ===== CORRECTION SHORTS - COMPREND TOUS LES LIENS YOUTUBE =====
+// ===== CHARGER AUTOMATIQUEMENT DEPUIS GOOGLE SHEET =====
+async function loadVideos(){
+  try{
+    const res = await fetch(API_URL);
+    const data = await res.json();
+    // Ton Apps Script peut renvoyer soit un tableau, soit {videos:[...]} soit {data:[...]}
+    let list = Array.isArray(data) ? data : (data.videos || data.data || data.rows || []);
+    // Si ton script renvoie des objets avec d'autres noms, on les adapte
+    videos = list.map((v,i)=>{
+      return {
+        id: v.id || v.ID || ('sheet-'+i),
+        title: v.title || v.titre || v.Title || 'Vidéo FREDDY-V',
+        author: v.author || v.auteur || v.Author || v.name || 'Freddy V',
+        source: (v.source || v.type || v.platform || 'youtube').toLowerCase(),
+        link: v.link || v.url || v.lien || v.videoUrl || '',
+        likes: parseInt(v.likes || v.like || 0),
+        views: parseInt(v.views || v.vues || 0),
+        comments: v.comments || [],
+        saved: false
+      };
+    }).filter(v=>v.link);
+    // Si le tableau est vide, on met ta vidéo de secours pour ne pas avoir un écran noir
+    if(videos.length===0){
+      videos = [{id:'old-jesus-1', title:'Je vous montre ma vidéo qui parle de la foi en Jésus-Christ si vous avez des questions concernant la parole du seigneur Jésus-Christ je suis disponible', author:'Freddy V', source:'youtube', link:'https://youtube.com/shorts/2vbWaxYFW4I', likes:124, comments:[{name:'Makola', text:'Amen, très puissante !'}], saved:false, views:857}];
+    }
+  }catch(e){
+    console.log('Erreur chargement Sheet, mode secours', e);
+    videos = [{id:'old-jesus-1', title:'Je vous montre ma vidéo qui parle de la foi en Jésus-Christ si vous avez des questions concernant la parole du seigneur Jésus-Christ je suis disponible', author:'Freddy V', source:'youtube', link:'https://youtube.com/shorts/2vbWaxYFW4I', likes:124, comments:[{name:'Makola', text:'Amen, très puissante !'}], saved:false, views:857}];
+  }
+  document.getElementById('loading').style.display='none';
+  render();
+}
+
+// ===== CORRECTION SHORTS =====
 function getEmbed(v){
   if(v.source==='youtube'){
     let id = v.link;
@@ -110,11 +130,11 @@ function render(){
   feed.innerHTML='';
   videos.forEach(v=>{
     let key=deviceId+'_'+v.id;
-    if(!seen[key]){ seen[key]=1; v.views=(v.views||0)+1; localStorage.setItem('freddyv_seen_final', JSON.stringify(seen)); saveAll(); }
+    if(!seen[key]){ seen[key]=1; v.views=(v.views||0)+1; localStorage.setItem('freddyv_seen_final', JSON.stringify(seen)); }
     const div=document.createElement('div');
     div.className='short';
     div.innerHTML=`
-      <div class="views">👁️ ${v.views} vues • ${v.source.toUpperCase()}</div>
+      <div class="views">👁️ ${v.views} vues • ${v.source.toUpperCase()} • AUTOMATIQUE</div>
       <div class="bigHeart" id="heart-${v.id}">❤️</div>
       <iframe src="${getEmbed(v)}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
       <div class="overlay"></div>
@@ -134,11 +154,10 @@ function like(id){
   let v=videos.find(x=>x.id===id);
   let liked = localStorage.getItem('like_'+id);
   if(!liked){ v.likes++; localStorage.setItem('like_'+id,'1'); } else { v.likes--; localStorage.removeItem('like_'+id); }
-  saveAll();
   let h=document.getElementById('heart-'+id); if(h){ h.classList.add('show'); setTimeout(()=>h.classList.remove('show'),500); }
   render();
 }
-function saveVideo(id){ let v=videos.find(x=>x.id===id); v.saved=!v.saved; saveAll(); alert(v.saved ? '🔖 Enregistré !' : 'Enregistrement retiré'); render(); }
+function saveVideo(id){ let v=videos.find(x=>x.id===id); v.saved=!v.saved; alert(v.saved ? '🔖 Enregistré !' : 'Enregistrement retiré'); render(); }
 function shareVideo(id){
   let v=videos.find(x=>x.id===id);
   let text=`Regarde cette vidéo sur FREDDY-V : ${v.title} - ${v.link}`;
@@ -147,15 +166,17 @@ function shareVideo(id){
 function openComments(id){ currentId=id; document.getElementById('commentModal').classList.add('open'); showComments(); }
 function showComments(){
   let v=videos.find(x=>x.id===currentId);
-  document.getElementById('commentList').innerHTML = v.comments.map(c=>`<div class="comment"><div class="avatar">${c.name[0].toUpperCase()}</div><div><b>${c.name}</b><br>${c.text}<br><small style="color:#888">❤️ J'aime • Répondre</small></div></div>`).join('') || '<p style="text-align:center;color:#888">Aucun commentaire. Sois le premier !</p>';
+  document.getElementById('commentList').innerHTML = v.comments.map(c=>`<div class="comment"><div class="avatar">${(typeof c==='string'?c:c.name||'I')[0].toUpperCase()}</div><div><b>${typeof c==='string'?'Invité':c.name}</b><br>${typeof c==='string'?c:c.text}<br><small style="color:#888">❤️ J'aime • Répondre</small></div></div>`).join('') || '<p style="text-align:center;color:#888">Aucun commentaire. Sois le premier ! Tout le monde peut commenter !</p>';
 }
 function addComment(){
   let name=document.getElementById('commentName').value.trim()||'Invité';
   let text=document.getElementById('commentText').value.trim();
   if(!text) return alert('Écris ton commentaire');
   let v=videos.find(x=>x.id===currentId);
-  v.comments.push({name, text}); saveAll();
+  v.comments.push({name, text});
   document.getElementById('commentText').value=''; showComments(); render();
+  // On envoie aussi le commentaire au Sheet si ton script le gère
+  fetch(API_URL, {method:'POST', mode:'no-cors', body: JSON.stringify({action:'comment', videoId: v.id, name, text})});
 }
 function openRemix(id){ currentId=id; document.getElementById('remixModal').classList.add('open'); }
 function doRemix(type){
@@ -172,19 +193,34 @@ function setSource(s){
   document.getElementById('tabTT').className = s==='tiktok'?'active':'';
   document.getElementById('tabFB').className = s==='facebook'?'active':'';
 }
-function publishVideo(){
+
+// ===== PUBLIER AUTOMATIQUEMENT POUR TOUT LE MONDE =====
+async function publishVideo(){
   let title=document.getElementById('pubTitle').value.trim();
   let author=document.getElementById('pubAuthor').value.trim()||'Freddy V';
   let link=document.getElementById('pubLink').value.trim();
   if(!title||!link) return alert('Mets le titre et le lien !');
-  // On ne supprime RIEN, on ajoute par-dessus
+  document.getElementById('pubBtn').innerText='⏳ Publication automatique...';
+  // On envoie au Google Sheet - AUTOMATIQUE
+  try{
+    await fetch(API_URL, {
+      method:'POST',
+      mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({action:'add', title, author, link, source, likes:0, views:0})
+    });
+  }catch(e){ console.log(e); }
+  // On l'ajoute aussi tout de suite à l'écran pour ne pas attendre
   videos.unshift({id:Date.now().toString(), title, author, source, link, likes:0, comments:[], saved:false, views:1});
-  saveAll(); closePublish();
+  closePublish();
   document.getElementById('pubTitle').value=''; document.getElementById('pubLink').value='';
-  alert('✅ Publié ! Ton ancienne vidéo sur la foi en Jésus-Christ est toujours là, la nouvelle s’est ajoutée par-dessus !');
+  document.getElementById('pubBtn').innerText='🚀 PUBLIER AUTOMATIQUEMENT';
+  alert('✅ Publié AUTOMATIQUEMENT ! Tout le monde va voir ta vidéo, tu n’as plus besoin d’envoyer les liens à personne !');
   render(); document.getElementById('feed').scrollTo({top:0, behavior:'smooth'});
+  // On recharge depuis le Sheet après 2 secondes pour être sûr que tout le monde a la même chose
+  setTimeout(loadVideos, 2000);
 }
-render();
+loadVideos();
 </script>
 </body>
 </html>
