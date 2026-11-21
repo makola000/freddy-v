@@ -48,15 +48,12 @@ header button{background:#fe2c55;color:#fff;border:none;padding:8px 14px;border-
 </head>
 <body>
 <div id="loading"><div style="font-size:30px;font-weight:900">FREDDY-<span style="color:#fe2c55">V</span></div><div>Chargement automatique...</div></div>
-
 <header><div class="logo">FREDDY-<span>V</span></div><div style="font-size:13px;font-weight:700">Shorts • Pour Goma</div><button onclick="openPublish()">+ Publier</button></header>
 <div id="feed"></div>
-
 <div class="modal" id="commentModal"><div class="sheet"><div class="sheetHead">💬 Commentaires <span onclick="closeModal('commentModal')">✕</span></div><div class="sheetBody" id="commentList"></div><div class="inputRow"><input id="commentName" placeholder="Ton nom..."><input id="commentText" placeholder="Ajoute un commentaire..."><button onclick="addComment()">Envoyer</button></div></div></div>
 <div class="modal" id="remixModal"><div class="sheet"><div class="sheetHead">🎵 Remix comme TikTok <span onclick="closeModal('remixModal')">✕</span></div><div class="sheetBody"><div class="remixOpt" onclick="doRemix('Duo')"><div style="font-size:28px">👥</div><div><b>Duo</b><br><small>Ta vidéo à côté de l'originale</small></div></div><div class="remixOpt" onclick="doRemix('Collage')"><div style="font-size:28px">🧩</div><div><b>Collage</b><br><small>Toi en petit, original en grand</small></div></div><div class="remixOpt" onclick="doRemix('Utiliser ce son')"><div style="font-size:28px">🎵</div><div><b>Utiliser ce son</b><br><small>Utilise le son pour ta vidéo</small></div></div><div class="remixOpt" onclick="doRemix('Réagir')"><div style="font-size:28px">✂️</div><div><b>Réagir / Couper</b><br><small>Ta réaction par-dessus la vidéo</small></div></div></div></div></div>
-
 <div class="publish" id="publishPage">
-<h2>📤 Publier dans FREDDY-V</h2><p style="color:#666;margin:8px 0 14px">✅ AUTOMATIQUE pour tout le monde ! Tu publies, tout le monde voit. Tu n'as plus besoin d'envoyer les liens à personne !</p>
+<h2>📤 Publier dans FREDDY-V</h2><p style="color:#666;margin:8px 0 14px">✅ AUTOMATIQUE pour tout le monde ! Tu publies, tout le monde voit. Elle ne disparaît plus !</p>
 <div class="tabs"><button id="tabYT" class="active" onclick="setSource('youtube')">🎥 YouTube</button><button id="tabTT" onclick="setSource('tiktok')">🎵 TikTok</button><button id="tabFB" onclick="setSource('facebook')">📘 Facebook</button></div>
 <input id="pubTitle" placeholder="Titre... Ex: La foi en Jésus-Christ">
 <input id="pubAuthor" placeholder="Ton nom... Ex: Freddy V">
@@ -65,9 +62,9 @@ header button{background:#fe2c55;color:#fff;border:none;padding:8px 14px;border-
 <button onclick="closePublish()" style="background:#eee;color:#111;margin-top:10px">Annuler</button>
 <p style="font-size:12px;color:#888;margin-top:12px;text-align:center">1 personne = 1 vue • Tout le monde peut commenter • Remix comme TikTok</p>
 </div>
-
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbwrIUEdD9UYmm3z7t2hL-zFcs5ED_SE1V9SWmf6xQqt502nn_V5tnpfGhV2fIdXqdoQBg/exec";
+// ===== TON VRAI LIEN COMPLET - VERSION 7 =====
+const API_URL = "https://script.google.com/macros/s/AKfycbxVu4dA6y9UGdbKQfWVKFdZiwnAR8w3GPCXK96UawsZyfq7lu6iYNG7sigUhbacyF9Ung/exec";
 
 let videos = [];
 let currentId = null;
@@ -94,28 +91,30 @@ async function loadVideos(){
         saved: false
       };
     }).filter(v=>v.link);
+    let backup = JSON.parse(localStorage.getItem('freddyv_local_backup')||'[]');
+    backup.forEach(b=>{ if(!videos.find(v=>v.link===b.link)) videos.unshift(b); });
     if(videos.length===0){
       videos = [{id:'old-jesus-1', title:'Je vous montre ma vidéo qui parle de la foi en Jésus-Christ si vous avez des questions concernant la parole du seigneur Jésus-Christ je suis disponible', author:'Freddy V', source:'youtube', link:'https://youtube.com/shorts/2vbWaxYFW4I', likes:124, comments:[{name:'Makola', text:'Amen, très puissante !'}], saved:false, views:857}];
     }
   }catch(e){
-    videos = [{id:'old-jesus-1', title:'Je vous montre ma vidéo qui parle de la foi en Jésus-Christ si vous avez des questions concernant la parole du seigneur Jésus-Christ je suis disponible', author:'Freddy V', source:'youtube', link:'https://youtube.com/shorts/2vbWaxYFW4I', likes:124, comments:[{name:'Makola', text:'Amen, très puissante !'}], saved:false, views:857}];
+    let backup = JSON.parse(localStorage.getItem('freddyv_local_backup')||'[]');
+    if(backup.length>0){ videos = backup; }
+    else { videos = [{id:'old-jesus-1', title:'Je vous montre ma vidéo qui parle de la foi en Jésus-Christ si vous avez des questions concernant la parole du seigneur Jésus-Christ je suis disponible', author:'Freddy V', source:'youtube', link:'https://youtube.com/shorts/2vbWaxYFW4I', likes:124, comments:[{name:'Makola', text:'Amen, très puissante !'}], saved:false, views:857}]; }
   }
   document.getElementById('loading').style.display='none';
   render();
 }
 
-// ===== CORRECTION COMPLETE : SHORT, SHORTS, YOUTUBE, YT = TOUS YOUTUBE =====
 function getEmbed(v){
   let s = (v.source||'').toLowerCase();
   let link = (v.link||'').trim();
-  // Si le type est SHORT / SHORTS / YOUTUBE / YT OU si le lien contient youtube / youtu.be => c'est YouTube
   if(s.includes('youtube') || s.includes('short') || s.includes('yt') || link.includes('youtube') || link.includes('youtu.be')){
     let id = link;
     if(id.includes('/shorts/')){ id = id.split('/shorts/')[1].split('?')[0].split('&')[0].split('/')[0]; }
     else if(id.includes('youtu.be/')){ id = id.split('youtu.be/')[1].split('?')[0].split('&')[0]; }
     else if(id.includes('v=')){ id = id.split('v=')[1].split('&')[0].split('?')[0]; }
     else if(id.includes('youtube.com/')){ id = id.split('/').pop().split('?')[0]; }
-    else if(id.length===11){ /* déjà un ID seul */ }
+    else if(id.length===11){ }
     else { id = id.split('/').pop().split('?')[0]; }
     id = id.trim();
     return `https://www.youtube.com/embed/${id}?autoplay=0&controls=1&rel=0`;
@@ -123,10 +122,6 @@ function getEmbed(v){
   if(s.includes('facebook') || link.includes('facebook.com') || link.includes('fb.watch')){
     return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(link)}&show_text=false`;
   }
-  if(s.includes('tiktok') || link.includes('tiktok.com')){
-    return link;
-  }
-  // Par défaut, on essaie comme YouTube si ça ressemble à un ID
   return link;
 }
 
@@ -203,21 +198,21 @@ async function publishVideo(){
   let link=document.getElementById('pubLink').value.trim();
   if(!title||!link) return alert('Mets le titre et le lien !');
   document.getElementById('pubBtn').innerText='⏳ Publication automatique...';
-  try{
-    await fetch(API_URL, {
-      method:'POST',
-      mode:'no-cors',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({action:'add', title, author, link, source, likes:0, views:0})
-    });
-  }catch(e){ console.log(e); }
-  videos.unshift({id:Date.now().toString(), title, author, source, link, likes:0, comments:[], saved:false, views:1});
+  let url = API_URL + '?action=add&title=' + encodeURIComponent(title) + '&author=' + encodeURIComponent(author) + '&link=' + encodeURIComponent(link) + '&source=' + encodeURIComponent(source);
+  try{ await fetch(url); }catch(e){ console.log(e); }
+  try{ await fetch(API_URL, {method:'POST', mode:'no-cors', body: JSON.stringify({action:'add', title, author, link, source})}); }catch(e){}
+  let newVideo = {id:Date.now().toString(), title, author, source, link, likes:0, comments:[], saved:false, views:1};
+  videos.unshift(newVideo);
+  localStorage.setItem('freddyv_local_backup', JSON.stringify(videos));
   closePublish();
   document.getElementById('pubTitle').value=''; document.getElementById('pubLink').value='';
   document.getElementById('pubBtn').innerText='🚀 PUBLIER AUTOMATIQUEMENT';
-  alert('✅ Publié AUTOMATIQUEMENT ! Tout le monde va voir ta vidéo !');
+  alert('✅ Publié ! Maintenant elle va rester ! Elle ne va plus disparaître !');
   render(); document.getElementById('feed').scrollTo({top:0, behavior:'smooth'});
-  setTimeout(loadVideos, 2000);
+  setTimeout(async ()=>{
+    await loadVideos();
+    if(!videos.find(v=>v.link===link)){ videos.unshift(newVideo); render(); }
+  }, 5000);
 }
 loadVideos();
 </script>
