@@ -65,19 +65,19 @@ header button{background:#fe2c55;color:#fff;border:none;padding:8px 14px;border-
 <p style="font-size:12px;color:#888;margin-top:12px;text-align:center">1 personne = 1 vue • Tout le monde peut commenter • Remix comme TikTok</p>
 </div>
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbxVu4dA6y9UGdbKQfWVKFdZiwnAR8w3GPCXK96UawsZyfq7lu6iYNG7sigUhbacyF9Ung/exec";
+// ===== TON VRAI LIEN - VERSION 8 - NE PAS CHANGER =====
+const API_URL = "https://script.google.com/macros/s/AKfycbxKpxPjCsc_WCpXN-oXzVcp7FOlNqfq8-NV_roIh9RXYZDXhDRkZ4a3CzsyLyXmO7sQzA/exec";
 
 let videos = [];
 let currentId = null;
 let deviceId = localStorage.getItem('freddyv_device') || ('dev_'+Math.random().toString(36).slice(2,9));
 localStorage.setItem('freddyv_device', deviceId);
-// 1 PERSONNE = 1 VUE - On se souvient de ce que chaque téléphone a déjà vu
+// 1 PERSONNE = 1 VUE
 let seen = JSON.parse(localStorage.getItem('freddyv_seen_final')||'{}');
-// LIKES QUI RESTENT - On se souvient de tous tes likes
+// LIKES QUI RESTENT
 let myLikes = JSON.parse(localStorage.getItem('freddyv_my_likes')||'{}');
 let mySaved = JSON.parse(localStorage.getItem('freddyv_my_saved')||'{}');
 let source = 'youtube';
-let currentPlayingId = null;
 let observer = null;
 
 async function loadVideos(){
@@ -86,25 +86,19 @@ async function loadVideos(){
     const data = await res.json();
     let list = Array.isArray(data) ? data : (data.videos || data.data || data.rows || []);
     videos = list.map((v,i)=>{
-      let baseLikes = parseInt(v.likes || v.like || 0);
       let id = v.id || v.ID || ('sheet-'+i);
-      // Si TOI tu as déjà liké, on ajoute +1 et on garde le coeur rouge, même après fermeture
-      if(myLikes[id]) baseLikes = baseLikes + 0; // le Sheet a déjà ton like si on l'a envoyé, sinon on le garde en local
       return {
         id: id,
         title: v.title || v.titre || v.Title || 'Vidéo FREDDY-V',
         author: v.author || v.auteur || v.Author || v.name || 'Freddy V',
         source: (v.source || v.type || v.platform || 'youtube').toLowerCase(),
         link: v.link || v.url || v.lien || v.videoUrl || '',
-        likes: baseLikes,
-        // On affiche le vrai nombre de likes du Sheet + ton like local si pas encore compté
-        displayLikes: baseLikes + (myLikes[id] && !v._alreadyCounted ? 0 : 0),
+        likes: parseInt(v.likes || v.like || 0),
         views: parseInt(v.views || v.vues || 0),
         comments: v.comments || [],
         saved: !!mySaved[id]
       };
     }).filter(v=>v.link);
-    // On garde les vidéos locales qui ne sont pas encore dans le Sheet
     let backup = JSON.parse(localStorage.getItem('freddyv_local_backup')||'[]');
     backup.forEach(b=>{ if(!videos.find(v=>v.link===b.link)) videos.unshift(b); });
     if(videos.length===0){
@@ -117,7 +111,6 @@ async function loadVideos(){
   }
   document.getElementById('loading').style.display='none';
   render();
-  setupAutoPlay();
 }
 
 function getVideoId(link){
@@ -135,12 +128,10 @@ function getEmbed(v, autoplay){
   let link = (v.link||'').trim();
   if(s.includes('youtube') || s.includes('short') || s.includes('yt') || link.includes('youtube') || link.includes('youtu.be')){
     let id = getVideoId(link);
-    // autoplay=1 + mute=1 = YouTube autorise la lecture automatique comme TikTok
-    // enablejsapi=1 = on peut arrêter la vidéo quand tu glisses
     return `https://www.youtube.com/embed/${id}?autoplay=${autoplay?1:0}&mute=1&controls=1&rel=0&enablejsapi=1&playsinline=1`;
   }
   if(s.includes('facebook') || link.includes('facebook.com') || link.includes('fb.watch')){
-    return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(link)}&show_text=false&autoplay=${autoplay}`;
+    return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(link)}&show_text=false`;
   }
   return link;
 }
@@ -149,15 +140,11 @@ function render(){
   const feed=document.getElementById('feed');
   feed.innerHTML='';
   videos.forEach((v, idx)=>{
-    // 1 PERSONNE = 1 VUE : Si tu as déjà vu cette vidéo, on ne rajoute PAS une vue
-    let key=deviceId+'_'+v.id;
-    let isNewView = !seen[key];
-    if(isNewView && idx===0){
-      // On ne compte la vue que quand la vidéo est vraiment regardée (dans setupAutoPlay)
-    }
     let liked = !!myLikes[v.id];
     let likeCount = v.likes + (liked ? 1 : 0);
-    // Si le Sheet a déjà compté ton like, on ne double pas - on garde juste l'affichage local
+    // Si le Sheet a déjà compté ton like, on évite le double : on regarde si v.likes vient déjà du Sheet
+    // Pour être simple : si tu as liké, on affiche v.likes (qui vient du Sheet) et on garde le coeur rouge
+    // Le +1 est géré par le Sheet, on ne double pas ici si le Sheet a déjà +1
     const div=document.createElement('div');
     div.className='short';
     div.dataset.vid = v.id;
@@ -169,13 +156,12 @@ function render(){
       <div class="overlay"></div>
       <div class="left"><b>@${v.author}</b><p>${v.title}</p><p style="opacity:.8">🎵 Son original - ${v.author}</p></div>
       <div class="right">
-        <div class="action" onclick="like('${v.id}', event)"><div class="circle ${liked?'liked':''}">${liked?'❤️':'🤍'}</div><small id="likeCount-${v.id}">${likeCount}</small></div>
+        <div class="action" onclick="like('${v.id}', event)"><div class="circle ${liked?'liked':''}">${liked?'❤️':'🤍'}</div><small id="likeCount-${v.id}">${v.likes}</small></div>
         <div class="action" onclick="openComments('${v.id}')"><div class="circle">💬</div><small>${v.comments.length}</small></div>
         <div class="action" onclick="saveVideo('${v.id}')"><div class="circle ${v.saved?'saved':''}">🔖</div><small>${v.saved?'Enregistré':'Enregistrer'}</small></div>
         <div class="action" onclick="shareVideo('${v.id}')"><div class="circle">↗️</div><small>Partager</small></div>
         <div class="action" onclick="openRemix('${v.id}')"><div class="circle">🎵</div><small>Remix</small></div>
       </div>`;
-    // Cliquer sur la vidéo = Play / Pause comme TikTok
     div.addEventListener('click', (e)=>{
       if(e.target.closest('.right') || e.target.closest('.left')) return;
       togglePlay(v.id);
@@ -183,11 +169,10 @@ function render(){
     div.ondblclick=()=>like(v.id);
     feed.appendChild(div);
   });
-  // On réactive l'autoplay après chaque render
   setTimeout(setupAutoPlay, 100);
 }
 
-// ===== AUTOPLAY COMME TIKTOK : QUAND TU GLISSES, L'ANCIENNE S'ARRÊTE, LA NOUVELLE JOUE SEULE =====
+// ===== AUTOPLAY COMME TIKTOK =====
 function setupAutoPlay(){
   if(observer) observer.disconnect();
   observer = new IntersectionObserver((entries)=>{
@@ -197,40 +182,31 @@ function setupAutoPlay(){
       if(!frame) return;
       let v = videos.find(x=>x.id===vid);
       if(entry.isIntersecting){
-        // C'est celle que tu regardes maintenant
-        currentPlayingId = vid;
-        // 1 PERSONNE = 1 VUE : On compte la vue UNE SEULE FOIS, la première fois que tu la vois vraiment
+        // 1 PERSONNE = 1 VUE : On compte UNE SEULE FOIS
         let key = deviceId+'_'+vid;
         if(!seen[key]){
           seen[key]=1;
           localStorage.setItem('freddyv_seen_final', JSON.stringify(seen));
           v.views = (v.views||0)+1;
-          // On met à jour l'affichage des vues sans tout recharger
           let viewsEl = entry.target.querySelector('.views');
           if(viewsEl) viewsEl.innerText = `👁️ ${v.views} vues • ${v.source.toUpperCase()} • AUTOMATIQUE`;
-          // On envoie la vue au Sheet pour que tout le monde voit le vrai nombre
           fetch(API_URL + '?action=view&videoId=' + encodeURIComponent(vid) + '&link=' + encodeURIComponent(v.link)).catch(()=>{});
         }
-        // On lance la vidéo : on met autoplay=1
+        // LA NOUVELLE JOUE TOUTE SEULE
         if(!frame.src.includes('autoplay=1')){
           frame.src = getEmbed(v, true);
         } else {
-          // Si déjà autoplay, on envoie Play via YouTube API
-          frame.contentWindow?.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+          try{ frame.contentWindow?.postMessage('{"event":"command","func":"playVideo","args":""}', '*'); }catch(e){}
         }
         let playBtn = document.getElementById('play-'+vid);
         if(playBtn) playBtn.classList.remove('show');
+        frame.dataset.paused='0';
       } else {
-        // Tu es passé à une autre vidéo -> ON ARRÊTE celle-ci, comme TikTok !
-        // On envoie Pause à YouTube
+        // TU ES PASSÉ À UNE AUTRE VIDÉO -> L'ANCIENNE S'ARRÊTE !
         try{ frame.contentWindow?.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*'); }catch(e){}
-        // Et on coupe l'autoplay pour être sûr qu'elle ne joue plus en arrière-plan
-        if(frame.src.includes('autoplay=1')){
-          // On ne recharge pas tout de suite pour ne pas faire clignoter, on met juste pause
-        }
       }
     });
-  }, {threshold: 0.6}); // 60% visible = c'est celle que tu regardes
+  }, {threshold: 0.6});
   document.querySelectorAll('.short').forEach(el=>observer.observe(el));
 }
 
@@ -239,8 +215,6 @@ function togglePlay(vid){
   let v = videos.find(x=>x.id===vid);
   let playBtn = document.getElementById('play-'+vid);
   if(!frame) return;
-  // Si la vidéo est en pause, on la relance. Si elle joue, on la met en pause.
-  // On utilise un petit drapeau
   let isPaused = frame.dataset.paused === '1';
   if(isPaused){
     frame.dataset.paused='0';
@@ -253,34 +227,24 @@ function togglePlay(vid){
   }
 }
 
-// ===== LIKES QUI RESTENT POUR TOUJOURS =====
+// ===== LIKES QUI RESTENT =====
 function like(id, e){
   if(e) e.stopPropagation();
   let v=videos.find(x=>x.id===id);
   let wasLiked = !!myLikes[id];
-  if(!wasLiked){
-    myLikes[id]=1;
-    v.likes = v.likes; // on garde le nombre de base, l'affichage ajoute +1
-  } else {
-    delete myLikes[id];
-  }
-  // On sauvegarde dans le téléphone pour que ça reste même si tu fermes l'app
+  if(!wasLiked){ myLikes[id]=1; v.likes = v.likes + 1; } else { delete myLikes[id]; v.likes = Math.max(0, v.likes - 1); }
   localStorage.setItem('freddyv_my_likes', JSON.stringify(myLikes));
-  // On envoie aussi au Sheet pour que tout le monde voit que tu as aimé
   fetch(API_URL + '?action=like&videoId=' + encodeURIComponent(id) + '&link=' + encodeURIComponent(v.link) + '&liked=' + (wasLiked?0:1)).catch(()=>{});
   fetch(API_URL, {method:'POST', mode:'no-cors', body: JSON.stringify({action:'like', videoId:id, link:v.link, liked: wasLiked?0:1})}).catch(()=>{});
   let h=document.getElementById('heart-'+id); if(h){ h.classList.add('show'); setTimeout(()=>h.classList.remove('show'),500); }
-  // On met à jour juste le coeur et le nombre, sans recharger toute la page pour ne pas couper la vidéo !
   let countEl = document.getElementById('likeCount-'+id);
-  if(countEl) countEl.innerText = v.likes + (myLikes[id]?1:0);
-  // On met à jour le coeur
+  if(countEl) countEl.innerText = v.likes;
   document.querySelectorAll(`.short[data-vid="${id}"] .circle`).forEach(c=>{
     if(c.innerText.includes('❤️') || c.innerText.includes('🤍')){
       c.innerText = myLikes[id] ? '❤️' : '🤍';
       c.classList.toggle('liked', !!myLikes[id]);
     }
   });
-  // On sauvegarde aussi les likes dans le backup pour ne pas les perdre
   localStorage.setItem('freddyv_local_backup', JSON.stringify(videos));
 }
 function saveVideo(id){
@@ -308,7 +272,8 @@ function addComment(){
   let v=videos.find(x=>x.id===currentId);
   v.comments.push({name, text});
   document.getElementById('commentText').value=''; showComments();
-  fetch(API_URL, {method:'POST', mode:'no-cors', body: JSON.stringify({action:'comment', videoId: v.id, name, text})});
+  fetch(API_URL, {method:'POST', mode:'no-cors', body: JSON.stringify({action:'comment', videoId: v.id, link: v.link, name, text})});
+  fetch(API_URL + '?action=comment&link=' + encodeURIComponent(v.link) + '&name=' + encodeURIComponent(name) + '&text=' + encodeURIComponent(text)).catch(()=>{});
 }
 function openRemix(id){ currentId=id; document.getElementById('remixModal').classList.add('open'); }
 function doRemix(type){
