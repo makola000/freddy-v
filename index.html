@@ -2,17 +2,17 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>FREDDY-V</title>
 <meta name="description" content="FREDDY-V est une plateforme où chacun crée sa chaîne, publie ses vidéos, s'abonne aux autres et partage sa foi, sa musique et sa culture.">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-body{background:#000;color:#fff;overflow:hidden}
-header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(0,0,0,.95);padding:10px 12px 8px}
+body{background:#000;color:#fff;overflow:hidden;height:100dvh}
+header{position:fixed;top:0;left:0;right:0;z-index:100;background:linear-gradient(to bottom,rgba(0,0,0,.9),rgba(0,0,0,.4),transparent);padding:10px 12px 18px}
 .topRow{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.logo{font-weight:900;font-size:22px}.logo span{color:#fe2c55}
+.logo{font-weight:900;font-size:22px;text-shadow:0 2px 6px #000}.logo span{color:#fe2c55}
 header button{background:#fe2c55;color:#fff;border:none;padding:8px 14px;border-radius:20px;font-weight:700}
-.searchBar{display:flex;gap:6px;background:#222;border:1px solid #444;border-radius:25px;padding:6px 6px 6px 12px;align-items:center}
+.searchBar{display:flex;gap:6px;background:rgba(20,20,20,.9);border:1px solid #444;border-radius:25px;padding:6px 6px 6px 12px;align-items:center}
 .searchBar span{font-size:18px}
 .searchBar input{flex:1;background:transparent;border:none;outline:none;color:#fff;font-size:15px;min-width:0}
 .searchBar input::placeholder{color:#999}
@@ -20,24 +20,23 @@ header button{background:#fe2c55;color:#fff;border:none;padding:8px 14px;border-
 .searchTags{display:flex;gap:6px;overflow-x:auto;margin-top:8px;padding-bottom:2px;scrollbar-width:none}
 .searchTags button{background:#222;color:#fff;border:1px solid #444;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:700;white-space:nowrap;cursor:pointer}
 .searchTags button.active{background:#fe2c55;border-color:#fe2c55}
-/* === TIKTOK : 1 VIDÉO = 1 ÉCRAN, BIEN SÉPARÉE === */
-#feed{height:100vh;overflow-y:scroll;scroll-snap-type:y mandatory;padding-top:132px;padding-bottom:80px;scroll-behavior:smooth}
-.short{height:calc(100vh - 212px);scroll-snap-align:start;scroll-snap-stop:always;position:relative;background:#111;margin:0 0 12px 0;border-radius:16px;overflow:hidden;border:1px solid #222}
-.short iframe{width:100%;height:100%;border:none}
+#feed{height:100dvh;overflow-y:scroll;scroll-snap-type:y mandatory;padding-top:0;padding-bottom:0;scroll-behavior:smooth}
+.short{height:100dvh;scroll-snap-align:start;scroll-snap-stop:always;position:relative;background:#000;margin:0;border-radius:0;overflow:hidden}
+.short iframe{width:100%;height:100%;border:none;object-fit:cover}
 .overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.75),transparent 45%);pointer-events:none}
-.topStats{position:absolute;top:10px;left:10px;right:10px;z-index:20;display:flex;gap:5px;flex-wrap:wrap}
+.topStats{position:absolute;top:142px;left:10px;right:10px;z-index:20;display:flex;gap:5px;flex-wrap:wrap}
 .topStats span{background:rgba(0,0,0,.75);padding:6px 9px;border-radius:20px;font-size:11px;font-weight:800;border:1px solid rgba(255,255,255,.3)}
-.soundBtn{position:absolute;top:48px;right:12px;z-index:30;background:#fe2c55;color:#fff;border:none;padding:10px 14px;border-radius:20px;font-size:13px;font-weight:900;cursor:pointer}
+.soundBtn{position:absolute;top:182px;right:12px;z-index:30;background:#fe2c55;color:#fff;border:none;padding:10px 14px;border-radius:20px;font-size:13px;font-weight:900;cursor:pointer}
 .soundBtn.off{background:#000;border:1px solid #fff}
-.left{position:absolute;left:14px;bottom:20px;right:85px;z-index:10}
+.left{position:absolute;left:14px;bottom:78px;right:85px;z-index:10}
 .authorRow{display:flex;align-items:center;gap:8px;margin-bottom:6px}
 .authorRow img{width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid #fff}
-.authorRow b{font-size:16px}
+.authorRow b{font-size:16px;text-shadow:0 1px 4px #000}
 .subBtn{background:#fff;color:#000;border:none;padding:6px 14px;border-radius:20px;font-weight:800;font-size:13px;cursor:pointer}
 .subBtn.subbed{background:#fe2c55;color:#fff}
-.left p{font-size:14px;margin-top:6px;line-height:1.4}
+.left p{font-size:14px;margin-top:6px;line-height:1.4;text-shadow:0 1px 4px #000}
 .left small{opacity:.8}
-.right{position:absolute;right:10px;bottom:80px;z-index:10;display:flex;flex-direction:column;gap:15px;align-items:center}
+.right{position:absolute;right:10px;bottom:110px;z-index:10;display:flex;flex-direction:column;gap:15px;align-items:center}
 .action{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer}
 .circle{width:54px;height:54px;border-radius:50%;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center;font-size:24px}
 .circle.liked{background:#fe2c55}.circle.saved{background:#ffcc00}
@@ -50,7 +49,7 @@ header button{background:#fe2c55;color:#fff;border:none;padding:8px 14px;border-
 .bottomNav div{font-size:26px;cursor:pointer;text-align:center}
 .bottomNav div.active{color:#fe2c55}
 .bottomNav small{display:block;font-size:10px}
-.noResult{text-align:center;padding:60px 20px;color:#aaa}
+.noResult{text-align:center;padding:180px 20px;color:#aaa}
 .noResult button{background:#fe2c55;color:#fff;border:none;padding:12px 20px;border-radius:20px;font-weight:800;margin-top:14px}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;z-index:300;align-items:flex-end;justify-content:center}
 .modal.open{display:flex}
@@ -83,7 +82,6 @@ header button{background:#fe2c55;color:#fff;border:none;padding:8px 14px;border-
 <div class="searchTags" id="searchTags"></div>
 </header>
 <div id="feed"></div>
-<div style="position:fixed;bottom:60px;left:0;right:0;text-align:center;background:rgba(0,0,0,.85);padding:6px;font-size:11px;z-index:150"><a onclick="alert('FREDDY-V est une plateforme créée par Freddy V à Kinshasa pour créer sa chaîne, publier ses vidéos et s\'abonner aux autres.')" style="color:#aaa;margin:0 6px;cursor:pointer">À Propos</a> • <a onclick="alert('Nous ne collectons pas tes données sensibles. Nous utilisons des cookies pour compter 1 personne = 1 vue et mémoriser tes likes et abonnements.')" style="color:#aaa;margin:0 6px;cursor:pointer">Confidentialité</a> • <a onclick="alert('Contact : Freddy V, Kinshasa - contact@freddy-v.com')" style="color:#aaa;margin:0 6px;cursor:pointer">Contact</a></div>
 <div id="tapSound" onclick="enableSound()">🔊 TOUCHE ICI 1 FOIS POUR LE SON AUTO</div>
 <div class="bottomNav">
 <div class="active" onclick="clearSearch();showFeed()">🏠<small>Accueil</small></div>
@@ -99,6 +97,7 @@ header button{background:#fe2c55;color:#fff;border:none;padding:8px 14px;border-
 <input id="pubAuthor" placeholder="Nom de ta chaîne..."><input id="pubLink" placeholder="Colle ton lien YouTube / TikTok / Facebook">
 <button onclick="publishVideo()" id="pubBtn">🚀 PUBLIER - COMMENCER À 0</button>
 <button onclick="closePublish()" style="background:#eee;color:#111;margin-top:10px">Annuler</button>
+<p style="text-align:center;color:#888;font-size:12px;margin-top:14px">À Propos • Confidentialité • Contact : Freddy V, Kinshasa - contact@freddy-v.com</p>
 </div>
 <div class="profile" id="profilePage">
 <h2>👤 Ma Chaîne FREDDY-V</h2>
@@ -114,18 +113,21 @@ header button{background:#fe2c55;color:#fff;border:none;padding:8px 14px;border-
 const API_URL="https://script.google.com/macros/s/AKfycbzrf2mRkCNMDT1_45TrkaC0Eu5WLWNZrI6C2E9Z07AKgYlcnd_ramCtC-vQ8-YaJHk0Cw/exec";
 let videos=[];let filtered=[];let currentId=null;let currentSearch='';
 let deviceId=localStorage.getItem('freddyv_device')||('dev_'+Math.random().toString(36).slice(2,9));localStorage.setItem('freddyv_device',deviceId);
-let seen=JSON.parse(localStorage.getItem('freddyv_seen_final_v2')||'{}');
+// === 1 VUE = 1 PERSONNE = 1 VIDÉO = 1 JOUR, COMME TIKTOK / YOUTUBE ===
+function todayStr(){let d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
+let seen=JSON.parse(localStorage.getItem('freddyv_seen_daily')||'{}');
 let myLikes=JSON.parse(localStorage.getItem('freddyv_my_likes')||'{}');
 let mySaved=JSON.parse(localStorage.getItem('freddyv_my_saved')||'{}');
 let mySubs=JSON.parse(localStorage.getItem('freddyv_subs')||'{}');
 let realCounts=JSON.parse(localStorage.getItem('freddyv_real_counts_v2')||'{}');
 let savedComments=JSON.parse(localStorage.getItem('freddyv_comments_v2')||'{}');
+let viewTimers={};
 function keyOf(v){return (v.link||v.id||'').trim();}
 function getCounts(v){let k=keyOf(v);if(!realCounts[k])realCounts[k]={views:0,likes:0};return realCounts[k];}
 function saveCounts(){localStorage.setItem('freddyv_real_counts_v2',JSON.stringify(realCounts));}
 function getSavedComments(v){let k=keyOf(v);return savedComments[k]||[];}
 function saveAllComments(){localStorage.setItem('freddyv_comments_v2',JSON.stringify(savedComments));}
-function resetAllCounters(){if(!confirm('Remettre TOUT à 0 ?'))return;realCounts={};seen={};myLikes={};savedComments={};localStorage.setItem('freddyv_real_counts_v2',JSON.stringify(realCounts));localStorage.setItem('freddyv_seen_final_v2',JSON.stringify(seen));localStorage.setItem('freddyv_my_likes',JSON.stringify(myLikes));localStorage.setItem('freddyv_comments_v2',JSON.stringify(savedComments));videos.forEach(v=>{v.views=0;v.likes=0;v.comments=[];});filtered=videos;render();alert('✅ Tout est à 0 !');}
+function resetAllCounters(){if(!confirm('Remettre TOUT à 0 ?'))return;realCounts={};seen={};myLikes={};savedComments={};localStorage.setItem('freddyv_real_counts_v2',JSON.stringify(realCounts));localStorage.setItem('freddyv_seen_daily',JSON.stringify(seen));localStorage.setItem('freddyv_my_likes',JSON.stringify(myLikes));localStorage.setItem('freddyv_comments_v2',JSON.stringify(savedComments));videos.forEach(v=>{v.views=0;v.likes=0;v.comments=[];});filtered=videos;render();alert('✅ Tout est à 0 !');}
 let myChannel=localStorage.getItem('freddyv_channel')||'Freddy V';
 let soundOn=localStorage.getItem('freddyv_sound')==='1';
 let observer=null;
@@ -139,8 +141,8 @@ async function loadVideos(){
    let serverComments = Array.isArray(v.comments) ? v.comments : [];
    let local = getCounts(tmp);
    let localCom = getSavedComments(tmp);
-   let finalViews = serverViews>0 ? serverViews : local.views;
-   let finalLikes = serverLikes>0 ? serverLikes : local.likes;
+   let finalViews = Math.max(serverViews, local.views);
+   let finalLikes = Math.max(serverLikes, local.likes);
    let finalComments = serverComments.length>0 ? serverComments : localCom;
    if(serverViews>0){ local.views=serverViews; }
    if(serverLikes>0){ local.likes=serverLikes; }
@@ -151,8 +153,24 @@ async function loadVideos(){
  saveCounts();saveAllComments();
 }catch(e){let b=JSON.parse(localStorage.getItem('freddyv_local_backup')||'[]');videos=b.length?b:[{id:'old-1',title:'La séparation',desc:'Mon partage.',author:'Freddy V',source:'youtube',link:'https://youtube.com/shorts/2vbWaxYFW4I',likes:0,views:0,comments:[],saved:false}];videos.forEach(v=>{let c=getCounts(v);v.views=c.views;v.likes=c.likes;v.comments=getSavedComments(v);});}
  filtered=videos;document.getElementById('loading').style.display='none';document.getElementById('myChannelLabel').innerText=myChannel.slice(0,6);buildTags();render();
- // Si le son était déjà activé avant, on ne montre pas le bouton
  if(!soundOn)document.getElementById('tapSound').style.display='block';
+ setInterval(refreshCounts,30000);
+}
+async function refreshCounts(){
+ try{const r=await fetch(API_URL);const d=await r.json();let list=Array.isArray(d)?d:(d.videos||d.data||d.rows||[]);
+ let changed=false;
+ list.forEach(sv=>{
+   let link=sv.link||sv.Link||sv.url||'';
+   let v=videos.find(x=>x.link===link);
+   if(v){
+     let svViews=Number(sv.views)||0; let svLikes=Number(sv.likes)||0;
+     if(svViews>v.views){v.views=svViews;changed=true;}
+     if(svLikes>v.likes){v.likes=svLikes;changed=true;}
+     if(Array.isArray(sv.comments) && sv.comments.length>v.comments.length){v.comments=sv.comments;changed=true;}
+   }
+ });
+ if(changed){render();}
+ }catch(e){}
 }
 function buildTags(){let tags=['Tout','Foi','Jésus','Afrique','Musique','Football','Comédie','News'];let t=document.getElementById('searchTags');t.innerHTML=tags.map((x,i)=>`<button class="${i===0?'active':''}" onclick="tagSearch('${x}',this)">${x==='Tout'?'🏠 Tout':'🔍 '+x}</button>`).join('');}
 function tagSearch(tag,el){document.querySelectorAll('#searchTags button').forEach(b=>b.classList.remove('active'));el.classList.add('active');if(tag==='Tout')clearSearch();else{document.getElementById('searchInput').value=tag;doSearch(tag);}}
@@ -162,7 +180,7 @@ function getVideoId(link){let id=link.trim();if(id.includes('/shorts/'))id=id.sp
 function getEmbed(v,auto){let s=(v.source||'').toLowerCase();let link=(v.link||'').trim();if(s.includes('youtube')||link.includes('youtube')||link.includes('youtu.be')){let id=getVideoId(link);return `https://www.youtube.com/embed/${id}?autoplay=${auto?1:0}&mute=${soundOn?0:1}&controls=1&rel=0&enablejsapi=1&playsinline=1`;}if(s.includes('facebook')||link.includes('facebook'))return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(link)}&show_text=false`;return link;}
 function getSubsCount(author){let c=0;if(mySubs[author])c++;if(author===myChannel)return c;return c;}
 function render(){const feed=document.getElementById('feed');feed.innerHTML='';
- if(currentSearch)feed.innerHTML=`<div style="padding:10px 14px;background:#111;border-radius:12px;margin:0 10px 10px;font-size:13px">🔍 Résultats pour <b>"${currentSearch}"</b> : <b>${filtered.length} vidéo(s)</b> <span onclick="clearSearch()" style="color:#fe2c55;cursor:pointer;font-weight:800;margin-left:8px">✕ Effacer</span></div>`;
+ if(currentSearch)feed.innerHTML=`<div style="position:absolute;top:140px;left:10px;right:10px;z-index:50;padding:10px 14px;background:#111;border-radius:12px;font-size:13px">🔍 Résultats pour <b>"${currentSearch}"</b> : <b>${filtered.length} vidéo(s)</b> <span onclick="clearSearch()" style="color:#fe2c55;cursor:pointer;font-weight:800;margin-left:8px">✕ Effacer</span></div>`;
  if(filtered.length===0){feed.innerHTML+=`<div class="noResult"><div style="font-size:50px">😢</div><h3>Aucune vidéo pour "${currentSearch}"</h3><p>Essaie un autre mot</p><button onclick="clearSearch()">Voir toutes les vidéos</button></div>`;return;}
  filtered.forEach((v,idx)=>{let liked=!!myLikes[keyOf(v)];let isSub=!!mySubs[v.author];let isMe=v.author===myChannel;const div=document.createElement('div');div.className='short';div.dataset.vid=v.id;div.dataset.link=v.link;
  div.innerHTML=`
@@ -190,14 +208,28 @@ function render(){const feed=document.getElementById('feed');feed.innerHTML='';
 function toggleSub(author,e){if(e)e.stopPropagation();if(author===myChannel)return;if(mySubs[author]){delete mySubs[author];alert('❌ Désabonné de @'+author);}else{mySubs[author]=1;alert('✅ Tu es abonné à @'+author+' !');}localStorage.setItem('freddyv_subs',JSON.stringify(mySubs));render();}
 function enableSound(){soundOn=true;localStorage.setItem('freddyv_sound','1');document.getElementById('tapSound').style.display='none';document.querySelectorAll('iframe').forEach(f=>{let src=f.src;if(src.includes('mute=1')){f.src=src.replace('mute=1','mute=0');}try{f.contentWindow.postMessage('{"event":"command","func":"unMute","args":""}','*');f.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}','*');}catch(e){}});document.querySelectorAll('.soundBtn').forEach(b=>{b.innerText='🔊 SON ON';b.classList.remove('off');});}
 function toggleSound(e){e.stopPropagation();if(!soundOn)enableSound();else{soundOn=false;localStorage.setItem('freddyv_sound','0');document.querySelectorAll('iframe').forEach(f=>{try{f.contentWindow.postMessage('{"event":"command","func":"mute","args":""}','*');}catch(e){}});document.querySelectorAll('.soundBtn').forEach(b=>{b.innerText='🔇 SON OFF';b.classList.add('off');});document.getElementById('tapSound').style.display='block';}}
-// 1ère touche n'importe où = son auto pour toujours
 document.addEventListener('touchstart',function(){if(!soundOn)enableSound();},{once:true});
 document.addEventListener('click',function(){if(!soundOn)enableSound();},{once:true});
-function setupAutoPlay(){if(observer)observer.disconnect();observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{let vid=entry.target.dataset.vid;let link=entry.target.dataset.link;let frame=document.getElementById('frame-'+vid);if(!frame)return;let v=videos.find(x=>x.id===vid);if(!v)v=videos.find(x=>x.link===link);if(!v)return;if(entry.isIntersecting){let key=deviceId+'_'+link;if(!seen[key]){seen[key]=1;localStorage.setItem('freddyv_seen_final_v2',JSON.stringify(seen));v.views++;let c=getCounts(v);c.views=v.views;saveCounts();let t=entry.target.querySelector('.topStats');if(t)t.innerHTML=`<span>👁️ ${fmt(v.views)} vues</span><span>💬 ${v.comments.length} commentaires</span><span>❤️ ${fmt(v.likes)} likes</span><span>${v.source.toUpperCase()}</span>`;fetch(API_URL+'?action=view&videoId='+encodeURIComponent(vid)+'&link='+encodeURIComponent(v.link)).catch(()=>{});}
-// === SON AUTO : quand tu arrives sur une vidéo, elle joue avec son ===
+// === TIKTOK / YOUTUBE : 1 VUE PAR JOUR PAR VIDÉO PAR PERSONNE ===
+function setupAutoPlay(){if(observer)observer.disconnect();observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{let vid=entry.target.dataset.vid;let link=entry.target.dataset.link;let frame=document.getElementById('frame-'+vid);if(!frame)return;let v=videos.find(x=>x.id===vid);if(!v)v=videos.find(x=>x.link===link);if(!v)return;if(entry.isIntersecting){
+if(viewTimers[vid])clearTimeout(viewTimers[vid]);
+viewTimers[vid]=setTimeout(()=>{
+  // Clé unique : téléphone + vidéo + date d'aujourd'hui
+  let dailyKey = deviceId + '_' + link + '_' + todayStr();
+  // Si tu as déjà vu CETTE vidéo AUJOURD'HUI, on ne compte pas encore
+  if(!seen[dailyKey]){
+    seen[dailyKey]=1;
+    localStorage.setItem('freddyv_seen_daily',JSON.stringify(seen));
+    v.views++;let c=getCounts(v);c.views=v.views;saveCounts();
+    let t=entry.target.querySelector('.topStats');if(t)t.innerHTML=`<span>👁️ ${fmt(v.views)} vues</span><span>💬 ${v.comments.length} commentaires</span><span>❤️ ${fmt(v.likes)} likes</span><span>${v.source.toUpperCase()}</span>`;
+    fetch(API_URL+'?action=view&videoId='+encodeURIComponent(vid)+'&link='+encodeURIComponent(v.link)).catch(()=>{});
+  }
+},3000);
 if(soundOn){if(!frame.src.includes('mute=0'))frame.src=getEmbed(v,true);else{try{frame.contentWindow.postMessage('{"event":"command","func":"unMute","args":""}','*');frame.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}','*');}catch(e){}}}
 else{if(!frame.src.includes('autoplay=1'))frame.src=getEmbed(v,true);}
-let pb=document.getElementById('play-'+vid);if(pb)pb.classList.remove('show');frame.dataset.paused='0';}else{try{frame.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}','*');}catch(e){}}});},{threshold:0.7});document.querySelectorAll('.short').forEach(el=>observer.observe(el));}
+let pb=document.getElementById('play-'+vid);if(pb)pb.classList.remove('show');frame.dataset.paused='0';}else{
+if(viewTimers[vid]){clearTimeout(viewTimers[vid]);viewTimers[vid]=null;}
+try{frame.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}','*');}catch(e){}}});},{threshold:0.7});document.querySelectorAll('.short').forEach(el=>observer.observe(el));}
 function togglePlay(vid){let f=document.getElementById('frame-'+vid);let v=videos.find(x=>x.id===vid);let pb=document.getElementById('play-'+vid);if(!f)return;if(f.dataset.paused==='1'){f.dataset.paused='0';f.src=getEmbed(v,true);if(pb)pb.classList.remove('show');}else{f.dataset.paused='1';try{f.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}','*');}catch(e){}if(pb)pb.classList.add('show');}}
 function like(id,e){if(e)e.stopPropagation();let v=videos.find(x=>x.id===id);let c=getCounts(v);let k=keyOf(v);if(!myLikes[k]){myLikes[k]=1;v.likes++;c.likes=v.likes;}else{delete myLikes[k];v.likes=Math.max(0,v.likes-1);c.likes=v.likes;}saveCounts();localStorage.setItem('freddyv_my_likes',JSON.stringify(myLikes));let heart=document.getElementById('heart-'+id);if(heart){heart.classList.add('show');setTimeout(()=>heart.classList.remove('show'),700);}fetch(API_URL+'?action=like&videoId='+encodeURIComponent(id)+'&link='+encodeURIComponent(v.link)).catch(()=>{});render();}
 function saveVideo(id){let v=videos.find(x=>x.id===id);v.saved=!v.saved;if(v.saved)mySaved[keyOf(v)]=1;else delete mySaved[keyOf(v)];localStorage.setItem('freddyv_my_saved',JSON.stringify(mySaved));alert(v.saved?'✅ Enregistré !':'❌ Retiré');render();}
