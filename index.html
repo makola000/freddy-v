@@ -7,9 +7,8 @@
 <meta name="description" content="FREDDY-V est une plateforme où chacun crée sa chaîne, publie ses vidéos, s'abonne aux autres et partage sa foi, sa musique et sa culture.">
 
 <!-- ===== GOOGLE ANALYTICS - FREDDY-V ===== -->
-<!-- Nom de la propriété : freddy-chat-d7685 -->
+<!-- Propriété : freddy-chat-d7685 -->
 <!-- Measurement ID : G-8SJX6NZFX9 -->
-<!-- Stream : FREDDY-V - freddy-v-o82q.onrender.com -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-8SJX6NZFX9"></script>
 <script>
 window.dataLayer = window.dataLayer || [];
@@ -19,8 +18,6 @@ gtag('config', 'G-8SJX6NZFX9');
 </script>
 <!-- ===== FIN GOOGLE ANALYTICS ===== -->
 
-<!-- GOOGLE ADSENSE : QUAND GOOGLE T'ACCEPTE, TU COLLES TON CODE ICI -->
-<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
 body{background:#000;color:#fff;overflow:hidden;height:100dvh}
@@ -132,10 +129,11 @@ header button{background:#fe2c55;color:#fff;border:none;padding:8px 14px;border-
 <button onclick="closePublish()" style="background:#eee;color:#111;margin-top:10px">Annuler</button>
 
 <div class="statsBox">
-<h3>👥 VISITEURS + 📊 CHIFFRES RÉELS - Google Analytics Activé</h3>
+<h3>👥 VISITEURS POUR TOUT LE MONDE + 📊 CHIFFRES RÉELS</h3>
+<p style="font-size:12px;color:#00e676;text-align:center;margin-bottom:10px">✅ Maintenant ce chiffre est le même pour tout le monde, pas juste ton téléphone !</p>
 <div class="statsGrid">
-<div class="statCard green"><b id="statTodayVisitors">0</b><small>👥 Visiteurs Aujourd'hui</small></div>
-<div class="statCard green"><b id="statTotalVisitors">0</b><small>👥 Total Visiteurs Site</small></div>
+<div class="statCard green"><b id="statTodayVisitors">...</b><small>👥 Visiteurs Aujourd'hui - TOUT LE MONDE</small></div>
+<div class="statCard green"><b id="statTotalVisitors">...</b><small>👥 Total Visiteurs - TOUT LE MONDE</small></div>
 <div class="statCard"><b id="statTotalViews">0</b><small>👁️ Total Vues Réelles</small></div>
 <div class="statCard"><b id="statTotalLikes">0</b><small>❤️ Total Likes Réels</small></div>
 <div class="statCard"><b id="statTotalShares">0</b><small>↗️ Total Partages Réels</small></div>
@@ -145,9 +143,9 @@ header button{background:#fe2c55;color:#fff;border:none;padding:8px 14px;border-
 </div>
 <p id="statUpdate" style="font-size:12px;color:#ffcc00;margin-top:10px;text-align:center">Actualisé à l'instant...</p>
 <p id="visitorInfo" style="font-size:12px;color:#ccc;margin-top:6px;text-align:center"></p>
-<div style="background:#0a2a43;border-radius:10px;padding:10px;margin-top:10px;text-align:center;font-size:12px;color:#fff">📈 <b>Google Analytics - freddy-chat-d7685</b><br>ID : G-8SJX6NZFX9<br><span id="gaStatus" style="color:#00e676">✅ Analytics activé : G-8SJX6NZFX9 - Va sur analytics.google.com</span></div>
+<div style="background:#0a2a43;border-radius:10px;padding:10px;margin-top:10px;text-align:center;font-size:12px;color:#fff">📈 <b>Google Analytics - freddy-chat-d7685</b><br>ID : G-8SJX6NZFX9<br><span id="gaStatus" style="color:#00e676">✅ Analytics activé : G-8SJX6NZFX9</span></div>
 <div id="myVideosList" style="margin-top:12px"></div>
-<button onclick="updatePublishStats()" style="background:#fe2c55;margin-top:10px">🔄 ACTUALISER MES CHIFFRES RÉELS</button>
+<button onclick="updatePublishStats();refreshGlobalVisitors(true)" style="background:#fe2c55;margin-top:10px">🔄 ACTUALISER MES CHIFFRES RÉELS - TOUT LE MONDE</button>
 </div>
 
 <div style="background:#f5f5f5;border:1px dashed #ccc;border-radius:12px;padding:14px;text-align:center;color:#888;font-size:13px;margin:10px 0">Publicité - FREDDY-V Kolwezi<br><span style="font-size:11px">Espace réservé à Google AdSense</span></div>
@@ -187,7 +185,7 @@ header button{background:#fe2c55;color:#fff;border:none;padding:8px 14px;border-
 <p>FREDDY-V utilise <b>Google Analytics - Propriété : freddy-chat-d7685 - ID : G-8SJX6NZFX9</b> pour compter les visiteurs, savoir quelles vidéos sont les plus regardées et améliorer le site. Google Analytics utilise des cookies pour mesurer les visites de façon anonyme.</p>
 <p>FREDDY-V utilise aussi <b>Google AdSense</b> pour afficher des publicités. Google utilise des cookies pour afficher des annonces adaptées à vos intérêts, mesurer les visites et lutter contre la fraude. Vous pouvez désactiver la personnalisation des annonces dans les paramètres de votre compte Google, sur la page <b>Ads Settings</b> de Google.</p>
 <h3>3. Visiteurs du site</h3>
-<p>Nous comptons le nombre de visiteurs par jour pour savoir combien de personnes visitent FREDDY-V. Ce comptage est anonyme : 1 téléphone = 1 visiteur par jour. Nous ne collectons pas votre nom ou votre adresse pour ce comptage.</p>
+<p>Nous comptons le nombre de visiteurs pour tout le monde avec un compteur partagé sur internet et avec Google Analytics. Chaque téléphone compte 1 fois par jour. Ce comptage est anonyme : nous ne collectons pas votre nom ou votre adresse pour ce comptage.</p>
 <h3>4. Informations stockées dans votre téléphone</h3>
 <p>Vos préférences, comme le son activé, vos likes et vos abonnements, sont enregistrées dans votre propre téléphone. Vous pouvez les effacer à tout moment en effaçant les données de votre navigateur.</p>
 <h3>5. Vidéos de tiers</h3>
@@ -240,29 +238,63 @@ let mySubs=JSON.parse(localStorage.getItem('freddyv_subs')||'{}');
 let realCounts=JSON.parse(localStorage.getItem('freddyv_real_counts_v2')||'{}');
 let savedComments=JSON.parse(localStorage.getItem('freddyv_comments_v2')||'{}');
 let viewTimers={};
-let visitorData=JSON.parse(localStorage.getItem('freddyv_visitors')||'{"total":0,"byDay":{}}');
-function countVisitor(){
-  let today=todayStr();
-  let lastVisit=localStorage.getItem('freddyv_last_visit_day');
-  if(lastVisit!==today){
-    localStorage.setItem('freddyv_last_visit_day',today);
-    visitorData.total=(Number(visitorData.total)||0)+1;
-    if(!visitorData.byDay)visitorData.byDay={};
-    visitorData.byDay[today]=(Number(visitorData.byDay[today])||0)+1;
-    localStorage.setItem('freddyv_visitors',JSON.stringify(visitorData));
-    trackEvent('visit_site',{day:today,property:GA_PROPERTY});
-    fetch(API_URL+'?action=visit&deviceId='+encodeURIComponent(deviceId)+'&day='+encodeURIComponent(today)).catch(()=>{});
+
+// ===== VISITEURS POUR TOUT LE MONDE - COMPTEUR GLOBAL PARTAGÉ =====
+// Avant : chaque téléphone gardait son chiffre. Maintenant : 1 seul compteur sur internet pour tout le monde.
+let visitorData={total:0,byDay:{}};
+let globalVisitorsLoaded=false;
+try{let savedV=JSON.parse(localStorage.getItem('freddyv_visitors_global')||'{}'); if(savedV.total) visitorData=savedV;}catch(e){}
+function saveGlobalVisitors(){localStorage.setItem('freddyv_visitors_global',JSON.stringify(visitorData));}
+async function refreshGlobalVisitors(forceHit){
+  // 1. Essaye le compteur global partagé (CountAPI) - c'est lui qui compte pour tout le monde
+  try{
+    let today=todayStr();
+    // Si c'est la 1ère visite de ce téléphone aujourd'hui, on fait +1 sur le compteur global
+    let lastVisit=localStorage.getItem('freddyv_last_visit_day');
+    let shouldHit = forceHit || (lastVisit!==today);
+    if(shouldHit && !forceHit){
+      localStorage.setItem('freddyv_last_visit_day',today);
+    }
+    if(shouldHit && !forceHit){
+      // +1 total pour tout le monde
+      let r1=await fetch('https://api.countapi.xyz/hit/freddy-v-site-o82q/total');
+      let j1=await r1.json(); if(j1.value!==undefined) visitorData.total=j1.value;
+      // +1 aujourd'hui pour tout le monde
+      let r2=await fetch('https://api.countapi.xyz/hit/freddy-v-site-o82q/day-'+today);
+      let j2=await r2.json(); if(j2.value!==undefined){ if(!visitorData.byDay) visitorData.byDay={}; visitorData.byDay[today]=j2.value; }
+      trackEvent('visit_site',{day:today,property:GA_PROPERTY});
+      try{fetch(API_URL+'?action=visit&deviceId='+encodeURIComponent(deviceId)+'&day='+encodeURIComponent(today)).catch(()=>{});}catch(e){}
+    } else {
+      // Juste lire le chiffre global, sans ajouter +1 (pour ne pas tricher quand on appuie sur Actualiser)
+      let r1=await fetch('https://api.countapi.xyz/get/freddy-v-site-o82q/total');
+      let j1=await r1.json(); if(j1.value!==undefined) visitorData.total=j1.value;
+      let r2=await fetch('https://api.countapi.xyz/get/freddy-v-site-o82q/day-'+today);
+      let j2=await r2.json(); if(j2.value!==undefined){ if(!visitorData.byDay) visitorData.byDay={}; visitorData.byDay[today]=j2.value; }
+    }
+    globalVisitorsLoaded=true;
+    saveGlobalVisitors();
+    updatePublishStats();
+  }catch(e){
+    // Si internet coupe, on garde l'ancien chiffre global, on ne retombe pas à 1
+    console.log('Compteur global indisponible, on garde ancien chiffre');
   }
-  return visitorData;
+  // 2. Essaye aussi Google Sheet si il donne un chiffre plus grand
+  try{
+    const r=await fetch(API_URL); const d=await r.json();
+    if(d.totalVisitors!==undefined && Number(d.totalVisitors)>Number(visitorData.total)){ visitorData.total=Number(d.totalVisitors); saveGlobalVisitors(); updatePublishStats(); }
+    if(d.todayVisitors!==undefined && Number(d.todayVisitors)>getTodayVisitors()){ if(!visitorData.byDay) visitorData.byDay={}; visitorData.byDay[todayStr()]=Number(d.todayVisitors); saveGlobalVisitors(); updatePublishStats(); }
+  }catch(e){}
 }
-countVisitor();
+refreshGlobalVisitors(false);
+setInterval(()=>refreshGlobalVisitors(false),30000);
+
 function getTodayVisitors(){let d=visitorData.byDay||{};return Number(d[todayStr()])||0;}
 function keyOf(v){return (v.link||v.id||'').trim();}
 function getCounts(v){let k=keyOf(v);if(!realCounts[k])realCounts[k]={views:0,likes:0,shares:0};if(realCounts[k].shares===undefined)realCounts[k].shares=0;return realCounts[k];}
 function saveCounts(){localStorage.setItem('freddyv_real_counts_v2',JSON.stringify(realCounts));}
 function getSavedComments(v){let k=keyOf(v);return savedComments[k]||[];}
 function saveAllComments(){localStorage.setItem('freddyv_comments_v2',JSON.stringify(savedComments));}
-function resetAllCounters(){if(!confirm('Remettre TOUT à 0 ?'))return;realCounts={};seen={};myLikes={};savedComments={};localStorage.setItem('freddyv_real_counts_v2',JSON.stringify(realCounts));localStorage.setItem('freddyv_seen_daily',JSON.stringify(seen));localStorage.setItem('freddyv_my_likes',JSON.stringify(myLikes));localStorage.setItem('freddyv_comments_v2',JSON.stringify(savedComments));videos.forEach(v=>{v.views=0;v.likes=0;v.shares=0;v.comments=[];});filtered=videos;render();updatePublishStats();alert('✅ Tout est à 0 ! Les visiteurs ne sont pas effacés.');}
+function resetAllCounters(){if(!confirm('Remettre TOUT à 0 ? Attention : les visiteurs pour tout le monde ne seront PAS effacés.'))return;realCounts={};seen={};myLikes={};savedComments={};localStorage.setItem('freddyv_real_counts_v2',JSON.stringify(realCounts));localStorage.setItem('freddyv_seen_daily',JSON.stringify(seen));localStorage.setItem('freddyv_my_likes',JSON.stringify(myLikes));localStorage.setItem('freddyv_comments_v2',JSON.stringify(savedComments));videos.forEach(v=>{v.views=0;v.likes=0;v.shares=0;v.comments=[];});filtered=videos;render();updatePublishStats();alert('✅ Vues / Likes / Commentaires remis à 0 ! Les visiteurs pour tout le monde ne sont pas effacés.');}
 let myChannel=localStorage.getItem('freddyv_channel')||'Freddy V';
 let soundOn=localStorage.getItem('freddyv_sound')==='1';
 let observer=null;
@@ -283,7 +315,7 @@ function updatePublishStats(){
   let el3=document.getElementById('statMyViews');if(el3)el3.innerText=fmt(myViews);
   let el4=document.getElementById('statMyCount');if(el4)el4.innerText=mine.length;
   let up=document.getElementById('statUpdate');if(up)up.innerText='Actualisé à '+new Date().toLocaleTimeString()+' - Réel : '+totalViews+' vues • '+totalLikes+' likes • '+totalShares+' partages • '+totalComments+' commentaires';
-  let vi=document.getElementById('visitorInfo');if(vi)vi.innerText='📅 Aujourd\'hui '+todayStr()+' : '+getTodayVisitors()+' visiteur(s) • Depuis le début : '+visitorData.total+' visiteur(s) • Chaque téléphone compte 1 fois par jour';
+  let vi=document.getElementById('visitorInfo');if(vi)vi.innerText='🌍 POUR TOUT LE MONDE - Aujourd\'hui '+todayStr()+' : '+getTodayVisitors()+' visiteur(s) • Depuis le début : '+visitorData.total+' visiteur(s) • 1 téléphone = 1 visite par jour, même chiffre pour tout le monde';
   let list=document.getElementById('myVideosList');
   if(list){
     if(mine.length===0){list.innerHTML='<p style="color:#666;font-size:13px;text-align:center">Tu n\'as pas encore de vidéo. Publie ta première vidéo !</p>';}
@@ -292,8 +324,8 @@ function updatePublishStats(){
 }
 async function loadVideos(){
  try{const r=await fetch(API_URL);const d=await r.json();let list=Array.isArray(d)?d:(d.videos||d.data||d.rows||[]);
- if(d.totalVisitors!==undefined){visitorData.total=Math.max(Number(visitorData.total)||0,Number(d.totalVisitors)||0);}
- if(d.todayVisitors!==undefined){if(!visitorData.byDay)visitorData.byDay={};visitorData.byDay[todayStr()]=Math.max(getTodayVisitors(),Number(d.todayVisitors)||0);}
+ if(d.totalVisitors!==undefined && Number(d.totalVisitors)>Number(visitorData.total)){visitorData.total=Number(d.totalVisitors);saveGlobalVisitors();}
+ if(d.todayVisitors!==undefined && Number(d.todayVisitors)>getTodayVisitors()){if(!visitorData.byDay)visitorData.byDay={};visitorData.byDay[todayStr()]=Number(d.todayVisitors);saveGlobalVisitors();}
  videos=list.map((v,i)=>{
    let tmp={id:v.id||v.ID||('sheet-'+i),link:v.link||v.Link||v.url||''};
    let serverViews = Number(v.views)||0;
@@ -313,7 +345,7 @@ async function loadVideos(){
    return{id:tmp.id,title:v.title||v.Title||'Vidéo FREDDY-V',desc:v.desc||v.Desc||'',author:v.author||v.Author||'Freddy V',source:(v.source||v.Source||'youtube').toLowerCase(),link:tmp.link,likes:finalLikes,views:finalViews,shares:finalShares,comments:finalComments,saved:!!mySaved[keyOf(tmp)]}}).filter(v=>v.link);
  let b=JSON.parse(localStorage.getItem('freddyv_local_backup')||'[]');b.forEach(x=>{if(!videos.find(v=>v.link===x.link)){let c=getCounts(x);x.views=c.views;x.likes=c.likes;x.shares=c.shares||0;x.comments=getSavedComments(x);videos.unshift(x);}});
  if(videos.length===0)videos=[{id:'old-1',title:'La séparation',desc:'Mon partage.',author:'Freddy V',source:'youtube',link:'https://youtube.com/shorts/2vbWaxYFW4I',likes:0,views:0,shares:0,comments:[],saved:false}];
- saveCounts();saveAllComments();localStorage.setItem('freddyv_visitors',JSON.stringify(visitorData));
+ saveCounts();saveAllComments();saveGlobalVisitors();
 }catch(e){let b=JSON.parse(localStorage.getItem('freddyv_local_backup')||'[]');videos=b.length?b:[{id:'old-1',title:'La séparation',desc:'Mon partage.',author:'Freddy V',source:'youtube',link:'https://youtube.com/shorts/2vbWaxYFW4I',likes:0,views:0,shares:0,comments:[],saved:false}];videos.forEach(v=>{let c=getCounts(v);v.views=c.views;v.likes=c.likes;v.shares=c.shares||0;v.comments=getSavedComments(v);});}
  filtered=videos;document.getElementById('loading').style.display='none';document.getElementById('myChannelLabel').innerText=myChannel.slice(0,6);buildTags();render();updatePublishStats();
  if(!soundOn)document.getElementById('tapSound').style.display='block';
@@ -335,7 +367,7 @@ async function refreshCounts(){
      if(Array.isArray(sv.comments) && sv.comments.length>v.comments.length){v.comments=sv.comments;changed=true;}
    }
  });
- if(changed){localStorage.setItem('freddyv_visitors',JSON.stringify(visitorData));render();updatePublishStats();}
+ if(changed){saveGlobalVisitors();render();updatePublishStats();}
  }catch(e){}
 }
 function buildTags(){let tags=['Tout','Foi','Jésus','Afrique','Musique','Football','Comédie','News'];let t=document.getElementById('searchTags');t.innerHTML=tags.map((x,i)=>`<button class="${i===0?'active':''}" onclick="tagSearch('${x}',this)">${x==='Tout'?'🏠 Tout':'🔍 '+x}</button>`).join('');}
@@ -402,7 +434,7 @@ function openComments(id){currentId=id;let v=videos.find(x=>x.id===id);let list=
 function addComment(){let name=document.getElementById('commentName').value.trim()||myChannel;let text=document.getElementById('commentText').value.trim();if(!text)return;let v=videos.find(x=>x.id===currentId);v.comments.push({name,text});let k=keyOf(v);savedComments[k]=v.comments;saveAllComments();trackEvent('comment_video',{video_title:v.title});document.getElementById('commentText').value='';openComments(currentId);fetch(API_URL,{method:'POST',body:JSON.stringify({action:'comment',videoId:currentId,link:v.link,name,text})}).catch(()=>{});render();updatePublishStats();}
 function openRemix(id){alert('🔁 Remix : Duo / Collage / Utiliser ce son !');}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
-function openPublish(){document.getElementById('pubAuthor').value=myChannel;updatePublishStats();trackEvent('open_publish',{});document.getElementById('publishPage').classList.add('open');}
+function openPublish(){document.getElementById('pubAuthor').value=myChannel;updatePublishStats();refreshGlobalVisitors(false);trackEvent('open_publish',{});document.getElementById('publishPage').classList.add('open');}
 function closePublish(){document.getElementById('publishPage').classList.remove('open');}
 function showFeed(){document.getElementById('profilePage').classList.remove('open');document.getElementById('publishPage').classList.remove('open');closeInfo();window.scrollTo(0,0);}
 function openProfile(){let myVideos=videos.filter(v=>v.author===myChannel);document.getElementById('myName').innerText='@'+myChannel;document.getElementById('myAvatar').innerText=myChannel[0].toUpperCase();document.getElementById('mySubs').innerText=fmt(getSubsCount(myChannel))+' abonnés • '+myVideos.length+' vidéos';document.getElementById('channelNameInput').value=myChannel;
