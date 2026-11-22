@@ -5,7 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>FREDDY-V</title>
 <meta name="description" content="FREDDY-V est une plateforme où chacun crée sa chaîne, publie ses vidéos, s'abonne aux autres et partage sa foi, sa musique et sa culture.">
-<!-- GOOGLE ADSENSE : QUAND GOOGLE T'ACCEPTE, TU COLLES TON CODE ICI EN DESSOUS -->
+
+<!-- ===== GOOGLE ANALYTICS - FREDDY-V ===== -->
+<!-- Nom de la propriété : freddy-chat-d7685 -->
+<!-- Measurement ID : G-8SJX6NZFX9 -->
+<!-- Stream : FREDDY-V - freddy-v-o82q.onrender.com -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8SJX6NZFX9"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-8SJX6NZFX9');
+</script>
+<!-- ===== FIN GOOGLE ANALYTICS ===== -->
+
+<!-- GOOGLE ADSENSE : QUAND GOOGLE T'ACCEPTE, TU COLLES TON CODE ICI -->
 <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
@@ -81,6 +95,8 @@ header button{background:#fe2c55;color:#fff;border:none;padding:8px 14px;border-
 .statCard{background:#222;border-radius:12px;padding:12px;text-align:center}
 .statCard b{display:block;font-size:22px;color:#fe2c55}
 .statCard small{color:#ccc;font-size:12px}
+.statCard.green b{color:#00e676}
+.statCard.blue b{color:#00b0ff}
 .myVideoRow{display:flex;justify-content:space-between;gap:8px;background:#f5f5f5;color:#111;padding:10px;border-radius:12px;margin-bottom:8px;font-size:13px}
 .myVideoRow b{flex:1}
 .channelCard{background:#f5f5f5;border-radius:16px;padding:14px;margin-bottom:12px;display:flex;gap:12px;align-items:center;cursor:pointer}
@@ -116,8 +132,10 @@ header button{background:#fe2c55;color:#fff;border:none;padding:8px 14px;border-
 <button onclick="closePublish()" style="background:#eee;color:#111;margin-top:10px">Annuler</button>
 
 <div class="statsBox">
-<h3>📊 MES CHIFFRES RÉELS EN DIRECT - Pour tout le monde !</h3>
+<h3>👥 VISITEURS + 📊 CHIFFRES RÉELS - Google Analytics Activé</h3>
 <div class="statsGrid">
+<div class="statCard green"><b id="statTodayVisitors">0</b><small>👥 Visiteurs Aujourd'hui</small></div>
+<div class="statCard green"><b id="statTotalVisitors">0</b><small>👥 Total Visiteurs Site</small></div>
 <div class="statCard"><b id="statTotalViews">0</b><small>👁️ Total Vues Réelles</small></div>
 <div class="statCard"><b id="statTotalLikes">0</b><small>❤️ Total Likes Réels</small></div>
 <div class="statCard"><b id="statTotalShares">0</b><small>↗️ Total Partages Réels</small></div>
@@ -126,11 +144,12 @@ header button{background:#fe2c55;color:#fff;border:none;padding:8px 14px;border-
 <div class="statCard"><b id="statMyCount">0</b><small>📺 Mes Vidéos</small></div>
 </div>
 <p id="statUpdate" style="font-size:12px;color:#ffcc00;margin-top:10px;text-align:center">Actualisé à l'instant...</p>
+<p id="visitorInfo" style="font-size:12px;color:#ccc;margin-top:6px;text-align:center"></p>
+<div style="background:#0a2a43;border-radius:10px;padding:10px;margin-top:10px;text-align:center;font-size:12px;color:#fff">📈 <b>Google Analytics - freddy-chat-d7685</b><br>ID : G-8SJX6NZFX9<br><span id="gaStatus" style="color:#00e676">✅ Analytics activé : G-8SJX6NZFX9 - Va sur analytics.google.com</span></div>
 <div id="myVideosList" style="margin-top:12px"></div>
 <button onclick="updatePublishStats()" style="background:#fe2c55;margin-top:10px">🔄 ACTUALISER MES CHIFFRES RÉELS</button>
 </div>
 
-<!-- PUB ADSENSE : ELLE VA APPARAITRE ICI QUAND GOOGLE T'ACCEPTE -->
 <div style="background:#f5f5f5;border:1px dashed #ccc;border-radius:12px;padding:14px;text-align:center;color:#888;font-size:13px;margin:10px 0">Publicité - FREDDY-V Kolwezi<br><span style="font-size:11px">Espace réservé à Google AdSense</span></div>
 
 <p class="footerLinks"><a onclick="openInfo('aboutPage')">À Propos</a> • <a onclick="openInfo('privacyPage')">Confidentialité</a> • <a onclick="openInfo('termsPage')">Conditions</a> • <a onclick="openInfo('contactPage')">Contact</a><br>Freddy V, Kolwezi - contact@freddy-v.com</p>
@@ -164,16 +183,19 @@ header button{background:#fe2c55;color:#fff;border:none;padding:8px 14px;border-
 <p>Dernière mise à jour : 22 novembre 2026. Cette page explique comment FREDDY-V protège vos informations.</p>
 <h3>1. Informations que nous collectons</h3>
 <p>Quand vous utilisez FREDDY-V, nous pouvons collecter : votre nom de chaîne que vous choisissez vous-même, vos commentaires, vos likes, vos partages et vos abonnements. Nous ne vous demandons pas votre vrai nom, votre adresse ou votre numéro de téléphone pour regarder les vidéos.</p>
-<h3>2. Cookies et publicités Google AdSense</h3>
-<p>FREDDY-V utilise Google AdSense pour afficher des publicités. Google utilise des cookies pour afficher des annonces adaptées à vos intérêts, mesurer les visites et lutter contre la fraude. Vous pouvez désactiver la personnalisation des annonces dans les paramètres de votre compte Google, sur la page <b>Ads Settings</b> de Google.</p>
-<h3>3. Informations stockées dans votre téléphone</h3>
-<p>Vos préférences, comme le son activé, vos likes et vos abonnements, sont enregistrées dans votre propre téléphone, avec le localStorage du navigateur. Vous pouvez les effacer à tout moment en effaçant les données de votre navigateur.</p>
-<h3>4. Vidéos de tiers</h3>
+<h3>2. Cookies, Google Analytics et publicités Google AdSense</h3>
+<p>FREDDY-V utilise <b>Google Analytics - Propriété : freddy-chat-d7685 - ID : G-8SJX6NZFX9</b> pour compter les visiteurs, savoir quelles vidéos sont les plus regardées et améliorer le site. Google Analytics utilise des cookies pour mesurer les visites de façon anonyme.</p>
+<p>FREDDY-V utilise aussi <b>Google AdSense</b> pour afficher des publicités. Google utilise des cookies pour afficher des annonces adaptées à vos intérêts, mesurer les visites et lutter contre la fraude. Vous pouvez désactiver la personnalisation des annonces dans les paramètres de votre compte Google, sur la page <b>Ads Settings</b> de Google.</p>
+<h3>3. Visiteurs du site</h3>
+<p>Nous comptons le nombre de visiteurs par jour pour savoir combien de personnes visitent FREDDY-V. Ce comptage est anonyme : 1 téléphone = 1 visiteur par jour. Nous ne collectons pas votre nom ou votre adresse pour ce comptage.</p>
+<h3>4. Informations stockées dans votre téléphone</h3>
+<p>Vos préférences, comme le son activé, vos likes et vos abonnements, sont enregistrées dans votre propre téléphone. Vous pouvez les effacer à tout moment en effaçant les données de votre navigateur.</p>
+<h3>5. Vidéos de tiers</h3>
 <p>Les vidéos publiées sur FREDDY-V peuvent venir de YouTube, TikTok ou Facebook. Quand vous regardez une vidéo, ces plateformes peuvent aussi collecter des informations selon leurs propres politiques de confidentialité.</p>
-<h3>5. Vos droits</h3>
+<h3>6. Vos droits</h3>
 <p>Vous pouvez nous demander de supprimer votre chaîne, vos commentaires ou vos vidéos en nous écrivant à <b>contact@freddy-v.com</b>. Nous répondons depuis Kolwezi, Lualaba, RDC.</p>
-<h3>6. Contact</h3>
-<p>Pour toute question sur la confidentialité : <b>Freddy V, Kolwezi, Lualaba, République Démocratique du Congo - contact@freddy-v.com</b></p>
+<h3>7. Contact</h3>
+<p>Pour toute question : <b>Freddy V, Kolwezi, Lualaba, République Démocratique du Congo - contact@freddy-v.com</b></p>
 <button onclick="closeInfo()" style="background:#eee;color:#111;margin-top:14px">Retour</button>
 </div>
 
@@ -181,9 +203,9 @@ header button{background:#fe2c55;color:#fff;border:none;padding:8px 14px;border-
 <h2>📜 Conditions d'Utilisation</h2>
 <p>En utilisant FREDDY-V, vous acceptez ces conditions.</p>
 <h3>1. Le service</h3>
-<p>FREDDY-V permet de créer une chaîne, de publier des vidéos et d'interagir avec d'autres utilisateurs. Toutes les vues, likes, commentaires et partages affichés sont des chiffres réels, comptés à partir des actions réelles des visiteurs. Aucun chiffre n'est inventé.</p>
+<p>FREDDY-V permet de créer une chaîne, de publier des vidéos et d'interagir avec d'autres utilisateurs. Toutes les vues, likes, commentaires, partages et visiteurs affichés sont des chiffres réels, comptés à partir des actions réelles des visiteurs. Aucun chiffre n'est inventé.</p>
 <h3>2. Ce qui est interdit</h3>
-<ul><li>Publier des vidéos violentes, haineuses, pornographiques ou qui encouragent la haine</li><li>Publier des vidéos qui ne vous appartiennent pas sans autorisation</li><li>Insulter, harceler ou menacer d'autres utilisateurs dans les commentaires</li><li>Essayer de tricher sur les vues, les likes, les partages ou les abonnés, par exemple en cliquant soi-même en boucle ou en utilisant des robots</li></ul>
+<ul><li>Publier des vidéos violentes, haineuses, pornographiques ou qui encouragent la haine</li><li>Publier des vidéos qui ne vous appartiennent pas sans autorisation</li><li>Insulter, harceler ou menacer d'autres utilisateurs dans les commentaires</li><li>Essayer de tricher sur les vues, les likes, les partages, les visiteurs ou les abonnés, par exemple en cliquant soi-même en boucle ou en utilisant des robots</li></ul>
 <h3>3. Vos vidéos</h3>
 <p>Vous restez responsable de vos vidéos. Si vous publiez une vidéo de YouTube, TikTok ou Facebook, vous devez respecter les règles de ces plateformes. FREDDY-V peut supprimer toute vidéo qui ne respecte pas ces règles, sans avertissement.</p>
 <h3>4. Publicités</h3>
@@ -205,9 +227,12 @@ header button{background:#fe2c55;color:#fff;border:none;padding:8px 14px;border-
 
 <script>
 const API_URL="https://script.google.com/macros/s/AKfycbzrf2mRkCNMDT1_45TrkaC0Eu5WLWNZrI6C2E9Z07AKgYlcnd_ramCtC-vQ8-YaJHk0Cw/exec";
+const GA_ID="G-8SJX6NZFX9";
+const GA_PROPERTY="freddy-chat-d7685";
 let videos=[];let filtered=[];let currentId=null;let currentSearch='';
 let deviceId=localStorage.getItem('freddyv_device')||('dev_'+Math.random().toString(36).slice(2,9));localStorage.setItem('freddyv_device',deviceId);
 function todayStr(){let d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
+function trackEvent(name,params){try{if(typeof gtag==='function'){gtag('event',name,params||{});}}catch(e){}}
 let seen=JSON.parse(localStorage.getItem('freddyv_seen_daily')||'{}');
 let myLikes=JSON.parse(localStorage.getItem('freddyv_my_likes')||'{}');
 let mySaved=JSON.parse(localStorage.getItem('freddyv_my_saved')||'{}');
@@ -215,12 +240,29 @@ let mySubs=JSON.parse(localStorage.getItem('freddyv_subs')||'{}');
 let realCounts=JSON.parse(localStorage.getItem('freddyv_real_counts_v2')||'{}');
 let savedComments=JSON.parse(localStorage.getItem('freddyv_comments_v2')||'{}');
 let viewTimers={};
+let visitorData=JSON.parse(localStorage.getItem('freddyv_visitors')||'{"total":0,"byDay":{}}');
+function countVisitor(){
+  let today=todayStr();
+  let lastVisit=localStorage.getItem('freddyv_last_visit_day');
+  if(lastVisit!==today){
+    localStorage.setItem('freddyv_last_visit_day',today);
+    visitorData.total=(Number(visitorData.total)||0)+1;
+    if(!visitorData.byDay)visitorData.byDay={};
+    visitorData.byDay[today]=(Number(visitorData.byDay[today])||0)+1;
+    localStorage.setItem('freddyv_visitors',JSON.stringify(visitorData));
+    trackEvent('visit_site',{day:today,property:GA_PROPERTY});
+    fetch(API_URL+'?action=visit&deviceId='+encodeURIComponent(deviceId)+'&day='+encodeURIComponent(today)).catch(()=>{});
+  }
+  return visitorData;
+}
+countVisitor();
+function getTodayVisitors(){let d=visitorData.byDay||{};return Number(d[todayStr()])||0;}
 function keyOf(v){return (v.link||v.id||'').trim();}
 function getCounts(v){let k=keyOf(v);if(!realCounts[k])realCounts[k]={views:0,likes:0,shares:0};if(realCounts[k].shares===undefined)realCounts[k].shares=0;return realCounts[k];}
 function saveCounts(){localStorage.setItem('freddyv_real_counts_v2',JSON.stringify(realCounts));}
 function getSavedComments(v){let k=keyOf(v);return savedComments[k]||[];}
 function saveAllComments(){localStorage.setItem('freddyv_comments_v2',JSON.stringify(savedComments));}
-function resetAllCounters(){if(!confirm('Remettre TOUT à 0 ?'))return;realCounts={};seen={};myLikes={};savedComments={};localStorage.setItem('freddyv_real_counts_v2',JSON.stringify(realCounts));localStorage.setItem('freddyv_seen_daily',JSON.stringify(seen));localStorage.setItem('freddyv_my_likes',JSON.stringify(myLikes));localStorage.setItem('freddyv_comments_v2',JSON.stringify(savedComments));videos.forEach(v=>{v.views=0;v.likes=0;v.shares=0;v.comments=[];});filtered=videos;render();updatePublishStats();alert('✅ Tout est à 0 !');}
+function resetAllCounters(){if(!confirm('Remettre TOUT à 0 ?'))return;realCounts={};seen={};myLikes={};savedComments={};localStorage.setItem('freddyv_real_counts_v2',JSON.stringify(realCounts));localStorage.setItem('freddyv_seen_daily',JSON.stringify(seen));localStorage.setItem('freddyv_my_likes',JSON.stringify(myLikes));localStorage.setItem('freddyv_comments_v2',JSON.stringify(savedComments));videos.forEach(v=>{v.views=0;v.likes=0;v.shares=0;v.comments=[];});filtered=videos;render();updatePublishStats();alert('✅ Tout est à 0 ! Les visiteurs ne sont pas effacés.');}
 let myChannel=localStorage.getItem('freddyv_channel')||'Freddy V';
 let soundOn=localStorage.getItem('freddyv_sound')==='1';
 let observer=null;
@@ -232,6 +274,8 @@ function updatePublishStats(){
   videos.forEach(v=>{totalViews+=Number(v.views)||0;totalLikes+=Number(v.likes)||0;totalComments+=(v.comments?v.comments.length:0);totalShares+=Number(v.shares)||0;});
   let mine=videos.filter(v=>v.author===myChannel);
   let myViews=0;mine.forEach(v=>{myViews+=Number(v.views)||0;});
+  let tV=document.getElementById('statTodayVisitors');if(tV)tV.innerText=fmt(getTodayVisitors());
+  let totV=document.getElementById('statTotalVisitors');if(totV)totV.innerText=fmt(Number(visitorData.total)||0);
   let el1=document.getElementById('statTotalViews');if(el1)el1.innerText=fmt(totalViews);
   let el2=document.getElementById('statTotalLikes');if(el2)el2.innerText=fmt(totalLikes);
   let elS=document.getElementById('statTotalShares');if(elS)elS.innerText=fmt(totalShares);
@@ -239,6 +283,7 @@ function updatePublishStats(){
   let el3=document.getElementById('statMyViews');if(el3)el3.innerText=fmt(myViews);
   let el4=document.getElementById('statMyCount');if(el4)el4.innerText=mine.length;
   let up=document.getElementById('statUpdate');if(up)up.innerText='Actualisé à '+new Date().toLocaleTimeString()+' - Réel : '+totalViews+' vues • '+totalLikes+' likes • '+totalShares+' partages • '+totalComments+' commentaires';
+  let vi=document.getElementById('visitorInfo');if(vi)vi.innerText='📅 Aujourd\'hui '+todayStr()+' : '+getTodayVisitors()+' visiteur(s) • Depuis le début : '+visitorData.total+' visiteur(s) • Chaque téléphone compte 1 fois par jour';
   let list=document.getElementById('myVideosList');
   if(list){
     if(mine.length===0){list.innerHTML='<p style="color:#666;font-size:13px;text-align:center">Tu n\'as pas encore de vidéo. Publie ta première vidéo !</p>';}
@@ -247,6 +292,8 @@ function updatePublishStats(){
 }
 async function loadVideos(){
  try{const r=await fetch(API_URL);const d=await r.json();let list=Array.isArray(d)?d:(d.videos||d.data||d.rows||[]);
+ if(d.totalVisitors!==undefined){visitorData.total=Math.max(Number(visitorData.total)||0,Number(d.totalVisitors)||0);}
+ if(d.todayVisitors!==undefined){if(!visitorData.byDay)visitorData.byDay={};visitorData.byDay[todayStr()]=Math.max(getTodayVisitors(),Number(d.todayVisitors)||0);}
  videos=list.map((v,i)=>{
    let tmp={id:v.id||v.ID||('sheet-'+i),link:v.link||v.Link||v.url||''};
    let serverViews = Number(v.views)||0;
@@ -266,7 +313,7 @@ async function loadVideos(){
    return{id:tmp.id,title:v.title||v.Title||'Vidéo FREDDY-V',desc:v.desc||v.Desc||'',author:v.author||v.Author||'Freddy V',source:(v.source||v.Source||'youtube').toLowerCase(),link:tmp.link,likes:finalLikes,views:finalViews,shares:finalShares,comments:finalComments,saved:!!mySaved[keyOf(tmp)]}}).filter(v=>v.link);
  let b=JSON.parse(localStorage.getItem('freddyv_local_backup')||'[]');b.forEach(x=>{if(!videos.find(v=>v.link===x.link)){let c=getCounts(x);x.views=c.views;x.likes=c.likes;x.shares=c.shares||0;x.comments=getSavedComments(x);videos.unshift(x);}});
  if(videos.length===0)videos=[{id:'old-1',title:'La séparation',desc:'Mon partage.',author:'Freddy V',source:'youtube',link:'https://youtube.com/shorts/2vbWaxYFW4I',likes:0,views:0,shares:0,comments:[],saved:false}];
- saveCounts();saveAllComments();
+ saveCounts();saveAllComments();localStorage.setItem('freddyv_visitors',JSON.stringify(visitorData));
 }catch(e){let b=JSON.parse(localStorage.getItem('freddyv_local_backup')||'[]');videos=b.length?b:[{id:'old-1',title:'La séparation',desc:'Mon partage.',author:'Freddy V',source:'youtube',link:'https://youtube.com/shorts/2vbWaxYFW4I',likes:0,views:0,shares:0,comments:[],saved:false}];videos.forEach(v=>{let c=getCounts(v);v.views=c.views;v.likes=c.likes;v.shares=c.shares||0;v.comments=getSavedComments(v);});}
  filtered=videos;document.getElementById('loading').style.display='none';document.getElementById('myChannelLabel').innerText=myChannel.slice(0,6);buildTags();render();updatePublishStats();
  if(!soundOn)document.getElementById('tapSound').style.display='block';
@@ -275,6 +322,8 @@ async function loadVideos(){
 async function refreshCounts(){
  try{const r=await fetch(API_URL);const d=await r.json();let list=Array.isArray(d)?d:(d.videos||d.data||d.rows||[]);
  let changed=false;
+ if(d.totalVisitors!==undefined && Number(d.totalVisitors)>Number(visitorData.total)){visitorData.total=Number(d.totalVisitors);changed=true;}
+ if(d.todayVisitors!==undefined && Number(d.todayVisitors)>getTodayVisitors()){if(!visitorData.byDay)visitorData.byDay={};visitorData.byDay[todayStr()]=Number(d.todayVisitors);changed=true;}
  list.forEach(sv=>{
    let link=sv.link||sv.Link||sv.url||'';
    let v=videos.find(x=>x.link===link);
@@ -286,12 +335,12 @@ async function refreshCounts(){
      if(Array.isArray(sv.comments) && sv.comments.length>v.comments.length){v.comments=sv.comments;changed=true;}
    }
  });
- if(changed){render();updatePublishStats();}
+ if(changed){localStorage.setItem('freddyv_visitors',JSON.stringify(visitorData));render();updatePublishStats();}
  }catch(e){}
 }
 function buildTags(){let tags=['Tout','Foi','Jésus','Afrique','Musique','Football','Comédie','News'];let t=document.getElementById('searchTags');t.innerHTML=tags.map((x,i)=>`<button class="${i===0?'active':''}" onclick="tagSearch('${x}',this)">${x==='Tout'?'🏠 Tout':'🔍 '+x}</button>`).join('');}
 function tagSearch(tag,el){document.querySelectorAll('#searchTags button').forEach(b=>b.classList.remove('active'));el.classList.add('active');if(tag==='Tout')clearSearch();else{document.getElementById('searchInput').value=tag;doSearch(tag);}}
-function doSearch(q){currentSearch=q.trim().toLowerCase();if(!currentSearch){filtered=videos;render();return;}filtered=videos.filter(v=>(v.title+' '+v.author+' '+(v.desc||'')+' '+v.source).toLowerCase().includes(currentSearch));render();}
+function doSearch(q){currentSearch=q.trim().toLowerCase();trackEvent('search',{search_term:q});if(!currentSearch){filtered=videos;render();return;}filtered=videos.filter(v=>(v.title+' '+v.author+' '+(v.desc||'')+' '+v.source).toLowerCase().includes(currentSearch));render();}
 function clearSearch(){currentSearch='';document.getElementById('searchInput').value='';filtered=videos;document.querySelectorAll('#searchTags button').forEach((b,i)=>b.classList.toggle('active',i===0));render();}
 function getVideoId(link){let id=link.trim();if(id.includes('/shorts/'))id=id.split('/shorts/')[1].split('?')[0].split('&')[0].split('/')[0];else if(id.includes('youtu.be/'))id=id.split('youtu.be/')[1].split('?')[0];else if(id.includes('v='))id=id.split('v=')[1].split('&')[0];else id=id.split('/').pop().split('?')[0];return id.trim();}
 function getEmbed(v,auto){let s=(v.source||'').toLowerCase();let link=(v.link||'').trim();if(s.includes('youtube')||link.includes('youtube')||link.includes('youtu.be')){let id=getVideoId(link);return `https://www.youtube.com/embed/${id}?autoplay=${auto?1:0}&mute=${soundOn?0:1}&controls=1&rel=0&enablejsapi=1&playsinline=1`;}if(s.includes('facebook')||link.includes('facebook'))return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(link)}&show_text=false`;return link;}
@@ -322,7 +371,7 @@ function render(){const feed=document.getElementById('feed');feed.innerHTML='';
  div.ondblclick=()=>like(v.id);feed.appendChild(div);});
  setTimeout(setupAutoPlay,100);
 }
-function toggleSub(author,e){if(e)e.stopPropagation();if(author===myChannel)return;if(mySubs[author]){delete mySubs[author];alert('❌ Désabonné de @'+author);}else{mySubs[author]=1;alert('✅ Tu es abonné à @'+author+' !');}localStorage.setItem('freddyv_subs',JSON.stringify(mySubs));render();}
+function toggleSub(author,e){if(e)e.stopPropagation();if(author===myChannel)return;if(mySubs[author]){delete mySubs[author];alert('❌ Désabonné de @'+author);}else{mySubs[author]=1;alert('✅ Tu es abonné à @'+author+' !');trackEvent('subscribe',{channel:author});}localStorage.setItem('freddyv_subs',JSON.stringify(mySubs));render();}
 function enableSound(){soundOn=true;localStorage.setItem('freddyv_sound','1');document.getElementById('tapSound').style.display='none';document.querySelectorAll('iframe').forEach(f=>{let src=f.src;if(src.includes('mute=1')){f.src=src.replace('mute=1','mute=0');}try{f.contentWindow.postMessage('{"event":"command","func":"unMute","args":""}','*');f.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}','*');}catch(e){}});document.querySelectorAll('.soundBtn').forEach(b=>{b.innerText='🔊 SON ON';b.classList.remove('off');});}
 function toggleSound(e){e.stopPropagation();if(!soundOn)enableSound();else{soundOn=false;localStorage.setItem('freddyv_sound','0');document.querySelectorAll('iframe').forEach(f=>{try{f.contentWindow.postMessage('{"event":"command","func":"mute","args":""}','*');}catch(e){}});document.querySelectorAll('.soundBtn').forEach(b=>{b.innerText='🔇 SON OFF';b.classList.add('off');});document.getElementById('tapSound').style.display='block';}}
 document.addEventListener('touchstart',function(){if(!soundOn)enableSound();},{once:true});
@@ -335,6 +384,7 @@ viewTimers[vid]=setTimeout(()=>{
     seen[dailyKey]=1;
     localStorage.setItem('freddyv_seen_daily',JSON.stringify(seen));
     v.views++;let c=getCounts(v);c.views=v.views;saveCounts();updatePublishStats();
+    trackEvent('view_video',{video_title:v.title,video_author:v.author});
     let t=entry.target.querySelector('.topStats');if(t)t.innerHTML=`<span>👁️ ${fmt(v.views)} vues</span><span>💬 ${v.comments.length} commentaires</span><span>❤️ ${fmt(v.likes)} likes</span><span>↗️ ${fmt(v.shares||0)} partages</span><span>${v.source.toUpperCase()}</span>`;
     fetch(API_URL+'?action=view&videoId='+encodeURIComponent(vid)+'&link='+encodeURIComponent(v.link)).catch(()=>{});
   }
@@ -345,14 +395,14 @@ let pb=document.getElementById('play-'+vid);if(pb)pb.classList.remove('show');fr
 if(viewTimers[vid]){clearTimeout(viewTimers[vid]);viewTimers[vid]=null;}
 try{frame.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}','*');}catch(e){}}});},{threshold:0.7});document.querySelectorAll('.short').forEach(el=>observer.observe(el));}
 function togglePlay(vid){let f=document.getElementById('frame-'+vid);let v=videos.find(x=>x.id===vid);let pb=document.getElementById('play-'+vid);if(!f)return;if(f.dataset.paused==='1'){f.dataset.paused='0';f.src=getEmbed(v,true);if(pb)pb.classList.remove('show');}else{f.dataset.paused='1';try{f.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}','*');}catch(e){}if(pb)pb.classList.add('show');}}
-function like(id,e){if(e)e.stopPropagation();let v=videos.find(x=>x.id===id);let c=getCounts(v);let k=keyOf(v);if(!myLikes[k]){myLikes[k]=1;v.likes++;c.likes=v.likes;}else{delete myLikes[k];v.likes=Math.max(0,v.likes-1);c.likes=v.likes;}saveCounts();localStorage.setItem('freddyv_my_likes',JSON.stringify(myLikes));let heart=document.getElementById('heart-'+id);if(heart){heart.classList.add('show');setTimeout(()=>heart.classList.remove('show'),700);}fetch(API_URL+'?action=like&videoId='+encodeURIComponent(id)+'&link='+encodeURIComponent(v.link)).catch(()=>{});render();updatePublishStats();}
+function like(id,e){if(e)e.stopPropagation();let v=videos.find(x=>x.id===id);let c=getCounts(v);let k=keyOf(v);if(!myLikes[k]){myLikes[k]=1;v.likes++;c.likes=v.likes;trackEvent('like_video',{video_title:v.title});}else{delete myLikes[k];v.likes=Math.max(0,v.likes-1);c.likes=v.likes;}saveCounts();localStorage.setItem('freddyv_my_likes',JSON.stringify(myLikes));let heart=document.getElementById('heart-'+id);if(heart){heart.classList.add('show');setTimeout(()=>heart.classList.remove('show'),700);}fetch(API_URL+'?action=like&videoId='+encodeURIComponent(id)+'&link='+encodeURIComponent(v.link)).catch(()=>{});render();updatePublishStats();}
 function saveVideo(id){let v=videos.find(x=>x.id===id);v.saved=!v.saved;if(v.saved)mySaved[keyOf(v)]=1;else delete mySaved[keyOf(v)];localStorage.setItem('freddyv_my_saved',JSON.stringify(mySaved));alert(v.saved?'✅ Enregistré !':'❌ Retiré');render();}
-function shareVideo(id){let v=videos.find(x=>x.id===id);v.shares=(Number(v.shares)||0)+1;let c=getCounts(v);c.shares=v.shares;saveCounts();let text=`Regarde @${v.author} sur FREDDY-V : ${v.title} - ${v.link}`;fetch(API_URL+'?action=share&videoId='+encodeURIComponent(id)+'&link='+encodeURIComponent(v.link)).catch(()=>{});if(navigator.share)navigator.share({title:'FREDDY-V',text,url:v.link}).catch(()=>{});else{navigator.clipboard.writeText(text);alert('✅ Lien copié ! Partage compté : '+v.shares);}render();updatePublishStats();}
+function shareVideo(id){let v=videos.find(x=>x.id===id);v.shares=(Number(v.shares)||0)+1;let c=getCounts(v);c.shares=v.shares;saveCounts();trackEvent('share_video',{video_title:v.title});let text=`Regarde @${v.author} sur FREDDY-V : ${v.title} - ${v.link}`;fetch(API_URL+'?action=share&videoId='+encodeURIComponent(id)+'&link='+encodeURIComponent(v.link)).catch(()=>{});if(navigator.share)navigator.share({title:'FREDDY-V',text,url:v.link}).catch(()=>{});else{navigator.clipboard.writeText(text);alert('✅ Lien copié ! Partage compté : '+v.shares);}render();updatePublishStats();}
 function openComments(id){currentId=id;let v=videos.find(x=>x.id===id);let list=document.getElementById('commentList');list.innerHTML=v.comments.length?v.comments.map(c=>`<div class="comment"><div class="avatar">${(c.name||'F')[0].toUpperCase()}</div><div><b>${c.name||'Fan'}</b><br>${c.text||''}</div></div>`).join(''):'<p style="text-align:center;color:#888">Aucun commentaire. Sois le premier ! (0 commentaire)</p>';document.getElementById('commentModal').classList.add('open');}
-function addComment(){let name=document.getElementById('commentName').value.trim()||myChannel;let text=document.getElementById('commentText').value.trim();if(!text)return;let v=videos.find(x=>x.id===currentId);v.comments.push({name,text});let k=keyOf(v);savedComments[k]=v.comments;saveAllComments();document.getElementById('commentText').value='';openComments(currentId);fetch(API_URL,{method:'POST',body:JSON.stringify({action:'comment',videoId:currentId,link:v.link,name,text})}).catch(()=>{});render();updatePublishStats();}
+function addComment(){let name=document.getElementById('commentName').value.trim()||myChannel;let text=document.getElementById('commentText').value.trim();if(!text)return;let v=videos.find(x=>x.id===currentId);v.comments.push({name,text});let k=keyOf(v);savedComments[k]=v.comments;saveAllComments();trackEvent('comment_video',{video_title:v.title});document.getElementById('commentText').value='';openComments(currentId);fetch(API_URL,{method:'POST',body:JSON.stringify({action:'comment',videoId:currentId,link:v.link,name,text})}).catch(()=>{});render();updatePublishStats();}
 function openRemix(id){alert('🔁 Remix : Duo / Collage / Utiliser ce son !');}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
-function openPublish(){document.getElementById('pubAuthor').value=myChannel;updatePublishStats();document.getElementById('publishPage').classList.add('open');}
+function openPublish(){document.getElementById('pubAuthor').value=myChannel;updatePublishStats();trackEvent('open_publish',{});document.getElementById('publishPage').classList.add('open');}
 function closePublish(){document.getElementById('publishPage').classList.remove('open');}
 function showFeed(){document.getElementById('profilePage').classList.remove('open');document.getElementById('publishPage').classList.remove('open');closeInfo();window.scrollTo(0,0);}
 function openProfile(){let myVideos=videos.filter(v=>v.author===myChannel);document.getElementById('myName').innerText='@'+myChannel;document.getElementById('myAvatar').innerText=myChannel[0].toUpperCase();document.getElementById('mySubs').innerText=fmt(getSubsCount(myChannel))+' abonnés • '+myVideos.length+' vidéos';document.getElementById('channelNameInput').value=myChannel;
@@ -363,7 +413,7 @@ function openProfile(){let myVideos=videos.filter(v=>v.author===myChannel);docum
 function searchChannel(name){closeProfile();document.getElementById('searchInput').value=name;doSearch(name);window.scrollTo(0,0);}
 function closeProfile(){document.getElementById('profilePage').classList.remove('open');}
 function saveChannel(){let n=document.getElementById('channelNameInput').value.trim();if(!n)return alert('Mets le nom de ta chaîne !');myChannel=n;localStorage.setItem('freddyv_channel',n);document.getElementById('myChannelLabel').innerText=n.slice(0,6);alert('✅ Ta chaîne @'+n+' est créée !');openProfile();}
-async function publishVideo(){let title=document.getElementById('pubTitle').value.trim();let desc=document.getElementById('pubDesc').value.trim();let author=document.getElementById('pubAuthor').value.trim()||myChannel;let link=document.getElementById('pubLink').value.trim();if(!link||!title)return alert('Mets le titre et le lien !');myChannel=author;localStorage.setItem('freddyv_channel',author);let src='youtube';if(link.includes('tiktok'))src='tiktok';if(link.includes('facebook'))src='facebook';let nid='local-'+Date.now();let nv={id:nid,title,desc,author,source:src,link,likes:0,views:0,shares:0,comments:[],saved:false};realCounts[keyOf(nv)]={views:0,likes:0,shares:0};savedComments[keyOf(nv)]=[];saveCounts();saveAllComments();videos.unshift(nv);filtered=videos;let b=JSON.parse(localStorage.getItem('freddyv_local_backup')||'[]');b.unshift(nv);localStorage.setItem('freddyv_local_backup',JSON.stringify(b));try{await fetch(API_URL,{method:'POST',body:JSON.stringify({action:'add',title,desc,author,link,source:src})});}catch(e){}closePublish();clearSearch();render();updatePublishStats();alert('✅ Publié ! Commence à 0 vues • 0 likes • 0 commentaires • 0 partages !');}
+async function publishVideo(){let title=document.getElementById('pubTitle').value.trim();let desc=document.getElementById('pubDesc').value.trim();let author=document.getElementById('pubAuthor').value.trim()||myChannel;let link=document.getElementById('pubLink').value.trim();if(!link||!title)return alert('Mets le titre et le lien !');myChannel=author;localStorage.setItem('freddyv_channel',author);let src='youtube';if(link.includes('tiktok'))src='tiktok';if(link.includes('facebook'))src='facebook';let nid='local-'+Date.now();let nv={id:nid,title,desc,author,source:src,link,likes:0,views:0,shares:0,comments:[],saved:false};realCounts[keyOf(nv)]={views:0,likes:0,shares:0};savedComments[keyOf(nv)]=[];saveCounts();saveAllComments();videos.unshift(nv);filtered=videos;let b=JSON.parse(localStorage.getItem('freddyv_local_backup')||'[]');b.unshift(nv);localStorage.setItem('freddyv_local_backup',JSON.stringify(b));trackEvent('publish_video',{video_title:title,video_author:author});try{await fetch(API_URL,{method:'POST',body:JSON.stringify({action:'add',title,desc,author,link,source:src})});}catch(e){}closePublish();clearSearch();render();updatePublishStats();alert('✅ Publié ! Commence à 0 vues • 0 likes • 0 commentaires • 0 partages !');}
 loadVideos();
 </script>
 </body>
