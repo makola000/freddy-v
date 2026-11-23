@@ -33,9 +33,6 @@ header button{background:#fe2c55;color:#fff;border:none;padding:8px 14px;border-
 .searchTags{display:flex;gap:6px;overflow-x:auto;margin-top:8px;padding-bottom:2px;scrollbar-width:none}
 .searchTags button{background:#222;color:#fff;border:1px solid #444;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:700;white-space:nowrap;cursor:pointer}
 .searchTags button.active{background:#fe2c55;border-color:#fe2c55}
-/* BARRE POUR TOUT LE MONDE - VUES + VISITEURS */
-#globalBar{display:flex;gap:6px;overflow-x:auto;margin-top:8px;padding-bottom:2px;scrollbar-width:none}
-#globalBar span{background:rgba(0,0,0,.75);border:1px solid #00e676;padding:6px 9px;border-radius:20px;font-size:11px;font-weight:800;white-space:nowrap}
 #feed{height:100dvh;overflow-y:scroll;scroll-snap-type:y mandatory;padding-top:0;padding-bottom:0;scroll-behavior:smooth}
 .short{height:100dvh;scroll-snap-align:start;scroll-snap-stop:always;position:relative;background:#000;margin:0;border-radius:0;overflow:hidden}
 .short iframe{width:100%;height:100%;border:none;object-fit:cover}
@@ -101,8 +98,6 @@ header button{background:#fe2c55;color:#fff;border:none;padding:8px 14px;border-
 .myVideoRow b{flex:1}
 .channelCard{background:#f5f5f5;border-radius:16px;padding:14px;margin-bottom:12px;display:flex;gap:12px;align-items:center;cursor:pointer}
 .channelCard img{width:52px;height:52px;border-radius:50%;object-fit:cover}
-.dayRow{display:flex;justify-content:space-between;background:#222;color:#fff;padding:10px 12px;border-radius:10px;margin-bottom:6px;font-size:13px}
-.dayRow b{color:#00e676}
 #loading{position:fixed;inset:0;background:#000;display:flex;align-items:center;justify-content:center;z-index:500;flex-direction:column;gap:10px}
 #tapSound{position:fixed;bottom:130px;left:50%;transform:translateX(-50%);background:#fe2c55;color:#fff;padding:14px 18px;border-radius:30px;font-weight:800;z-index:400;display:none;white-space:nowrap;cursor:pointer;box-shadow:0 4px 20px rgba(254,44,85,.6);animation:pulse 1.5s infinite}
 @keyframes pulse{0%{transform:translateX(-50%) scale(1)}50%{transform:translateX(-50%) scale(1.05)}100%{transform:translateX(-50%) scale(1)}}
@@ -113,7 +108,6 @@ header button{background:#fe2c55;color:#fff;border:none;padding:8px 14px;border-
 <header>
 <div class="topRow"><div class="logo">FREDDY-<span>V</span></div><button onclick="openPublish()">+ Publier</button></div>
 <div class="searchBar"><span>🔍</span><input id="searchInput" placeholder="Rechercher titre, chaîne, sujet..." oninput="doSearch(this.value)"><button onclick="doSearch(document.getElementById('searchInput').value)">Rechercher</button></div>
-<div id="globalBar"><span>👥 Aujourd'hui : <b id="globalToday">0</b></span><span>🌍 Total visiteurs : <b id="globalTotal">0</b></span><span>👁️ Total vues : <b id="globalViews">0</b></span><span>❤️ Total likes : <b id="globalLikes">0</b></span></div>
 <div class="searchTags" id="searchTags"></div>
 </header>
 <div id="feed"></div>
@@ -150,9 +144,6 @@ header button{background:#fe2c55;color:#fff;border:none;padding:8px 14px;border-
 <p id="statUpdate" style="font-size:12px;color:#ffcc00;margin-top:10px;text-align:center">Actualisé à l'instant...</p>
 <p id="visitorInfo" style="font-size:12px;color:#ccc;margin-top:6px;text-align:center"></p>
 <div style="background:#0a2a43;border-radius:10px;padding:10px;margin-top:10px;text-align:center;font-size:12px;color:#fff">📈 <b>Google Analytics - freddy-chat-d7685</b><br>ID : G-8SJX6NZFX9<br><span id="gaStatus" style="color:#00e676">✅ Analytics activé : G-8SJX6NZFX9</span></div>
-<h3 style="margin:14px 0 8px;color:#fff">📅 VISITEURS PAR JOUR - POUR TOUT LE MONDE</h3>
-<p style="font-size:12px;color:#ccc;margin-bottom:8px">Combien de personnes ont visité chaque jour :</p>
-<div id="visitorsByDayList"></div>
 <div id="myVideosList" style="margin-top:12px"></div>
 <button onclick="updatePublishStats();refreshGlobalVisitors(true)" style="background:#fe2c55;margin-top:10px">🔄 ACTUALISER MES CHIFFRES RÉELS - TOUT LE MONDE</button>
 </div>
@@ -233,9 +224,11 @@ header button{background:#fe2c55;color:#fff;border:none;padding:8px 14px;border-
 </div>
 
 <script>
-const API_URL="https://script.google.com/macros/s/AKfycbzrf2mRkCNMDT1_45TrkaC0Eu5WLWNZrI6C2E9Z07AKgYlcnd_ramCtC-vQ8-YaJHk0Cw/exec";
+const API_URL="https://script.google.com/macros/s/AKfycbwJ1_fHmgCejCSWVoWPGlTpsfg1TycayxH8NBZeLe0SilgQmw9C_McHgANHOd8Hc0Da3g/exec";
 const GA_ID="G-8SJX6NZFX9";
 const GA_PROPERTY="freddy-chat-d7685";
+
+// ===== AJOUT 1 : Fusion Freddyvmondial = Freddy V =====
 function normalizeChannel(nom){
   if(!nom) return "Freddy V";
   let n = nom.toString().trim().toLowerCase().replace(/[\s\-_]/g,"");
@@ -253,43 +246,48 @@ let mySubs=JSON.parse(localStorage.getItem('freddyv_subs')||'{}');
 let realCounts=JSON.parse(localStorage.getItem('freddyv_real_counts_v2')||'{}');
 let savedComments=JSON.parse(localStorage.getItem('freddyv_comments_v2')||'{}');
 let viewTimers={};
+
+// ===== VISITEURS POUR TOUT LE MONDE - COMPTEUR GLOBAL PARTAGÉ =====
 let visitorData={total:0,byDay:{}};
+let globalVisitorsLoaded=false;
 try{let savedV=JSON.parse(localStorage.getItem('freddyv_visitors_global')||'{}'); if(savedV.total) visitorData=savedV;}catch(e){}
 function saveGlobalVisitors(){localStorage.setItem('freddyv_visitors_global',JSON.stringify(visitorData));}
 async function refreshGlobalVisitors(forceHit){
-  let today = todayStr();
-  let lastVisit = localStorage.getItem('freddyv_last_visit_day');
-  if(lastVisit !== today){
-    localStorage.setItem('freddyv_last_visit_day', today);
-    visitorData.total = (Number(visitorData.total)||0) + 1;
-    if(!visitorData.byDay) visitorData.byDay = {};
-    visitorData.byDay[today] = (Number(visitorData.byDay[today])||0) + 1;
+  try{
+    let today=todayStr();
+    let lastVisit=localStorage.getItem('freddyv_last_visit_day');
+    let shouldHit = forceHit || (lastVisit!==today);
+    if(shouldHit && !forceHit){
+      localStorage.setItem('freddyv_last_visit_day',today);
+    }
+    if(shouldHit && !forceHit){
+      let r1=await fetch('https://api.countapi.xyz/hit/freddy-v-site-o82q/total');
+      let j1=await r1.json(); if(j1.value!==undefined) visitorData.total=j1.value;
+      let r2=await fetch('https://api.countapi.xyz/hit/freddy-v-site-o82q/day-'+today);
+      let j2=await r2.json(); if(j2.value!==undefined){ if(!visitorData.byDay) visitorData.byDay={}; visitorData.byDay[today]=j2.value; }
+      trackEvent('visit_site',{day:today,property:GA_PROPERTY});
+      try{fetch(API_URL+'?action=visit&deviceId='+encodeURIComponent(deviceId)+'&day='+encodeURIComponent(today)).catch(()=>{});}catch(e){}
+    } else {
+      let r1=await fetch('https://api.countapi.xyz/get/freddy-v-site-o82q/total');
+      let j1=await r1.json(); if(j1.value!==undefined) visitorData.total=j1.value;
+      let r2=await fetch('https://api.countapi.xyz/get/freddy-v-site-o82q/day-'+today);
+      let j2=await r2.json(); if(j2.value!==undefined){ if(!visitorData.byDay) visitorData.byDay={}; visitorData.byDay[today]=j2.value; }
+    }
+    globalVisitorsLoaded=true;
     saveGlobalVisitors();
     updatePublishStats();
-    try{ fetch(API_URL+'?action=visit&deviceId='+encodeURIComponent(deviceId)+'&day='+encodeURIComponent(today)).catch(()=>{}); }catch(e){}
-    try{ if(typeof gtag==='function') gtag('event','visit_site',{day:today}); }catch(e){}
+  }catch(e){
+    console.log('Compteur global indisponible, on garde ancien chiffre');
   }
   try{
-    const r = await fetch(API_URL);
-    const d = await r.json();
-    if(d.totalVisitors!==undefined && Number(d.totalVisitors) > Number(visitorData.total)){
-      visitorData.total = Number(d.totalVisitors);
-      saveGlobalVisitors(); updatePublishStats();
-    }
-    if(d.todayVisitors!==undefined && Number(d.todayVisitors) > getTodayVisitors()){
-      if(!visitorData.byDay) visitorData.byDay={};
-      visitorData.byDay[today] = Number(d.todayVisitors);
-      saveGlobalVisitors(); updatePublishStats();
-    }
-    // Si Sheet envoie l'historique par jour, on le prend
-    if(d.visitorsByDay){
-      Object.keys(d.visitorsByDay).forEach(k=>{ if(!visitorData.byDay) visitorData.byDay={}; visitorData.byDay[k]=Number(d.visitorsByDay[k]); });
-      saveGlobalVisitors(); updatePublishStats();
-    }
+    const r=await fetch(API_URL); const d=await r.json();
+    if(d.totalVisitors!==undefined && Number(d.totalVisitors)>Number(visitorData.total)){ visitorData.total=Number(d.totalVisitors); saveGlobalVisitors(); updatePublishStats(); }
+    if(d.todayVisitors!==undefined && Number(d.todayVisitors)>getTodayVisitors()){ if(!visitorData.byDay) visitorData.byDay={}; visitorData.byDay[todayStr()]=Number(d.todayVisitors); saveGlobalVisitors(); updatePublishStats(); }
   }catch(e){}
 }
 refreshGlobalVisitors(false);
 setInterval(()=>refreshGlobalVisitors(false),30000);
+
 function getTodayVisitors(){let d=visitorData.byDay||{};return Number(d[todayStr()])||0;}
 function keyOf(v){return (v.link||v.id||'').trim();}
 function getCounts(v){let k=keyOf(v);if(!realCounts[k])realCounts[k]={views:0,likes:0,shares:0};if(realCounts[k].shares===undefined)realCounts[k].shares=0;return realCounts[k];}
@@ -303,26 +301,6 @@ let observer=null;
 function fmt(n){if(n>=1000)return (n/1000).toFixed(1).replace('.0','')+' k';return n;}
 function openInfo(id){document.querySelectorAll('.infoPage').forEach(p=>p.classList.remove('open'));document.getElementById(id).classList.add('open');window.scrollTo(0,0);}
 function closeInfo(){document.querySelectorAll('.infoPage').forEach(p=>p.classList.remove('open'));}
-function updateGlobalBar(){
-  let totalViews=0,totalLikes=0;
-  videos.forEach(v=>{totalViews+=Number(v.views)||0;totalLikes+=Number(v.likes)||0;});
-  let a=document.getElementById('globalToday'); if(a) a.innerText=fmt(getTodayVisitors());
-  let b=document.getElementById('globalTotal'); if(b) b.innerText=fmt(Number(visitorData.total)||0);
-  let c=document.getElementById('globalViews'); if(c) c.innerText=fmt(totalViews);
-  let d=document.getElementById('globalLikes'); if(d) d.innerText=fmt(totalLikes);
-}
-function updateVisitorsByDayList(){
-  let el=document.getElementById('visitorsByDayList'); if(!el) return;
-  let days=[];
-  for(let i=0;i<7;i++){
-    let dt=new Date(); dt.setDate(dt.getDate()-i);
-    let key=dt.getFullYear()+'-'+(dt.getMonth()+1)+'-'+dt.getDate();
-    let label = i===0 ? "Aujourd'hui" : i===1 ? "Hier" : key;
-    let val = visitorData.byDay && visitorData.byDay[key] ? Number(visitorData.byDay[key]) : 0;
-    days.push({label:label, key:key, val:val});
-  }
-  el.innerHTML = days.map(d=>`<div class="dayRow"><span>📅 ${d.label} <small style="color:#aaa">(${d.key})</small></span><b>👥 ${d.val} visiteur(s)</b></div>`).join('');
-}
 function updatePublishStats(){
   let totalViews=0,totalLikes=0,totalComments=0,totalShares=0;
   videos.forEach(v=>{totalViews+=Number(v.views)||0;totalLikes+=Number(v.likes)||0;totalComments+=(v.comments?v.comments.length:0);totalShares+=Number(v.shares)||0;});
@@ -338,14 +316,14 @@ function updatePublishStats(){
   let el4=document.getElementById('statMyCount');if(el4)el4.innerText=mine.length;
   let up=document.getElementById('statUpdate');if(up)up.innerText='Actualisé à '+new Date().toLocaleTimeString()+' - Réel : '+totalViews+' vues • '+totalLikes+' likes • '+totalShares+' partages • '+totalComments+' commentaires';
   let vi=document.getElementById('visitorInfo');if(vi)vi.innerText='🌍 POUR TOUT LE MONDE - Aujourd\'hui '+todayStr()+' : '+getTodayVisitors()+' visiteur(s) • Depuis le début : '+visitorData.total+' visiteur(s) • 1 téléphone = 1 visite par jour, même chiffre pour tout le monde';
-  updateGlobalBar();
-  updateVisitorsByDayList();
   let list=document.getElementById('myVideosList');
   if(list){
     if(mine.length===0){list.innerHTML='<p style="color:#666;font-size:13px;text-align:center">Tu n\'as pas encore de vidéo. Publie ta première vidéo !</p>';}
     else{list.innerHTML='<h4 style="color:#111;margin:8px 0">📺 Tes vidéos - Chiffres réels :</h4>'+mine.map(v=>`<div class="myVideoRow"><b>${v.title}</b><span>👁️ ${fmt(v.views)}</span><span>❤️ ${fmt(v.likes)}</span><span>↗️ ${fmt(v.shares||0)}</span><span>💬 ${v.comments.length}</span></div>`).join('');}
   }
 }
+
+// ===== AJOUT 2 : Envoyer les anciennes vidéos locales vers Sheet, automatiquement, sans doublon =====
 async function syncLocalToSheet(sheetVideos){
   let b = [];
   try{ b = JSON.parse(localStorage.getItem('freddyv_local_backup')||'[]'); }catch(e){ b=[]; }
@@ -360,12 +338,14 @@ async function syncLocalToSheet(sheetVideos){
     }catch(e){}
   }
 }
+
 async function loadVideos(){
  try{const r=await fetch(API_URL);const d=await r.json();let list=Array.isArray(d)?d:(d.videos||d.data||d.rows||[]);
  if(d.totalVisitors!==undefined && Number(d.totalVisitors)>Number(visitorData.total)){visitorData.total=Number(d.totalVisitors);saveGlobalVisitors();}
  if(d.todayVisitors!==undefined && Number(d.todayVisitors)>getTodayVisitors()){if(!visitorData.byDay)visitorData.byDay={};visitorData.byDay[todayStr()]=Number(d.todayVisitors);saveGlobalVisitors();}
- if(d.visitorsByDay){ Object.keys(d.visitorsByDay).forEach(k=>{ if(!visitorData.byDay) visitorData.byDay={}; visitorData.byDay[k]=Number(d.visitorsByDay[k]); }); saveGlobalVisitors(); }
+ // On envoie les anciennes vidéos locales qui ne sont pas encore dans Sheet
  await syncLocalToSheet(list);
+ // Si on vient d'en envoyer, on recharge Sheet une fois pour les avoir toutes
  let bCheck = JSON.parse(localStorage.getItem('freddyv_local_backup')||'[]');
  if(bCheck.length){
    let encoreManquant = bCheck.some(x=> !list.some(v=> (v.link||'').trim().toLowerCase() === (x.link||'').trim().toLowerCase()));
@@ -403,7 +383,6 @@ async function refreshCounts(){
  let changed=false;
  if(d.totalVisitors!==undefined && Number(d.totalVisitors)>Number(visitorData.total)){visitorData.total=Number(d.totalVisitors);changed=true;}
  if(d.todayVisitors!==undefined && Number(d.todayVisitors)>getTodayVisitors()){if(!visitorData.byDay)visitorData.byDay={};visitorData.byDay[todayStr()]=Number(d.todayVisitors);changed=true;}
- if(d.visitorsByDay){ Object.keys(d.visitorsByDay).forEach(k=>{ if(!visitorData.byDay) visitorData.byDay={}; if(Number(d.visitorsByDay[k])>Number(visitorData.byDay[k]||0)){ visitorData.byDay[k]=Number(d.visitorsByDay[k]); changed=true; } }); }
  list.forEach(sv=>{
    let link=sv.link||sv.Link||sv.url||'';
    let v=videos.find(x=>x.link===link);
