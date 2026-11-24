@@ -209,7 +209,6 @@ header button{background:#fe2c55;color:#fff;border:none;padding:8px 14px;border-
 <button onclick="closeInfo()" style="background:#eee;color:#111;margin-top:14px">Retour</button>
 </div>
 <script>
-// ===== NOUVEAU LIEN SCRIPT - NE PLUS CHANGER =====
 const API_URL="https://script.google.com/macros/s/AKfycbxPhYOEpAVmi0VcwkIhZ9wiMCmykD6qgmVvvfoEPOeeVnzm3ZV-4JFt6EMHHhlKsRDwMw/exec";
 const GA_ID="G-8SJX6NZFX9";
 const GA_PROPERTY="freddy-chat-d7685";
@@ -394,6 +393,7 @@ function render(){const feed=document.getElementById('feed');feed.innerHTML='';
   <div class="action" onclick="saveVideo('${v.id}')"><div class="circle ${v.saved?'saved':''}">🔖</div><small>Enregistrer</small></div>
   <div class="action" onclick="shareVideo('${v.id}')"><div class="circle">↗️</div><small>${fmt(v.shares||0)} Partager</small></div>
   <div class="action" onclick="openRemix('${v.id}')"><div class="circle">🔁</div><small>Remixer</small></div>
+  <div class="action" onclick="deleteVideo('${v.id}',event)"><div class="circle" style="background:#ff0000;border-color:#ff0000">🗑️</div><small>Supprimer</small></div>
  </div>`;
  div.addEventListener('click',e=>{if(e.target.closest('.right')||e.target.closest('.soundBtn')||e.target.closest('.subBtn'))return;if(!soundOn)enableSound();togglePlay(v.id);});
  div.ondblclick=()=>like(v.id);feed.appendChild(div);});
@@ -429,6 +429,7 @@ function shareVideo(id){let v=videos.find(x=>x.id===id);v.shares=(Number(v.share
 function openComments(id){currentId=id;let v=videos.find(x=>x.id===id);let list=document.getElementById('commentList');list.innerHTML=v.comments.length?v.comments.map(c=>`<div class="comment"><div class="avatar">${(c.name||'F')[0].toUpperCase()}</div><div><b>${c.name||'Fan'}</b><br>${c.text||''}</div></div>`).join(''):'<p style="text-align:center;color:#888">Aucun commentaire. Sois le premier ! (0 commentaire)</p>';document.getElementById('commentModal').classList.add('open');}
 function addComment(){let name=document.getElementById('commentName').value.trim()||myChannel;let text=document.getElementById('commentText').value.trim();if(!text)return;let v=videos.find(x=>x.id===currentId);v.comments.push({name,text});let k=keyOf(v);savedComments[k]=v.comments;saveAllComments();trackEvent('comment_video',{video_title:v.title});document.getElementById('commentText').value='';openComments(currentId);fetch(API_URL,{method:'POST',body:JSON.stringify({action:'comment',videoId:currentId,link:v.link,name,text})}).catch(()=>{});render();updatePublishStats();}
 function openRemix(id){alert('🔁 Remix : Duo / Collage / Utiliser ce son !');}
+function deleteVideo(id,e){if(e)e.stopPropagation();let v=videos.find(x=>x.id===id);if(!v)return;if(!confirm('🗑️ Supprimer cette vidéo ?\n\n"'+v.title+'"\n\nCette action est définitive.'))return;let link=v.link;videos=videos.filter(x=>x.id!==id);filtered=filtered.filter(x=>x.id!==id);let b=JSON.parse(localStorage.getItem('freddyv_local_backup')||'[]');b=b.filter(x=>x.id!==id && x.link!==link);localStorage.setItem('freddyv_local_backup',JSON.stringify(b));let k=keyOf(v);delete realCounts[k];delete savedComments[k];delete myLikes[k];delete mySaved[k];saveCounts();saveAllComments();localStorage.setItem('freddyv_my_likes',JSON.stringify(myLikes));localStorage.setItem('freddyv_my_saved',JSON.stringify(mySaved));try{fetch(API_URL,{method:'POST',body:JSON.stringify({action:'delete',videoId:id,link:link})}).catch(()=>{});}catch(e2){}trackEvent('delete_video',{video_title:v.title});render();updatePublishStats();alert('✅ Vidéo supprimée !');}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
 function openPublish(){document.getElementById('pubAuthor').value=myChannel;updatePublishStats();refreshGlobalVisitors(false);trackEvent('open_publish',{});document.getElementById('publishPage').classList.add('open');}
 function closePublish(){document.getElementById('publishPage').classList.remove('open');}
